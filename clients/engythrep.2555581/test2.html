@@ -1,0 +1,67 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      document.getElementById("InvoiceForm").onsubmit = async function (e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const formDataObj = {};
+        let isValid = true;
+        let errorMessage = "";
+        formData.forEach((value, key) => {
+          const keys = key.match(/[^\[\]]+/g);
+          let tempObj = formDataObj;
+          const inputElement = e.target.querySelector(`[name="${key}"]`);
+          if (inputElement && inputElement.hasAttribute("required") && !value) {
+            isValid = false;
+            errorMessage += `${inputElement.placeholder || key} is required.\n`;
+          }
+          keys.forEach((k, i) => {
+            if (i === keys.length - 1) {
+              tempObj[k] = value;
+            } else {
+              if (!tempObj[k]) {
+                tempObj[k] = {};
+              }
+              tempObj = tempObj[k];
+            }
+          });
+        });
+        if (!isValid) {
+          alert(errorMessage);
+          return;
+        }
+        delete formDataObj.data._Token;
+        console.log({ formDataObj: formDataObj });
+        try {
+          const response = await fetch(`/api2/invoices`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formDataObj.data),
+          });
+
+          if (!response.ok) {
+            const errorRes = await response.json();
+            console.error("Error:", errorRes);
+            alert(
+              `Error ${response.status}: ${
+                errorRes.message || "An error occurred."
+              }`
+            );
+            return; // Exit the function after handling the error
+          }
+
+          const res = await response.json();
+          console.log("Success:", res);
+          //   await updateProjectData2(res.id);
+          // window.location.href = `/owner/invoices/view/${res.id}`;
+        } catch (error) {
+          console.error("Fetch error:", error);
+          alert("An unexpected error occurred. Please try again.");
+        }
+      };
+    }, 250);
+  });
+</script>

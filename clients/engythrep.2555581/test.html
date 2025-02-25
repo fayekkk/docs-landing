@@ -1,0 +1,54 @@
+<script>
+  function rebuildInvoiceBody(currentBody, invServices) {
+    let body = {
+      Invoice: {
+        subscription_id: "",
+        store_id: 1,
+        po_number: 26,
+        client_id: currentBody.Client.id, // Get client_id from currentBody
+        client_email: currentBody.Invoice.client_email || "", // Use current email or empty
+        client_country_code: currentBody.Invoice.client_country_code || "SAR", // Default to "SAR"
+        draft: "1",
+        follow_up_status: null,
+        work_order_id: currentBody.Invoice.work_order_id,
+        staff_id: 0,
+        name: "",
+        is_offline: currentBody.Invoice.is_offline === "1",
+        currency_code: "SAR",
+        date: currentBody.Invoice.date,
+        discount: currentBody.Invoice.discount,
+        discount_amount: currentBody.Invoice.discount_amount,
+        deposit: currentBody.Invoice.deposit,
+        deposit_type: currentBody.Invoice.deposit_type,
+        notes: currentBody.Invoice.notes,
+        html_notes: currentBody.Invoice.html_notes,
+        invoice_layout_id: currentBody.Invoice.invoice_layout_id,
+        estimate_id: currentBody.Invoice.estimate_id,
+        shipping_options: currentBody.Invoice.shipping_options,
+        shipping_amount: null,
+        requisition_delivery_status: null,
+        pos_shift_id: null,
+        branch_id: 1,
+      },
+      InvoiceItem: currentBody.InvoiceItem,
+      InvoiceCustomField: currentBody.InvoiceCustomField,
+      JournalAccountRoute: {
+        entity_type: "sales",
+        entity_id: "",
+        auto_account_type: "fixed",
+        account_type: "1",
+        account_id: "468",
+      },
+      JournalAccountAdjustmentRoute: currentBody.JournalAccountAdjustmentRoute,
+      CustomModel: currentBody.CustomModel,
+      Payment: currentBody.Payment,
+    };
+
+    return body; // Return the newly constructed body
+  }
+
+
+
+  let newBody = rebuildInvoiceBody(currentBody, invServices);
+  console.log(newBody);
+</script>

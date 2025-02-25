@@ -1,0 +1,92 @@
+<script>
+  async function getEstimate(id) {
+    let estimate = await fetch(`/api2/estimates/${id}`);
+    let data = await estimate.json();
+
+    return data.data.Estimate;
+  }
+
+  async function makePurchaseInvoice(data) {
+    console.log({ data });
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, "0");
+    var mm = String(today.getMonth() + 1).padStart(2, "0");
+    var yyyy = today.getFullYear();
+
+    today = yyyy + "-" + mm + "-" + dd;
+
+    info = {
+      PurchaseOrder: {
+        staff_id: 0,
+        supplier_id: 1,
+        is_offline: data.is_offline,
+        currency_code: data.currency_code,
+        date: today,
+        draft: "1",
+      },
+      PurchaseOrderItem: data.InvoiceItem,
+    };
+    let response = await fetch(`/api2/purchase_invoices?send=draft`, {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        APIKEY: "c2a2b31f54c3bdf3d804031d441f10152344d85b",
+        "Content-Type": "application/json",
+        accept: "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify(info), // body data type must match "Content-Type" header
+    });
+
+    let res = await response.json();
+
+    console.log({ res });
+    if (res.result == "successful") {
+      setTimeout(() => {
+        // window.location.href = `/owner/purchase_invoices/edit/${res.id}`;
+      }, 500);
+    }
+    return res.id; // parses JSON response into native JavaScript objects)
+  }
+
+  async function perform() {
+    let estimate_id =
+      window.location.href.split("/")[
+        window.location.href.split("/").length - 1
+      ];
+    let data = await getEstimate(estimate_id);
+    let purchaseInvoiceId = await makePurchaseInvoice(data);
+
+    return { estimate_id, purchaseInvoiceId };
+  }
+
+  async function convertToPurchaseInvoice() {
+    let { estimate_id, purchaseInvoiceId } = await perform();
+    window.location.href = `/owner/purchase_invoices/edit/${purchaseInvoiceId}?estimate_id=${estimate_id}`;
+  }
+
+  $(document).ready(function () {
+    let conversionLink = `<a href="#" id= "convert-invoice" class="primary-btn btn btn-success btn-icn s2020 responsive  pull-right mr-1"><i class="fa fa-usd"></i> <span class="hidden-xs">Convert to purchase invoice</span></a>`;
+    // $(
+    //   "#main-content > div > div.main-area.clearfix > div > ol > div.pages-head-s2020.fixed-div > div > div > div.col-lg-7 > div > a:nth-child(2)"
+    // ).after(conversionLink);
+
+    setTimeout(() => {
+      // let conversionLink = `<a href="#" id= "convert-invoice" class="primary-btn btn btn-success btn-icn s2020 responsive  pull-right mr-1"><i class="fa fa-usd"></i> <span class="hidden-xs">Convert to purchase invoice</span></a>`;
+      // document.querySelector(
+      //   "#main-content > div > div.main-area.clearfix > div > ol > div.pages-head-s2020.fixed-div > div > div > div.col-lg-7 > div > a:nth-child(2)"
+      // ).innerHTML += conversionLink;
+
+      $(
+        "#main-content > div > div.main-area.clearfix > div > ol > div.pages-head-s2020.fixed-div > div > div > div.col-lg-7 > div > a:nth-child(2)"
+      ).after(conversionLink);
+    }, 550);
+  });
+
+  $(document).on("click", "#convert-invoice", function () {
+    convertToPurchaseInvoice();
+  });
+</script>

@@ -1,0 +1,145 @@
+<style>
+  #currencyFactor {
+    width: 35%;
+    padding: 19px 8px;
+  }
+  #convertprices {
+    border: none;
+    padding: 9px 8px;
+    font-size: 15px;
+    background: #3aa4de;
+    font-weight: 400;
+    color: #fff;
+    width: 37%;
+    transition: background-color 0.3s ease-in-out;
+  }
+  #convertprices:hover {
+    background-color: #013d7e;
+  }
+  #oldcurrencyFactor {
+    display: none;
+  }
+  .bi-bootstrap-reboot {
+    font-size: 24px;
+    color: #007bff;
+    cursor: pointer;
+    margin-left: 8px !important;
+    transform: scale(1.3);
+    transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    width: 30px;
+    height: 30px;
+    border-radius: 10px !important;
+    padding: 6px;
+  }
+
+  .bi-bootstrap-reboot:hover {
+    color: #fff;
+    background-color: #0056b3;
+  }
+
+  .customcurrency .l-input-box {
+    display: flex;
+    align-items: center;
+  }
+  #calctype {
+    margin-left: 5px;
+  }
+  .customcurrency {
+    display: block !important;
+    visibility: visible !important;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      let currencybtn = `
+                            <div class="tab-pane customcurrency">
+                                <label class="ui-input-label l-input-label discount-tab-input-label">Currency converter</label>
+                                <div class='l-input-box text'>
+                                   <button id="convertprices">convert prices</button>
+                                   <input type="number" name="" id="currencyFactor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bootstrap-reboot renewprices" viewBox="0 0 16 16">
+                                    <path d="M1.161 8a6.84 6.84 0 1 0 6.842-6.84.58.58 0 1 1 0-1.16 8 8 0 1 1-6.556 3.412l-.663-.577a.58.58 0 0 1 .227-.997l2.52-.69a.58.58 0 0 1 .728.633l-.332 2.592a.58.58 0 0 1-.956.364l-.643-.56A6.8 6.8 0 0 0 1.16 8z"/>
+                                    <path d="M6.641 11.671V8.843h1.57l1.498 2.828h1.314L9.377 8.665c.897-.3 1.427-1.106 1.427-2.1 0-1.37-.943-2.246-2.456-2.246H5.5v7.352zm0-3.75V5.277h1.57c.881 0 1.416.499 1.416 1.32 0 .84-.504 1.324-1.386 1.324z"/>
+                                    </svg>                               
+                                    <input type="number" name="" id="oldcurrencyFactor">
+                                    <select id="calctype">
+                                      <option value="1">/</option>
+                                      <option value="2">*</option>
+                                      </select>
+                                      </div>
+                            </div>
+                          
+                            `;
+
+      $("#tab-1").eq(0).after(currencybtn);
+      $(".renewprices").on("click", function () {
+        let result = confirm("Are you sure you want to reset prices");
+        if (result == true) {
+          let allpricesinput = $(".item-unit-price");
+          allpricesinput.each(function () {
+            let price = $(this).val();
+            if ($("#calctype").val() == 1) {
+              $(this)
+                .val((price * $("#currencyFactor").val()).toFixed(2))
+                .change();
+            } else {
+              $(this)
+                .val((price / $("#currencyFactor").val()).toFixed(2))
+                .change();
+            }
+
+            $("#oldcurrencyFactor").val("1");
+            $(this).removeClass("converted");
+          });
+        }
+      });
+
+      $("#convertprices").on("click", function (e) {
+        e.preventDefault();
+        let oldcurrencyFactor = $("#oldcurrencyFactor");
+        let currencyFactor = $("#currencyFactor");
+
+        let allpricesinput = $(".item-unit-price");
+        allpricesinput.each(function () {
+          let price = $(this).val();
+          if ($(this).val() != "") {
+            if (!$(this).hasClass("converted")) {
+              if ($("#calctype").val() == 1) {
+                $(this)
+                  .val((price / currencyFactor.val()).toFixed(2))
+                  .change();
+              } else {
+                $(this)
+                  .val((price * currencyFactor.val()).toFixed(2))
+                  .change();
+              }
+              $(this).addClass("converted");
+            } else {
+              if ($("#calctype").val() == 1) {
+                $(this)
+                  .val(
+                    (
+                      (price * oldcurrencyFactor.val()) /
+                      currencyFactor.val()
+                    ).toFixed(2)
+                  )
+                  .change();
+              } else {
+                $(this)
+                  .val(
+                    (
+                      (price / oldcurrencyFactor.val()) *
+                      currencyFactor.val()
+                    ).toFixed(2)
+                  )
+                  .change();
+              }
+            }
+          }
+        });
+        oldcurrencyFactor.val(currencyFactor.val());
+      });
+    }, 500);
+  });
+</script>

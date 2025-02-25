@@ -1,0 +1,347 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: transparent;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    .invoice-address {
+      border-top: 3px double #000000;
+      margin: 35px 0;
+      padding-top: 25px;
+    }
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    strong_tag {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: right;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    .total-table td {
+      border-right: 1px solid #555555;
+    }
+    .total-row {
+      /* background-color: #e5e5e5; */
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    .notes-block {
+      /* margin: 50px 0 0 0; */
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    .qr-code {
+      text-align: left;
+    }
+    #footer {
+      font-style: normal !important;
+    }
+    #invoice_title {
+      margin-top: 5px;
+    }
+    .bg {
+      z-index: -90000;
+      position: absolute;
+      left: 0px;
+      background-image: url("https://dvip25888.daftara.com/files/f3e88c0/logos/67b4ff65be107_blobid1739915102149.jpg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      width: 100%;
+      height: 24.1cm;
+    }
+    .total-table td {
+      background-color: transparent !important;
+    }
+    #banks {
+      width: 100%;
+      margin-top: 20px;
+      font-weight: bold;
+      border-spacing: 0;
+      border-top: 1px solid #000;
+      border-right: 1px solid #000;
+    }
+    #banks td {
+      padding: 3px;
+      border-bottom: 1px solid #000;
+      border-left: 1px solid #000;
+      text-align: center;
+    }
+    #banks td:nth-child(1) {
+      width: 15%;
+      text-align: right;
+    }
+    #banks td:nth-child(2) {
+      width: 70%;
+      text-align: center;
+    }
+    #banks td:nth-child(3) {
+      width: 15px;
+      text-align: left;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="bg" style="top: 0cm"></div>
+
+      <div class="invoice-inner">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <!-- <tr>
+            <td align="center" valign="top">
+              <div>
+                <img
+                  id="logo"
+                  class="editable-area"
+                  src="{%logo%}"
+                  width="{%logo-width%}"
+                  height="{%logo-height%}"
+                />
+              </div>
+            </td>
+          </tr> -->
+          <tr>
+            <td align="center" valign="top">
+              <h1>
+                <p id="invoice_title" class="editable-area invoice-name">
+                  {%invoice_title%}
+                </p>
+              </h1>
+            </td>
+          </tr>
+        </table>
+        <div class="invoice-address">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="50%" align="right" valign="top">
+                <table border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td valign="top">
+                      <strong id="field1" class="editable-area"
+                        >{%field1%}</strong
+                      >
+                    </td>
+                    <td valign="top">
+                      <div
+                        id="client_info"
+                        style="padding-right: 20px"
+                        class="editable-area"
+                      >
+                        {%client_info%}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr id="shipping_options" style="display: none">
+                    <td valign="top">
+                      <br />
+                      <strong id="label_ship" class="editable-area"
+                        >{%label_ship%}</strong
+                      >
+                    </td>
+                    <td valign="top">
+                      <br />
+                      <div
+                        id="ship_info"
+                        style="padding-right: 20px"
+                        class="editable-area"
+                      >
+                        {%ship_info%}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td width="50%" valign="top" align="left">
+                <table border="0" cellspacing="0" cellpadding="0" align="left">
+                  <tr>
+                    <td>
+                      <div class="qr-code">{%sa_qr_code_image%}<br /></div>
+                      <div
+                        style="text-align: left"
+                        id="business_info"
+                        class="editable-area"
+                      >
+                        {%business_info%}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+                <div style="clear: both" />
+                <br />
+                <br />
+                <table
+                  id="invoice_basics"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                >
+                  <tr>
+                    <td align="left">
+                      <strong class="editable-area" id="label_invoice_no"
+                        >{%label_invoice_no%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" align="right">
+                      {%invoice_number%}
+                    </td>
+                  </tr>
+                  <tr {%refund_invoice_number_condition%}>
+                    <td align="right">
+                      <strong class="editable-area" id="refund_label_invoice_no"
+                        >{%refund_invoice_no_title%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%refund_invoice_number%}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left">
+                      <strong class="editable-area" id="label_date"
+                        >{%label_date%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" align="right">
+                      {%invoice_date%}
+                    </td>
+                  </tr>
+                </table>
+                <custom_field
+                  id="custom_fields"
+                  class="editable-area"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                >
+                  {%custom_fields%}
+                </custom_field>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div id="items-list">{%items_list%}</div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <table id="banks">
+          <tr>
+            <td colspan="100%" style="text-align: center !important">
+              بنك الرياض
+            </td>
+          </tr>
+          <tr>
+            <td>الإسم</td>
+            <td>مؤسسة رافعات انوار الامل لتأجير المعدات</td>
+            <td>Name</td>
+          </tr>
+          <tr>
+            <td>الحساب</td>
+            <td>2303904819940</td>
+            <td>Account Number</td>
+          </tr>
+          <tr>
+            <td>رقم الآيبان</td>
+            <td>SA5220000002303904819940</td>
+            <td>IBAN Number</td>
+          </tr>
+          <tr>
+            <td>الفرع</td>
+            <td>فرع الروابى</td>
+            <td>Branch</td>
+          </tr>
+        </table>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function repeatBg() {
+        var invoiceHeight =
+          document.querySelector(".invoice-inner").offsetHeight;
+        var pageHeight = document.querySelector(".bg").offsetHeight;
+        var numPages = Math.ceil(invoiceHeight / pageHeight);
+        var bg = document.querySelector(".bg");
+        var topDis = parseFloat(bg.style.top.replace("cm", ""));
+        for (var i = 1; i < numPages; i++) {
+          var newBg = document.createElement("div");
+          newBg.setAttribute("class", "bg");
+          topDis = topDis + 20.2;
+          console.log(topDis);
+          newBg.style.top = topDis + "cm";
+          bg.parentNode.insertBefore(newBg, bg.nextSibling);
+        }
+      }
+      try {
+        repeatBg();
+      } catch (e) {
+        console.log(e);
+      }
+    </script>
+  </body>
+</html>

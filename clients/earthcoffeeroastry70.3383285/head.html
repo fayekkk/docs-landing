@@ -1,0 +1,99 @@
+<style>
+  #main_head {
+    background-image: url("https://earthcoffeeroastry70.daftra.com/files/9305f89c/logos/67bc5f9bb7830_blobid1740398487304.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 100%;
+    height: 10cm;
+    /* position: relative; */
+    margin-top: -25px;
+  }
+  .data {
+    width: 80%;
+    margin-right: 10%;
+    margin-left: 10%;
+    border-spacing: 5px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #831b14;
+    margin-top: 7.3cm !important;
+    position: fixed;
+  }
+  .data td {
+    border-radius: 7px;
+    border: 1px solid #831b14;
+    height: 25px;
+    padding: 3px;
+
+    color: #590705;
+    font-weight: bold;
+  }
+  .data td:nth-child(1) {
+    width: 55%;
+    text-align: right;
+  }
+  .data td:nth-child(2) {
+    text-align: center;
+    width: 45%;
+  }
+  .circle {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #c27116;
+    margin: 5px;
+    float: right;
+  }
+  .rightfloat {
+    float: right;
+    display: inline-block;
+    width: 33%;
+    text-align: right;
+  }
+  .leftfloat {
+    float: left;
+    display: inline-block;
+    width: 33%;
+    text-align: left;
+    color: #c27116 !important;
+  }
+  .qr-Code {
+    display: inline-block;
+    width: 120px;
+    position: absolute;
+    right: 110px;
+    top: 120px;
+  }
+  .qr-Code img {
+    width: 100%;
+  }
+</style>
+<!-- <div style="padding-top: 28px"></div> -->
+<div id="main_head" style="vertical-align: bottom">
+  <div class="qr-Code">{%sa_qr_code_image%}</div>
+  <table class="data">
+    <tr>
+      <td>
+        <span class="circle"></span>
+        العميل : {%client_business_name%}
+      </td>
+      <td>
+        <span class="rightfloat">رقم الفاتورة : </span>
+        {%invoice_no%}
+        <span class="leftfloat">:Invoice No </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="circle"></span>
+        الرقم الضريبى للعميل : {%client_bn1%}
+      </td>
+      <td>
+        <span class="rightfloat">تاريخ الفاتورة : </span>
+        {%invoice_date%}
+        <span class="leftfloat">:Invoice Date </span>
+      </td>
+    </tr>
+  </table>
+</div>

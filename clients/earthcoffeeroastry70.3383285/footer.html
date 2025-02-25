@@ -1,0 +1,94 @@
+<style>
+  #mainContaienr {
+    background-image: url("https://earthcoffeeroastry70.daftra.com/files/9305f89c/logos/67bc8874830fb_blobid1740408944568.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 100%;
+    height: 7cm;
+    /* margin-top: -25px; */
+  }
+  .widths td {
+    border: none !important;
+  }
+  .widths td:nth-child(1) {
+    width: 50%;
+  }
+  .widths td:nth-child(2) {
+    width: 20%;
+  }
+  .widths td:nth-child(3) {
+    width: 30%;
+  }
+  #New_totals {
+    width: 70%;
+    margin-left: 20%;
+    margin-right: 10%;
+    border-spacing: 4px;
+  }
+  #New_totals td {
+    border: 1px solid #831b14;
+    border-radius: 7px;
+    padding: 3px;
+    font-weight: bold;
+  }
+  .circle {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #c27116;
+    margin: 5px;
+    float: right;
+  }
+  #New_totals.leftfloat {
+    float: left;
+  }
+  .removeCurr {
+    display: inline-block;
+    width: 70px;
+    padding: 2px;
+  }
+</style>
+<div id="mainContaienr">
+  <table id="New_totals">
+    <tbody>
+      <tr>
+        <td>
+          <span class="circle"></span>
+          الإجمالى قبل الضريبة
+          <br />
+          Total before VAT: <span class="removeCurr">{%invoice_subtotal%}</span>
+        </td>
+        <td colspan="2">
+          <span class="circle"></span> الإجمالى بعد الضريبة
+          <br />
+          Total with VAT: <span class="removeCurr">{%invoice_total%}</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span class="circle"></span> القيمة المضافة (15%):
+          <span class="removeCurr">{%tax-total%}</span>
+        </td>
+        <td colspan="2">
+          <span class="circle"></span>المدفوع (Paid) :
+          <span class="removeCurr">{%paid%}</span>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <span class="circle"></span> الرصيد المستحق :
+          <span class="removeCurr">{%unpaid%}</span>
+          <span class="leftfloat">: Due Amount</span>
+        </td>
+        <td style="border: none !important"></td>
+      </tr>
+      <tr class="widths">
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
