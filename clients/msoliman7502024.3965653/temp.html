@@ -1,4 +1,11 @@
 <style>
+  * {
+    word-break: keep-all !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    border-collapse: collapse !important;
+    font-weight: bold !important;
+  }
   .indent-td td:nth-child(2),
   .indent-td td:nth-child(3),
   .indent-td td:nth-child(5) {
@@ -15,7 +22,7 @@
     padding: 2px !important;
   }
   .indent-td td:nth-child(5) {
-    width: 50% !important;
+    width: 40% !important;
     vertical-align: sub !important;
     font-size: 12px !important;
   }
@@ -23,10 +30,10 @@
     width: 5% !important;
   }
   .indent-td td:nth-child(7) {
-    width: 10% !important;
+    width: 15% !important;
   }
   .indent-td td:nth-child(8) {
-    width: 10% !important;
+    width: 15% !important;
   }
   .indent-td td:nth-child(9) {
     width: 15% !important;
@@ -110,6 +117,21 @@
   }
   .new_head td span {
     background-color: #ffffe1;
+  }
+  .customspan {
+    background-color: #ffffe1;
+    margin: 0 5%;
+  }
+  .noborders {
+    border: none !important;
+    padding-bottom: 5px !important;
+  }
+  .tabless {
+    border-top: none !important;
+  }
+  .tabless tr:nth-child(1) {
+    border: none !important;
+    display: none !important;
   }
 </style>
 <div style="width: 98%; margin: 0 1%">
@@ -230,10 +252,12 @@
 
         for (var j = 0; j < headers.length; j++) {
           var newTd = document.createElement("td");
+          newTd.classList.add("noborders");
           if (j == 3) {
             newTd.setAttribute("colspan", "4");
           }
           var newSpan = document.createElement("span");
+          newSpan.setAttribute("class", "customspan");
           newSpan.innerText = headers[j];
           newSpan.style.width = "90%";
           newSpan.style.border = "1px solid #000";

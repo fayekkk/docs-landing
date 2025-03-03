@@ -86,7 +86,6 @@
       async function updateProjectItem(workOrderId, invoiceNo, subval) {
         const selectedOption = $(".itemSelect").find("option:selected");
         if ($(".itemSelect").val() == "إختر الخدمة") {
-          await postHistory(invoiceNo, "-", "-", subval);
           return;
         }
         const itemvalues = selectedOption[0].dataset;
@@ -122,7 +121,7 @@
           }
           const res = await response.json();
           await postHistory(
-            invoiceNo,
+            res.id,
             itemvalues.rec_id,
             selectedOption[0].textContent,
             subval
