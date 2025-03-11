@@ -1,0 +1,154 @@
+<style>
+  #my_file {
+    display: none;
+  }
+
+  .custom-file-upload {
+    display: inline-block;
+    padding: 14px 21px;
+    cursor: pointer;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #3a3e63;
+    font-size: 15px;
+    width: 30%;
+  }
+
+  .custom-file-upload * {
+    color: #fff;
+  }
+
+  .custom-file-upload:hover {
+    background-color: #636aa7;
+  }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+  $(document).ready(function () {
+    // Hide the default file input and create a custom file upload button
+    $("#file").hide();
+    const newInput = `
+        <label class="custom-file-upload">
+          <span class="label_text">إضافة الملف</span>
+          <input id="my_file" type="file" accept=".xls, .xlsx" />
+        </label>`;
+    $("#file").after(`<br>${newInput}`);
+
+    // Function to add products based on the data from the uploaded file
+    async function addProduct(rows) {
+      const allProducts = [];
+
+      // Collect existing product codes
+      $("[id$='--product_code']").each(function () {
+        const code = $(this).val();
+        if (code) {
+          allProducts.push(code);
+        }
+      });
+      var excistingprods = [];
+
+      // Function to wait for a specific duration
+      const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      // Iterate through the rows from the uploaded file
+      for (const row of rows) {
+        const productId = row["product id"];
+        const productCode = row["product code"];
+        const productName = row["product Name"];
+
+        console.log(allProducts);
+        console.log(productId);
+
+        // Check if the product code already exists
+        if (allProducts.includes(String(productId))) {
+          excistingprods.push(productId);
+          $("[id$='--product_code']").each(async function () {
+            if ($(this).val() == productId) {
+              // await wait(2); // Wait for 200 ms
+              $(this)
+                .closest("tr")
+                .find("[id$='--upper_limit']")
+                .val(row["upper limit"]);
+              $(this)
+                .closest("tr")
+                .find("[id$='--lower_limit']")
+                .val(row["lower limit"]);
+            }
+          });
+        } else if ($("[id$='--product_code']").last().val() == "") {
+          await wait(2); // Wait for 200 ms
+          const newCodeOption = $("<option>").val(productId).text(productCode);
+          $("[id$='--product_code']").last().append(newCodeOption);
+          $("[id$='--product_code']").last().val(productId).trigger("change");
+
+          const newNameOption = $("<option>").val(productId).text(productName);
+          $("[id$='--product_name']").last().append(newNameOption);
+          $("[id$='--product_name']").last().val(productId).trigger("change");
+
+          $("[id$='--upper_limit']")
+            .last()
+            .val(row["upper limit"])
+            .trigger("change");
+          $("[id$='--lower_limit']")
+            .last()
+            .val(row["lower limit"])
+            .trigger("change");
+        } else {
+          console.log("log3");
+          // await wait(200); // Wait for 200 ms
+          $(".add-row button").trigger("click");
+
+          // // Wait a bit for the new row to be added
+          await wait(2);
+
+          const newCodeOption = $("<option>").val(productId).text(productCode);
+          $("[id$='--product_code']").last().append(newCodeOption);
+          $("[id$='--product_code']").last().val(productId).trigger("change");
+
+          const newNameOption = $("<option>").val(productId).text(productName);
+          $("[id$='--product_name']").last().append(newNameOption);
+          $("[id$='--product_name']").last().val(productId).trigger("change");
+
+          $("[id$='--upper_limit']")
+            .last()
+            .val(row["upper limit"])
+            .trigger("change");
+          $("[id$='--lower_limit']")
+            .last()
+            .val(row["lower limit"])
+            .trigger("change");
+        }
+      }
+
+      // Trigger the department add button after a delay
+      await wait(200); // Wait for 200 ms
+      $("#departmentAddButton").trigger("click");
+
+      $(".page-loader").remove();
+      console.log({ excistingprods: excistingprods });
+    }
+
+    // Function to handle file input change and read the uploaded file
+    const handleFileUpload = async () => {
+      document
+        .getElementById("my_file")
+        .addEventListener("change", async () => {
+          $("body").append(
+            `<div class="page-loader" style=""><div class="spinner-wrap"><div class="spinner-border loading-spinner-icon" role="status"></div></div></div>`
+          );
+          const file = document.getElementById("my_file").files[0];
+          const data = await file.arrayBuffer();
+          const workbook = XLSX.read(data);
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+          const jsonData = XLSX.utils.sheet_to_json(worksheet);
+          console.log(jsonData);
+          await addProduct(jsonData); // Await the addProduct function
+        });
+    };
+
+    handleFileUpload();
+  });
+</script>

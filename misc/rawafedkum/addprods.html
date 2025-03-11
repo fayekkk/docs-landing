@@ -1,0 +1,126 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      function extractLotAndExpiry(code) {
+        let lotNumber = "";
+        let expiryDate = "";
+        let skuCode = "";
+        const lastSixDigitsRegex = /(\d{6})$/;
+        const elevenCharRegex = /([a-zA-Z][\w]{8})(\d+)/;
+        const skuRegex = /^.{2}(\d{14})/;
+        const lastSixMatches = code.match(lastSixDigitsRegex);
+        const isDataable = code.substr(-8, 2) === "17";
+        const isDataable2 = code.length > 41;
+        if (lastSixMatches && isDataable && isDataable2) {
+          expiryDate = lastSixMatches[1];
+        }
+        const elevenCharMatches = code.match(elevenCharRegex);
+        if (elevenCharMatches) {
+          lotNumber = elevenCharMatches[1];
+        }
+        let formattedExpiry = "";
+        if (expiryDate) {
+          const year = "20" + expiryDate.substr(0, 2);
+          const month = expiryDate.substr(2, 2);
+          const day = expiryDate.substr(4, 2);
+          formattedExpiry = `${year}/${month}/${day}`;
+        }
+        const skuMatches = code.match(skuRegex);
+        if (skuMatches) {
+          skuCode = skuMatches[1];
+        }
+        return {
+          lotNumber: lotNumber,
+          expiryDate: formattedExpiry,
+          skuCode: skuCode,
+        };
+      }
+      // onReceiveBarCodess = function () {
+      //   let code = "";
+      //   $(document).on("keydown", function (event) {
+      //     if (event.keyCode === 13) {
+      //       console.log("done");
+      //       console.log(code);
+      //       const extractedData = extractLotAndExpiry(
+      //         "01088000421685310ftp23c7081123032221006517310321"
+      //       );
+      //       addCodes(extractedData);
+
+      //       code = "";
+      //     } else {
+      //       code += event.key;
+      //       console.log(code);
+      //     }
+      //   });
+      // };
+      // onReceiveBarCodess();
+
+      setTimeout(() => {
+        console.log("stating");
+
+        $("#CustomField0").on("change", function () {
+          console.log("changed");
+          if ($(this).val() != "") {
+            var generalcodes = extractLotAndExpiry($(this).val());
+            addCodes(generalcodes);
+            $(this).val("").change();
+            setTimeout(() => {
+              $(this).focus();
+            }, 1000);
+          }
+        });
+      }, 3000);
+
+      function addCodes(generatedCode) {
+        console.log(generatedCode);
+        onReceiveBarCode(generatedCode.skuCode);
+        setTimeout(() => {
+          addClasses(generatedCode);
+        }, 700);
+      }
+      function addClasses(barcodeToAdd) {
+        $(".item-id").each(function () {
+          const $itemId = $(this);
+          const $closestRow = $itemId.closest("tr");
+
+          // Check if the item ID input is not empty
+          if ($itemId.val()) {
+            const isAddedBefore = $closestRow.hasClass("addedbefore");
+
+            if (!isAddedBefore) {
+              // Add classes
+              $closestRow
+                .addClass("addedbefore")
+                .addClass("BAR_" + barcodeToAdd.skuCode);
+
+              // Set lot number
+              const $lotInput = $closestRow.find(".trackingInput input").eq(0);
+              $lotInput.val(barcodeToAdd.lotNumber).focus();
+
+              // Set expiry date
+              const $expiryInput = $closestRow
+                .find(".item-serial")
+                .eq(1)
+                .find("input")
+                .eq(0);
+              $expiryInput.val(barcodeToAdd.expiryDate || "");
+
+              // Simulate enter event
+              setTimeout(() => {
+                triggerEnterEvent($closestRow, 0);
+                triggerEnterEvent($closestRow, 1);
+              }, 200);
+            }
+          }
+        });
+      }
+
+      // Helper function to trigger enter event
+      function triggerEnterEvent($row, index) {
+        const $input = $row.find(".item-serial").eq(index).find("input").eq(0);
+        $input.trigger(jQuery.Event("keydown", { which: 13, keyCode: 13 }));
+        $input.trigger(jQuery.Event("keyup", { which: 13, keyCode: 13 }));
+      }
+    }, 500);
+  });
+</script>

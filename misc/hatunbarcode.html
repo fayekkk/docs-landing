@@ -1,0 +1,50 @@
+<style>
+  #cont {
+    width: 5.45cm;
+    width: 100%;
+    direction: ltr;
+    height: 1.25cm;
+  }
+  * {
+    text-align: center;
+    font-size: 8pt;
+    font-weight: bold;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    color: #000 !important;
+  }
+  #cont img {
+    width: 95% !important;
+    margin: auto;
+  }
+</style>
+<div
+  id="barcode_template"
+  class="mceEditable"
+  readonly="readonly"
+  style="
+    padding: 0px 0px 0px 0px;
+    margin: 0 auto !important;
+    background-color: #ffffff;
+    width: 5.45cm;
+    height: 1.2cm;
+  "
+>
+  <table id="cont">
+    <tbody>
+      <tr>
+        <td style="width: 1.97cm">
+          {%site_business_name%}<br />{%product_unit_price%}
+        </td>
+        <td style="width: 1.5cm"></td>
+        <td style="width: 1.97cm">
+          <img
+            id="barcode_image"
+            src="https://hatun.daftra.com/img/dummy_barcode.jpg"
+          /><br />{%product_code%}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

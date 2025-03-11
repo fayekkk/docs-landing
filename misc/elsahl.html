@@ -1,0 +1,746 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@500&family=Young+Serif&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "arial", sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .invoice-wrap {
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+
+    .header {
+      width: 100%;
+      margin-top: 0;
+    }
+
+    .notes-block {
+      margin: 0;
+    }
+
+    .ar_title {
+      color: #57bb46;
+      font-family: "El Messiri", sans-serif !important;
+    }
+
+    .en_title {
+      color: #5dbbd7;
+      letter-spacing: 2px;
+    }
+
+    .invoice-clinet-info {
+      margin-top: 10px;
+      margin-bottom: 5px;
+      position: relative;
+    }
+
+    .invoice-data {
+      border-radius: 5px;
+      border: 2px solid #5dbbd7;
+
+      overflow: hidden;
+      height: 92px;
+      width: 220px;
+      margin-left: 10px;
+    }
+
+    .invoice-data td {
+      width: 90px;
+      height: 24px;
+      text-align: center;
+    }
+    .invoice-data tr td:nth-child(1) {
+      width: 60%;
+      border-left: 2px solid #5dbbd7;
+      border-bottom: 2px solid #5dbbd7;
+      color: #5dbbd7;
+    }
+    .invoice-data tr td:nth-child(2) {
+      width: 40%;
+      border-bottom: 2px solid #5dbbd7;
+      color: #5dbbd7;
+    }
+    .invoice-data tr:last-child td {
+      width: 40%;
+      border-bottom: 0 !important;
+    }
+
+    .invoice-data tr {
+      font-size: 9px;
+      font-weight: 500;
+    }
+
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+
+    .listing-table:nth-child(1) {
+      direction: ltr;
+    }
+
+    .listing-table {
+      border: 2px solid #5dbbd7 !important;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .listing-table th {
+      font-weight: 700;
+
+      font-size: 8px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    .listing-table tr:last-child td {
+      border-bottom: 0 !important;
+    }
+
+    .listing-table tr th:first-child {
+      border-left: 0 !important;
+    }
+
+    .listing-table tr td:first-child {
+      border-left: 0 !important;
+    }
+
+    .listing-table tr {
+      border-bottom: 2px solid #5dbbd7 !important;
+      border-top: 2px solid #5dbbd7 !important;
+      height: 30px;
+    }
+
+    .listing-table td {
+      text-align: center;
+      color: #000;
+      font-size: 12px;
+      font-weight: 500;
+      border-left: 0;
+      background-color: #fff;
+      border-bottom: 0 !important;
+      border-left: 0 !important;
+      border-top: 0 !important;
+      border-left: 2px solid #5dbbd7 !important;
+
+      padding: 3px 0;
+    }
+    .listing-table tbody tr td:nth-last-child() {
+      border-left: 0 !important;
+    }
+    .listing-table th {
+      text-align: center;
+      color: #5dbbd7;
+      font-size: 12px;
+      font-weight: 500;
+      border-left: 2px solid #5dbbd7;
+      background-color: #fff;
+      border-top: 0 !important;
+      border-bottom: 2px solid #5dbbd7 !important;
+      border-right: 0 !important;
+    }
+
+    .listing-table th:nth-child(1) {
+      width: 7%;
+    }
+
+    .listing-table th:nth-child(2) {
+      width: 12.6%;
+    }
+
+    .listing-table th:nth-child(3) {
+      width: 42.3%;
+    }
+
+    .listing-table th:nth-child(4) {
+      width: 6%;
+    }
+
+    .listing-table th:nth-child(5) {
+      width: 6.3%;
+    }
+
+    .listing-table th:nth-child(6) {
+      width: 6.3%;
+    }
+
+    .listing-table th:nth-child(7) {
+      width: 8.2%;
+    }
+
+    .listing-table th:nth-child(9),
+    .listing-table tr td:nth-child(9) {
+      display: none;
+    }
+
+    .listing-table th:nth-child(8) {
+      width: 16.3%;
+    }
+
+    .totals {
+      width: 100%;
+      direction: rtl;
+      height: 140px;
+    }
+
+    .totals .invoice_total {
+      width: 30%;
+      height: 100%;
+      overflow-wrap: normal;
+    }
+
+    .totals .invoice_total div {
+      padding-top: 3px;
+      display: inline-block;
+      width: 47%;
+      margin-bottom: 1px;
+      height: 20px;
+      border: 2px solid #5dbbd7;
+      margin-bottom: 1px;
+      border-radius: 5px;
+      text-align: center;
+      padding-top: 5px;
+    }
+
+    .totals div {
+      text-align: center;
+    }
+    .salesman_sign {
+      display: inline-block;
+      width: 48.9%;
+      height: 31px;
+      border: 2px solid #5dbbd7;
+      border-radius: 0 0 0 5px;
+      padding-top: 8px;
+      color: #5dbbd7;
+      text-align: center;
+    }
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      <table class="header">
+        <tbody style="width: 100%">
+          <tr style="margin-bottom: 25px; width: 100%">
+            <td style="width: 90%">
+              <div
+                id="header_data"
+                style="
+                  width: 100%;
+                  height: 75px;
+                  margin-top: -2%;
+                  background-color: #fff;
+                  border-bottom: 2px solid #57bb46;
+                  padding-bottom: 13px;
+                  background-color: #fafcfb;
+                "
+              >
+                <span
+                  id="VAT_TABLE"
+                  style="
+                    width: 100%;
+                    display: inline-block;
+                    height: 50px;
+                    color: #5dbbd7;
+                    font-weight: 300;
+                    font-size: 10px;
+                    position: relative;
+                    top: 25px;
+                    line-height: 12px;
+                  "
+                  ><span style="position: relative; top: -17px">
+                    <span
+                      style="
+                        border-left: 2px solid #5dbbd7;
+                        display: inline-block;
+                        height: 61%;
+                        padding-left: 18px;
+                        padding-top: 11px;
+                        padding-right: 18px;
+                      "
+                    >
+                      <span style="font-family: 'Noto Kufi Arabic', sans-serif">
+                        الرقم الضريبى: <span> ٣١٠٦٥٧٧٧٦٥٠٠٠٠٣</span> <br />
+                        <span
+                          style="font-family: 'Noto Kufi Arabic', sans-serif"
+                        >
+                          VAT NO.:
+                        </span>
+                        <span style="letter-spacing: 1.7px">
+                          310657776500003
+                        </span>
+                      </span>
+                    </span></span
+                  ></span
+                >
+                <p
+                  id="title"
+                  style="
+                    width: 63%;
+                    display: inline-block;
+                    line-height: 27px;
+                    font-size: 20px;
+                    font-weight: bold;
+                    position: relative;
+                    text-align: center;
+                    left: -206px;
+                    top: -42px;
+                  "
+                >
+                  <span
+                    style="
+                      color: #57bb46;
+                      font-family: 'Tajawal', sans-serif !important;
+                    "
+                    >شركة السهل السريع للمواد الغذائية <br />
+                    <span style="color: #5dbbd7; letter-spacing: 4px"
+                      >EASY FAST FOODSTUFF CO.
+                    </span></span
+                  >
+                </p>
+              </div>
+              <p
+                id="head_data_border"
+                style="
+                  position: absolute;
+                  top: 95px;
+                  left: 360px;
+                  background-color: #57bb46;
+                  color: #fff;
+                  width: 85px;
+                  height: 18px;
+                  padding-top: 3px;
+                  border-radius: 3px;
+                  text-align: center;
+                "
+              >
+                فاتورة INVOICE
+              </p>
+            </td>
+            <td style="width: 10%">
+              <img
+                src="https://ahmedfayek.daftra.com/files/48b8e1d3/logos/652275a7ef751_blobid1696757155235.png"
+                alt="image"
+                title="download.png"
+                style="width: 135px; height: 135px"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="invoice-clinet-info">
+        <div style="width: 30%; display: inline-block; margin-left: 40px">
+          <table class="invoice-data" cellspacing="0" cellpadding="0">
+            <tbody>
+              <tr>
+                <td>{%invoice_no%}</td>
+                <td>
+                  رقم الفاتورة <br />
+                  Invoice No.
+                </td>
+              </tr>
+              <tr>
+                <td>{%invoice_date%}</td>
+                <td>
+                  التاريخ <br />
+                  Date
+                </td>
+              </tr>
+              <tr>
+                <td>{%manual_status%}</td>
+                <td>نوع <br />Type</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div
+          style="
+            display: inline-block;
+            border: 2px solid #5dbbd7;
+            border-radius: 5px;
+            width: 67%;
+            height: 88px;
+            position: absolute;
+            left: 0px;
+            direction: ltr;
+            font-size: 10px;
+            margin-bottom: 10px;
+          "
+        >
+          <img
+            src="{%qr_code_link%}"
+            width="70"
+            height="70"
+            style="margin-right: 10px; position: absolute; left: 5px; top: 9px"
+          />
+          <p
+            style="
+              width: 280px;
+              height: 100%;
+              display: inline-block;
+              color: #5dbbd7;
+              text-align: left;
+              margin-right: 70px;
+              padding-top: 10px;
+            "
+          >
+            To Br. of SINOPEC international petroleum service corporation<br />
+            Adress : {%client_address%} {%client_city%} {%client_state%}
+            {%client_country%} <br /><br />Client Vat :
+          </p>
+        </div>
+      </div>
+
+      <div id="items-list">{%items_list%}</div>
+
+      <div class="notes-block">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td>
+              <div style="font-style: italic" class="editable-area" id="footer">
+                {%footer%}
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="totals" style="position: relative; margin-top: 20px">
+        <div
+          class="invoice_total"
+          style="
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: #5dbbd7;
+          "
+        >
+          <div>{%invoice_subtotal%}</div>
+          <div>Gross Amount</div>
+          <div>{%tax-total%}</div>
+          <div>Vat Amount</div>
+          <div>{%invoice_total%}</div>
+          <div>Total Amount</div>
+        </div>
+        <div
+          class="signs"
+          style="
+            width: 70%;
+            display: inline-block;
+            height: 140px;
+            position: absolute;
+            top: -15px;
+            left: 0;
+          "
+        >
+          <div
+            class="total_amount"
+            style="
+              width: 99%;
+              height: 30px;
+              border: 2px solid #5dbbd7;
+              border-radius: 5px 5px 0 0;
+              margin-bottom: 2px;
+              margin-top: 15px;
+              text-align: center;
+              color: #5dbbd7;
+              padding-top: 10px;
+              font-size: 10px;
+            "
+          >
+            المبلغ الإجمالى بالكلمات
+            <span style="display: inline-block; width: 40%; color: #5dbbd7">
+            </span>
+            total amount in words <br />
+            <span id="total_in_words"> {%invoice_total_spelled%}</span>
+          </div>
+          <div
+            class="two_signs"
+            style="width: 100%; height: 50px; font-size: 10px"
+          >
+            <div
+              class="reciver_sign"
+              style="
+                display: inline-block;
+                width: 48.9%;
+                height: 31px;
+                border: 2px solid #5dbbd7;
+                border-radius: 0 0 5px 0;
+                padding-top: 8px;
+                text-align: center;
+                color: #5dbbd7;
+              "
+            >
+              ...............................................<br />
+              التوقيع المستلم
+              <span style="display: inline-block; width: 15%"></span> Reciver's
+              sign
+            </div>
+            <div class="salesman_sign">
+              ...............................................<br />
+              التوقيع البائع
+              <span style="display: inline-block; width: 15%"></span> Salesman's
+              sign
+            </div>
+          </div>
+        </div>
+
+        <div></div>
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+
+    <script>
+      function calctax() {
+        const newTd = document.createElement("th");
+        newTd.innerHTML = "الضريبة 15%  <br> Vat 15%";
+        const existingTd = document.querySelector(
+          "#listing_table thead tr th:nth-child(7)"
+        );
+
+        document
+          .querySelector("#listing_table thead tr")
+          .insertBefore(newTd, existingTd);
+
+        for (
+          var i = 0;
+          i < document.querySelectorAll("#listing_table tbody tr").length;
+          i++
+        ) {
+          var newCell = document.createElement("td");
+          var row = document.querySelectorAll("#listing_table tbody tr")[i];
+
+          var priceVal = parseFloat(row.cells[4].innerText) * 0.15;
+          newCell.textContent = (
+            priceVal * parseFloat(row.cells[5].innerText)
+          ).toFixed(2);
+
+          row.insertBefore(newCell, row.cells[6]);
+        }
+      }
+
+      /******************/
+      function addtotals() {
+        var grossAmount = 0;
+        const totalTd = document.createElement("th");
+
+        totalTd.innerHTML = "الإجمالى مع الضريبة <br> Total Wi VAT";
+
+        const existingtotalTd = document.querySelector(
+          "#listing_table thead tr th:nth-child(8)"
+        );
+        document
+          .querySelector("#listing_table thead tr")
+          .insertBefore(totalTd, existingtotalTd);
+
+        for (
+          var i = 0;
+          i < document.querySelectorAll("#listing_table tbody tr").length;
+          i++
+        ) {
+          var row = document.querySelectorAll("#listing_table tbody tr")[i];
+          grossAmount =
+            grossAmount +
+            parseFloat(row.cells[4].innerText) *
+              parseFloat(row.cells[5].innerText);
+          var newCell = document.createElement("td");
+          var TotalpriceVal =
+            parseFloat(row.cells[4].innerText) *
+            parseFloat(row.cells[5].innerText);
+          newCell.textContent = (TotalpriceVal + TotalpriceVal * 0.15).toFixed(
+            2
+          );
+
+          row.insertBefore(newCell, row.cells[7]);
+          row.cells[5].innerHTML = row.cells[5].innerHTML + "<br>PCS";
+        }
+        document.querySelectorAll("#listing_table thead tr th")[2].innerHTML =
+          "البيـــــــــــان <br> Description";
+        document.getElementById("gross_amount").innerText =
+          grossAmount.toFixed(2);
+        document.getElementById("vat_amount").innerText = (
+          grossAmount * 0.15
+        ).toFixed(2);
+      }
+      /*reserved rows*/
+      function addNewRows() {
+        var selectedDiv = document.querySelector("#items-list");
+        while (selectedDiv.offsetHeight < 595) {
+          var i = document.querySelectorAll("#listing_table tbody tr").length;
+          const newTr = document.createElement("tr");
+          for (var j = 0; j < 9; j++) {
+            if (j == 0) {
+              var newTd = document.createElement("td");
+              newTd.innerText = i + 1;
+              newTr.appendChild(newTd);
+            } else {
+              var newTd = document.createElement("td");
+              newTr.appendChild(newTd);
+            }
+          }
+          document.querySelector("#listing_table tbody").appendChild(newTr);
+          i++;
+        }
+      }
+
+      /*  numberToWords fn */
+
+      try {
+        calctax();
+      } catch (e) {}
+      try {
+        addtotals();
+      } catch (e) {}
+
+      try {
+        addNewRows();
+      } catch (e) {}
+      ///////////////////////////////////split td in two td /////////////////////////////////
+      function splitTd() {
+        var tdElements = document.querySelectorAll(
+          "#listing_table tbody tr:last-child td"
+        );
+        for (var i = 0; i < tdElements.length; i++) {
+          var newSpan1 = document.createElement("span");
+          var newSpan2 = document.createElement("span");
+          var newTD = document.createElement("td");
+          newSpan1.innerHTML = " ";
+          newSpan1.style.cssText =
+            "display: inline-block; text-align:center; width:100%; background-color:red; height:" +
+            (parseInt(tdElements[i].offsetHeight / 2) - 5) +
+            "px;";
+          newSpan2.innerHTML = " ";
+          newSpan2.style.cssText =
+            "display: inline-block; text-align:center;  width:100%; background-color:blue; height:" +
+            (parseInt(tdElements[i].offsetHeight / 2) - 5) +
+            "px;";
+          newTD.appendChild(newSpan1);
+          newTD.appendChild(newSpan2);
+          tdElements[i].parentNode.insertBefore(newTD, tdElements[i]);
+          tdElements[i].parentNode.removeChild(tdElements[i]);
+        }
+      }
+      // try {
+      //   splitTd();
+      // } catch (e) {}
+
+      // *****************************************************************************
+      var ones = [
+        "",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+      ];
+      var tens = [
+        "",
+        "",
+        "twenty",
+        "thirty",
+        "forty",
+        "fifty",
+        "sixty",
+        "seventy",
+        "eighty",
+        "ninety",
+      ];
+      var teens = [
+        "ten",
+        "eleven",
+        "twelve",
+        "thirteen",
+        "fourteen",
+        "fifteen",
+        "sixteen",
+        "seventeen",
+        "eighteen",
+        "nineteen",
+      ];
+
+      function convert_millions(num) {
+        if (num >= 1000000) {
+          return (
+            convert_millions(Math.floor(num / 1000000)) +
+            " million " +
+            convert_thousands(num % 1000000)
+          );
+        } else {
+          return convert_thousands(num);
+        }
+      }
+
+      function convert_thousands(num) {
+        if (num >= 1000) {
+          return (
+            convert_hundreds(Math.floor(num / 1000)) +
+            " thousand " +
+            convert_hundreds(num % 1000)
+          );
+        } else {
+          return convert_hundreds(num);
+        }
+      }
+
+      function convert_hundreds(num) {
+        if (num > 99) {
+          return (
+            ones[Math.floor(num / 100)] + " hundred " + convert_tens(num % 100)
+          );
+        } else {
+          return convert_tens(num);
+        }
+      }
+
+      function convert_tens(num) {
+        if (num < 10) return ones[num];
+        else if (num >= 10 && num < 20) return teens[num - 10];
+        else {
+          return tens[Math.floor(num / 10)] + " " + ones[num % 10];
+        }
+      }
+
+      function convert(num) {
+        console.log(convert_millions(num));
+        if (num == 0) return "zero";
+        else return convert_millions(num);
+      }
+      try {
+        convert(
+          parseInt(document.querySelectorAll(".invoice_total div")[4].innerText.replace(/,/g, ""))
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

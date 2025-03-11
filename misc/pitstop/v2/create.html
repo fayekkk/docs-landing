@@ -1,0 +1,333 @@
+<style>
+  .save-car-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 15px;
+  }
+  #save-vehicle {
+    font-weight: 500;
+  }
+  .alert {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    height: 36px;
+    top: 33px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    $("#client_id").on("change", function () {
+      const clientId = $("#client_id").val();
+      $("#le_workflow-type-entity-1_custom_data-vehicle_model").html(
+        '<option value="">Please Select</option>'
+      );
+      $("#le_workflow-type-entity-1_custom_data-brand").val("");
+      $("#le_workflow-type-entity-1_custom_data-model").val("");
+      $("#le_workflow-type-entity-1_custom_data-year").val("");
+      $("#le_workflow-type-entity-1_custom_data-color").val("");
+      $("#le_workflow-type-entity-1_custom_data-motor_number").val("");
+      $("#le_workflow-type-entity-1_custom_data-platelicense").val("");
+      console.log(clientId);
+      $.get(
+        `/v2/api/entity/le_vehicle-form/list/1?filter[reference_id]=${clientId}`
+      ).then(function (data1) {
+        console.log(data1);
+        const total = data1.total;
+        $.get(
+          `/v2/api/entity/le_vehicle-form/list/1?filter[reference_id]=${clientId}&per_page=${total}`
+        ).then(function (data) {
+          console.log(data);
+          const carForms = data.data;
+          for (let i = 0; i < carForms.length; i++) {
+            const model = carForms[i].model;
+            $("#le_workflow-type-entity-1_custom_data-vehicle_model").append(
+              `<option value='${model}'>${model}</option>`
+            );
+          }
+        });
+      });
+    });
+    $("#le_workflow-type-entity-1_custom_data-vehicle_model").on(
+      "change",
+      function () {
+        console.log("changed");
+        const carModel = $(
+          "#le_workflow-type-entity-1_custom_data-vehicle_model"
+        ).val();
+        $.get(
+          `/v2/api/entity/le_vehicle-form/list/1?filter[model]=${carModel}`
+        ).then(function (data) {
+          console.log(data);
+          const cars = data.data;
+          for (let i = 0; i < cars.length; i++) {
+            const brand = cars[i].brand;
+            const color = cars[i].color;
+            const model = cars[i].model;
+            const motorNo = cars[i].motor_no;
+            const plateLicense = cars[i].platelicense;
+            const year = cars[i].year;
+            $("#le_workflow-type-entity-1_custom_data-brand").val(brand);
+            $("#le_workflow-type-entity-1_custom_data-model").val(model);
+            $("#le_workflow-type-entity-1_custom_data-year").val(year);
+            $("#le_workflow-type-entity-1_custom_data-color").val(color);
+            $("#le_workflow-type-entity-1_custom_data-motor_number").val(
+              motorNo
+            );
+            $("#le_workflow-type-entity-1_custom_data-platelicense").val(
+              plateLicense
+            );
+          }
+        });
+      }
+    );
+
+    $(".container-le_workflow-type-entity-1_custom_data-platelicense")
+      .clone()
+      .html(
+        '<a id="save-vehicle"class="l-btn-inline l-btn--text-center my-0 px-0 py-0 ui-btn-w-icon l-btn-w-icon ui-btn--hover-ripple u-bg-color-success u-text-color-white u-text-hover-color-white btn btn-icon btn-success responsive" type="submit" style="width: 4cm; height: 1cm; position: absolute; bottom: 7px;"> <span class="ui-btn-inner-ripple ui-btn-inner-ripple-dark" style="top: 14px; left: 110.262px;"></span> <span class="ui-btn-inner-content" style="margin-left:15px;"> <i class="fas fa-check-circle" style="margin-right: 75px;"></i><span class="ui-btn-inner-text">أضف المركبة</span> </span> </a><div class="alert alert-success d-none" role="alert"> تم اضافة نموذج المركبة إلى ملف العميل بنجاح! </div>'
+      )
+      .addClass("d-flex")
+      .insertBefore(
+        "#le_workflow-type-entity-1 > div.form-row > div.col-lg-12 > div.row > div.col-lg-12.col-md-12.col-xs-12",
+        null
+      );
+    $("body").append(
+      "<style>#save-vehicle > span.ui-btn-inner-content > i {background: none !important; position: absolute; top: 1px; left: -34px; width: 35px; height: 35px; display: inline-block; vertical-align: middle; line-height: 35px; font-size: 20px; text-align: center !important; }#save-vehicle { margin-bottom: 10px !important; }</style>"
+    );
+    // ADD NEW CAR FORM
+    var client = $("#client_id");
+    var brand = $("#le_workflow-type-entity-1_custom_data-brand");
+    var model = $("#le_workflow-type-entity-1_custom_data-model");
+    var year = $("#le_workflow-type-entity-1_custom_data-year");
+    var color = $("#le_workflow-type-entity-1_custom_data-color");
+    var motorNo = $("#le_workflow-type-entity-1_custom_data-motor_number");
+    var plateLicense = $("#le_workflow-type-entity-1_custom_data-platelicense");
+    async function addCarForm() {
+      const entityBody = {
+        client_name: $(client).val(),
+        phone_number: "",
+        brand: $(brand).val(),
+        model: $(model).val(),
+        year: $(year).val(),
+        color: $(color).val(),
+        motor_no: $(motorNo).val(),
+        platelicense: $(plateLicense).val(),
+        reference_id: $(client).val(),
+      };
+
+      console.log(entityBody);
+      const response = await fetch("/v2/api/entity/le_vehicle-form", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          // "apikey": apikey,
+        },
+        body: JSON.stringify(entityBody),
+      });
+      const rez = await response.json();
+      console.log(rez);
+      // alert('The Car has been successfuly added to the client file')
+      $("#save-vehicle").addClass("d-none");
+      $(
+        ".container-le_workflow-type-entity-1_custom_data-platelicense .alert"
+      ).removeClass("d-none");
+    }
+
+    $("#save-vehicle").on("click", function () {
+      addCarForm();
+    });
+  });
+</script>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .popup {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .popup-content {
+    position: relative;
+    width: 65%;
+    /* max-width: 600px; */
+    background: white;
+    border-radius: 8px;
+    /* overflow: hidden; */
+  }
+
+  .close-btn {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #333;
+    background-color: red;
+    width: 26px;
+    height: 26px;
+    text-align: center;
+    vertical-align: baseline;
+    border-radius: 15%;
+  }
+
+  iframe {
+    width: 60%;
+    height: 400px;
+    border: none;
+  }
+
+  .open-popup {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .open-popup:hover {
+    background-color: #0056b3;
+  }
+  #closePopup {
+    color: white;
+    width: 23px;
+    text-align: center;
+    background-color: red;
+    border-radius: 15%;
+  }
+  #closePopup:hover {
+    color: black;
+  }
+</style>
+
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      let Html = `
+    <button class="open-popup">إضافة خدمة</button>
+    <div class="popup" style="display: none;">
+      <div class="popup-content">
+        <span class="close-btn">&times;</span>
+        <iframe
+          id="iframe"
+          src="https://pitstop.daftra.com/owner/products/add/2?box=1"
+          frameborder="0"
+        ></iframe>
+      </div>
+    </div>`;
+
+      $("[id$='--service']").each(function () {
+        // $("[id$='--service']")
+        // --service
+        if ($(this).closest("tr").find(".open-popup").length == 0) {
+          //   $(this).after(Html);
+          $(this)
+            .closest("tr")
+            .find("[class$='--service'] .select2-container")
+            .after(Html);
+          $(this)
+            .closest("tr")
+            .find("[class$='--service'] .select2-container")
+            .css("width", "70%");
+          $(this)
+            .closest("tr")
+            .find("[class$='--service'] .select2-container")
+            .css("display", "inline-block");
+          $(this)
+            .closest("tr")
+            .find("[class$='--service'] label ")
+            .css("display", "block");
+        }
+      });
+
+      function setupPopupHandlers() {
+        const openPopups = document.querySelectorAll(".open-popup");
+        openPopups.forEach((button) => {
+          button.addEventListener("click", (e) => {
+            e.preventDefault();
+            const popup = button.nextElementSibling;
+            const iframe = popup.querySelector("#iframe");
+            iframe.src = iframe.src;
+            popup.style.display = "flex";
+          });
+        });
+
+        const closeBtns = document.querySelectorAll(".close-btn");
+        closeBtns.forEach((closeBtn) => {
+          closeBtn.addEventListener("click", () => {
+            const popup = closeBtn.closest(".popup");
+            popup.style.display = "none";
+          });
+        });
+
+        window.addEventListener("click", (event) => {
+          const popups = document.querySelectorAll(".popup");
+          popups.forEach((popup) => {
+            if (event.target === popup) {
+              popup.style.display = "none";
+            }
+          });
+        });
+      }
+      setupPopupHandlers();
+      function hundleCodeSelect() {
+        $(document).on("change", "[id$='--itemcode']", function (e) {
+          const selectedValue = $(this).val();
+          const selectedText = $(this).find("option:selected").text();
+          console.log("Value:", selectedValue);
+          console.log("Selected Option Text:", selectedText);
+          $(this)
+            .closest("tr")
+            .find("[id$='--service']")
+            .append(
+              `<option value="${selectedValue}">تم إختيار الخدمة </option>`
+              // `<option value="${selectedValue}">${selectedText}</option>`
+            );
+          $(this)
+            .closest("tr")
+            .find("[id$='--service']")
+            .val(selectedValue)
+            .trigger("change");
+        });
+        // itemcode ("[id$='--service']")
+      }
+      hundleCodeSelect();
+      document
+        .querySelector(
+          "#le_workflow-type-entity-1 > div.form-row > div.col-lg-12 > div.row > div.col-lg-12.col-md-12.col-xs-12 > div > div > div > div.card-body.p-0 > div > div > div > div > div > div.btn-group.add-row.dropdown > button"
+        )
+        .addEventListener("click", () => {
+          console.log("Button clicked to add service.");
+          $("[id$='--service']").each(function () {
+            if ($(this).closest("tr").find(".open-popup").length == 0) {
+              $(this)
+                .closest("tr")
+                .find("[class$='--service'] .select2-container")
+                .after(Html);
+              setupPopupHandlers();
+            }
+          });
+        });
+    }, 250);
+  });
+</script>

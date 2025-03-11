@@ -1,0 +1,958 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: transparent;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    #site_data,
+    #client_data {
+      width: 100%;
+      border-spacing: 0;
+      padding: 2px;
+      border: 1px solid #000;
+      margin-top: 10px;
+      font-size: 11px;
+    }
+    #site_data th,
+    #site_data td,
+    #client_data th,
+    #client_data td {
+      border-left: 1px dotted #000;
+      border-bottom: 1px dotted #000;
+      padding: 2px;
+      direction: ltr;
+    }
+    #site_data th:first-child,
+    #client_data th:first-child {
+      text-align: right;
+      direction: rtl;
+    }
+    #site_data th:last-child,
+    #client_data th:last-child {
+      text-align: left;
+    }
+
+    #site_data th:last-child,
+    #site_data td:last-child,
+    #client_data th:last-child,
+    #client_data td:last-child {
+      border-left: none !important;
+    }
+    #site_data tr:last-child th,
+    #site_data tr:last-child td,
+    #client_data tr:last-child th,
+    #client_data tr:last-child td {
+      border-bottom: none !important;
+    }
+
+    #inv_data {
+      width: 100%;
+      border-top: 2px solid #00008b;
+      margin: 10px 0;
+    }
+    #inv_data td:nth-child(1) {
+      width: 15%;
+      padding: 3px;
+      text-align: right;
+      color: #800015;
+      font-weight: bold;
+    }
+    #inv_data td:nth-child(2) {
+      width: 35%;
+      padding: 3px;
+      text-align: right;
+      color: #800015;
+      font-weight: bold;
+    }
+    #inv_data td:nth-child(3) {
+      width: 35%;
+      padding: 3px;
+      text-align: left;
+      color: #800015;
+      font-weight: bold;
+    }
+    #inv_data td:nth-child(4) {
+      width: 15%;
+      padding: 3px;
+      text-align: left;
+      color: #800015;
+      font-weight: bold;
+    }
+
+    #invoice_title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #0080ff;
+      text-align: center;
+    }
+    .square {
+      background-color: #0080ff;
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      margin: 0 5px;
+    }
+    .alignRight {
+      text-align: right;
+    }
+    .alignRLeft {
+      text-align: left;
+    }
+    .boldtext {
+      font-weight: bold;
+    }
+    .widthes td:nth-child(1) {
+      width: 12%;
+    }
+    .widthes td:nth-child(2) {
+      width: 15%;
+    }
+    .widthes td:nth-child(3) {
+      width: 8%;
+    }
+    .widthes td:nth-child(4) {
+      width: 15%;
+    }
+    .widthes td:nth-child(5) {
+      width: 15%;
+    }
+    .widthes td:nth-child(6) {
+      width: 15%;
+    }
+    .widthes td:nth-child(6) {
+      width: 8%;
+    }
+    .widthes td:nth-child(7) {
+      width: 15%;
+    }
+    .widthes td:nth-child(8) {
+      width: 12%;
+    }
+    .colered {
+      background-color: #dddddd;
+    }
+
+    #invDetails {
+      width: 100%;
+      border-spacing: 0;
+      padding: 2px;
+      border: 1px solid #000;
+      margin: 10px 0;
+      font-size: 11px;
+    }
+
+    #invDetails td {
+      border-left: 1px dotted #000;
+      border-bottom: 1px dotted #000;
+      padding: 2px;
+      direction: ltr;
+      text-align: center !important;
+    }
+    #invDetails td:first-child {
+      direction: rtl;
+    }
+    #invDetails td:last-child {
+      text-align: left;
+    }
+
+    #invDetails td:last-child {
+      border-left: none !important;
+    }
+
+    #invDetails tr:last-child td {
+      border-bottom: none !important;
+    }
+    #invDetails tr:first-child td {
+      background-color: #dddddd;
+    }
+    #invDetails td:nth-child(1) {
+      width: 20%;
+    }
+    #invDetails td:nth-child(2) {
+      width: 20%;
+    }
+    #invDetails td:nth-child(3) {
+      width: 10%;
+    }
+    #invDetails td:nth-child(4) {
+      width: 25%;
+    }
+    #invDetails td:nth-child(5) {
+      width: 12.5%;
+    }
+    #invDetails td:nth-child(6) {
+      width: 12.5%;
+    }
+    #listing_table {
+      font-size: 10px !important;
+      text-align: center !important;
+      border-left: none !important;
+      border-bottom: none !important;
+      border-right: 1px solid #000;
+      border-top: 1px solid #000;
+    }
+    #listing_table th {
+      background-color: #dddddd !important;
+      direction: ltr;
+      border-left: 1px solid #000;
+      border-bottom: 1px solid #000;
+      border-right: none !important;
+      border-top: none !important;
+      padding: 2px !important;
+    }
+    #listing_table td {
+      border-left: 1px solid #000;
+      border-bottom: 1px solid #000;
+      border-right: none !important;
+      border-top: none !important;
+      padding: 2px !important;
+    }
+    #listing_table th:nth-child(1) {
+      width: 5% !important;
+    }
+    #listing_table th:nth-child(2) {
+      width: 10% !important;
+    }
+    #listing_table th:nth-child(3) {
+      width: 20% !important;
+    }
+    #listing_table th:nth-child(4) {
+      width: 7.5% !important;
+    }
+    #listing_table th:nth-child(5) {
+      width: 7.5% !important;
+    }
+    #listing_table th:nth-child(6) {
+      width: 8% !important;
+    }
+    #listing_table th:nth-child(7) {
+      width: 8% !important;
+    }
+    #listing_table th:nth-child(8) {
+      width: 10% !important;
+    }
+    #listing_table th:nth-child(9) {
+      width: 5% !important;
+    }
+    #listing_table th:nth-child(10) {
+      width: 10% !important;
+    }
+    #listing_table th:nth-child(11) {
+      width: 10% !important;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #new_totals {
+      width: 100%;
+      border-spacing: 0;
+      border-top: 1px solid black;
+      border-right: 1px solid black;
+      direction: ltr;
+      font-weight: bold;
+      font-size: 10px;
+      vertical-align: baseline;
+    }
+    #new_totals td {
+      border-bottom: 1px solid black;
+      border-left: 1px solid black;
+      padding: 2px;
+    }
+    #new_totals td:nth-child(1) {
+      width: 40%;
+      text-align: left;
+    }
+    #new_totals td:nth-child(2) {
+      width: 20%;
+      text-align: right;
+    }
+    #new_totals td:nth-child(3) {
+      width: 40%;
+      text-align: left;
+      direction: rtl;
+    }
+    #qr-code {
+      padding: 6px;
+      border: 1px solid black;
+    }
+    #qr-code img {
+      width: 100%;
+    }
+    .words {
+      display: inline-block;
+      width: 100%;
+    }
+    .words:nth-child(1) {
+      text-align: left;
+    }
+    .words:nth-child(2) {
+      text-align: right;
+    }
+    #signs {
+      width: 100%;
+      border-spacing: 0;
+      margin-top: 25px;
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+      direction: ltr;
+      page-break-inside: avoid;
+    }
+    #signs td {
+      border-top: 1px solid black;
+      border-left: 1px solid black;
+      padding: 2px;
+      text-align: center;
+    }
+    #signs tr:nth-child(1) td {
+      background-color: #dddddd;
+      font-weight: bold;
+    }
+    .bg {
+      z-index: -90000;
+      position: absolute;
+      left: 0px;
+      background-image: url("https://jawaharatbat.daftra.com/files/48ec4b8b/logos/679f7bd4f0fd8_blobid1738505170110.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+
+      width: 100%;
+      height: 23.2cm;
+    }
+    .listing-table:nth-child(2) * {
+      background-color: none !important;
+    }
+    /* #signs{
+      display: none;
+    } */
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="bg" style="top: 0cm"></div>
+      <div class="invoice-inner">
+        <div id="invoice_title">{%invoice_title%}</div>
+        <table id="inv_data">
+          <tbody>
+            <tr>
+              <td>رقم الفاتورة</td>
+              <td>{%invoice_no%}</td>
+              <td>{%invoice_no%}</td>
+              <td>: Invoice No</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="site_data">
+          <thead>
+            <th colspan="4"><span class="square"></span> تفاصيل شركتنا</th>
+            <th colspan="4"><span class="square"></span> Our Details:</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="alignRight colered">الإسم</td>
+              <td class="alignRight boldtext" colspan="3">
+                مؤسسة جوهرة بات للمقاولات العامة
+              </td>
+              <td class="alignRLeft boldtext" colspan="3">
+                Jawharat Bat Contracting EST
+              </td>
+              <td class="alignRLeft colered">Name:</td>
+            </tr>
+            <tr>
+              <td class="alignRight colered">اسم الشارع</td>
+              <td class="alignRight" colspan="3">العام</td>
+              <td class="alignRLeft" colspan="3">Al-Aam</td>
+              <td class="alignRLeft colered">Street Name :</td>
+            </tr>
+            <tr class="widthes">
+              <td class="alignRight colered">رقم المبنى</td>
+              <td class="alignRight">٨٦٩٤</td>
+              <td class="alignRight colered">المدينة</td>
+              <td class="alignRight">الرياض</td>
+              <td class="alignRLeft">Riyadh</td>
+              <td class="alignRLeft colered">City:</td>
+              <td class="alignRLeft">8694</td>
+              <td class="alignRLeft colered">Building No:</td>
+            </tr>
+            <tr>
+              <td class="alignRight colered">الرقم الإضافى</td>
+              <td class="alignRight">٥١٦٢</td>
+              <td class="alignRight colered">الحي</td>
+              <td class="alignRight">العزيزية</td>
+              <td class="alignRLeft">Al-Aziziyah</td>
+              <td class="alignRLeft colered">District:</td>
+              <td class="alignRLeft">5162</td>
+              <td class="alignRLeft colered">Addl. No.</td>
+            </tr>
+            <tr>
+              <td class="alignRight colered">الرمز البريدي</td>
+              <td class="alignRight">١٨٤١٤</td>
+              <td class="alignRight colered">البلد</td>
+              <td class="alignRight">المملكة العربية السعودية</td>
+              <td class="alignRLeft">Saudi Arabia</td>
+              <td class="alignRLeft colered">Country :</td>
+              <td class="alignRLeft">18414</td>
+              <td class="alignRLeft colered">Postal Code :</td>
+            </tr>
+            <tr>
+              <td class="alignRight colered">الرقم الضريبي</td>
+              <td class="alignRight">٣١١٧١٩٥٧٥٨٠٠٠٣</td>
+ 
+              <td class="alignRight colered">معرف أخر</td>
+              <td class="alignRight">١٠٥٢٨٩٧٨٤٢</td>
+              <td class="alignRLeft">1052897842</td>
+              <td class="alignRLeft colered">CRN</td>
+              <td class="alignRLeft">{%site_bn1%}</td>
+              <td class="alignRLeft colered">VAT Number</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="client_data">
+          <thead>
+            <th colspan="4"><span class="square"></span> تفاصيل شركة العميل</th>
+            <th colspan="4"><span class="square"></span> Client Details:</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="alignRight colered">الإسم</td>
+              <td class="alignRight boldtext" colspan="3">
+                {%client_business_name%}
+              </td>
+              <td class="alignRLeft boldtext" colspan="3">
+                {%le_custom_data_client_client_english_name_%}
+              </td>
+              <td class="alignRLeft colered">Name:</td>
+            </tr>
+            <tr>
+              <td class="alignRight colered">اسم الشارع</td>
+              <td class="alignRight" colspan="3">{%client_address%}</td>
+              <td class="alignRLeft" colspan="3">
+                {%le_custom_data_client_street_name%}
+              </td>
+              <td class="alignRLeft colered">Street Name :</td>
+            </tr>
+            <tr class="widthes">
+              <td class="alignRight colered">رقم المبنى</td>
+              <td class="alignRight">{%le_custom_data_client_building_no_arabic%}</td>
+              <td class="alignRight colered">المدينة</td>
+              <td class="alignRight">{%client_city%}</td>
+              <td class="alignRLeft">
+                {%le_custom_data_client_client_city_en%}
+              </td>
+              <td class="alignRLeft colered">City:</td>
+              <td class="alignRLeft">{%le_custom_data_client_building_no%}</td>
+              <td class="alignRLeft colered">Building No:</td>
+            </tr>
+            <tr>
+              <td class="alignRight colered">الرقم الإضافى</td>
+              <td class="alignRight">{%le_custom_data_client_arabic_addl_no%}</td>
+              <td class="alignRight colered">الحي</td>
+              <td class="alignRight">{%client_state%}</td>
+              <td class="alignRLeft">
+                {%le_custom_data_client_client_district_en%}
+              </td>
+              <td class="alignRLeft colered">District:</td>
+              <td class="alignRLeft">{%le_custom_data_client_addl_no%}</td>
+              <td class="alignRLeft colered">Addl. No.</td>
+            </tr>
+            <tr>
+              <td class="alignRight colered">الرمز البريدي</td>
+              <td class="alignRight">{%client_postcode%}</td>
+              <td class="alignRight colered">البلد</td>
+              <td class="alignRight">{%client_country%}</td>
+              <td class="alignRLeft">
+                {%le_custom_data_client_client_country_en%}
+              </td>
+              <td class="alignRLeft colered">Country :</td>
+              <td class="alignRLeft">{%client_postcode%}</td>
+              <td class="alignRLeft colered">Postal Code :</td>
+            </tr>
+            <tr>
+              <td class="alignRight colered">الرقم الضريبي</td>
+              <td class="alignRight">{%le_custom_data_client_vat_no_arabic%}</td>
+              <td class="alignRight colered">معرف أخر</td>
+              <td class="alignRight">{%le_custom_data_client_crn_arabic%}</td>
+              <td class="alignRLeft">{%le_custom_data_client_crn%}</td>
+              <td class="alignRLeft colered">CRN</td>
+              <td class="alignRLeft">{%client_bn1%}</td>
+              <td class="alignRLeft colered">VAT Number</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="invDetails">
+          <tbody>
+            <tr>
+              <td>
+                رقم المرجع
+                <br />
+                Project / Reference No
+              </td>
+              <td>
+                فترة الفاتورة
+                <br />
+                Invoice Period
+              </td>
+              <td>
+                تاريخ الإستحقاق
+                <br />
+                Due Date
+              </td>
+              <td>
+                رقم أمر الشراء
+                <br />
+                Contract / PO No
+              </td>
+              <td>
+                تاريخ التسليم
+                <br />
+                Supply Date
+              </td>
+              <td>
+                تاريخ الفاتورة
+                <br />
+                Invoice Date
+              </td>
+            </tr>
+            <tr>
+              <td>{%Reference No%}</td>
+              <td>{%Invoice Period%}</td>
+              <td>{% Due Date%}</td>
+              <td>{%PO No%}</td>
+              <td>{%Supply Date%}</td>
+              <td>{%invoice_date%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="items-list">{%items_list%}</div>
+        <table style="width: 100%">
+          <tbody>
+            <tr>
+              <td style="width: 25%" id="qr-code">{%sa_qr_code_image%}</td>
+              <td style="width: 75%; vertical-align: baseline">
+                <table id="new_totals">
+                  <tbody>
+                    <tr>
+                      <td>Gross Total (SAR) :</td>
+                      <td id="ttlbef"></td>
+                      <td>السعر الإجمالى (ريال سعودى)</td>
+                    </tr>
+                    <tr>
+                      <td>Total Discount (SAR) :</td>
+                      <td id="discounts">
+                        {%discount%} /// {%item-discount-total%}
+                      </td>
+                      <td>الخصم الإضافى (ريال سعودى)</td>
+                    </tr>
+                    <tr>
+                      <td>Total excl. VAT (SAR) :</td>
+                      <td>{%invoice_subtotal%}</td>
+                      <td>
+                        الإجمالي غير شامل ضريبة القيمة المضافة (ريال سعودى)
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>VAT Amount (SAR) :</td>
+                      <td>{%tax-total%}</td>
+                      <td>ضريبة القيمة المضافة (ريال سعودى)</td>
+                    </tr>
+                    <tr>
+                      <td>Amount Incl. VAT (SAR) :</td>
+                      <td id="invoice_total">{%invoice_total%}</td>
+                      <td>المبلغ شاملاً ضريبة القيمة المضافة (ريال سعودى)</td>
+                    </tr>
+                    <tr>
+                      <td>Balance Due (SAR) :</td>
+                      <td>{%invoice_total%}</td>
+                      <td>إجمالى المبلغ المستحق (ريال سعودى)</td>
+                    </tr>
+                    <tr>
+                      <td colspan="100%">
+                        <span
+                          class="words"
+                          id="en_invoice_total_spelled"
+                        ></span>
+
+                        <span class="words">{%invoice_total_spelled%}</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="100%" style="height: 10px"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="signs">
+          <tbody>
+            <tr>
+              <td colspan="2">Bank Details / التفاصيل المصرفية</td>
+              <td style="width: 20%">Prepared By</td>
+              <td style="width: 20%">Approved By</td>
+              <td style="width: 20%">Received By</td>
+            </tr>
+            <tr>
+              <td style="width: 13%">ACCOUNT NAME / اسم الحساب</td>
+              <td style="width: 27%">
+                مؤسسة جوهرة بات للمقاولات العامة
+
+                <br />
+                Jawharat Bat Contracting EST
+              </td>
+              <td rowspan="5" style="vertical-align: bottom; font-weight: bold">
+                التوقيع مع الختم <br />
+                Signature with stamp
+              </td>
+              <td rowspan="5" style="vertical-align: bottom; font-weight: bold">
+                التوقيع مع الختم <br />
+                Signature with stamp
+              </td>
+              <td rowspan="5" style="vertical-align: bottom; font-weight: bold">
+                التوقيع مع الختم <br />
+                Signature with stamp
+              </td>
+            </tr>
+            <tr>
+              <td>BANK / بنك</td>
+              <td>
+                مصرف الراجحى
+                <br />
+                Al-Rajhi Bank
+              </td>
+            </tr>
+            <tr>
+              <td>ACCOUNT / الحساب</td>
+              <td>423000010006086187303</td>
+            </tr>
+            <tr>
+              <td>IBAN / آيبان</td>
+              <td>SA9180000423608016187303</td>
+            </tr>
+            <tr>
+              <td>BRANCH / الفرع</td>
+              <td>
+                الرياض
+                <br />
+                Riyadh
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+      </div>
+      <div style="display: none">
+        <div id="discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function addDiscCol() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        if (allRows[0].cells.length == 8) {
+          var newth = document.createElement("th");
+          newth.innerHTML = "الخصم  <br> Discount";
+
+          newth.classList.add("DiscountAdded");
+          allRows[0].insertBefore(newth, allRows[0].cells[5]);
+          for (var i = 1; i < allRows.length; i++) {
+            var newtd = document.createElement("td");
+            newtd.innerText = "0";
+
+            allRows[i].insertBefore(newtd, allRows[i].cells[5]);
+          }
+        }
+      }
+      try {
+        addDiscCol();
+      } catch (error) {
+        console.log(error);
+      }
+      function addsubttlCol() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var newTh = document.createElement("th");
+        newTh.innerHTML =
+          "    السعر الإجمالى غير شامل ضريبة القيمة المضافة (ريال سعودى)   <br> Total Price excl. VAT (SAR) ";
+        allRows[0].insertBefore(
+          newTh,
+          allRows[0].cells[allRows[0].cells.length - 3]
+        );
+
+        for (var i = 1; i < allRows.length; i++) {
+          console.log(allRows[i].cells[allRows[i].cells.length - 1].innerText);
+          console.log(allRows[i].cells[allRows[i].cells.length - 2].innerText);
+
+          var newTd = document.createElement("td");
+          newTd.innerText = (
+            parseFloat(
+              allRows[i].cells[allRows[i].cells.length - 1].innerText.replace(
+                /,/g,
+                ""
+              )
+            ) -
+            parseFloat(
+              allRows[i].cells[allRows[i].cells.length - 2].innerText.replace(
+                /,/g,
+                ""
+              )
+            )
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          allRows[i].insertBefore(
+            newTd,
+            allRows[i].cells[allRows[i].cells.length - 3]
+          );
+        }
+      }
+      try {
+        addsubttlCol();
+      } catch (error) {
+        console.log(error);
+      }
+
+      function totalbrforediscount() {
+        var ttlbef = 0;
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 1; i < allRows.length; i++) {
+          console.log(allRows[i].cells[4].innerText.replace(/,/g, ""));
+          console.log(allRows[i].cells[3].innerText.replace(/,/g, ""));
+          ttlbef =
+            ttlbef +
+            parseFloat(allRows[i].cells[4].innerText.replace(/,/g, "")) *
+              parseFloat(allRows[i].cells[3].innerText.replace(/,/g, ""));
+          console.log({ ttlbef: ttlbef });
+        }
+
+        document.querySelector("#ttlbef").innerText =
+          ttlbef.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " ر.س ";
+        document.getElementById("discounts").innerText =
+          (
+            parseFloat(
+              document
+                .getElementById("discounts")
+                .innerText.split("///")[0]
+                .replace(/,/g, "")
+            ) +
+            parseFloat(
+              document
+                .getElementById("discounts")
+                .innerText.split("///")[1]
+                .replace(/,/g, "")
+            )
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " ر.س ";
+      }
+      try {
+        totalbrforediscount();
+      } catch (error) {
+        console.log(error);
+      }
+      function AddSerials() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var newTh = document.createElement("th");
+        newTh.innerText = "#";
+        allRows[0].insertBefore(newTh, allRows[0].cells[0]);
+        for (var i = 1; i < allRows.length; i++) {
+          var newTd = document.createElement("td");
+          newTd.innerText = i;
+          allRows[i].insertBefore(newTd, allRows[i].cells[0]);
+        }
+      }
+      try {
+        AddSerials();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+    <script>
+      var ones = [
+        "",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+      ];
+      var tens = [
+        "",
+        "",
+        "twenty",
+        "thirty",
+        "forty",
+        "fifty",
+        "sixty",
+        "seventy",
+        "eighty",
+        "ninety",
+      ];
+      var teens = [
+        "ten",
+        "eleven",
+        "twelve",
+        "thirteen",
+        "fourteen",
+        "fifteen",
+        "sixteen",
+        "seventeen",
+        "eighteen",
+        "nineteen",
+      ];
+
+      function convert_billions(num) {
+        if (num >= 1000000000) {
+          return (
+            convert_billions(Math.floor(num / 1000000000)) +
+            " billion " +
+            convert_millions(num % 1000000000)
+          );
+        } else {
+          return convert_millions(num);
+        }
+      }
+      function convert_millions(num) {
+        if (num >= 1000000) {
+          return (
+            convert_millions(Math.floor(num / 1000000)) +
+            " million " +
+            convert_thousands(num % 1000000)
+          );
+        } else {
+          return convert_thousands(num);
+        }
+      }
+
+      function convert_thousands(num) {
+        if (num >= 1000) {
+          return (
+            convert_hundreds(Math.floor(num / 1000)) +
+            " thousand " +
+            convert_hundreds(num % 1000)
+          );
+        } else {
+          return convert_hundreds(num);
+        }
+      }
+
+      function convert_hundreds(num) {
+        if (num > 99) {
+          return (
+            ones[Math.floor(num / 100)] + " hundred " + convert_tens(num % 100)
+          );
+        } else {
+          return convert_tens(num);
+        }
+      }
+
+      function convert_tens(num) {
+        if (num < 10) return ones[num];
+        else if (num >= 10 && num < 20) return teens[num - 10];
+        else {
+          return tens[Math.floor(num / 10)] + " " + ones[num % 10];
+        }
+      }
+
+      function convert(num) {
+        console.log(convert_billions(num));
+        if (num == 0) return "zero";
+        else return convert_billions(num);
+      }
+      function convertFN(num, maincurrency, floatCurr) {
+        var myIntNum = parseInt(num.split(".")[0]);
+        var myFloatNum = parseInt(num.split(".")[1]);
+        return (
+          convert(myIntNum) +
+          " " +
+          maincurrency +
+          " and " +
+          convert(myFloatNum) +
+          " " +
+          floatCurr
+        );
+      }
+
+      try {
+        var myNum = String(
+          parseFloat(
+            document
+              .getElementById("invoice_total")
+              .innerText.replace(/[\$,]/g, "")
+          ).toFixed(2)
+        );
+
+        document.getElementById("en_invoice_total_spelled").innerText =
+          convertFN(myNum, "SAR", "Hallah");
+      } catch (error) {
+        console.log(error);
+      }
+      function repeatBg() {
+        var invoiceHeight =
+          document.querySelector(".invoice-inner").offsetHeight;
+        var pageHeight = document.querySelector(".bg").offsetHeight;
+        var numPages = Math.ceil(invoiceHeight / pageHeight);
+        var bg = document.querySelector(".bg");
+        var topDis = parseFloat(bg.style.top.replace("cm", ""));
+        for (var i = 1; i < numPages; i++) {
+          var newBg = document.createElement("div");
+          newBg.setAttribute("class", "bg");
+          topDis = topDis + 23.2;
+          console.log(topDis);
+          newBg.style.top = topDis + "cm";
+          bg.parentNode.insertBefore(newBg, bg.nextSibling);
+        }
+      }
+      try {
+        repeatBg();
+      } catch (e) {
+        console.log(e);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 10px 0;
+    }
+
+    .invoice-address {
+      margin: 10px 0;
+      padding-top: 30px;
+    }
+
+    bold_title {
+      font-weight: bold;
+    }
+
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: left;
+      padding: 6px 4px;
+    }
+
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: left;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+
+    .total-table td {
+      border-left: 1px solid #555555;
+    }
+
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+
+    .notes-block {
+      margin: 5px 0 0 0;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    #business_info {
+      line-height: 1.4;
+    }
+
+    #listing_table th:last-child,
+    #listing_table td:last-child {
+      border-left: 1px solid #555555;
+    }
+
+    #label_subtotal {
+      width: 65px;
+    }
+
+    #label_field3,
+    #label_field4 {
+      width: 55px;
+    }
+
+    #items-list > table:nth-child(2) tr td:nth-child(1) {
+      width: 60%;
+    }
+
+    #listing_table th,
+    #listing_table td {
+      text-align: center;
+    }
+
+    #listing_table th:nth-child(2),
+    #listing_table td:nth-child(2) {
+      text-align: left;
+    }
+
+    .invoice-inner {
+      margin: 0 25px;
+    }
+
+    #listing_table th:last-child,
+    #listing_table td:last-child {
+      display: none;
+    }
+    #listing_table th:nth-last-child(2),
+    #listing_table td:nth-last-child(2) {
+      border-right: 1px solid black;
+    }
+    .listing-table:nth-child(2) td:nth-child(2) {
+      direction: rtl;
+    }
+    .qr-code img {
+      height: 80px;
+    }
+
+    /*   .invoice-info {
+      border-collapse: collapse;
+    }*/
+    .invoice-info td {
+      padding: 2px;
+      border: 1px solid #000;
+      vertical-align: middle;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 7px;
+    }
+
+    .listing-table:nth-child(2) td {
+      border-bottom: 1px solid #000 !important;
+      border-top: 0 !important;
+      border-left: 0 !important;
+      border-right: 0 !important;
+    }
+
+    .listing-table:nth-child(2) td:first-child {
+      border: 0 !important;
+    }
+
+    .listing-table:nth-child(2) td:nth-child(2) {
+      font-weight: bold;
+    }
+    .info-child td {
+      border: none;
+      padding: 0;
+    }
+    .info-child td:nth-child(even) {
+      text-align: left;
+    }
+    .invoice-info td {
+      width: 25%;
+    }
+    #items-list td {
+      background-color: transparent;
+    }
+
+    #new_totals {
+      margin-top: 15px;
+      width: 50%;
+      float: right;
+      border-top: 1px solid black;
+      border-right: 1px solid black;
+      border-spacing: 0;
+    }
+    #new_totals td {
+      border-bottom: 1px solid black;
+      border-left: 1px solid black;
+      padding: 3px;
+      text-align: center !important;
+    }
+    .grayBg td {
+      background-color: #e5e5e5 !important;
+      font-weight: bold;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      <div
+        style="
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          background-image: url('https://somutraining.daftra.com/files/d51883db/logos/65b631957a34a_blobid1706439059753.png');
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center;
+          width: 21cm;
+          height: 29.4cm;
+        "
+      >
+        {%html_sticky_header%}
+        <div class="invoice-inner">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td align="left" valign="top" style="width: 38%; height: 2.25cm">
+                <!--       <img id="logo" class="editable-area" src="{%logo%}" width="{%logo-width%}" height="{%logo-height%}" />-->
+              </td>
+
+              <td valign="top" align="center">
+                <div class="qr-code">{%sa_qr_code_image%}<br /></div>
+              </td>
+              <td align="right" valign="" style="width: 38%; font-size: 14px">
+                <p
+                  id="invoice_title"
+                  class="editable-area invoice-name"
+                  style="text-align: center"
+                >
+                  {%invoice_title%}
+                </p>
+                <!--    <img id="logo" class="editable-area" src="https://somutraining.daftra.com/files/d51883db/logos/6183ab437b33d_blobid1636019002947.jpg" width="200" height="auto" />-->
+                <!-- 
+            <div id="business_info" class='editable-area'>
+              {%business_info%}
+            </div> -->
+              </td>
+            </tr>
+          </table>
+
+          <div class="invoice-address">
+            <table
+              width="100%"
+              border="0"
+              cellspacing="0"
+              cellpadding="0"
+              class="invoice-info"
+            >
+              <tr>
+                <td>
+                  <table width="100%" class="info-child">
+                    <tr>
+                      <td>{%label_invoice_no%}</td>
+                      <td>: {%invoice_number%}</td>
+                    </tr>
+                  </table>
+                </td>
+                <td>
+                  <table width="100%" class="info-child">
+                    <tr>
+                      <td>
+                        Vendor Code <br />
+                        رمز البائع
+                      </td>
+                      <td>:{%Vendor Code%}</td>
+                    </tr>
+                  </table>
+                </td>
+
+                <td>
+                  <table width="100%" class="info-child">
+                    <tr>
+                      <td>Purchase Order <br />رقم أمر الشراء</td>
+                      <td>:{%Po No%}</td>
+                    </tr>
+                  </table>
+                </td>
+                <td>
+                  <table width="100%" class="info-child">
+                    <tr>
+                      <td>
+                        Date <br />
+                        التاريخ
+                      </td>
+                      <td>: {%invoice_date%}</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <!-- <tr>
+            <td width="50%" align="left" valign="top">
+
+              <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td valign="top" style="float: left;"><strong id="field1" class='editable-area'>{%field1%}</strong></td>
+                  <td style="padding-left:20px;" valign="top">
+                    <div id="client_info" class='editable-area'>{%client_info%}</div>
+                  </td>
+                </tr>
+                <tr id="shipping_options" style="display:none;">
+                  <td valign="top" style="float: left;"><br /><strong id="label_ship" class='editable-area'>{%label_ship%}</strong></td>
+                  <td style="padding-left:20px;" valign="top"><br />
+                    <div id="ship_info" class='editable-area'>{%ship_info%}</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td width="50%" valign="top" align="right">
+              <table id="invoice_basics" border="0" cellspacing="0" cellpadding="0" align="right">
+                <tr>
+                  <td align="right"><strong class="editable-area" id="label_invoice_no">{%label_invoice_no%}</strong></td>
+                  <td style="padding-left:20px;" align="left">{%invoice_number%}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right"><strong class="editable-area">Vendor Code</strong></td>
+                  <td style="padding-left:20px;" align="left">{%Vendor Code%}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right"><strong class="editable-area" id="label_date">{%label_date%}</strong></td>
+                  <td style="padding-left:20px;" align="left">{%invoice_date%}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right"><strong class="editable-area">P.O</strong></td>
+                  <td style="padding-left:20px;" align="left">{%Po No%}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right"><strong class="editable-area">VAT No</strong></td>
+                  <td style="padding-left:20px;" align="left">{%client_bn1%}
+                  </td>
+                </tr>
+
+              </table>
+               <custom_field id="custom_fields" style="clear:both" class='editable-area' border="0" cellspacing="0" cellpadding="0" align="right">
+                {%custom_fields%}
+              </custom_field>
+
+            </td>
+          </tr> -->
+            </table>
+          </div>
+          <div>
+            <table
+              width="100%"
+              border="0"
+              cellspacing="0"
+              cellpadding="0"
+              style="padding: 18px 0"
+            >
+              <tr>
+                <td class="client" width="50%" valign="top" align="center">
+                  <div id="client_info" class="editable-area">
+                    {%client_info%}
+                  </div>
+                </td>
+                <td class="business" width="50%" valign="top" align="center">
+                  <div id="business_info" class="editable-area">
+                    {%business_info%}
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div id="items-list" style="min-height: 14.5cm">{%items_list%}</div>
+
+          <div class="notes-block">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td>
+                  <!--     <div style="font-style: italic" class="editable-area" id="footer">{%footer%}</div>-->
+                </td>
+              </tr>
+            </table>
+          </div>
+          <p>Payment Method</p>
+          <p>Transfer To: Somu International Trading Co</p>
+          <p>Bank Name: SNB</p>
+          <p>IBAN NO: SA63 1000 0007 8712 4800 0102</p>
+          <p>Terms and Conditions: Against Delivery</p>
+          <div style="text-align: left"></div>
+          <!-- Hidden Div -->
+          <div style="display: none">
+            <div class="inv-dis">{%discount%}</div>
+            <div class="subtot">{%invoice_subtotal%}</div>
+          </div>
+        </div>
+        {%html_sticky_footer%}
+      </div>
+    </div>
+    <script>
+      function swapAll() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          if (allRows[i].cells.length == 8) {
+            var band = allRows[i].cells[0].innerText;
+            var desc = allRows[i].cells[1].innerText;
+            var taxper = allRows[i].cells[2].innerText;
+            var taxAm = allRows[i].cells[3].innerText;
+            var totWithVat = allRows[i].cells[4].innerText;
+            var price = allRows[i].cells[5].innerText;
+            var Qty = allRows[i].cells[6].innerText;
+            var totBeforeVat = allRows[i].cells[7].innerText;
+            allRows[i].cells[0].innerText = band;
+            allRows[i].cells[1].innerText = desc;
+            allRows[i].cells[2].innerText = price;
+            allRows[i].cells[3].innerText = Qty;
+            allRows[i].cells[4].innerText = taxper;
+            allRows[i].cells[5].innerText = taxAm;
+            allRows[i].cells[6].innerText = totWithVat;
+            allRows[i].cells[7].innerText = totBeforeVat;
+          } else {
+            var band = allRows[i].cells[0].innerText;
+            var desc = allRows[i].cells[1].innerText;
+            var taxper = allRows[i].cells[2].innerText;
+            var taxAm = allRows[i].cells[3].innerText;
+            var totWithVat = allRows[i].cells[4].innerText;
+            var price = allRows[i].cells[5].innerText;
+            var Qty = allRows[i].cells[6].innerText;
+            var discount = allRows[i].cells[7].innerText;
+            var totBeforeVat = allRows[i].cells[8].innerText;
+            allRows[i].cells[0].innerText = band;
+            allRows[i].cells[1].innerText = desc;
+            allRows[i].cells[2].innerText = price;
+            allRows[i].cells[3].innerText = Qty;
+            allRows[i].cells[4].innerText = taxper;
+            allRows[i].cells[5].innerText = taxAm;
+            allRows[i].cells[6].innerText = discount;
+            allRows[i].cells[7].innerText = totWithVat;
+            allRows[i].cells[8].innerText = totBeforeVat;
+          }
+        }
+      }
+      try {
+        swapAll();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

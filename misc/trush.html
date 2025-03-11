@@ -1,0 +1,428 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    body {
+      direction: rtl;
+      /* background: #ffffff; */
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      /* background: #fff; */
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    .listing-table th {
+      text-align: right;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      border-right: none !important;
+      border-left: none !important;
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    #listing_table th {
+      font-weight: bold;
+      border: none !important;
+    }
+    /*#listing_table tr th:last-child, #listing_table tr td:last-child{text-align:left}*/
+    .listing-table:nth-child(2) {
+      direction: ltr;
+      margin: 20px 0;
+    }
+    .listing-table:nth-child(2) tr td {
+      border: none !important;
+      background-color: transparent !important;
+    }
+    .listing-table:nth-child(2) tr td:nth-child(2) {
+      width: 35%;
+    }
+    #listing_table th:nth-child(2) {
+      width: 45%;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    strong_tag {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 25px;
+      font-weight: bold;
+    }
+    .row-tax-summary td:nth-child(1) {
+      direction: ltr;
+    }
+    .notes-block {
+      margin: 30px 0 0 0;
+    }
+    .total-row {
+      font-weight: bold;
+    }
+    .total-row td:nth-child(1) {
+      background-color: transparent !important;
+    }
+    .listing-table:nth-child(2) strong {
+      font-weight: normal;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+    .qr-code img {
+      margin-top: 10px;
+    }
+    .invoice-date {
+      font-size: 15px;
+    }
+    /*.biz__info td{padding: 0 0 15px;width:33%; border-bottom: 1px solid #c0c0c0}*/
+    .inv__info {
+      margin: 20px 0;
+    }
+    .labels {
+      color: #7d9eb5;
+    }
+    .listing-table:nth-child(2) tr:first-child td:nth-child(2) {
+      color: #7d9eb5;
+      text-align: right;
+    }
+    .listing-table:nth-child(2) tr:nth-child(n + 1) td:nth-child(1) {
+      color: #7d9eb5;
+      width: 40% !important;
+    }
+    .listing-table:nth-child(2) td {
+      text-align: right;
+    }
+    #listing_table tr *:first-child {
+      padding-right: 9px;
+    }
+    #business_info {
+      width: 90%;
+      margin-right: auto;
+    }
+    #business_info,
+    #client_info {
+      color: #7d9eb5;
+    }
+    #label_unit_price,
+    #label_quantity {
+      width: 90px;
+    }
+    #listing_table th,
+    #listing_table td {
+      text-align: center !important;
+    }
+    #label_subtotal,
+    #listing_table td:last-child {
+      text-align: left;
+    }
+    #listing_table th:nth-child(1) {
+      width: 110px;
+    }
+    /* #listing_table th:nth-last-child(2),
+    #listing_table td:nth-last-child(2) {
+      padding-right: 25px;
+    } */
+    #listing_table {
+      direction: ltr;
+    }
+    #custom_fields td:nth-child(1) {
+      text-align: left;
+    }
+    #custom_fields td:nth-child(2) {
+      text-align: center;
+    }
+    #custom_fields {
+      direction: ltr;
+      width: 30%;
+      margin-left: 70%;
+      margin-bottom: 15px;
+    }
+    #header {
+      width: 100%;
+      direction: ltr;
+    }
+    #header td {
+      text-align: left;
+    }
+    #invoice_title {
+      font-size: 25px;
+      font-weight: bold;
+      text-align: center !important;
+    }
+    #header tr:nth-child(2) td:nth-child(1) {
+      width: 40%;
+    }
+    #header tr:nth-child(2) td:nth-child(2) {
+      width: 30%;
+    }
+    #header tr:nth-child(2) td:nth-child(3) {
+      width: 15%;
+    }
+    #header tr:nth-child(2) td:nth-child(4) {
+      width: 15%;
+    }
+
+    #custom_fields tr:nth-child(1),
+    #custom_fields tr:nth-child(2),
+    #custom_fields tr:nth-child(3),
+    #custom_fields tr:nth-child(4) {
+      display: none;
+    }
+
+    .bg {
+      z-index: -90000;
+      position: absolute;
+      left: 0px;
+      background-image: url("https://tayyarservices.daftra.com/files/806cfa9f/logos/65bb3f7082c53_blobid1706770285915.jpg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100%;
+      width: 100%;
+      /* margin: 0 5%; */
+      height: 21.2cm;
+    }
+    #listing_table th:nth-child(5) {
+      width: 5%;
+    }
+    #listing_table th:nth-child(3) {
+      width: 14%;
+    }
+    #listing_table th:nth-child(4),
+    #listing_table td:nth-child(4),
+    #listing_table th:nth-child(6),
+    #listing_table td:nth-child(6),
+    #listing_table th:nth-child(7),
+    #listing_table td:nth-child(7) {
+      display: none;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+
+      <div class="invoice-inner">
+        <div class="bg" style="top: 0cm"></div>
+
+        <table id="header">
+          <tr>
+            <td colspan="100%" id="invoice_title">Delivery Note</td>
+          </tr>
+          <tr>
+            <td>To:</td>
+            <td rowspan="100%" class="qr-code">{%sa_qr_code_image%}</td>
+            <td style="font-weight: bold">Date:</td>
+            <td style="text-align: center">{%invoice_date%}</td>
+          </tr>
+          <tr>
+            <td>{%client_business_name%}</td>
+            <td style="font-weight: bold" id="InvoiceNo">Invoice No:</td>
+            <td style="text-align: center">{%invoice_no%}</td>
+          </tr>
+          <tr id="clbn1row">
+            <td>
+              Customer VAT number : <span id="clbn1">{%client_bn2%}</span>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+
+        <table id="custom_fields11">
+          <custom_field
+            id="custom_fields"
+            style="clear: both"
+            class="editable-area"
+            border="0"
+            cellspacing="0"
+            cellpadding="0"
+            align="right"
+          >
+            {%custom_fields%}
+          </custom_field>
+        </table>
+
+        <br />
+
+        <div id="items-list">{%items_list%}</div>
+        <div
+          style="
+            text-align: center;
+            background-color: transparent;
+            direction: ltr;
+          "
+        >
+          We hope these products reach you in good condition and in the correct
+          quantity.
+        </div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+
+    <script>
+      function totTableAdj() {
+        var totTableLen = document.querySelector(".listing-table:nth-child(2)")
+          .rows.length;
+        var fstTotCell = document.querySelector(
+          ".listing-table:nth-child(2) tr:first-child td:first-child"
+        );
+        var fstCol = document.querySelectorAll(
+          ".listing-table:nth-child(2) tr td:nth-child(1)"
+        );
+        var qr = document.querySelector(".qr-code").innerHTML;
+
+        for (var i = 0; i < totTableLen - 1; i++) {
+          fstCol[i + 1].outerHTML = "";
+        }
+
+        fstTotCell.rowSpan = totTableLen;
+        fstTotCell.innerHTML = qr;
+        fstTotCell.style.cssText = "text-align:right";
+      }
+      function select(selectors) {
+        var elements = document.querySelectorAll(selectors);
+        return elements;
+      }
+      function addStyles(elements, addedClass) {
+        for (var i = 0; i < elements.length; i++) {
+          elements[i].classList.add(addedClass);
+        }
+      }
+
+      try {
+        var selectedForBack = select(
+          "#listing_table th,  .listing-table:nth-child(2) tr:nth-child(1) td:nth-child(n+2) , .info-all"
+        );
+        var AllBorders = select("#listing_table th, #listing_table td");
+        var evenRows = select("#listing_table tr:nth-child(even) td");
+        var oddRows = select("#listing_table tr:nth-child(odd) td");
+
+        addStyles(selectedForBack, "dynamic_background");
+        addStyles(selectedForBack, "dynamic_header_color");
+        addStyles(evenRows, "dynamic_even");
+        addStyles(oddRows, "dynamic_odd");
+        addStyles(AllBorders, "dynamic_border_color");
+
+        totTableAdj();
+      } catch (err) {}
+
+      function removebn() {
+        if (document.querySelector("#clbn1").innerText.trim() == "") {
+          document.querySelector("#clbn1row").style.display = "none";
+        } else {
+          if (document.querySelectorAll("#custom_fields").length > 0) {
+            document.querySelector("#custom_fields").style.marginTop = "-20px";
+          }
+        }
+      }
+      try {
+        removebn();
+      } catch (error) {
+        console.log(error);
+      }
+      function invest1() {
+        if (
+          document.getElementById("invoice_title").innerText.trim() ==
+          "Quatation"
+        ) {
+          document.getElementById("InvoiceNo").innerText = "Quotation No";
+        }
+      }
+      try {
+        invest1();
+      } catch (error) {
+        console.log(error);
+      }
+      function showcustomerdata() {
+        var allRows = document.querySelectorAll("#custom_fields tr");
+        for (var i = 0; i < allRows.length; i++) {
+          if (allRows[i].cells[0].innerText.trim() == "Supplier No") {
+            allRows[i].style.display = "table-row";
+          }
+        }
+      }
+      try {
+        showcustomerdata();
+      } catch (error) {
+        console.log(error);
+      }
+      function repeatBg() {
+        var invoiceHeight =
+          document.querySelector(".invoice-inner").offsetHeight;
+        var pageHeight = document.querySelector(".bg").offsetHeight;
+        var numPages = Math.ceil(invoiceHeight / pageHeight);
+        var bg = document.querySelector(".bg");
+        var topDis = parseFloat(bg.style.top.replace("cm", ""));
+        for (var i = 1; i < numPages; i++) {
+          var newBg = document.createElement("div");
+          newBg.setAttribute("class", "bg");
+          topDis = topDis + 21.3;
+          console.log(topDis);
+          newBg.style.top = topDis + "cm";
+          bg.parentNode.insertBefore(newBg, bg.nextSibling);
+        }
+      }
+      try {
+        repeatBg();
+      } catch (e) {
+        console.log(e);
+      }
+      function hidepayments() {
+        if (document.getElementById("invoice_title").innerText != "Quatation") {
+          var allRows = document.querySelectorAll(
+            ".listing-table:nth-child(2) tr"
+          );
+          allRows[allRows.length - 1].style.display = "none";
+          allRows[allRows.length - 2].style.display = "none";
+        }
+      }
+      try {
+        hidepayments();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,618 @@
+<style>
+  * {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+  #headerofExtra {
+    direction: rtl;
+    width: 100%;
+    text-align: right;
+    border: none !important;
+    font-size: 14px;
+  }
+  #headerofExtra td {
+    padding: 8px 4px;
+    border: none !important;
+  }
+  #headerofExtra tr:nth-child(1) td:nth-child(1) {
+    width: 20%;
+  }
+  #headerofExtra tr:nth-child(1) td:nth-child(1) img {
+    width: 80%;
+    margin: 0 10%;
+  }
+  #headerofExtra tr:nth-child(1) td:nth-child(2) {
+    width: 30%;
+  }
+  #headerofExtra tr:nth-child(1) td:nth-child(3) {
+    width: 20%;
+  }
+  #headerofExtra tr:nth-child(1) td:nth-child(4) {
+    width: 30%;
+  }
+  .bolds {
+    font-weight: bold;
+    font-weight: 15px;
+  }
+  .itemsTable {
+    table-layout: fixed;
+    width: 100%;
+    font-family: "Arial", "Tahoma", sans-serif;
+  }
+  .itemsTable th,
+  .itemsTable td {
+    white-space: normal;
+    font-family: "Arial", "Tahoma", sans-serif !important;
+    text-align: center !important;
+    font-size: 13px !important;
+    font-weight: bold !important;
+  }
+  .itemsTable {
+    text-align: right;
+  }
+  .itemsTable tr:nth-child(1) th {
+    background-color: #e5e5e5;
+  }
+  .itemsTable tr:nth-child(2) th {
+    background-color: #f5f5f5;
+  }
+  .deductions {
+    width: 50%;
+    float: right;
+    margin-top: 2px;
+    text-align: center;
+  }
+  #newTotals th,
+  #newTotals td,
+  .deductions th,
+  .deductions td {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  #newTotals {
+    width: 20%;
+    float: left;
+    margin-top: 2px;
+    border: none !important;
+    text-align: center;
+  }
+</style>
+
+<table id="headerofExtra">
+  <tbody>
+    <tr>
+      <td rowspan="100%"><img src="{{__system.business.site_logo}}" /></td>
+      <td>
+        <span class="bolds">
+          مستخلص أعمال رقم : {{Data.le_vendorextraction.extraction_no}}
+        </span>
+      </td>
+      <td>
+        <span class="bolds"
+          >حالة المستخلص : {{Data.le_vendorextraction.extra_status}}</span
+        >
+      </td>
+      <td>
+        <span class="bolds"
+          >إسم المشروع :{{Data.le_vendorextraction.project_name}}</span
+        >
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="bolds"> عن الفترة من بدء الأعمال حتى</span>
+        :{{Data.le_vendorextraction.project_duedate}}
+      </td>
+      <td></td>
+      <td>
+        <span class="bolds"
+          >رقم المشروع : {{Data.le_vendorextraction.single_line_field}}</span
+        >
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="bolds"> المقاول :</span>
+        {{Data.le_vendorextraction.le_vendorextraction_vendor_project.vendor_names}}
+      </td>
+      <td>
+        <span class="bolds"> العنوان :</span>
+      </td>
+      <td>
+        <span class="bolds"> رقم البطاقة :</span>
+        <!-- {{Data.le_vendorextraction.le_vendorextraction_client_project1.national_id}} -->
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="bolds"> نوع المقاولة </span>:
+        {{Data.le_vendorextraction.extra_type}}
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<table
+  class="mce-inline-non-editable-area mce-hide-table-options itemsTable"
+  border="1"
+  cellpadding="0"
+  cellspacing="0"
+  style="width: 100%"
+>
+  <thead>
+    <tr>
+      <th colspan="2">البند بالمقايسة</th>
+      <th style="width: 23%">بيان الأعمال</th>
+      <th>الوحدة</th>
+      <th colspan="3">الأعمال</th>
+      <th>الفئة</th>
+      <th>قيمة الأعمال</th>
+      <th colspan="2">التعلية</th>
+      <th>الصافى بعد التعلية</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >رقم
+        </span>
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >كمية
+        </span>
+      </th>
+
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+        ></span>
+      </th>
+
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+        ></span>
+      </th>
+
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+        >
+          السابق</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+        >
+          الحالي</span
+        >
+      </th>
+
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >الإجمالى</span
+        >
+      </th>
+
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+        ></span>
+      </th>
+
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+        >
+        </span>
+      </th>
+
+      <th style="display: none">
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >كمية التعلية</span
+        >
+      </th>
+
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >النسبة
+        </span>
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >القيمة
+        </span>
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+        >
+        </span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <!--% foreach({{Data.le_vendorextraction.le_vendorextraction_le_vendorextraction_extraction_items1}} as {{le_vendorextraction_le_vendorextraction_extraction_items1_row}}) { %-->
+    <tr>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_vendorextraction_le_vendorextraction_extraction_items1_row.item_number1}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_vendorextraction_le_vendorextraction_extraction_items1_row.ttlqty1}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_vendorextraction_le_vendorextraction_extraction_items1_row.item_desc}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_vendorextraction_le_vendorextraction_extraction_items1_row.unit1}}</span
+        >
+      </td>
+
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_vendorextraction_le_vendorextraction_extraction_items1_row.prev_process1}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_vendorextraction_le_vendorextraction_extraction_items1_row.current_process1}}</span
+        >
+      </td>
+
+      <td>
+        <span
+          class="mce-inline-non-editable-area mce-inline-placeholder"
+        ></span>
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_vendorextraction_le_vendorextraction_extraction_items1_row.price1}}</span
+        >
+      </td>
+      <td>
+        <span
+          class="mce-inline-non-editable-area mce-inline-placeholder"
+        ></span>
+      </td>
+      <td style="display: none">
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_vendorextraction_le_vendorextraction_extraction_items1_row.ta3lyattlqty}}</span
+        >
+      </td>
+
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_vendorextraction_le_vendorextraction_extraction_items1_row.curr_ta3lya_per}}</span
+        >
+      </td>
+      <td>
+        <span
+          class="mce-inline-non-editable-area mce-inline-placeholder"
+        ></span>
+      </td>
+      <td>
+        <span
+          class="mce-inline-non-editable-area mce-inline-placeholder"
+        ></span>
+      </td>
+    </tr>
+    <!--% } %-->
+    <tr>
+      <td colspan="7">بيان الإستقطاعات</td>
+      <td colspan="2">الإجمالى</td>
+      <td id="ttlbefta3"></td>
+      <td></td>
+      <td id="ttlta3"></td>
+      <td id="ttlafterta3"></td>
+    </tr>
+  </tbody>
+</table>
+<table
+  class="mce-inline-non-editable-area mce-hide-table-options deductions"
+  border="1"
+  cellpadding="0"
+  cellspacing="0"
+>
+  <tbody>
+    <!--% foreach({{Data.le_vendorextraction.le_vendorextraction_le_vendorextraction_subs}} as {{le_vendorextraction_le_vendorextraction_subs_row}}) { %-->
+    <tr>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_vendorextraction_le_vendorextraction_subs_row.subtitle}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_vendorextraction_le_vendorextraction_subs_row.subvalue}}</span
+        >
+      </td>
+      <td></td>
+    </tr>
+    <!--% } %-->
+  </tbody>
+</table>
+
+<table id="newTotals">
+  <tbody>
+    <tr>
+      <td>ما سبق صرفه</td>
+      <td id="prevPayment"></td>
+    </tr>
+    <tr>
+      <td>الإستحقاقات</td>
+      <td id="currentTotal"></td>
+    </tr>
+    <tr>
+      <td>الإستقطاعات</td>
+      <td id="ttldeduction"></td>
+    </tr>
+    <tr>
+      <td>المستحق للصرف</td>
+      <td id="to_pay"></td>
+    </tr>
+  </tbody>
+</table>
+
+<script>
+  function addserials() {
+    var AllRows = document.querySelectorAll(".itemsTable  tr");
+    var newTh = document.createElement("th");
+    newTh.innerHTML = "م";
+    AllRows[0].insertBefore(newTh, AllRows[0].cells[0]);
+    for (var i = 2; i < AllRows.length - 1; i++) {
+      var newTd = document.createElement("td");
+      newTd.innerHTML = i - 1;
+      AllRows[i].insertBefore(newTd, AllRows[i].cells[0]);
+    }
+  }
+  try {
+    addserials();
+  } catch (error) {
+    console.log(error);
+  }
+  function gettalyaVal() {
+    var AllRows = document.querySelectorAll(".itemsTable  tr");
+    for (var i = 2; i < AllRows.length; i++) {
+      var talyattlValue = AllRows[i].cells[10].innerText.trim();
+      if (talyattlValue == "") {
+        talyattlValue = 0;
+      }
+      var talyapercent = AllRows[i].cells[11].innerText.trim();
+      if (talyapercent == "") {
+        talyapercent = 0;
+      }
+
+      AllRows[i].cells[12].innerText = (
+        parseFloat(talyattlValue) *
+        (parseFloat(talyapercent) / 100)
+      ).toFixed(2);
+    }
+  }
+  try {
+    gettalyaVal();
+  } catch (error) {
+    console.log(error);
+  }
+  function addtotals() {
+    var AllRows = document.querySelectorAll(".itemsTable  tr");
+    for (var i = 2; i < AllRows.length; i++) {
+      var prevprocess = AllRows[i].cells[5].innerText.trim();
+      if (prevprocess == "") {
+        prevprocess = 0;
+      }
+      var currProcess = AllRows[i].cells[6].innerText.trim();
+      if (currProcess == "") {
+        currProcess = 0;
+      }
+      AllRows[i].cells[7].innerText = (
+        parseFloat(prevprocess) + parseFloat(currProcess)
+      ).toFixed(2);
+
+      var price = AllRows[i].cells[8].innerText.trim();
+      if (price == "") {
+        price = 0;
+      }
+      var ttlQty = AllRows[i].cells[2].innerText.trim();
+      if (ttlQty == "") {
+        ttlQty = 0;
+      }
+
+      AllRows[i].cells[9].innerText = (
+        (parseFloat(AllRows[i].cells[6].innerText) / 100) *
+        parseFloat(price) *
+        parseFloat(ttlQty)
+      ).toFixed(2);
+
+      var ta3lyacurrqty = AllRows[i].cells[12].innerText.trim();
+      if (ta3lyacurrqty == "") {
+        ta3lyacurrqty = 0;
+      }
+
+      AllRows[i].cells[13].innerText = "0";
+      AllRows[i].cells[13].innerText = (
+        parseFloat(AllRows[i].cells[9].innerText) +
+        parseFloat(AllRows[i].cells[8].innerText) * ta3lyacurrqty
+      ).toFixed(2);
+    }
+  }
+  try {
+    addtotals();
+  } catch (error) {
+    console.log(error);
+  }
+  function calculateTotals() {
+    var AllRows = document.querySelectorAll(".itemsTable  tr");
+    var ttlbefta3 = 0;
+    var ttlta3 = 0;
+    var ttlafterta3 = 0;
+    for (var i = 2; i < AllRows.length - 1; i++) {
+      ttlbefta3 = ttlbefta3 + parseFloat(AllRows[i].cells[9].innerText);
+      ttlta3 = ttlta3 + parseFloat(AllRows[i].cells[12].innerText);
+      ttlafterta3 = ttlafterta3 + parseFloat(AllRows[i].cells[13].innerText);
+    }
+    document.getElementById("ttlbefta3").innerText = ttlbefta3.toFixed(2);
+    document.getElementById("ttlta3").innerText = ttlta3.toFixed(2);
+    document.getElementById("ttlafterta3").innerText = ttlafterta3.toFixed(2);
+  }
+  try {
+    calculateTotals();
+  } catch (error) {
+    console.log(error);
+  }
+
+  function calculateTotals1() {
+    var prevPayment = 0;
+    var AllRows = document.querySelectorAll(".itemsTable  tr");
+
+    for (var i = 2; i < AllRows.length - 1; i++) {
+      var price = AllRows[i].cells[8].innerText.trim();
+      if (price == "") {
+        price = 0;
+      }
+      var ttlQty = AllRows[i].cells[2].innerText.trim();
+      if (ttlQty == "") {
+        ttlQty = 0;
+      }
+      var previous = AllRows[i].cells[5].innerText.trim();
+      if (previous == "") {
+        previous = 0;
+      }
+      prevPayment = prevPayment + (parseFloat(previous) / 100) * ttlQty * price;
+    }
+    var currentTotal = parseFloat(
+      document.getElementById("ttlafterta3").innerText
+    );
+
+    var ttldeduction = 0;
+    var AlldeuctionsRows = document.querySelectorAll(".deductions tr");
+    for (var i = 0; i < AlldeuctionsRows.length; i++) {
+      var deductionsPer = AlldeuctionsRows[i].cells[1].innerText.trim();
+      if (deductionsPer == "") {
+        deductionsPer = 0;
+      }
+      ttldeduction =
+        ttldeduction + (parseFloat(deductionsPer) / 100) * currentTotal;
+    }
+    document.getElementById("prevPayment").innerText = prevPayment.toFixed(2);
+    document.getElementById("currentTotal").innerText = currentTotal.toFixed(2);
+    document.getElementById("ttldeduction").innerText = ttldeduction.toFixed(2);
+    document.getElementById("to_pay").innerText = (
+      currentTotal - ttldeduction
+    ).toFixed(2);
+  }
+  try {
+    calculateTotals1();
+  } catch (error) {
+    console.log(error);
+  }
+  function addcommas() {
+    var AllRows = document.querySelectorAll(".itemsTable  tr");
+
+    for (var i = 2; i < AllRows.length - 1; i++) {
+      AllRows[i].cells[1].innerText = parseFloat(
+        AllRows[i].cells[1].innerText.replace(/,/g, "")
+      )
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      AllRows[i].cells[2].innerText = parseFloat(
+        AllRows[i].cells[2].innerText.replace(/,/g, "")
+      )
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      AllRows[i].cells[9].innerText = parseFloat(
+        AllRows[i].cells[9].innerText.replace(/,/g, "")
+      )
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      AllRows[i].cells[10].innerText = parseFloat(
+        AllRows[i].cells[10].innerText.replace(/,/g, "")
+      )
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      AllRows[i].cells[12].innerText = parseFloat(
+        AllRows[i].cells[12].innerText.replace(/,/g, "")
+      )
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      AllRows[i].cells[13].innerText = parseFloat(
+        AllRows[i].cells[13].innerText.replace(/,/g, "")
+      )
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById("ttlafterta3").innerText = parseFloat(
+        document.getElementById("ttlafterta3").innerText.replace(/,/g, "")
+      ).toFixed(2);
+      document.getElementById("ttlta3").innerText = parseFloat(
+        document.getElementById("ttlta3").innerText.replace(/,/g, "")
+      ).toFixed(2);
+      document.getElementById("ttlbefta3").innerText = parseFloat(
+        document.getElementById("ttlbefta3").innerText.replace(/,/g, "")
+      )
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById("prevPayment").innerText = parseFloat(
+        document.getElementById("prevPayment").innerText.replace(/,/g, "")
+      )
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById("currentTotal").innerText = parseFloat(
+        document.getElementById("currentTotal").innerText.replace(/,/g, "")
+      )
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById("ttldeduction").innerText = parseFloat(
+        document.getElementById("ttldeduction").innerText.replace(/,/g, "")
+      )
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      document.getElementById("to_pay").innerText = parseFloat(
+        document.getElementById("to_pay").innerText.replace(/,/g, "")
+      )
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+  }
+  try {
+    addcommas();
+  } catch (error) {
+    console.log(error);
+  }
+  function addduductionsAmounts() {
+    var AlldeuctionsRows = document.querySelectorAll(".deductions tr");
+    for (var i = 0; i < AlldeuctionsRows.length; i++) {
+      var deductionsPer = AlldeuctionsRows[i].cells[1].innerText.trim();
+      if (deductionsPer == "") {
+        deductionsPer = 0;
+      }
+      AlldeuctionsRows[i].cells[2].innerText = (
+        (parseFloat(deductionsPer) / 100) *
+        parseFloat(document.getElementById("ttlafterta3").innerText)
+      )
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+  }
+  try {
+    addduductionsAmounts();
+  } catch (error) {
+    console.log(error);
+  }
+</script>

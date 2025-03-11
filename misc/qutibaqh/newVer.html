@@ -1,0 +1,503 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    #Inv_data {
+      width: 100%;
+      direction: rtl;
+      text-align: right;
+      margin: 20px 0;
+    }
+    #Inv_data td:nth-child(1) {
+      width: 33.3%;
+    }
+    #Inv_data td:nth-child(2) {
+      width: 33.3%;
+    }
+    #Inv_data td:nth-child(3) {
+      width: 33.3%;
+    }
+    .invoice_title {
+      font-size: 17px;
+      font-weight: bold;
+      padding: 20px 0;
+      direction: ltr;
+    }
+    .graycolor td {
+      color: #686868;
+    }
+    #listing_table {
+      direction: rtl;
+      border-left: 1px solid black !important;
+      border-top: 1px solid black !important;
+      /* border-bottom: 1px solid black !important; */
+      text-align: center;
+    }
+    #listing_table th:nth-child(1),
+    #listing_table td:nth-child(1) {
+      text-align: right !important;
+    }
+    #listing_table th {
+      font-weight: bold;
+      background-color: #fff;
+      border-bottom: 1px solid black !important;
+      font-size: 14px;
+    }
+    #listing_table th,
+    #listing_table td {
+      border-right: 1px solid black;
+      border-left: none;
+      border-top: none;
+      border-bottom: none;
+      padding: 2px;
+    }
+    #listing_table th:nth-child(1) {
+      width: 30%;
+    }
+    #listing_table th:nth-child(2) {
+      width: 12%;
+    }
+    #listing_table th:nth-child(3) {
+      width: 12%;
+    }
+    #listing_table th:nth-child(4) {
+      width: 12%;
+    }
+    #listing_table th:nth-child(5) {
+      width: 10%;
+    }
+    #listing_table th:nth-child(6) {
+      width: 12%;
+    }
+    #listing_table th:nth-child(8) {
+      width: 12%;
+    }
+
+    .titleRow {
+      background-color: #686868;
+      color: #fff;
+      font-weight: bold;
+      text-align: left;
+      font-size: 14px;
+    }
+    .subttlrow td {
+      background-color: #e5e5e5;
+      border-right: none !important;
+      border-top: 1px solid black !important;
+      border-bottom: 1px solid black !important;
+    }
+    .subttlrow td:nth-child(1) {
+      border-right: 1px solid black !important;
+    }
+    #new_totals {
+      float: left;
+      width: 70%;
+      border-spacing: 0;
+      border-left: 1px solid black;
+      border-top: 1px solid black;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      direction: rtl;
+    }
+    #new_totals td {
+      padding: 3px;
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    #new_totals td:nth-child(1) {
+      width: 40%;
+      text-align: right;
+    }
+    #new_totals td:nth-child(2) {
+      width: 60%;
+      text-align: left;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #bank_data {
+      width: 100%;
+      direction: rtl;
+      border-spacing: 0;
+      page-break-inside: avoid;
+      border-right: 1px solid #e5e5e5;
+      border-top: 1px solid #e5e5e5;
+      text-align: center;
+      margin-top: 25px;
+    }
+    #bank_data td {
+      padding: 3px;
+      border-bottom: 1px solid #e5e5e5;
+      border-left: 1px solid #e5e5e5;
+    }
+    #bank_data td:nth-child(1) {
+      width: 30%;
+    }
+    #bank_data td:nth-child(2) {
+      width: 70%;
+    }
+    #terms {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    #terms div:nth-child(1) {
+      text-align: left;
+    }
+    #terms div:nth-child(2) {
+      text-align: right;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table id="Inv_data">
+          <tbody>
+            <tr>
+              <td class="invoice_title" colspan="100%">
+                {%invoice_no%} # {%invoice_title%}
+              </td>
+            </tr>
+            <tr>
+              <td>تاريخ عرض السعر :</td>
+              <td>البائع :</td>
+              <td>العميل</td>
+            </tr>
+            <tr class="graycolor">
+              <td>{%invoice_date%}</td>
+              <td>مؤسسة البارع للانتاج الاعلامى (Film Rental)</td>
+              <td>{%client_business_name%}</td>
+            </tr>
+            <tr class="graycolor">
+              <td></td>
+              <td>إسم المشروع : {%Project Name%}</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div id="items-list">{%items_list%}</div>
+        <table id="new_totals">
+          <tbody>
+            <tr>
+              <td>الإجمالى غير شامل الضريبة</td>
+              <td
+                style="border-right: none !important"
+                class="removecurr subttlanddisc"
+              >
+                {%invoice_subtotal%}
+              </td>
+            </tr>
+            <tr>
+              <td>الخصومات</td>
+              <td id="ttldiscounts" class="removecurr">
+                {%discount%} // {%item-discount-total%}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                الضريبة على
+
+                <span id="taxablettl" class="removecurr"></span>
+              </td>
+              <td class="removecurr">{%tax-total%}</td>
+            </tr>
+            <tr>
+              <td style="background-color: #686868; color: #fff">
+                الإجمالى شامل الضريبة
+              </td>
+              <td
+                style="background-color: #686868; color: #fff"
+                class="removecurr"
+              >
+                {%invoice_total%}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="invDisc" style="display: none">{%discount%}</div>
+        <table id="bank_data">
+          <tr>
+            <td>اسم الحساب البنكى</td>
+            <td>مؤسسة البارع للإنتاج الاعلامى المرئى والمسموع</td>
+          </tr>
+          <tr>
+            <td>اسم البنك</td>
+            <td>مصرف الانماء</td>
+          </tr>
+          <tr>
+            <td>رقم الحساب</td>
+            <td>68204798341000</td>
+          </tr>
+          <tr>
+            <td>رقم الايبان</td>
+            <td>SA33 0500 0068 2047 9834 1000</td>
+          </tr>
+        </table>
+        <div id="terms">
+          <div>
+            An additional half day cost is caluclated for the work team after 12
+            hours have passed, and full day after 18 hours for crew and
+            equipment starting from the time of arriving in location <br />
+            - If the shooting date changed before 48 hours well add aditional
+            cost 25% . And 50% if before 24 hours<br />
+            - Please concider the feeding of the staff , A meal in starting or
+            end every 6 hours , and make sure that there are drinks and sugar
+            throughout the working time<br />
+            - An additional half day cost is caluclated for the shooting outside
+            Riyadh area , and please concider a convenient housing for the crew
+            with saftey parking for tracks<br />
+            - Included break days is a day in every week , an additional cost
+            will be applied for extra break days .<br />
+            - Please concider the feeding of the staff , A meal in starting or
+            end every 6 hours , and make sure that there are drinks and sugar
+            throughout the working time.<br />
+          </div>
+          <div>
+            يتم احتساب تكلفة اضافية نصف يوم لفريق العمل بعد مرور 12 ساعة ويوم
+            كامل بعد 18 ساعة لفريق العمل والمعدات - .تبدأ من وقت الوصول الى
+            الموقع سواء
+            <br />
+            . في حال تم تغيير موعد التصوير المتفق عليه قبل 48 ساعة تضاف تكلفة
+            اضافية %25 و %50 في حال تم تغيير الموعد قبل 24 ساعة -
+            <br />
+            . يتم احتساب تكلفة اضافية نصف يوم لفريق العمل عند التصوير خارج منطقة
+            الرياض ، ويرجى مراعاة وجود سكن لائق للفريق -
+            <br />
+            . يرجى مراعاة التغذية لفريق العمل وتوفير وجبة في بداية ونهاية كل 6
+            ساعات والتاكد من وجود مشروبات وسكريات طوال وقت العمل -
+          </div>
+        </div>
+        <!-- <div class="notes-block">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                  <td>
+                      <div
+                      style="font-style: italic"
+                      class="editable-area"
+                      id="footer"
+                      >
+                      {%footer%}
+                      </div>
+                  </td>
+                  </tr>
+              </table>
+              </div> -->
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function addDiscCol() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        if (allRows[0].cells.length == 8) {
+          var newTh = document.createElement("th");
+          newTh.innerText = "خصم";
+          allRows[0].insertBefore(newTh, allRows[0].cells[7]);
+          for (var i = 1; i < allRows.length; i++) {
+            var newTd = document.createElement("td");
+            newTd.innerText = "0.00";
+            allRows[i].insertBefore(newTd, allRows[i].cells[7]);
+          }
+        }
+      }
+      try {
+        addDiscCol();
+      } catch (error) {
+        console.log(error);
+      }
+      function swapAll() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          var desc = allRows[i].cells[0].innerText;
+          var dur = allRows[i].cells[1].innerText;
+          var Price = allRows[i].cells[2].innerText;
+          var Tax1name = allRows[i].cells[3].innerText;
+          var Tax1per = allRows[i].cells[4].innerText;
+          var mainPrice = allRows[i].cells[5].innerText;
+          var Quantity = allRows[i].cells[6].innerText;
+          var Discount = allRows[i].cells[7].innerText;
+          var Subtotal = allRows[i].cells[8].innerText;
+          allRows[i].cells[0].innerText = desc;
+          allRows[i].cells[1].innerText = Quantity;
+          allRows[i].cells[2].innerText = Price;
+          allRows[i].cells[3].innerText = dur;
+          allRows[i].cells[4].innerText = Discount;
+          allRows[i].cells[5].innerText = Tax1name;
+          allRows[i].cells[6].innerText = Tax1per;
+          allRows[i].cells[7].innerText = Subtotal;
+          allRows[i].cells[8].innerText = mainPrice;
+          allRows[i].cells[8].style.display = "none";
+        }
+      }
+      try {
+        swapAll();
+      } catch (error) {
+        console.log(error);
+      }
+      function mergeTaxes() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        allRows[0].cells[6].style.display = "none";
+        for (var i = 1; i < allRows.length; i++) {
+          allRows[i].cells[5].innerHTML =
+            allRows[i].cells[5].innerHTML +
+            "<br />" +
+            allRows[i].cells[6].innerHTML;
+          allRows[i].cells[6].style.display = "none";
+        }
+      }
+      try {
+        mergeTaxes();
+      } catch (error) {
+        console.log(error);
+      }
+      function hundlesubtotals() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var subttl = 0;
+        var taxablettl = 0;
+        var untaxablettl = 0;
+        for (var i = 1; i < allRows.length; i++) {
+          var title = allRows[i].cells[0].innerText.toLowerCase().trim();
+          if (title != "group") {
+            subttl =
+              subttl +
+              parseFloat(allRows[i].cells[7].innerText.replace(/,/g, ""));
+            // get totals
+            if (allRows[i].cells[5].innerText == "\n%") {
+              untaxablettl =
+                untaxablettl +
+                parseFloat(allRows[i].cells[7].innerText.replace(/,/g, ""));
+            } else {
+              taxablettl =
+                taxablettl +
+                parseFloat(allRows[i].cells[7].innerText.replace(/,/g, ""));
+            }
+          }
+          console.log(subttl);
+          if (title.trim() == "group" || i == allRows.length - 1) {
+            if (i != 1 || i == allRows.length - 1) {
+              // add subttl row
+              var newTr1 = document.createElement("tr");
+              newTr1.classList.add("subttlrow");
+              var newTd1 = document.createElement("td");
+              newTd1.setAttribute("colspan", "5");
+              var newTd2 = document.createElement("td");
+              newTd2.innerText = "المجموع ";
+              var newTd3 = document.createElement("td");
+              newTd3.innerText = subttl
+                .toFixed(2)
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              newTr1.appendChild(newTd1);
+              newTr1.appendChild(newTd2);
+              newTr1.appendChild(newTd3);
+              if (i != allRows.length - 1) {
+                document
+                  .querySelector("#listing_table tbody")
+                  .insertBefore(newTr1, allRows[i]);
+              } else {
+                document
+                  .querySelector("#listing_table tbody")
+                  .appendChild(newTr1);
+              }
+            }
+            // add title Row
+            if (i != allRows.length - 1) {
+              var newTr = document.createElement("tr");
+              newTr.classList.add("titleRow");
+
+              var newTd = document.createElement("td");
+              newTd.setAttribute("colspan", "100%");
+              newTd.innerText = allRows[i].cells[3].innerText;
+              allRows[i].style.display = "none";
+              newTr.appendChild(newTd);
+              document
+                .querySelector("#listing_table tbody")
+                .insertBefore(newTr, allRows[i]);
+            }
+            subttl = 0;
+          }
+        }
+        var ttlDisc = parseFloat(
+          document.getElementById("invDisc").innerText.replace(/,/g, "")
+        );
+        document.getElementById("taxablettl").innerText = (taxablettl - ttlDisc)
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // subttlanddisc
+        document.querySelector(".subttlanddisc").innerText = (
+          parseFloat(
+            document.querySelector(".subttlanddisc").innerText.replace(/,/g, "")
+          ) - ttlDisc
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // ttldiscounts
+        document.getElementById("ttldiscounts").innerText =
+          parseFloat(
+            document
+              .getElementById("ttldiscounts")
+              .innerText.split("//")[0]
+              .replace(/,/g, "")
+          ) +
+          parseFloat(
+            document
+              .getElementById("ttldiscounts")
+              .innerText.split("//")[1]
+              .replace(/,/g, "")
+          );
+        // /////////////////////
+        document.querySelector(".subttlanddisc").innerText =
+          parseFloat(
+            document.querySelector("#ttldiscounts").innerText.replace(/,/g, "")
+          ) +
+          parseFloat(
+            document.querySelector("#taxablettl").innerText.replace(/,/g, "")
+          );
+      }
+      try {
+        hundlesubtotals();
+      } catch (error) {
+        console.log(error);
+      }
+      // removecurr
+      function removecurr() {
+        var allremovecurr = document.querySelectorAll(".removecurr");
+        for (var i = 0; i < allremovecurr.length; i++) {
+          allremovecurr[i].innerText =
+            parseFloat(allremovecurr[i].innerText.replace(/,/g, ""))
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+            " " +
+            "ر.س";
+        }
+      }
+      try {
+        removecurr();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

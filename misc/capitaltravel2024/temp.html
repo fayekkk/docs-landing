@@ -1,0 +1,304 @@
+<style>
+  * {
+    /* white-space: nowrap; */
+    overflow-wrap: normal;
+    word-break: break-word;
+  }
+  .customTable {
+    margin: 15px 0;
+  }
+  .customTable th {
+    background-color: #cecdcd;
+    font-weight: bold;
+    padding: 2px !important;
+  }
+  .customTable2 td:nth-child(1),
+  .customTable2 td:nth-child(3) {
+    background-color: #cecdcd;
+    font-weight: bold;
+    width: 15%;
+  }
+  .customTable2 td:nth-child(2),
+  .customTable2 td:nth-child(4) {
+    width: 35%;
+  }
+  .hidden {
+    display: none;
+  }
+</style>
+<table border="1" cellpadding="5" cellspacing="0" class="customTable2">
+  <tbody>
+    <tr>
+      <td>Number</td>
+      <td>{{Data.le_workflow-type-entity-1.number}}</td>
+      <td>Client Code</td>
+      <td>
+        {{Data.le_workflow-type-entity-1.le_workflow-type-entity-1_custom_data.client_code}}
+      </td>
+    </tr>
+    <tr>
+      <td>Title</td>
+      <td>{{Data.le_workflow-type-entity-1.title}}</td>
+      <td>Client Name</td>
+      <td>
+        {{Data.le_workflow-type-entity-1.le_workflow-type-entity-1_custom_data.client_name}}
+      </td>
+    </tr>
+    <tr>
+      <td>Start Date</td>
+      <td>{{Data.le_workflow-type-entity-1.start_date}}</td>
+      <td>Passport No</td>
+      <td>
+        {{Data.le_workflow-type-entity-1.le_workflow-type-entity-1_custom_data.passport_no}}
+      </td>
+    </tr>
+    <tr>
+      <td>Nationality</td>
+      <td>
+        {{Data.le_workflow-type-entity-1.le_workflow-type-entity-1_custom_data.nationality}}
+      </td>
+      <td>Pax</td>
+      <td>
+        {{Data.le_workflow-type-entity-1.le_workflow-type-entity-1_custom_data.pax}}
+      </td>
+    </tr>
+  </tbody>
+</table>
+<table
+  class="mce-inline-non-editable-area mce-hide-table-options customTable"
+  border="1"
+  cellpadding="0"
+  cellspacing="0"
+  style="width: 100%"
+>
+  <thead>
+    <tr>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >CITY</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >HOTEL</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >CHECK IN DATE</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >CHECK OUT DATE</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >NIGHTS</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >Service</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >NO. OF ROOM</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >MEAL TYPE</span
+        >
+      </th>
+      <th class="">
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent td1"
+          >HOTELS NOTES</span
+        >
+      </th>
+      <th class="hidden">
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >HOTELS COST</span
+        >
+      </th>
+      <th class="hidden">
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >ROOM COST PER NIGHT</span
+        >
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <!--% foreach({{Data.le_workflow-type-entity-1.le_workflow-type-entity-1_custom_data.le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_hotels_information}} as {{le_workflow_type_entity_1_custom_data_row}}) { %-->
+    <tr>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.city}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.hotel}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.check_in_date}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.check_out_date}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.nights}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.hotel_service2}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.number_of_room}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.meal_types}}</span
+        >
+      </td>
+      <td class="">
+        <span class="mce-inline-non-editable-area mce-inline-placeholder td1"
+          >{{le_workflow_type_entity_1_custom_data_row.hotels_notes}}</span
+        >
+      </td>
+      <td class="hidden">
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.hotels_cost}}</span
+        >
+      </td>
+      <td class="hidden">
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.room_cost_per_night}}</span
+        >
+      </td>
+    </tr>
+    <!--% } %-->
+  </tbody>
+</table>
+<div id="texts"></div>
+<table
+  class="mce-inline-non-editable-area mce-hide-table-options customTable"
+  border="1"
+  cellpadding="0"
+  cellspacing="0"
+  style="width: 100%"
+>
+  <thead>
+    <tr>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >DATE</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >CITY</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >TOUR</span
+        >
+      </th>
+      <th class="td2">
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >TOUR NOTE</span
+        >
+      </th>
+      <th class="hidden">
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >TOUR COST</span
+        >
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <!--% foreach({{Data.le_workflow-type-entity-1.le_workflow-type-entity-1_custom_data.le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_tours_information}} as {{le_workflow_type_entity_1_custom_data_row}}) { %-->
+    <tr>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.date}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.city_name}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.tour}}</span
+        >
+      </td>
+      <td class="td2">
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.tours_notes}}</span
+        >
+      </td>
+      <td class="hidden">
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_1_custom_data_row.tour_cost}}</span
+        >
+      </td>
+    </tr>
+    <!--% } %-->
+  </tbody>
+</table>
+<script>
+  function hideIfNot(tds) {
+    console.log("runn");
+
+    var allTd = tds;
+    var flag = 0;
+    for (var i = 1; i < allTd.length; i++) {
+      if (allTd[i].innerText != "") {
+        flag = 1;
+      }
+    }
+
+    if (flag == 1) {
+      for (var i = 0; i < allTd.length; i++) {
+        allTd[i].style.display = "none";
+      }
+    }
+  }
+  try {
+    hideIfNot(document.querySelectorAll(".td1"));
+    hideIfNot(document.querySelectorAll(".td2"));
+  } catch (error) {
+    console.error(error);
+  }
+</script>

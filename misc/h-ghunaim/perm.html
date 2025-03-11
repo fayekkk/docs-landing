@@ -1,0 +1,27 @@
+<style>
+  .custom_hiden {
+    display: none !important;
+  }
+</style>
+
+<script>
+  $(document).ready(() => {
+    async function init() {
+      let currentstaff = USER.staff_id;
+      console.log({ currentstaff: currentstaff });
+
+      if (currentstaff == 0) {
+        console.log('yess');
+
+        $("#customPrem").removeClass("custom_hiden");
+      }
+    }
+
+    let readyPoLi = `<li data-app-sidebar-list-item-sublist-item-group-id="3"> <a href="/v2/owner/entity/le_invoicepers/1/edit"  id='customPrem' class="custom_hiden" onclick="subSideMenuClick(event)">
+              صلاحيات إرسال الفواتير  </a> </li>`;
+    setTimeout(() => {
+      $("li.mn_2> div > ul").append(readyPoLi);
+      init();
+    }, 500);
+  });
+</script>

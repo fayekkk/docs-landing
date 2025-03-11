@@ -1,0 +1,718 @@
+<style>
+  .custompopup,
+  .custompopup1,
+  .clientcustompopup {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .clientcustompopup-content,
+  .custompopup-content,
+  .custompopup1-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    width: 30%;
+    position: relative;
+  }
+
+  .clientcustompopup-content h2,
+  .custompopup-content h2,
+  .custompopup1-content h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .clientcustompopup-content input,
+  .custompopup-content input,
+  .custompopup1-content input {
+    margin: 0 25% 1.5rem;
+    text-align: center;
+    border-radius: 4px;
+    border-color: #e5e5e5;
+    width: 50%;
+    padding: 5px 3px;
+    font-size: 18px;
+  }
+
+  .clientcustompopup-content button,
+  .custompopup-content button,
+  .custompopup1-content button {
+    width: 25%;
+    margin: 0 37.5%;
+    border-radius: 15px;
+    border: none;
+    padding: 5px 3px;
+  }
+
+  .clientcustompopup-content button:hover,
+  .custompopup-content button:hover,
+  .custompopup1-content button:hover {
+    background-color: #88fb7e;
+    color: white;
+  }
+
+  .clientcustompopup-content #clientclosed-btn,
+  .custompopup-content #closed-btn,
+  .custompopup1-content #closed-btn1 {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 2rem;
+    color: #c16161;
+    cursor: pointer;
+  }
+  #clientaddbtn,
+  #add-btn,
+  #add-btn1 {
+    width: 40px;
+    height: 40px;
+    border: none;
+    padding: 5px;
+    border-radius: 50%;
+    margin-top: 30px;
+    vertical-align: super;
+    margin-right: 15px;
+    background-color: #88fb7e63;
+  }
+  #le_workflow-type-entity-1
+    > div.form-row
+    > div.col-lg-12
+    > div.row
+    > div.col-lg-6.col-md-6.col-sm-6.container-le_workflow-type-entity-1_custom_data-site
+    > div.form-group.h-auto.input-error-target {
+    width: 85%;
+    display: inline-block;
+  }
+  .plusIcon {
+    display: inline-block;
+    font-size: 19px;
+  }
+  #clienterr-msg,
+  #err-msg,
+  #err-msg1 {
+    display: none;
+    font-size: 12px;
+    width: 100%;
+    text-align: center;
+    color: red;
+  }
+  .container-le_workflow-type-entity-1_custom_data-le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_items_list--0--item_code {
+    display: none !important;
+  }
+  @media screen and (max-width: 1400px) {
+    .clientcustompopup-content {
+      width: 90% !important;
+      margin: 15% auto;
+    }
+  }
+  @media screen and (max-width: 850px) {
+    .clientcustompopup-content {
+      width: 90% !important;
+      margin: 30% auto;
+    }
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      $("#title").val(" مشروع").change();
+      console.log("starts");
+
+      // add new client
+      // ("#le_workflow-type-entity-1 > div.form-row > div.col-md-5")
+      const clientbtntoadd = `    <button id="clientaddbtn"> <span class="plusIcon">+</span></button>`;
+      const clientpopup = ` <div id="clientcustompopup" class="clientcustompopup">
+        <div class="clientcustompopup-content">
+          <h2>إضافة عميل</h2>
+          <input type="text" id="widget-input1" placeholder="Enter client name " />
+          <input type="text" id="widget-input2" placeholder="Enter client phone" />
+          <button id="clientsubmit-btn">إضافة</button>
+          <span id="clientclosed-btn">&times;</span>
+          <div id="clienterr-msg">برجاء التأكيد من البيانات  </div>
+
+          </div>
+          </div>`;
+      $(
+        "#le_workflow-type-entity-1 > div.form-row > div:nth-child(5)"
+      ).toggleClass("col-md-6");
+      $(
+        "#le_workflow-type-entity-1 > div.form-row > div:nth-child(5)"
+      ).toggleClass("col-md-5");
+      $("#le_workflow-type-entity-1 > div.form-row > div:nth-child(5)").after(
+        clientpopup + clientbtntoadd
+      );
+
+      $("#clientaddbtn").on("click", function (e) {
+        e.preventDefault();
+        $("#clientcustompopup").show();
+      });
+      $("#clientclosed-btn, #clientcustompopup").on("click", function (event) {
+        event.preventDefault();
+        if (
+          event.target.id === "clientcustompopup" ||
+          event.target.id === "clientclosed-btn"
+        ) {
+          $("#clientcustompopup").hide();
+        }
+      });
+      $("#clientsubmit-btn").on("click", function (e) {
+        e.preventDefault();
+
+        var clientName = $("#widget-input1").val().trim();
+        var clientEmail = $("#widget-input2").val().trim();
+
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple regex for email validation
+        let isvalidemail = emailPattern.test(clientEmail);
+        console.log(isvalidemail);
+
+        if (emailPattern.test(clientEmail)) {
+          $("#errorMsg").hide(); // Hide error message if valid
+          // Proceed with form submission or AJAX
+        }
+        if (clientName != "" && clientEmail != "") {
+          sendclientAPIRequest(clientName, clientEmail);
+          $("#custompopup").hide();
+          $("#widget-input").val("");
+        } else {
+          $("#clienterr-msg").show();
+          setTimeout(() => {
+            $("#clienterr-msg").hide();
+          }, 2000);
+        }
+      });
+      async function sendclientAPIRequest(clientName, clientEmail) {
+        console.log("sending");
+        const response = await fetch(`/api2/clients`, {
+          method: "POST",
+          headers: {
+            apikey: "4936e4cb1071b90f8904b07473051f2c60381e8c",
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            Client: {
+              is_offline: true,
+              staff_id: 0,
+              business_name: clientName,
+              first_name: "",
+              last_name: "",
+              email: "",
+              city: "",
+              state: "",
+              postal_code: "",
+              phone1: clientEmail,
+              phone2: "",
+            },
+          }),
+        })
+          .then((response) => {
+            response.json();
+          })
+          .then((response) => {
+            console.log("Success:", response);
+          })
+          .catch((error) => {
+            if (
+              error.result === "failed" &&
+              error.code === 400 &&
+              error.validation_errors.email
+            ) {
+              alert("البريد موجود مسبقاً");
+            }
+          });
+      }
+
+      $(".container-le_workflow-type-entity-1_custom_data-site").toggleClass(
+        "col-lg-6"
+      );
+      $(".container-le_workflow-type-entity-1_custom_data-site").toggleClass(
+        "col-lg-3"
+      );
+      $(
+        ".container-le_workflow-type-entity-1_custom_data-building_position1"
+      ).toggleClass("col-lg-6");
+      $(
+        ".container-le_workflow-type-entity-1_custom_data-building_position1"
+      ).toggleClass("col-lg-3");
+      const btntoadd = `    <button id="add-btn"> <span class="plusIcon">+</span></button>`;
+      const popup = ` <div id="custompopup" class="custompopup">
+        <div class="custompopup-content">
+          <h2>إضافة موقع</h2>
+          <input type="text" id="widget-input" placeholder="Enter location name" />
+          <button id="submit-btn">إضافة</button>
+          <span id="closed-btn">&times;</span>
+          <div id="err-msg">يرجى إدخال إسم</div>
+          </div>
+          </div>`;
+      const btntoadd1 = `    <button id="add-btn1"> <span class="plusIcon">+</span></button>`;
+      const popup1 = ` <div id="custompopup1" class="custompopup1">
+        <div class="custompopup1-content">
+          <h2>إضافة جزء بناء</h2>
+          <input type="text" id="widget-input1" placeholder="Enter location name" />
+          <button id="submit-btn1">إضافة</button>
+          <span id="closed-btn1">&times;</span>
+          <div id="err-msg1">يرجى إدخال إسم</div>
+          </div>
+          </div>`;
+
+      $(".container-le_workflow-type-entity-1_custom_data-site").after(
+        popup + btntoadd
+      );
+      $(
+        ".container-le_workflow-type-entity-1_custom_data-building_position1"
+      ).after(popup1 + btntoadd1);
+      $("#add-btn").on("click", function (e) {
+        e.preventDefault();
+        $("#custompopup").show();
+      });
+      $("#add-btn1").on("click", function (e) {
+        e.preventDefault();
+        $("#custompopup1").show();
+      });
+      $("#closed-btn, #custompopup").on("click", function (event) {
+        event.preventDefault();
+        if (
+          event.target.id === "custompopup" ||
+          event.target.id === "closed-btn"
+        ) {
+          $("#custompopup").hide();
+        }
+      });
+      $("#closed-btn1, #custompopup1").on("click", function (event) {
+        event.preventDefault();
+        if (
+          event.target.id === "custompopup1" ||
+          event.target.id === "closed-btn1"
+        ) {
+          $("#custompopup1").hide();
+        }
+      });
+
+      $("#submit-btn").on("click", function (e) {
+        e.preventDefault();
+
+        var widgetName = $("#widget-input").val().trim();
+
+        if (widgetName != "") {
+          sendAPIRequest(widgetName);
+          $("#custompopup").hide();
+          $("#widget-input").val("");
+        } else {
+          $("#err-msg").show();
+          setTimeout(() => {
+            $("#err-msg").hide();
+          }, 2000);
+          $("#widget-input").focus();
+        }
+      });
+      $("#submit-btn1").on("click", function (e) {
+        e.preventDefault();
+
+        var widgetName = $("#widget-input1").val().trim();
+
+        if (widgetName != "") {
+          sendAPIRequest1(widgetName);
+          $("#custompopup1").hide();
+          $("#widget-input1").val("");
+        } else {
+          $("#err-msg1").show();
+          setTimeout(() => {
+            $("#err-msg1").hide();
+          }, 2000);
+          $("#widget-input1").focus();
+        }
+      });
+
+      async function sendAPIRequest(widgetName) {
+        console.log("sending");
+
+        const response = await fetch(`/v2/api/entity/le_sites`, {
+          method: "POST",
+          headers: {
+            apikey: "4936e4cb1071b90f8904b07473051f2c60381e8c",
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ site_name: widgetName }),
+        });
+        const data = await response.json();
+        console.log("Response:", data);
+      }
+      async function sendAPIRequest1(widgetName) {
+        console.log("sending");
+
+        const response = await fetch(`/v2/api/entity/le_build-sections`, {
+          method: "POST",
+          headers: {
+            apikey: "4936e4cb1071b90f8904b07473051f2c60381e8c",
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ section: widgetName }),
+        });
+        const data = await response.json();
+        console.log("Response:", data);
+      }
+    }, 500);
+  });
+</script>
+<!-- add times -->
+<style>
+  .hour-div {
+    width: 12%;
+    height: 50px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    display: inline-block;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+  }
+
+  .hour-div.disabled {
+    background-color: #e9ecef;
+    color: #adb5bd;
+    cursor: not-allowed;
+  }
+  #hour-container {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    display: none;
+  }
+  .selectedTime,
+  .inRange {
+    background-color: #5b70d4;
+  }
+  .times_container {
+    width: 100%;
+  }
+  #le_workflow-type-entity-1_custom_data-time1 {
+    display: none;
+  }
+  .container-le_workflow-type-entity-1_custom_data-timeto {
+    display: none;
+  }
+  /* le_workflow-type-entity-1_custom_data-timeto */
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      let thetimes = `
+    <div class="times_container my-5">
+      <div id="hour-container" class="hour-container"></div>
+    </div>`;
+      $(".container-le_workflow-type-entity-1_custom_data-time1").after(
+        thetimes
+      );
+
+      for (var i = 0; i < 24; i++) {
+        let k = i < 10 ? "0" + i : i;
+        var hourDiv = $(`<div class="hour-div" time="${k}">${k}:00</div>`);
+        $("#hour-container").append(hourDiv);
+      }
+      var disabledHours = [];
+
+      function disabledHoursFN() {
+        disabledHours = [];
+
+        let thaDate = $(
+          "#le_workflow-type-entity-1 > div.form-row > div:nth-child(3) > div > input.form-control.ltr-input"
+        ).val();
+        fetch(
+          `/v2/api/entity/le_workflow-type-entity-1/list/1?filter[start_date]=${thaDate}`,
+          {
+            method: "GET",
+            headers: {
+              apikey: "4936e4cb1071b90f8904b07473051f2c60381e8c",
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            let allprojects = data.data;
+            console.log(allprojects);
+
+            //  $("#le_workflow-type-entity-1_custom_data-teams")
+            allprojects.forEach(function (project) {
+              let timeFrom =
+                project["le_workflow-type-entity-1_custom_data"].time1;
+              let timeTo =
+                project["le_workflow-type-entity-1_custom_data"].timeto;
+              let teams =
+                project["le_workflow-type-entity-1_custom_data"].teams.split(
+                  ","
+                );
+              let currentTeams = $(
+                "#le_workflow-type-entity-1_custom_data-teams"
+              ).val();
+              function getdisapledHouresOnTeams() {
+                // console.log({ timeFrom: timeFrom });
+                // console.log({ timeTo: timeTo });
+                if (timeFrom || timeTo) {
+                  let fromHour = timeFrom
+                    ? parseInt(timeFrom.split(":")[0])
+                    : 0;
+                  let toHour = timeTo ? parseInt(timeTo.split(":")[0]) : 0;
+                  for (let i = fromHour; i <= toHour; i++) {
+                    disabledHours.push(i < 10 ? `0${i}:00` : `${i}:00`);
+                  }
+                }
+              }
+              function compareTeams(teams, currentTeams) {
+                currentTeams = $(
+                  "#le_workflow-type-entity-1_custom_data-teams"
+                ).val();
+                const trimmedTeams = teams.map((team) => team.trim());
+                const trimmedCurrentTeams = currentTeams.map((team) =>
+                  team.trim()
+                );
+
+                if (
+                  trimmedTeams.length !== trimmedCurrentTeams.length &&
+                  trimmedTeams.length + trimmedCurrentTeams.length > 3
+                ) {
+                  return false;
+                }
+
+                return trimmedTeams.some((team) =>
+                  trimmedCurrentTeams.includes(team)
+                );
+              }
+
+              if (compareTeams(teams, currentTeams)) {
+                getdisapledHouresOnTeams();
+              }
+            });
+            console.log({ disabledHours: disabledHours });
+
+            $(".hour-div").each(function () {
+              $(this).removeClass("disabled");
+              $(this).attr("disabled", false);
+              var hour = $(this).attr("time") + ":00";
+
+              if (disabledHours.includes(hour)) {
+                $(this).addClass("disabled");
+                $(this).attr("disabled", true);
+              }
+            });
+          });
+      }
+      disabledHoursFN();
+
+      $(document).on("click", ".applyBtn", function () {
+        disabledHoursFN();
+        console.log("changed");
+      });
+      function updateonselect() {}
+      $("#le_workflow-type-entity-1_custom_data-teams").on(
+        "change",
+        function () {
+          console.log($(this).val());
+
+          if ($(this).val().length > 0) {
+            $("#hour-container").show();
+          } else {
+            $("#hour-container").hide();
+          }
+          $("#le_workflow-type-entity-1_custom_data-timeto").val("");
+          $("#le_workflow-type-entity-1_custom_data-time1").val("");
+          $(".hour-div").each(function () {
+            $(this).removeClass("disabled");
+            $(this).removeClass("inRange");
+            $(this).removeClass("selectedTime ");
+            $(this).attr("disabled", false);
+          });
+
+          disabledHoursFN();
+        }
+      );
+      let selectedFrom = null;
+      let selectedTo = null;
+
+      $(".hour-div").on("click", function () {
+        if ($(this).hasClass("disabled")) return;
+
+        let clickedTime = $(this).attr("time");
+
+        if (!selectedFrom || (selectedFrom && selectedTo)) {
+          // Start new selection
+          $(".hour-div").removeClass("selectedTime inRange");
+          selectedFrom = clickedTime;
+          selectedTo = null;
+          $(this).addClass("selectedTime");
+          $("#le_workflow-type-entity-1_custom_data-time1").val($(this).text());
+          $("#le_workflow-type-entity-1_custom_data-timeto").val("");
+        } else {
+          // Complete the selection
+          selectedTo = clickedTime;
+
+          // Highlight the range
+          let flag = 0;
+          $(".hour-div").each(function () {
+            let thisTime = $(this).attr("time");
+            if (thisTime >= selectedFrom && thisTime <= selectedTo) {
+              if ($(this).hasClass("disabled")) {
+                flag = 1;
+              }
+
+              $(this).addClass("inRange");
+              if (thisTime == selectedTo) {
+                console.log("here is");
+                if (flag == 0) {
+                  console.log("flag accepted");
+
+                  $("#le_workflow-type-entity-1_custom_data-timeto").val(
+                    $(this).text()
+                  );
+                } else {
+                  alert("wrong");
+                  $(".hour-div").removeClass("selectedTime inRange");
+                  $("#le_workflow-type-entity-1_custom_data-time1").val("");
+                  $("#le_workflow-type-entity-1_custom_data-timeto").val("");
+                }
+              }
+            }
+          });
+        }
+      });
+    }, 300);
+  });
+</script>
+<!-- manage products -->
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      const itemCodeSelects = $("select[id*='item_code']");
+      const itemSelects = $("select[id*='item']");
+      let isHandlingChange = false;
+
+      for (let i = 0; i < itemCodeSelects.length; i++) {
+        $(itemCodeSelects[i]).on("change", function () {
+          console.log("changedd");
+          let k = i * 2 + 1;
+
+          if (!isHandlingChange) {
+            isHandlingChange = true;
+            handleItemCodeSelectChange(itemCodeSelects[i], itemSelects[k]);
+            isHandlingChange = false;
+          }
+        });
+      }
+
+      for (let i = 0; i < itemSelects.length; i++) {
+        let k = i * 2 + 1;
+
+        console.log("yess");
+        $(itemSelects[k]).on("change", function () {
+          console.log("changedd2");
+
+          if (!isHandlingChange) {
+            isHandlingChange = true;
+            handleItemSelectChange(itemCodeSelects[i], itemSelects[k]);
+            isHandlingChange = false;
+          }
+        });
+      }
+      $(
+        "#le_workflow-type-entity-1 > div.form-row > div.col-lg-12 > div.row > div.col-lg-12.col-md-12.col-xs-12 > div > div > div > div.card-body.p-0 > div > div > div > div > div > div.btn-group.add-row.dropdown > button"
+      ).on("click", function () {
+        const itemCodeSelects = $("select[id*='item_code']").eq(
+          $("select[id*='item_code']").length - 1
+        );
+        const itemSelects = $("select[id*='item']").eq(
+          $("select[id*='item']").length - 1
+        );
+        let isHandlingChange = false;
+
+        $(itemCodeSelects).on("change", function () {
+          if (!isHandlingChange) {
+            isHandlingChange = true;
+            handleItemCodeSelectChange(itemCodeSelects, itemSelects);
+            isHandlingChange = false;
+          }
+        });
+
+        $(itemSelects).on("change", function () {
+          if (!isHandlingChange) {
+            isHandlingChange = true;
+            handleItemSelectChange(itemCodeSelects, itemSelects);
+            isHandlingChange = false;
+          }
+        });
+      });
+      function handleItemCodeSelectChange(codeSelect, nameSelect) {
+        const selectedItemCode = $(codeSelect).val();
+
+        if (!$(nameSelect).find(`option[value="${selectedItemCode}"]`).length) {
+          fetchProductDetails(selectedItemCode)
+            .then((product) => {
+              const newOption = new Option(
+                product.name,
+                product.id,
+                true,
+                true
+              );
+              $(nameSelect).append(newOption);
+              $(nameSelect).val(product.id).trigger("change");
+            })
+            .catch((error) => {
+              console.error("Error fetching product details:", error);
+            });
+        } else {
+          $(nameSelect).val(selectedItemCode).trigger("change");
+        }
+      }
+
+      function handleItemSelectChange(codeSelect, nameSelect) {
+        const selectedItemCode = $(nameSelect).val();
+
+        if (!$(codeSelect).find(`option[value="${selectedItemCode}"]`).length) {
+          fetchProductDetails(selectedItemCode)
+            .then((product) => {
+              const newOption = new Option(
+                product.product_code,
+                product.id,
+                true,
+                true
+              );
+
+              $(codeSelect).append(newOption);
+              $(codeSelect).val(product.id).trigger("change");
+            })
+            .catch((error) => {
+              console.error("Error fetching product details:", error);
+            });
+        } else {
+          $(codeSelect).val(selectedItemCode).trigger("change");
+        }
+      }
+
+      function fetchProductDetails(itemId) {
+        return fetch(`/v2/api/entity/product/${itemId}/1`)
+          .then((response) => response.json())
+          .then((data) => {
+            return {
+              product_code: data.product_code,
+              name: data.name,
+              id: data.id,
+            };
+          });
+      }
+    }, 250);
+  });
+</script>

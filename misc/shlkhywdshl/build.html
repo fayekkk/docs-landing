@@ -1,0 +1,539 @@
+<style>
+  * {
+    direction: rtl;
+  }
+  #firstTable {
+    width: 100%;
+    border-spacing: 0;
+    border-right: 1px dotted #ccc;
+    border-bottom: 1px dotted #ccc;
+    border-top: none;
+    border-left: none;
+  }
+  #firstTable td {
+    border-top: 1px dotted #ccc;
+    border-left: 1px dotted #ccc;
+    border-bottom: none;
+    border-right: none;
+    text-align: center;
+    font-weight: bold;
+    padding: 2px 0;
+    font-size: 15px;
+  }
+  #firstTable td:nth-child(1) {
+    width: 10%;
+  }
+  #firstTable td:nth-child(2) {
+    font-size: 22px;
+    width: 17%;
+  }
+  #firstTable td:nth-child(3) {
+    width: 5%;
+  }
+  #firstTable td:nth-child(4) {
+    font-size: 28px;
+    width: 35%;
+  }
+  #firstTable td:nth-child(5) {
+    width: 10%;
+  }
+  #firstTable td:nth-child(6) {
+    width: 15%;
+  }
+  #firstTable td:nth-child(7) {
+    width: 10%;
+  }
+
+  #secendTbl {
+    width: 100%;
+    border-spacing: 0;
+    border-right: 1px dotted #ccc;
+    border-bottom: 1px dotted #ccc;
+    border-top: none;
+    border-left: none;
+    margin: 10px 0;
+  }
+  #secendTbl td {
+    border-top: 1px dotted #ccc;
+    border-left: 1px dotted #ccc;
+    border-bottom: none;
+    border-right: none;
+    text-align: center;
+    font-weight: bold;
+    padding: 2px 0;
+    font-size: 15px;
+  }
+  #secendTbl td :nth-child(1) {
+    width: 10%;
+  }
+  #secendTbl td :nth-child(2) {
+    width: 30%;
+  }
+  #secendTbl td :nth-child(3) {
+    width: 30%;
+  }
+  #secendTbl td :nth-child(4) {
+    width: 30%;
+  }
+  /* driverdata */
+  #driverdata {
+    width: 100%;
+    border-spacing: 0;
+    border-right: 1px dotted #ccc;
+    border-bottom: 1px dotted #ccc;
+    border-top: none;
+    border-left: none;
+  }
+  #driverdata td {
+    border-top: 1px dotted #ccc;
+    border-left: 1px dotted #ccc;
+    border-bottom: none;
+    border-right: none;
+    text-align: center;
+    font-weight: bold;
+    padding: 2px 0;
+    font-size: 15px;
+  }
+  /* signs */
+  #signs {
+    width: 100%;
+    border-spacing: 0;
+    margin-top: 25px;
+    border: none;
+  }
+
+  #signs td {
+    font-weight: bold;
+    padding: 4px;
+    font-size: 15px;
+    border: none;
+  }
+  #signs td:nth-child(1) {
+    width: 15%;
+    text-align: right;
+    border-right: 1px dotted #ccc !important;
+    border-left: 1px dotted #ccc !important;
+    border-bottom: none !important;
+    border-top: none !important;
+  }
+  #signs td:nth-child(2) {
+    width: 25%;
+  }
+  #signs td:nth-child(3) {
+    width: 10%;
+    text-align: left;
+    border-right: 1px dotted #ccc !important;
+    border-left: 1px dotted #ccc !important;
+    border-bottom: none !important;
+    border-top: none !important;
+  }
+  #signs tr:nth-child(1) td:nth-child(1),
+  #signs tr:nth-child(1) td:nth-child(2),
+  #signs tr:nth-child(1) td:nth-child(3) {
+    border-top: 1px dotted #ccc !important;
+  }
+  #signs tr:nth-child(3) td:nth-child(1),
+  #signs tr:nth-child(3) td:nth-child(2),
+  #signs tr:nth-child(3) td:nth-child(3) {
+    border-bottom: 1px dotted #ccc !important;
+  }
+  #signs tr:nth-child(1) td:nth-child(4) {
+    width: 5%;
+    border: none !important;
+    border-right: none !important;
+    border-left: none !important;
+  }
+  #signs tr:nth-child(1) td:nth-child(5) {
+    border: 1px dotted #ccc !important;
+    width: 15%;
+  }
+  #signs tr:nth-child(1) td:nth-child(6) {
+    width: 20%;
+    border: none !important;
+    border-right: none !important;
+    border-left: none !important;
+  }
+  /* #listing-table */
+  #listing-table {
+    width: 100%;
+    border-spacing: 0;
+    border-right: 1px dotted #ccc;
+    border-bottom: 1px dotted #ccc;
+    border-top: none;
+    border-left: none;
+    margin: 10px 0;
+  }
+  #listing-table td,
+  #listing-table th {
+    border-top: 1px dotted #ccc;
+    border-left: 1px dotted #ccc;
+    border-bottom: none;
+    border-right: none;
+    text-align: center;
+    font-weight: bold;
+    padding: 2px 0;
+    font-size: 15px;
+  }
+</style>
+<table id="firstTable">
+  <tbody>
+    <tr>
+      <td>رقم الإذن</td>
+      <td>{{Data.le_workflow-type-entity-2.number}}</td>
+      <td>No</td>
+      <td>إذن تسليم منتجات بتروليه</td>
+      <td>تاريخ التسليم</td>
+      <td>
+        {{Data.le_workflow-type-entity-2.le_workflow-type-entity-2_custom_data.del_date}}
+      </td>
+      <td>Date</td>
+    </tr>
+  </tbody>
+</table>
+<div style="display: none" id="deliverfees">
+  {{Data.le_workflow-type-entity-2.le_workflow-type-entity-2_custom_data.number}}
+</div>
+<table id="secendTbl">
+  <tbody>
+    <tr>
+      <td>إسم العميل</td>
+      <td>
+        {{Data.le_workflow-type-entity-2.work_order_client.business_name}}
+      </td>
+      <td>
+        {{Data.le_workflow-type-entity-2.work_order_client.client_custom_data.clientenglishname}}
+      </td>
+      <td>الرقم الضريبى للعميل</td>
+    </tr>
+    <tr>
+      <td>موقع التسليم</td>
+      <td>
+        {{Data.le_workflow-type-entity-2.le_workflow-type-entity-2_custom_data.delivery_loc}}
+      </td>
+      <td>
+        {{Data.le_workflow-type-entity-2.le_workflow-type-entity-2_custom_data.delivery_loc_en}}
+      </td>
+      <td>{{Data.le_workflow-type-entity-2.work_order_client.bn1}}</td>
+    </tr>
+  </tbody>
+</table>
+<table
+  class="mce-inline-non-editable-area mce-hide-table-options"
+  border="1"
+  cellpadding="0"
+  cellspacing="0"
+  style="width: 100%"
+  id="listing-table"
+>
+  <thead>
+    <tr>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >البيان</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >الكمية</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >الوحدة</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >القيمة</span
+        >
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <!--% foreach({{Data.le_workflow-type-entity-2.le_workflow-type-entity-2_custom_data.le_custom_data_le_workflow-type-entity-2_le_custom_data_le_workflow-type-entity-2_products}} as {{le_workflow_type_entity_2_custom_data_row}}) { %-->
+    <tr>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_2_custom_data_row.desc}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_2_custom_data_row.qty}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_2_custom_data_row.unit}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_workflow_type_entity_2_custom_data_row.ttl}}</span
+        >
+      </td>
+    </tr>
+    <!--% } %-->
+  </tbody>
+</table>
+<table id="driverdata">
+  <tbody>
+    <tr>
+      <td>إسم السائق</td>
+      <td colspan="3">
+        {{Data.le_workflow-type-entity-2.le_workflow-type-entity-2_custom_data.driver_name}}
+      </td>
+      <td colspan="3">
+        {{Data.le_workflow-type-entity-2.le_workflow-type-entity-2_custom_data.diver_name_2_}}
+      </td>
+      <td>Driver Name</td>
+    </tr>
+    <tr>
+      <td>رقم إذن التحميل</td>
+      <td>
+        {{Data.le_workflow-type-entity-2.le_workflow-type-entity-2_custom_data.no}}
+      </td>
+      <td>رقم الشاحنة</td>
+      <td>
+        {{Data.le_workflow-type-entity-2.le_workflow-type-entity-2_custom_data.truckno}}
+      </td>
+      <td>Truck No</td>
+      <td>رقم اللوحة</td>
+      <td>
+        {{Data.le_workflow-type-entity-2.le_workflow-type-entity-2_custom_data.lic_no}}
+      </td>
+      <td>Plate No</td>
+    </tr>
+  </tbody>
+</table>
+<table id="signs">
+  <tbody>
+    <tr>
+      <td>إسم المستلم</td>
+      <td></td>
+      <td>Name</td>
+      <td style="border: none !important"></td>
+      <td>الكمية المستلمة</td>
+      <td style="border: none !important"></td>
+    </tr>
+    <tr>
+      <td>توقيع المستلم</td>
+      <td></td>
+      <td>Sign</td>
+      <td></td>
+      <td style="border: none !important"></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>التاريخ</td>
+      <td></td>
+      <td>Date</td>
+      <td></td>
+      <td style="border: none !important"></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<div class="user">
+  إسم المستخدم :
+  {{Data.le_workflow-type-entity-2.le_workflow-type-entity-2_custom_data.usernamee}}
+  <!-- {{Data.le_workflow-type-entity-2.staff.name}}
+    {{Data.le_workflow-type-entity-2.staff.last_name}} -->
+</div>
+<p>
+  <script>
+    function addcolumn() {
+      var allRows = document.querySelectorAll("#listing-table tr");
+
+      var newTh = document.createElement("th");
+      allRows[0].appendChild(newTh);
+      for (var i = 1; i < allRows.length; i++) {
+        var newTd = document.createElement("td");
+        allRows[i].appendChild(newTd);
+      }
+    }
+    try {
+      addcolumn();
+      addcolumn();
+      addcolumn();
+    } catch (error) {
+      console.log(error);
+    }
+    function hundlethead() {
+      var allths = document.querySelectorAll("#listing-table thead th");
+      allths[4].innerText = "ض ق م %";
+      allths[5].innerText = "قيمة الضريبة";
+      allths[6].innerText = "الإجمالي شامل الضريبة";
+      var newTr = document.createElement("tr");
+      var newth1 = document.createElement("th");
+      newth1.innerText = "Statement";
+
+      var newth2 = document.createElement("th");
+      newth2.innerText = "QTY";
+
+      var newth3 = document.createElement("th");
+      newth3.innerText = "Unit";
+
+      var newth4 = document.createElement("th");
+      newth4.innerText = "Amount";
+
+      var newth5 = document.createElement("th");
+      newth5.innerText = "Vat %";
+
+      var newth6 = document.createElement("th");
+      newth6.innerText = "vat Amount";
+
+      var newth7 = document.createElement("th");
+      newth7.innerText = "Total Amount";
+      newTr.appendChild(newth1);
+      newTr.appendChild(newth2);
+      newTr.appendChild(newth3);
+      newTr.appendChild(newth4);
+      newTr.appendChild(newth5);
+      newTr.appendChild(newth6);
+      newTr.appendChild(newth7);
+
+      document.querySelector("#listing-table thead").appendChild(newTr);
+    }
+    try {
+      hundlethead();
+    } catch (error) {
+      console.log(error);
+    }
+    function addvatper() {
+      var allRows = document.querySelectorAll("#listing-table tr");
+      for (var j = 2; j < allRows.length; j++) {
+        allRows[j].cells[4].innerText = "15%";
+        if (allRows[j].cells[1].innerText.trim() == "") {
+          allRows[j].cells[1].innerText = "0";
+        }
+        if (allRows[j].cells[3].innerText.trim() == "") {
+          allRows[j].cells[3].innerText = "0";
+        }
+      }
+    }
+    try {
+      addvatper();
+    } catch (error) {
+      console.log(error);
+    }
+    function hundletable() {
+      var allRows = document.querySelectorAll("#listing-table tbody tr");
+      for (var i = 0; i < allRows.length; i++) {
+        allRows[i].cells[1].innerText = parseFloat(
+          allRows[i].cells[1].innerText.replace(/,/g, "")
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        allRows[i].cells[3].innerText = parseFloat(
+          allRows[i].cells[3].innerText.replace(/,/g, "")
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        allRows[i].cells[5].innerText = (
+          parseFloat(allRows[i].cells[3].innerText.replace(/,/g, "")) * 0.15
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        allRows[i].cells[6].innerText = (
+          parseFloat(allRows[i].cells[3].innerText.replace(/,/g, "")) +
+          parseFloat(allRows[i].cells[5].innerText.replace(/,/g, ""))
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+    }
+    try {
+      hundletable();
+    } catch (error) {
+      console.log(error);
+    }
+    function addNewRows() {
+      var deliverfees = document.getElementById("deliverfees").innerText;
+      if (deliverfees.trim() == "") {
+        deliverfees = 0;
+      } else {
+        deliverfees = parseFloat(deliverfees.replace(/,/g, ""));
+      }
+      var newTr = document.createElement("tr");
+      var newTd1 = document.createElement("td");
+      newTd1.setAttribute("colspan", "3");
+      newTd1.innerText = " Trip - اجور النقل ";
+      var newTd2 = document.createElement("td");
+      newTd2.innerText = deliverfees
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      var newTd3 = document.createElement("td");
+      newTd3.innerText = "15%";
+      var newTd4 = document.createElement("td");
+      newTd4.innerText = (deliverfees * 0.15)
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      var newTd5 = document.createElement("td");
+      newTd5.innerText = (deliverfees * 1.15)
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      newTr.appendChild(newTd1);
+      newTr.appendChild(newTd2);
+      newTr.appendChild(newTd3);
+      newTr.appendChild(newTd4);
+      newTr.appendChild(newTd5);
+      document.querySelector("#listing-table tbody").appendChild(newTr);
+    }
+    try {
+      addNewRows();
+    } catch (error) {
+      console.log(error);
+    }
+    function hundlettlrow() {
+      var allRows = document.querySelectorAll("#listing-table tbody tr");
+      var taxttl = 0;
+      var ttl = 0;
+      for (var i = 0; i < allRows.length - 1; i++) {
+        taxttl =
+          taxttl + parseFloat(allRows[i].cells[5].innerText.replace(/,/g, ""));
+        ttl = ttl + parseFloat(allRows[i].cells[6].innerText.replace(/,/g, ""));
+      }
+      taxttl =
+        taxttl +
+        parseFloat(
+          allRows[allRows.length - 1].cells[3].innerText.replace(/,/g, "")
+        );
+      ttl =
+        ttl +
+        parseFloat(
+          allRows[allRows.length - 1].cells[4].innerText.replace(/,/g, "")
+        );
+
+      var newTr = document.createElement("tr");
+      var newTd1 = document.createElement("td");
+      newTd1.setAttribute("colspan", "3");
+      newTd1.innerText = " Total - الاجمالي  ";
+      var newTd2 = document.createElement("td");
+      newTd2.innerText = "";
+      var newTd3 = document.createElement("td");
+      newTd3.innerText = "15%";
+      var newTd4 = document.createElement("td");
+      newTd4.innerText = taxttl
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      var newTd5 = document.createElement("td");
+      newTd5.innerText = ttl.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      newTr.appendChild(newTd1);
+      newTr.appendChild(newTd2);
+      newTr.appendChild(newTd3);
+      newTr.appendChild(newTd4);
+      newTr.appendChild(newTd5);
+      document.querySelector("#listing-table tbody").appendChild(newTr);
+    }
+    try {
+      hundlettlrow();
+    } catch (error) {
+      console.log(error);
+    }
+  </script>
+</p>

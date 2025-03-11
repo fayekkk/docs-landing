@@ -1,0 +1,200 @@
+<style>
+  #listing_table th:nth-child(5),
+  #listing_table td:nth-child(5) {
+    display: none !important;
+  }
+  #adresss br {
+    display: none;
+  }
+  #header {
+    width: 100%;
+    border-bottom: 1px solid black;
+    margin-bottom: 5px;
+  }
+  .site_logo img {
+    width: 100px;
+    margin: auto;
+  }
+  #sitename {
+    font-size: 16px !important;
+  }
+  #header td {
+    padding: 3px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  #header td:nth-child(1) {
+    width: 10%;
+  }
+  #header td:nth-child(2) {
+    width: 26%;
+  }
+  #header td:nth-child(3) {
+    width: 15%;
+    text-align: left;
+  }
+  #header td:nth-child(4) {
+    text-align: right;
+    width: 39%;
+  }
+  #header td:nth-child(5) {
+    text-align: right;
+    width: 10%;
+  }
+  #client_data {
+    width: 100%;
+    border: 1px solid black;
+    margin-bottom: 9px;
+  }
+  #client_data td {
+    font-size: 11px;
+    font-weight: bold;
+    width: 25%;
+    text-align: right;
+    font-size: 8px;
+  }
+  #client_data td:last-child {
+    text-align: center !important;
+  }
+
+  #inv_data {
+    width: 100%;
+    border: 1px solid black;
+    margin-bottom: 8px;
+  }
+  #inv_data td {
+    font-size: 9px;
+    font-weight: bold;
+    text-align: right;
+  }
+  #inv_data td:nth-child(1) {
+    width: 25%;
+  }
+  #inv_data td:nth-child(2) {
+    width: 8%;
+  }
+  #inv_data td:nth-child(3) {
+    width: 18%;
+  }
+  #inv_data td:nth-child(4) {
+    width: 10%;
+  }
+  #inv_data td:nth-child(5) {
+    width: 7%;
+  }
+  #inv_data td:nth-child(6) {
+    width: 25%;
+  }
+  .qr-code img {
+    width: 80px;
+    margin: auto;
+  }
+</style>
+<div style="margin-top: -25px">
+  <div style="padding-bottom: 10px"></div>
+  <table id="header">
+    <tbody>
+      <tr>
+        <td class="site_logo">{%site_logo%}</td>
+        <td id="sitename">
+          شركة محمد عبدالله المانع للسيارات
+          <br />
+          (شركة ذات مسئولية محدودة)
+        </td>
+        <td>
+          فاتورة ضريبية
+          <br />
+          مبيعات سيارات
+        </td>
+        <td>
+          VAT Invoice<br />
+          Veicle Sales
+        </td>
+        <td class="qr-code">{%sa_qr_code_image%}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table id="client_data">
+    <tbody>
+      <tr>
+        <td>المركز Center :</td>
+        <td>{%client_number%}</td>
+        <td>الشركة البائعة Selling Company:</td>
+        <td>شركة محمد عبدالله المانع للسيارات</td>
+      </tr>
+      <tr>
+        <td>إسم المشترى Cust Name :</td>
+        <td>{%client_business_name%}</td>
+        <td>المدينة -العنوان City & Address :</td>
+        <td>طريق الملك عبدالعزيز - حى الشفاء - شقراء119611 - ص ب 136</td>
+      </tr>
+      <tr>
+        <td>عنوان المشترى Cust Address :</td>
+        <td id="adresss">{%client_full_address%}</td>
+        <td>سجل تجارى CR No</td>
+        <td>1113000326</td>
+      </tr>
+      <tr>
+        <td>السجل التجارى للمشترى Cust.C.R.No :</td>
+        <td>{%client_national_id%}</td>
+        <!-- <td>{%custom_رقم_السجل_المدني_او_الاقامة_field_81%}</td> -->
+        <td>هاتف Contact :</td>
+        <td>116220404</td>
+      </tr>
+      <tr>
+        <td>هاتف Contact :</td>
+        <td>{%client_mobile%}</td>
+        <td>رمز المستودع plant Code :</td>
+        <td>{%plant Code%}</td>
+      </tr>
+      <tr>
+        <td>رقم الهوية للمشترى ID.Number :</td>
+        <td>{%custom_رقم_السجل_المدني_او_الاقامة_field_81%}</td>
+        <!-- <td>{%client_national_id%}</td> -->
+        <td>رقم مرجع ضريبة القيمة المضافة للشركة VAT No:</td>
+        <td>301099496100003</td>
+      </tr>
+      <tr>
+        <td>البريد الإلكترونى E-Mail :</td>
+        <td>{%client_email%}</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>رقم مرجع ضريبة القيمة المضافة VAT No:</td>
+        <td>{%client_bn1%}</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <table id="inv_data">
+    <tbody>
+      <tr>
+        <td>فاتورة رقم Invoice No:</td>
+        <td>{%invoice_no%}</td>
+        <td>رقم أمر البيع Sales Order Number:</td>
+        <td>{%Sales Order Number%}</td>
+        <td>الوقت Time :</td>
+        <td>{%created_time%}</td>
+      </tr>
+      <tr>
+        <td>تاريخ الفاتورة Invoice Date:</td>
+        <td>{%invoice_date%}</td>
+        <td>طريقة الدفع Payment Method:</td>
+        <td>{%Payment Method%}</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>تاريخ الإستحقاق Due Date</td>
+        <td>{%Due Date%}</td>
+        <td>تاريخ التوريد Supply Date</td>
+        <td>{%Supply Date%}</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

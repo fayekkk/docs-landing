@@ -1,0 +1,686 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <style type="text/css">
+    :root {
+      --infoBackground: #951a1b;
+      --tableBorder: #ffc000;
+      --oddBackground: #dbdbdb;
+      --evenBackground: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #ffffff;
+      font-family: "Tajawal", sans-serif !important;
+      direction: rtl;
+      text-align: right;
+      font-size: 13px !important;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: right;
+      padding: 6px 4px;
+    }
+
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+
+    .total-table td {
+      border-right: 1px solid #555555;
+    }
+
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+
+    bold_title {
+      font-weight: bold;
+    }
+
+    strong_tag {
+      font-weight: bold;
+    }
+
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    .qr-code img {
+      margin-top: 10px;
+    }
+
+    /* Custom Styling */
+    .head {
+      background-color: #808080;
+      padding: 5px;
+      font-size: 17px;
+      color: white;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .info td {
+      width: auto;
+    }
+
+    .oddCol {
+      background-color: #951a1b;
+      /* width: 15%; */
+      text-align: center;
+      color: #ffffff;
+      padding: 4px;
+      font-weight: 700;
+    }
+
+    .evenCol {
+      /* width: auto;
+        min-width: 5%; */
+      text-align: center;
+      border: 1px solid #dbdbdb;
+      box-shadow: 3px 4px #dbdbdb;
+      color: #404040;
+      font-weight: 700;
+      padding: 4px;
+    }
+
+    .info td:first-child {
+      width: 15%;
+    }
+
+    .info tr:nth-child(even) .evenCol {
+      background-color: #f1f1f1;
+    }
+
+    .info .evenCol br {
+      display: none;
+    }
+
+    #listing_table th,
+    #th,
+    .custom-item-table th {
+      border: 0 !important;
+      color: #fff;
+      background-color: #808080;
+      text-align: center;
+      width: auto;
+    }
+    .custom-item-table th:first-child {
+      text-align: right;
+    }
+
+    .custom-item-table th,
+    .custom-item-table td {
+      padding: 8px 8px 5px 8px;
+      font-size: 13px;
+      font-weight: bold;
+      height: 18px;
+      line-height: 18px;
+    }
+    .custom-item-table td:last-child {
+      width: 70px;
+    }
+    #listing_table tbody td {
+      border-bottom: 1px solid #000 !important;
+      border-top: 0 !important;
+      border-right: 0 !important;
+      border-left: 0 !important;
+      text-align: center;
+      width: auto;
+    }
+
+    #listing_table tbody tr:nth-child(even) td {
+      background-color: #f1f1f1;
+    }
+
+    #listing_table th:nth-child(3),
+    #listing_table td:nth-child(3),
+    #listing_table th:nth-child(4),
+    #listing_table td:nth-child(4),
+    #listing_table th:nth-child(5),
+    #listing_table td:nth-child(5),
+    #listing_table th:nth-child(6),
+    #listing_table td:nth-child(6),
+    #listing_table th:nth-child(7),
+    #listing_table td:nth-child(7),
+    #listing_table th:nth-child(8),
+    #listing_table td:nth-child(8),
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+
+    #totals td:first-child {
+      width: 55%;
+    }
+
+    #container {
+      text-align: right;
+      margin: auto;
+    }
+
+    .block {
+      width: 23%;
+      display: inline-block;
+      margin: 7px;
+      border: 1px solid #000;
+      vertical-align: top;
+    }
+
+    .block div {
+      text-align: center;
+      padding: 5px;
+      font-size: 15px;
+    }
+
+    .item-des {
+      background-color: #fff;
+    }
+
+    .item-img {
+      vertical-align: middle;
+      background-color: #fff;
+      height: 100px;
+      display: table-cell;
+      width: 200px;
+      border-top: 1px solid;
+    }
+    .item-img img {
+      width: 155px;
+    }
+
+    .item-code {
+      border-top: 1px solid #000;
+    }
+
+    #terms,
+    .notes-block {
+      padding: 5px 0;
+    }
+
+    #terms div span {
+      font-weight: bold !important;
+    }
+
+    #terms div,
+    .notes-block * {
+      line-height: 1.8;
+    }
+
+    #sign {
+      table-layout: fixed;
+      margin-top: 10px;
+    }
+
+    #sign td {
+      text-align: center;
+      height: 30px;
+      vertical-align: top;
+    }
+
+    .item-des {
+      min-height: 45px;
+    }
+
+    .item-des {
+      background-color: #fff;
+    }
+
+    .item-img {
+      vertical-align: middle;
+      background-color: #fff;
+      height: 175px;
+      display: table-cell;
+      width: 200px;
+      border-top: 1px solid;
+    }
+
+    .item-img img {
+      width: 100%;
+    }
+
+    .item-code {
+      border-top: 1px solid #000;
+      min-height: 40px;
+    }
+
+    .pg-terms
+    /* .pg-terms tr td  */ {
+      height: 20.5cm;
+      page-break-inside: avoid-page !important;
+      break-inside: avoid-page !important;
+    }
+
+    #details {
+      /* height: 20.5cm; */
+      page-break-inside: avoid-page !important;
+      break-inside: avoid-page !important;
+    }
+
+    .first-pg {
+      min-height: 23cm;
+    }
+
+    #listing_table {
+      display: none;
+    }
+    /************************************************/
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="pg first-pg">
+        <!-- Invoice Info -->
+        <table width="100%" class="info" cellspacing="8">
+          <tr>
+            <td colspan="11" class="head">اتفاقية تجارية</td>
+          </tr>
+          <tr>
+            <td class="oddCol">رقم الاتفاقية:</td>
+            <td width="1%"></td>
+            <td class="evenCol">{%invoice_no%}</td>
+            <td width="1%"></td>
+            <td width="1%"></td>
+            <td width="1%"></td>
+            <td width="1%"></td>
+            <td width="1%"></td>
+            <td class="oddCol">التاريخ:</td>
+            <td width="1%"></td>
+            <td class="evenCol">{%created_time%} {%invoice_date%}</td>
+          </tr>
+          <tr>
+            <td class="oddCol">إسم العميل:</td>
+            <td width="1%"></td>
+            <td class="evenCol">{%client_business_name%}</td>
+            <td width="1%"></td>
+            <td class="oddCol">الجوال:</td>
+            <td width="1%"></td>
+            <td class="evenCol">{%client_mobile%}</td>
+            <td width="1%"></td>
+            <td class="oddCol">العنوان:</td>
+            <td width="1%"></td>
+            <td class="evenCol">{%client_full_address%}</td>
+          </tr>
+          <tr>
+            <td class="oddCol">ملاحظات:</td>
+            <td width="1%"></td>
+            <td
+              colspan="9"
+              class="evenCol"
+              style="text-align: right !important"
+            >
+              {%Notes%}
+            </td>
+          </tr>
+        </table>
+        <br />
+
+        <!-- Items List -->
+        <div id="items-list">
+          {%items_list%}
+
+          <div class="custom-item-table">
+            <table cellspaing="0" cellpadding="0" width="100%">
+              <tr>
+                <th class="item-name">اسم البند</th>
+                <th class="item-value">القيمة</th>
+              </tr>
+              <tr>
+                <td class="item-name">إجمالي قيمة العقد</td>
+                <td class="item-value">{%invoice_total%}</td>
+              </tr>
+            </table>
+          </div>
+          <div
+            style="
+              padding: 30px 0 20px;
+              font-size: 14px;
+              margin: auto;
+              text-align: center;
+            "
+          >
+            ----------------------------------------------Any data under this
+            line is
+            cancelled------------------------------------------------------------
+          </div>
+          <table id="totals" width="100%" cellspacing="8">
+            <tr>
+              <td></td>
+              <td class="oddCol">الإجمالي قبل الخصم</td>
+              <td class="evenCol subtot total-beforeDis"></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td class="oddCol">الخصم</td>
+              <td class="evenCol subtot total-discount"></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td class="oddCol">الإجمالي بعد الخصم</td>
+              <td class="evenCol subtot total-afterDis"></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td class="oddCol">ضريبة القيمة المضافة 15%</td>
+              <td class="evenCol tax">{%tax-total%}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td class="oddCol">الإجمالي بعد الخصم والضريبة 15%</td>
+              <td class="evenCol final">{%invoice_total%}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Kitchen Details -->
+      <div id="details" class="pg">
+        <div class="head" style="margin: auto; width: 50%; margin-bottom: 10px">
+          مواصفات فنية
+        </div>
+        <div id="container"></div>
+      </div>
+
+      <!-- Terms & Conditions -->
+      <table
+        class="pg pg-terms"
+        width="100%"
+        cellpadding="0"
+        cellspacin="0"
+        border="0"
+      >
+        <tr>
+          <td>
+            <div id="terms" class="pg pg-terms">
+              <div>1 -يلتزم الطرف الثاني بدفع <span>{%Percentage%}</span> من قيمة العقد عند التوقيع ويدفع المتبقي قبل التركيب بـ 10 أيام.</div>
+              <div>2 - يلتزم الطرف الاول بجميع ما ذكر أعلاه وبمدة تنفيذ 30 يوم من تاريخ توقيع العقد واكتمال سداد الدفعة الاولي.</div>
+              <div>
+                3- إجمالي قيمة العقد مع الضريبة المضافة
+                <span>{%invoice_total_spelled%}</span>.
+              </div>
+              <div>4- الخصم <span>{%discount%}</span></div>
+              <div>5- إجمالي قيمة الضريبة المضافة <span>{%tax-total%}</span> ريال فقط لا غير.</div>
+              <div>6- جميع بنود العقد المدونة وافق عليها الطرف الثاني وبناء عليها تم الاتفاق والتوقيع.</div>
+              <div>7- الرسم المرفق بالعقد جزء من العقد ويحتفظ كلا الطرفين بنسخة منه بعد توقيع العقد.</div>
+              <div>8- على الطرف الثاني الأستفسار عن جميع بنود العقد قبل التوقيع ولا يؤخذ بأي اتفاق شفهي ولا يجوز المطالبة بها.</div>
+              <div>9- على الطرف الثاني تحديد مواقع مواسير المياه والكهرباء قبل التركيب وفى حالة حدوث خلل لا يتحمل الطرف الأول أي مسئولية.</div>
+              <div>
+                10- على الطرف الثاني تجهيز موقع التركيب من فك المطبخ او المنتج القديم ما لم يتفق عليه بالمعرض كما وأن أعمال التركيب ال تشمل السباكة
+                والكهرباء والسيراميك.
+              </div>
+              <div>
+                11- في حالة إلغاء العقد من قبل الطرف الثاني خلال ثالثة أيام )3 أيام( من تاريخ التوقيع يتم خصم 25( %خمسة وعشرون بالمائة( من قيمة العقد
+                تخصم من الدفعة الأولى وذلك مقابل رسوم أداريه وتصميم ورفع مقاسات وفي حالة الإلغاء بعد الثالثة أيام لا يحق له المطالبة بمقدم العقد.
+              </div>
+              <div>
+                12- على الطرف الثاني أو من ينوب عنه التواجد أثناء عملية التركيب واستلام الأعمال المتفق عليها ولا يجوز له الاعتراض في حالة عدم حضوره
+                التركيب واستالم المطبخ.
+              </div>
+              <div>
+                13- في حالة تعثر الطرف الثاني في استلام المطبخ او المنتج في موعد التسليم يقوم الطرف الأول بتحديد موعد جديد حسب ما يراه الطرف الأول.
+              </div>
+              <div>
+                14- الأعمال الإضافية التي يطلبها الطرف الثاني بعد توقيع العقد يتم التعامل معها على انها أعمال إضافية ويتم الاتفاق عليها بعقد ملحق بين
+                الطرفين.
+              </div>
+              <div>
+                15- في حال تم تأجيل موعد التركيب من الطرف الثاني لمدة أكثر من 45 يوم من التاريخ المتفق عليه تحسب أجور تخزين قيمة ألف ريال للشهر
+                الواحد.
+              </div>
+              <div>
+                16- في حالة تأخر الطرف الأول عن موعد التركيب بمدة اقصاها 15 يوم يتم احتساب غرامة تأخير تدفع للطرف الثاني 100 ريال عن كل يوم تأخير بما
+                لا يزيد عن 15 %من إجمالي قيمة العقد.
+              </div>
+              <div>
+                17- يضمن الطرف الأول المطبخ او المنتج المصنع من قبل الطرف الأول والمقدم من طرفه ضمان مصنعي باستثناء سوء الاستخدام وذلك لمدة 10 سنوات )
+                عشر سنوات( شرط إحضار العقد أو الفاتورة.
+              </div>
+              <div>18- يضمن الطرف الأول الأجهزة الكهربائية ضمان الوكيل وذلك لمدة سنتان شريطة إحضار الفاتورة الأصل.</div>
+              <div>19- في حال نقل المنتج وتركيبه في مكان آخر عن طريق شركة أخرى يعتبر المطبخ والمنتج خارج الضمان.</div>
+              <div>20- قد يختلف اللون الخارجي للخامة أو سطح الجرانيت درجة أو أكثر عن العينة المعروضة بالمعرض.</div>
+              <div>21- أي كشط أو تعديل على هذا العقد يلغيه.</div>
+              <div>22- شروط خاصة:</div>
+              <div>
+                .............................................................................................................................<br />.............................................................................................................................<br />.............................................................................................................................<br />.............................................................................................................................
+              </div>
+              <!-- Kitchen Notes -->
+              <div class="notes-block">
+                <!-- <div><strong>المواصفات الفنية للمطبخ:</strong></div> -->
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td>
+                      <div class="editable-area" id="footer">{%footer%}</div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- Signature -->
+              <table id="sign" width="100%">
+                <tr>
+                  <td>الطرف الأول</td>
+                  <td>الطرف الثاني</td>
+                </tr>
+                <tr>
+                  <td>___________________________</td>
+                  <td>___________________________</td>
+                </tr>
+              </table>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      // Adding Serial Number Column
+      function addSerCol() {
+        var tbl = document.getElementById("listing_table"); // table reference
+        for (i = 0; i < tbl.rows.length; i++) {
+          var newCell = tbl.rows[i].insertCell(0);
+          newCell.id = "serial";
+          newCell.innerText = i;
+        }
+        var firstCell = tbl.rows[0].cells[0];
+        firstCell.id = "th";
+        tbl.rows[0].cells[0].innerHTML = "م";
+        // Styling Serial Col Head:
+        var snCell = document.querySelectorAll(
+          "#listing_table tr:first-child td:first-child"
+        )[0];
+        snCell.style.cssText = "font-weight:bold;vertical-align:middle;";
+      }
+
+      // Hiding Image Based Items
+      function hideImgItems() {
+        var desc = document.querySelectorAll(
+          "#listing_table tbody td:nth-child(3)"
+        );
+        var type = document.querySelectorAll(
+          "#listing_table tbody td:nth-child(6)"
+        );
+        for (i = 0; i < desc.length; i++) {
+          if (
+            desc[i].innerText != "  " &&
+            type[i].innerText.indexOf("بيعي") < 1 &&
+            type[i].innerText.indexOf("وبيعي") < 1
+          ) {
+            desc[i].parentElement.style.display = "none";
+          }
+        }
+      }
+
+      // Adding Item Images in Blocks
+      function addBlocks() {
+        var container = document.querySelector("#container");
+        var blockNum = 0;
+        var desc = document.querySelectorAll(
+          "#listing_table tbody td:nth-child(3)"
+        );
+        var image = document.querySelectorAll(
+          "#listing_table tbody td:nth-child(4)"
+        );
+        var code = document.querySelectorAll(
+          "#listing_table tbody td:nth-child(5)"
+        );
+        var type = document.querySelectorAll(
+          "#listing_table tbody td:nth-child(6)"
+        );
+        for (i = 0; i < desc.length; i++) {
+          if (
+            desc[i].innerText != "  " &&
+            (type[i].innerText.indexOf("مواصفة") >= 1 ||
+              type[i].innerText.indexOf("مواصفة وبيعي") >= 1)
+          ) {
+            var block = document.createElement("div");
+            block.setAttribute("class", "block");
+
+            var itemDes = document.createElement("div");
+            var itemImg = document.createElement("div");
+            var itemCode = document.createElement("div");
+
+            itemDes.innerHTML = desc[i].innerHTML;
+            itemImg.innerHTML = image[i].innerHTML.replace("?w=100", "");
+            itemCode.innerHTML = code[i].innerHTML;
+
+            itemDes.setAttribute("class", "item-des");
+            itemImg.setAttribute("class", "item-img");
+            itemCode.setAttribute("class", "item-code");
+
+            block.appendChild(itemDes);
+            block.appendChild(itemImg);
+            block.appendChild(itemCode);
+
+            container.appendChild(block);
+          }
+        }
+      }
+
+      function getDiscount() {
+        var dicountRow = document.querySelectorAll(
+          ".listing-table:nth-child(2) tbody tr td:nth-child(2)"
+        );
+        var discountValue = document.querySelectorAll(
+          ".listing-table:nth-child(2) tbody tr td:nth-child(3)"
+        );
+        var discount = document.querySelector(".total-discount");
+
+        for (var i = 0; i < dicountRow.length; i++) {
+          if (dicountRow[i].innerText.split(" ")[0] === "خصم") {
+            discount.innerText = discountValue[i].innerText.replace("-", "");
+            break;
+          }
+        }
+      }
+
+      function totalBeforeDiscount() {
+        var priceCol = document.querySelectorAll(
+          "#listing_table tbody tr td:nth-child(7)"
+        );
+        var qtyCol = document.querySelectorAll(
+          "#listing_table tbody tr td:nth-child(8)"
+        );
+        var sum = 0;
+        for (var i = 0; i < priceCol.length; i++) {
+          sum +=
+            parseFloat(priceCol[i].innerText.replace(",", "")) *
+            parseFloat(qtyCol[i].innerText);
+        }
+        document.querySelector(".total-beforeDis").innerText = sum;
+        document.querySelector(".total-beforeDis").innerText =
+          document
+            .querySelector(".total-beforeDis")
+            .innerText.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " ر.س";
+      }
+
+      function totalAfterDiscount() {
+        var totalBefore = document.querySelector(".total-beforeDis");
+        var discount = document.querySelector(".total-discount");
+
+        var totalAfter = document.querySelector(".total-afterDis");
+
+        if (
+          discount.innerText
+            .replace("ر.س", "")
+            .replace("-", "")
+            .replace(",", "") == ""
+        ) {
+          totalAfter.innerText = parseFloat(
+            totalBefore.innerText.replace("ر.س", "").replace(",", "")
+          );
+        } else {
+          totalAfter.innerText =
+            parseFloat(
+              totalBefore.innerText.replace("ر.س", "").replace(",", "")
+            ) -
+            parseFloat(
+              discount.innerText
+                .replace("ر.س", "")
+                .replace("-", "")
+                .replace(",", "")
+            );
+        }
+        totalAfter.innerText =
+          totalAfter.innerText.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " ر.س";
+      }
+      try {
+        addSerCol();
+        hideImgItems();
+        addBlocks();
+        getDiscount();
+        totalBeforeDiscount();
+        totalAfterDiscount();
+      } catch (err) {
+        console.log(err);
+      }
+    </script>
+  </body>
+</html>

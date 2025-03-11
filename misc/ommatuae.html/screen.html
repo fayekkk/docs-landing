@@ -1,0 +1,38 @@
+
+<script>
+  $(document).ready(function () {
+    function handleGroupItem() {
+      let branch_id = USER.branch_id;
+      if (
+        ($("#InvoiceLayout").val() == 6 && branch_id == 1) ||
+        ($("#InvoiceLayout").val() == 7 && branch_id == 2)
+      ) {
+        const $table = $("#listing_table");
+        $table.on("input", ".select-item textarea", function () {
+          const currentValue = $(this).val().toLowerCase();
+          if (currentValue === "group" || currentValue === "normal") {
+            console.log("triggerd");
+            const $row = $(this).closest("tr");
+            if ($row.find(".unit-price input").attr("disabled") == undefined) {
+              console.log("yesss");
+              $("#AddItem").click();
+            }
+            $row.find(".Quantity input").val(1).change().attr("disabled", true);
+            $row
+              .find(".unit-price input")
+              .val(0)
+              .change()
+              .attr("disabled", true);
+            $row.find(".col-2 textarea").focus();
+          }
+        });
+      }
+    }
+    setTimeout(() => {
+      handleGroupItem();
+      $("#InvoiceLayout").on("change", function () {
+        handleGroupItem();
+      });
+    }, 500);
+  });
+</script>

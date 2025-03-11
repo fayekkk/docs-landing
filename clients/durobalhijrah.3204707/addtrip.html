@@ -540,13 +540,44 @@
             flag1 = 0;
             $("#generalNameerror").attr("style", "display:none;");
           }
+// استلمت البضاعة كاملة و سليمة
 
           if (flag1 == 0) {
             $("#sendtrip").attr("disabled", true);
             sendtrip();
           }
+          function findSimilarHotel(airportOption, hotelsData) {
+            const hotelOptions = hotelsData;
+            // const hotelOptions = [
+            //   "من فضلك اختر",
+            //   "مكة المكرمة Makkah",
+            //   "المدينة المنورة Medina",
+            //   "الرياضRiyadh",
+            //   "جدة Jeddah",
+            //   "الطائف Taif",
+            //   "العلا Alula",
+            //   "الباحة Bahah",
+            // ];
 
-          function sendRoutesFn(tripId) {
+            const airportWords = airportOption.split(" ");
+            // console.log({ airportWords: airportWords });
+            console.log({ airportWords: airportWords });
+            console.log({ hotelOptions: hotelOptions });
+            // Iterate through hotel options to find a match
+            for (const hotel of hotelOptions) {
+              for (const word of airportWords) {
+                if (
+                  hotel.city2.includes(word) &&
+                  word != "" &&
+                  airportWords.indexOf("مطار") == -1
+                ) {
+                  return hotel.hotel;
+                }
+              }
+            }
+            return null;
+          }
+          async function sendRoutesFn(tripId) {
             console.log(tripId);
 
             // let tripId = parseInt(window.location.pathname.split("/")[4]);
@@ -578,7 +609,11 @@
                 workflowData["le_workflow-type-entity-4_custom_data"][
                   "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_transportations"
                 ];
-              console.log({ routes: routes });
+              let hotelsData =
+                workflowData["le_workflow-type-entity-4_custom_data"][
+                  "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_hotels"
+                ];
+              // console.log({ routes: routes });
 
               if (routes.length > 0) {
                 function creeatenusoks() {
@@ -586,7 +621,7 @@
                     workflowData["le_workflow-type-entity-4_custom_data"][
                       "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_nusuks"
                     ];
-                  console.log(nusoksData);
+                  // console.log(nusoksData);
                   if (nusoksData.length > 0) {
                     let nusoksObject = {
                       nusuk_no: "",
@@ -604,13 +639,14 @@
                       "-",
                       ""
                     );
-                    console.log(nusoksObject);
+                    // console.log(nusoksObject);
 
                     return nusoksObject;
                   }
                 }
                 let nusuksdata = creeatenusoks();
-                console.log({ nusuksdata: nusuksdata });
+                // console.log({ nusuksdata: nusuksdata });
+                const airportOption = "مطار المدينة Medina Airport"; // Example input
 
                 const promises = routes.map(async (route, index) => {
                   let newBody = {
@@ -619,57 +655,56 @@
                     nationality_masar1:
                       workflowData["le_workflow-type-entity-4_custom_data"]
                         .nationality,
+                    controller_name_masar1:
+                      workflowData["le_workflow-type-entity-4_custom_data"]
+                        .leader_no,
                     trip_number_masar1: `${workflowData.number}-${index + 1}`,
                     trip_number_masar1: nusuksdata.nusuk_no,
                     passengers_number_masar1: nusuksdata.passengers_no,
-                    controller_name_masar1: "",
-                    masar_date1: route.date,
-                    time_masar1: route.time,
-                    from_masar1: route.from,
+
+                    masar_date1: route.date2,
+                    time_masar1: route.time2,
+                    from_masar1: route.from2,
                     from_hotel_masar1:
-                      workflowData["le_workflow-type-entity-4_custom_data"][
-                        "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_hotels"
-                      ][index]?.hotel || "",
-                    masar_to11: route.to,
+                      findSimilarHotel(route.from2, hotelsData) || "",
+                    masar_to11: route.to2,
                     to_hotel_masar1:
-                      workflowData["le_workflow-type-entity-4_custom_data"][
-                        "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_hotels"
-                      ][index]?.hotel || "",
+                      findSimilarHotel(route.to2, hotelsData) || "",
                     flight_date_masar1:
                       getflight(
-                        route.date,
+                        route.date2,
                         workflowData["le_workflow-type-entity-4_custom_data"][
                           "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_flys"
                         ]
-                      )?.date || "",
+                      )?.date2 || "",
                     flight_time_masar1:
                       getflight(
-                        route.date,
+                        route.date2,
                         workflowData["le_workflow-type-entity-4_custom_data"][
                           "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_flys"
                         ]
-                      )?.etd || "",
+                      )?.etd2 || "",
                     flight_com_masar1:
                       getflight(
-                        route.date,
+                        route.date2,
                         workflowData["le_workflow-type-entity-4_custom_data"][
                           "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_flys"
                         ]
                       )?.flight_com || "",
                     flight_no_masar1:
                       getflight(
-                        route.date,
+                        route.date2,
                         workflowData["le_workflow-type-entity-4_custom_data"][
                           "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_flys"
                         ]
                       )?.flight_no || "",
                     flight_hall_masar1:
                       getflight(
-                        route.date,
+                        route.date2,
                         workflowData["le_workflow-type-entity-4_custom_data"][
                           "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_flys"
                         ]
-                      )?.carrier || "",
+                      )?.carrer || "",
                     reference_id: tripId,
                   };
                   console.log({ newBody: newBody });
@@ -678,7 +713,7 @@
 
                 await Promise.all(promises);
               } else {
-                console.log("No routes found");
+                // console.log("No routes found");
               }
             }
 
@@ -700,17 +735,11 @@
                 console.error("Error creating new route:", error);
               }
             }
-
             function getflight(date, flights) {
               return flights.find((f) => f.date === date) || false;
             }
 
-            // let newBtn = `<a href="#" class="btn btn-default btn-sm btn-5" id="Post_routes">إضافة المسارات</a>`;
-            // $("#print_button").after(newBtn);
-            // $("#Post_routes").on("click", function () {
-            //   PostRoutes();
-            PostRoutes();
-            // });
+            await PostRoutes();
           }
 
           function sendtrip() {
@@ -857,10 +886,10 @@
               body: JSON.stringify(newReq),
             })
               .then((response) => response.json())
-              .then((data) => {
+              .then(async (data) => {
                 console.log("Response:", data);
-                sendRoutesFn(data.id);
-                window.location.href = "/contents/process_content/view_trips";
+                await sendRoutesFn(data.id);
+                // window.location.href = "/contents/process_content/view_trips";
               })
               .catch((error) => {
                 console.error("Error:", error);

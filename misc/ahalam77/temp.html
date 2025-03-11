@@ -1,0 +1,534 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+
+    #items-list {
+      display: none !important;
+    }
+
+    .adressess br {
+      display: none;
+    }
+    #invHeader {
+      width: 100%;
+      direction: rtl;
+    }
+    #invHeader td:nth-child(1) {
+      width: 35%;
+      text-align: right;
+    }
+    #invHeader td:nth-child(2) {
+      width: 20%;
+      text-align: center;
+    }
+    #invHeader td:nth-child(3) {
+      width: 25%;
+      text-align: right;
+    }
+    #invHeader td:nth-child(4) {
+      width: 20%;
+    }
+    #invHeader td:nth-child(4) img {
+      width: 80%;
+      margin-left: 20%;
+    }
+    #invData {
+      width: 100%;
+      border-left: 1px solid black;
+      border-top: 1px solid black;
+      border-right: 1px solid black;
+
+      border-spacing: 0;
+      /* border-left: 1px solid black;
+        border-top: 1px solid black; */
+    }
+    #invData td {
+      background-color: #305496;
+      width: 50%;
+      text-align: center;
+      /* font-size: 15px; */
+      font-weight: bold;
+      color: #fff;
+      padding: 5px 0;
+      /* border-right: 1px solid black;
+        border-bottom: 1px solid black; */
+    }
+    #InvMoreData {
+      width: 100%;
+      direction: ltr;
+      border-left: 1px solid black;
+      /* border-top: 1px solid black; */
+      border-spacing: 0;
+    }
+    #InvMoreData th {
+      text-align: center;
+      /* font-size: 15px; */
+      color: #fff;
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    #InvMoreData td {
+      padding: 6px;
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    #InvMoreData td:nth-child(1) {
+      width: 25%;
+      text-align: center;
+      background-color: #305496;
+      /* font-size: 15px; */
+      color: #fff;
+    }
+    #InvMoreData td:nth-child(2) {
+      width: 45%;
+      text-align: center;
+      /* font-size: 14px; */
+    }
+    #InvMoreData td:nth-child(3) {
+      width: 15%;
+      text-align: center;
+      background-color: #305496;
+      /* font-size: 15px; */
+      color: #fff;
+    }
+    #InvMoreData td:nth-child(4) {
+      width: 15%;
+      text-align: center;
+      /* font-size: 14px; */
+    }
+    #customs {
+      width: 100%;
+      direction: ltr;
+      text-align: center;
+      border-left: 1px solid black;
+      /* border-top: 1px solid black; */
+      border-spacing: 0;
+    }
+    #customs th {
+      text-align: center;
+      background-color: #305496;
+      /* font-size: 15px; */
+      color: #fff;
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+
+    #customs td:nth-child(1),
+    #customs td:nth-child(3),
+    #customs td:nth-child(5) {
+      width: 19%;
+      text-align: center;
+      background-color: #305496;
+      /* font-size: 15px; */
+      color: #fff;
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    #customs td:nth-child(2),
+    #customs td:nth-child(4),
+    #customs td:nth-child(6) {
+      width: 14.3%;
+      text-align: center;
+
+      /* font-size: 15px; */
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    #invItems {
+      width: 100%;
+      direction: rtl;
+      text-align: center;
+      border-left: 1px solid black;
+      /* border-top: 1px solid black; */
+      border-spacing: 0;
+    }
+    #invItems th {
+      text-align: center;
+      background-color: #305496;
+      /* font-size: 15px; */
+      color: #fff;
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    #invItems td {
+      width: 33.3%;
+      text-align: center;
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    #banks {
+      width: 100%;
+      direction: rtl;
+      border-spacing: 0;
+      margin-top: 20px;
+    }
+    #banks td:nth-child(1) {
+      color: #305496;
+      text-align: right;
+      width: 15%;
+      direction: ltr;
+    }
+    #banks td:nth-child(2) {
+      color: #305496;
+      text-align: right;
+      width: 35%;
+    }
+    #banks td:nth-child(3) {
+      color: #305496;
+      text-align: left;
+      width: 35%;
+    }
+    #banks td:nth-child(4) {
+      color: #305496;
+      text-align: left;
+      width: 15%;
+    }
+    #banks tr:nth-child(1) td:nth-child(1),
+    #banks tr:nth-child(1) td:nth-child(4) {
+      border-top: 1px solid black;
+      padding-top: 5px;
+    }
+    #signs {
+      width: 100%;
+      direction: ltr;
+      margin-top: 25px;
+      border-spacing: 0;
+    }
+    #signs td {
+      text-align: center;
+      font-weight: bold;
+      font-size: 14px;
+      width: 33%;
+    }
+    #signs img {
+      width: 50%;
+      margin: 0 25%;
+    }
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table id="invHeader">
+          <tbody>
+            <tr>
+              <td>الرقم الضريبى : 310831883700003</td>
+              <td></td>
+              <td>العنوان : المملكة العربية السعودية</td>
+              <td rowspan="100%">{%site_logo%}</td>
+            </tr>
+            <tr>
+              <td>رقم السجل التجارى : 3550100124</td>
+              <td></td>
+              <td>تبوك المنطقة الصناعية - شارع عمر</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>السمرقندي 47321</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td style="font-size: 13px; font-weight: bold">
+                {%invoice_title%}
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>شركة إنجاز كار لصيانة السيارات</td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="invData">
+          <tbody>
+            <tr>
+              <td>
+                تاريخ ووقت الفاتورة
+                <br />
+                Invoice Date {%invoice_date%} {%created_time%}
+              </td>
+              <td>
+                رقم القاتورة
+                <br />
+                Invoice Number {%invoice_no%}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="InvMoreData">
+          <thead>
+            <tr>
+              <th colspan="100%"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                اسم العميل
+                <br />
+                Customer Name
+              </td>
+              <td>{%client_business_name%}</td>
+              <td>
+                رقم الهوية
+                <br />
+                ID
+              </td>
+              <td>{%client_national_id%}</td>
+            </tr>
+            <tr>
+              <td>
+                العنوان الوطنى
+                <br />
+                Address
+              </td>
+              <td class="adressess">{%client_full_address%}</td>
+              <td>السجل التجارى</td>
+              <td>{%client_bn2%}</td>
+            </tr>
+            <tr>
+              <td>
+                البريد الإلكترونى - الهاتف
+                <br />
+                Email - Phone
+              </td>
+              <td>
+                {%client_email%}
+                <br />
+                {%client_phone%}
+              </td>
+              <td>الرقم الضريبي</td>
+              <td>{%client_bn1%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="customs">
+          <thead>
+            <tr>
+              <th colspan="100%">معلومات السيارة Vehicle Information</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>رقم الهيكل VIN/FIN</td>
+              <td>{%VIN FIN%}</td>
+              <td>رقم اللوحة Plate Number</td>
+              <td>{%Plate Number%}</td>
+              <td>نوع السيارة</td>
+              <td>{%Car Type%}</td>
+            </tr>
+            <tr>
+              <td>رقم المطالبة</td>
+              <td>{%Claim Number%}</td>
+              <td>اللون</td>
+              <td>{%color%}</td>
+              <td>الموديل model / year</td>
+              <td>{%model%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="invItems">
+          <thead>
+            <tr>
+              <th colspan="100%">Invoice Summary</th>
+            </tr>
+            <tr>
+              <th>وصف البنود</th>
+              <th>السعر Price</th>
+              <th>Particular</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>المبلغ الإجمالى</td>
+              <td class="subttl"></td>
+              <td>Net Invoice</td>
+            </tr>
+            <tr>
+              <td style="direction: ltr">%ضريبة 15</td>
+              <td class="removeCurr">{%tax-total%}</td>
+              <td>VAT</td>
+            </tr>
+            <tr>
+              <td>المجموع</td>
+              <td class="ttlaftervat"></td>
+              <td>Total</td>
+            </tr>
+            <tr>
+              <td>الدفعة المقدمة مبلغ التحمل</td>
+              <td class="Excss removeCurr">
+                {%custom_الدفعة_المقدمة_مبلغ_التحمل_field_1%}
+              </td>
+              <td>Deposit Insur Excss</td>
+            </tr>
+            <tr>
+              <td>الدفعة المقدمة مبلغ الإستهلاك</td>
+              <td class="Consuming removeCurr">
+                {%custom_الدفعة_المقدمة_مبلغ_الإستهلاك_field_3%}
+              </td>
+              <td>Deposit Insur Consuming</td>
+            </tr>
+            <tr>
+              <td>إجمالى المبلغ شامل ضريبة القيمة المضافة</td>
+              <td class="invoice_total removeCurr">{%invoice_total%}</td>
+              <td>Net Payable</td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="items-list">{%items_list%}</div>
+
+        <table id="banks">
+          <tbody>
+            <tr>
+              <td class="topbordered">:إسم المستفيد</td>
+              <td>شركة انجاز كار لصيانة السيارات</td>
+              <td>Enjaz Car Company</td>
+              <td class="topbordered">:Beneficiary Name</td>
+            </tr>
+            <tr>
+              <td>:إسم البنك</td>
+              <td>مصرف الراجحي</td>
+              <td>Alrajhi Bank</td>
+              <td>:Bank Name</td>
+            </tr>
+            <tr>
+              <td>:رقم الايبان</td>
+              <td>SA6080000202608010085583</td>
+              <td>SA6080000202608010085583</td>
+              <td>:IBAN No</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table id="signs">
+          <tbody>
+            <tr>
+              <td>توقيع أمين الصندوق</td>
+              <td>توقيع العميل</td>
+              <td>{%sa_qr_code_image%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="display: none">
+          <div id="ExcssVal"></div>
+          <div id="ConsumingVal"></div>
+        </div>
+        <script>
+          function hundleTtls() {
+            if (document.querySelector(".Excss").innerText.trim() == "") {
+              document.querySelector(".Excss").innerText = 0.0;
+            }
+            if (document.querySelector(".Consuming").innerText.trim() == "") {
+              document.querySelector(".Consuming").innerText = 0.0;
+            }
+            var AllRows = document.querySelectorAll("#listing_table tbody tr");
+            var ttlprices = 0;
+            for (var i = 0; i < AllRows.length; i++) {
+              var price = parseFloat(
+                AllRows[i].cells[2].innerText.replace(/,/g, "")
+              );
+              ttlprices += price;
+            }
+            document.querySelector(".subttl").innerText = ttlprices
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            document.querySelector(".ttlaftervat").innerText = (
+              parseFloat(
+                document
+                  .querySelector(".invoice_total")
+                  .innerText.replace(/,/g, "")
+              ) +
+              parseFloat(
+                document.querySelector(".Consuming").innerText.replace(/,/g, "")
+              ) +
+              parseFloat(
+                document.querySelector(".Excss").innerText.replace(/,/g, "")
+              )
+            )
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          }
+          try {
+            hundleTtls();
+          } catch (error) {
+            console.log(error);
+          }
+          function removeCurr() {
+            var allremoveCurr = document.querySelectorAll(".removeCurr");
+            for (var i = 0; i < allremoveCurr.length; i++) {
+              allremoveCurr[i].innerText = parseFloat(
+                allremoveCurr[i].innerText.replace(/,/g, "")
+              )
+                .toFixed(2)
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+          }
+          try {
+            removeCurr();
+          } catch (error) {
+            console.log(error);
+          }
+          function additems() {
+            var AllRows = document.querySelectorAll("#listing_table tbody tr");
+            for (var i = AllRows.length - 1; i >= 0; i--) {
+              var newTr = document.createElement("tr");
+              var td1 = document.createElement("td");
+              var td2 = document.createElement("td");
+              var td3 = document.createElement("td");
+              td1.innerText = AllRows[i].cells[0].innerText;
+              td2.innerText = AllRows[i].cells[2].innerText;
+              td3.innerText = AllRows[i].cells[1].innerText;
+              newTr.appendChild(td1);
+              newTr.appendChild(td2);
+              newTr.appendChild(td3);
+              document
+                .querySelector("#invItems tbody")
+                .insertBefore(
+                  newTr,
+                  document.querySelector("#invItems tbody tr:nth-child(1)")
+                );
+            }
+          }
+          try {
+            additems();
+          } catch (error) {
+            console.log(error);
+          }
+        </script>
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+  </body>
+</html>

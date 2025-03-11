@@ -1,0 +1,13 @@
+<!-- owner_entity_le_Vendors_create -->
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      $("#project_vendor").on("change", function () {
+        console.log("yes");
+        console.log($(this).val());
+        console.log($(this).find("option:selected").text());
+        $("#vendor_names").val($(this).find("option:selected").text()).change();
+      });
+    }, 400);
+  });
+</script>

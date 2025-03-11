@@ -1,0 +1,71 @@
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap");
+  *:not(i, .fa, .fas, .sortable-arrows a),
+  input,
+  textarea,
+  select,
+  table,
+  th,
+  td,
+  ::placeholder {
+    font-family: "Tajawal", sans-serif !important;
+  }
+  .report-results-head th {
+    font-weight: bold !important;
+  }
+  #worker_name {
+    display: none;
+  }
+</style>
+
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      const currentURL = window.location.href.toLowerCase();
+
+      const hasReports =
+        currentURL.includes("reports/") || currentURL.includes("report");
+
+      if (hasReports) {
+        const searchableSelector = () => {
+          const selector = document.createElement("select");
+          selector.style.width = "100%";
+          selector.setAttribute("id", "staffselect");
+          const option = document.createElement("option");
+          option.textContent = "إختر العاملة";
+          option.style.textAlign = "center";
+          selector.appendChild(option);
+
+          $.get(
+            `https://the1salonsa.daftra.com/v2/api/entity/le_service_providers_staff_list/list/1`
+          ).then((options) => {
+            options.data.forEach((optionText) => {
+              const option = document.createElement("option");
+              option.textContent = optionText.staff_name;
+              option.style.textAlign = "center";
+              selector.appendChild(option);
+            });
+          });
+          document
+            .querySelector("#worker_name")
+            .parentElement.appendChild(selector);
+          setTimeout(() => {
+            console.log(document.querySelector("#worker_name").value);
+            if (document.querySelector("#worker_name").value != "") {
+              document.querySelector("#staffselect").value =
+                document.querySelector("#worker_name").value;
+            }
+          }, 1000);
+
+          document
+            .querySelector("#staffselect")
+            .addEventListener("change", () => {
+              document.querySelector("#worker_name").value =
+                document.querySelector("#staffselect").value;
+            });
+        };
+        searchableSelector();
+      }
+    }, 500);
+  });
+</script>

@@ -1,0 +1,531 @@
+<div
+  id="barcode_template"
+  class="mceEditable"
+  readonly="readonly"
+  style="padding: 0px 0px 0px 0px; margin: 0px auto; background-color: #ffffff"
+>
+  <style>
+    <!--
+      * {
+                              text-transform: capitalize;
+                           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                          }
+
+                          .arabic {
+                              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                          }
+
+                         .rowContent{
+                      text-align:center;
+                      width:100%;
+                      }
+
+                       .rowContent>span:first-child {
+                      width:23%;
+                      text-align:left;
+                      float:left;
+                      }
+
+                      .rowContent>span:nth-child(2) {
+                      width:35%;
+                      }
+
+                       .rowContent>span:last-child {
+                      width:25%;
+                      text-align:right;
+                      float:right;
+                      }
+                      .customTable th, .customTable  td {height: 15px;
+                        padding: 1px !important;
+                        text-align: center;}
+                      .customTable th {background:#ddd; text-align:center;}
+                    .customTable .num {width:5%}
+                    .customTable  .department {width:24%}
+                    .customTable  .disc {width:40%}
+                    .customTable  .cost {width:29%}
+                      #client-details{
+                              border-collapse: separate;
+                              border: 1px solid #bcbcbc;
+                              border-radius:5px;
+                              margin:10px 0px;
+                               direction:ltr;
+                          }
+
+                          #client-details td {
+                              padding: 0px 5px;
+                              width:50%;
+                               font-size:11px;
+                                height:20px;
+                          border:none;
+                          }
+                          #client-details input {margin: 0px 10px}
+                          #client-details td span:first-child {
+                              float: left;
+                          }
+
+                          #client-details td span:last-child {
+                              float: right;
+                          }
+
+                          #client-details tr {
+                         border:none;
+                          }
+                          #client-details tr:nth-child(odd) {
+                              background: #ddd;
+                          }
+
+                          #client-details tr:nth-child(1)> td:nth-child(1) {
+                             border-top-left-radius: 5px;
+                          }
+                        #client-details tr:nth-child(1)> td:nth-child(2) {
+                             border-top-right-radius: 5px;
+                          }
+
+                          #repair-details {
+                              border: 1px solid #000;
+                              border-collapse: collapse;
+                              margin: 20px 0px 0 0;
+                          }
+
+                          #repair-details td {
+                              border-left: 1px solid #000;
+                              padding: 20px 10px;
+                          }
+
+                          #repair-details tr:first-child {
+                              background: rgb(46, 46, 44) !important;
+                              color: #f8c901;
+                              font-weight: bold;
+                          }
+
+                          #repair-details tr:first-child td {
+                              border-left: 0;
+                              padding: 10px;
+                          }
+
+                          #repair-details td span:first-child {
+                              float: left;
+                          }
+
+                          #repair-details td span:last-child {
+                              float: right;
+                          }
+
+                          #repair-details tr:nth-child(odd) {
+                              background: #ddd;
+                          }
+
+                          #checkboxes {
+                              border: 1px solid #000;
+                              border-top: 0px;
+                              border-collapse: collapse;
+                          }
+
+                          #checkboxes td {
+                              padding: 10px;
+                          }
+
+                          .agreement {
+                              margin: 15px 0;
+                          }
+
+                          .agreement>div {
+                              width: 100%;
+                              border: 1px solid #bcbcbc;
+                              border-radius: 10px;
+                              overflow: hidden;
+                              height: 70px;
+
+
+
+
+                          }
+
+
+
+                          .agreement div div {
+                              background: #ddd;
+                              color:rgb(46, 46, 44);
+                              padding: 15px;
+                              text-align: center;
+                          }
+
+
+                    table.customTable {
+                        border: none !important;
+                        border-collapse: separate;
+                        border-spacing: 0;
+                    }
+
+                    table.customTable tr th:first-child {
+                        border-top-right-radius: 5px;
+                    }
+
+                    table.customTable tr th:last-child {
+                        border-top-left-radius: 5px;
+                    }
+
+                    .ipt_number, .ipt_item_name, .ipt_item_code, .ipt_item_quantity, .ipt_item_price, .ipt_item_total  {padding:2px !important;}
+      -->
+  </style>
+  <table
+    width="1024"
+    style="
+      margin: 0 auto;
+      width: 100%;
+      border: none;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    "
+  >
+    <tbody>
+      <tr>
+        <td style="border: none">
+          <table style="margin: auto; width: 93%; border: none">
+            <tbody>
+              <tr>
+                <td style="border: none">
+                  <div style="text-align: center">
+                    <img
+                      src="https://albedaiainfo.daftra.com/files/ee5b3865/work_order/5c21e33aa6a1e_blobid1545724725647.jpg"
+                      title="Logo new 2.jpg"
+                      width="345"
+                      height="77"
+                      caption="false"
+                    />
+                  </div>
+                  <div style="font-size: 13px; font-weight: bold; padding: 5px">
+                    <span class="arabic" style="margin: 0px 5px"
+                      >أمر إصلاح<span style="margin: 0px 5px"
+                        >Repair Order
+                      </span>
+                    </span>
+                  </div>
+                  <div>
+                    <table
+                      width="100%"
+                      id="client-details"
+                      cellspacing="0"
+                      cellpadding="0"
+                      style="font-size: 12px"
+                    >
+                      <tbody>
+                        <tr>
+                          <td>
+                            <div class="rowContent">
+                              <span>WIP No</span>
+                              <span>{%work_order_number%}</span>
+                              <span class="arabic">رقم الاصلاح</span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="rowContent">
+                              <span>Client Name</span>
+                              <span>{%client_business_name%}</span>
+                              <span class="arabic">اسم العميل</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="rowContent">
+                              <span>Plate.NO</span>
+                              <span>{%custom_رقم_اللوحة_field_78%}</span>
+                              <span class="arabic">رقم اللوحة</span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="rowContent">
+                              <span>Mobile Number</span>
+                              <span>{%client_mobile%}</span>
+                              <span class="arabic">رقم الاتصال</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="rowContent">
+                              <span>VIN No</span>
+                              <span>{%custom_رقم_الهيكل_field_77%}</span>
+                              <span class="arabic">رقم الهيكل</span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="rowContent">
+                              <span>Vehicle Type</span>
+                              <span>{%custom_نوع_السيارة_field_74%}</span>
+                              <span class="arabic">نوع السيارة</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="rowContent">
+                              <span>Advisor</span>
+                              <span>{%custom__field_64%}</span>
+                              <span class="arabic">الاستشاري</span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="rowContent">
+                              <span>Car Model</span>
+                              <span>{%custom_الموديل_field_76%}</span>
+                              <span class="arabic">موديل السيارة</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="rowContent">
+                              <span>Department </span>
+                              <span>{%custom_قسم_المسؤول_field_68%}</span>
+                              <span class="arabic">القسم</span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="rowContent">
+                              <span>Color</span>
+                              <span>{%custom_لون_السيارة_field_80%}</span>
+                              <span class="arabic">لون السيارة</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="rowContent">
+                              <span>Start Date</span>
+                              <span>{%work_order_start_date%}</span>
+                              <span class="arabic">موعد الاستلام</span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="rowContent">
+                              <span>KMs</span>
+                              <span
+                                >{%custom_قراءة_عداد_المركبة_field_79%}</span
+                              >
+                              <span class="arabic">عدد الكيلومترات</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="rowContent">
+                              <span>Promise Date</span>
+                              <span>{%work_order_delivery_date%}</span>
+                              <span class="arabic">موعد التسليم</span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="rowContent">
+                              <span>Form</span>
+                              <div
+                                style="
+                                  text-align: left;
+                                  width: 50%;
+                                  margin: auto;
+                                  display: inline-block;
+                                "
+                              >
+                                <span style="margin-top: 2px">مستلمة</span>
+                                <input
+                                  type="checkbox"
+                                  name="vehicle1"
+                                  style="margin-top: 2px"
+                                />
+                                <span style="margin-top: 2px">غير مستلمة</span>
+                                <input
+                                  type="checkbox"
+                                  name="vehicle1"
+                                  style="margin-top: 2px"
+                                />
+                              </div>
+                              <span class="arabic" style="width: 20%"
+                                >الاستمارة
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div style="margin: 10px 0; direction: rtl">
+                      <table class="customTable" width="100%">
+                        <tbody>
+                          <tr>
+                            <th class="num">م</th>
+                            <th class="department">القسم</th>
+                            <th class="disc">الوصف</th>
+                            <th class="cost">التكلفة التقريبية</th>
+                          </tr>
+                          <tr>
+                            <td>1</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>3</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>4</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>5</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>6</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>7</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>8</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>9</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>10</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="agreement">
+                      <div>
+                        <div
+                          style="
+                            font-size: 12px;
+                            padding: 0 20px;
+                            height: 18px;
+                            line-height: 18px;
+                          "
+                        >
+                          <span class="arabic">ملاحظات السيارة</span>
+                        </div>
+                      </div>
+                      <div style="width: 100%; margin-top: 20px">
+                        <div
+                          style="
+                            font-size: 12px;
+                            padding: 0 10px;
+                            height: 18px;
+                            line-height: 18px;
+                          "
+                        >
+                          <span class="arabic">ملاحظات المشرف</span>
+                        </div>
+                      </div>
+                    </div>
+                    <p style="text-align: center; margin-bottom: 0 !important">
+                      <img
+                        src="https://albedaiainfo.daftra.com/files/ee5b3865/work_order/5c28c2d81a145_blobid1546175188945.jpg"
+                        alt=""
+                        title="Decleration.jpg"
+                      />
+                    </p>
+                  </div>
+                  <table
+                    width="100%"
+                    style="margin: 5px 0px 0px 0px; direction: rtl; border: 0"
+                    id="last"
+                  >
+                    <tbody style="height: 15px">
+                      <tr style="height: 16px">
+                        <td align="right" style="font-size: 12px; border: 0">
+                          اسم العميل:
+                          .....................................................................
+                        </td>
+                        <td style="font-size: 12px; border: 0; width: 50%">
+                          توقيع بالاستلام:
+                          ...................................................................
+                        </td>
+                      </tr>
+                      <tr style="height: 16px">
+                        <td
+                          align="right"
+                          style="font-size: 12px; border: 0; width: 50%"
+                        >
+                          اسم المشرف:
+                          ...................................................................
+                        </td>
+                        <td style="font-size: 12px; border: 0; width: 50%">
+                          توقيع بالاستلام:
+                          ...................................................................
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="text-align: center; font-size: 12px; font-weight: bold">
+    <span class="arabic">الرقم الموحد : 920022838</span>
+  </div>
+  <style>
+    <!--
+      .ipt_number, .ipt_item_name, .ipt_item_code, .ipt_item_quantity, .ipt_item_price, .ipt_item_total {
+
+                    padding:0 10px;
+
+                    }
+
+                    .mceNonEditable table {
+                    border-collapse: separate;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    border-radius:5px;
+
+                    }
+                    .mceNonEditable table tr>th {height:14px; font-size:9px;text-align:right;}
+                    .mceNonEditable table tr>td {height:14px; font-size:9px;}
+                    .mceNonEditable table tr {height:14px; font-size:9px;}
+                    td.ipt_item_price {
+                        color: #fff;
+                    }
+
+                    .ipt_item_total {display:none;}
+                    .mceNonEditable table tr{
+                    font-size:10px;
+                    height:16px;
+
+                    }
+                    .mceNonEditable table tr>th{
+                    font-weight:bold;
+                    padding:0 10px;
+                    }
+      -->
+  </style>
+</div>

@@ -1,0 +1,129 @@
+<style>
+  #my_file {
+    display: none;
+  }
+
+  .custom-file-upload {
+    display: inline-block;
+    padding: 14px 21px;
+    cursor: pointer;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #3a3e63;
+    font-size: 15px;
+    width: 30%;
+  }
+
+  .custom-file-upload * {
+    color: #fff;
+  }
+
+  .custom-file-upload:hover {
+    background-color: #636aa7;
+  }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+  $(document).ready(function () {
+    // Hide the default file input and create a custom file upload button
+    $("#file").hide();
+    const newInput = `
+          <label class="custom-file-upload">
+            <span class="label_text">إضافة الملف</span>
+            <input id="my_file" type="file" accept=".xls, .xlsx" />
+          </label>`;
+    $("#file").after(`<br>${newInput}`);
+
+    // Function to add products based on the data from the uploaded file
+    async function addProduct(rows) {
+      const allProducts = new Set(); // Use Set for faster existence checks
+      const excistingprods = [];
+
+      // Collect existing product codes
+      $("[id$='--product_code']").each(function () {
+        const code = $(this).val();
+        if (code) {
+          allProducts.add(code);
+        }
+      });
+
+      // Create a document fragment for batch DOM updates
+      const productCodeFragment = document.createDocumentFragment();
+      const productNameFragment = document.createDocumentFragment();
+
+      // Prepare to update existing products
+      const updates = [];
+
+      // Iterate through the rows from the uploaded file
+      for (const row of rows) {
+        const productId = String(row["product id"]);
+        const productCode = row["product code"];
+        const productName = row["product Name"];
+
+        // Check if the product code already exists
+        if (allProducts.has(productId)) {
+          excistingprods.push(productId);
+          // Store updates for existing products
+          updates.push({
+            productId,
+            upperLimit: row["upper limit"],
+            lowerLimit: row["lower limit"],
+          });
+        } else {
+          // Add new product codes and names to the fragment
+          const newCodeOption = $("<option>")
+            .val(productId)
+            .text(productCode)[0];
+          productCodeFragment.appendChild(newCodeOption);
+
+          const newNameOption = $("<option>")
+            .val(productId)
+            .text(productName)[0];
+          productNameFragment.appendChild(newNameOption);
+        }
+      }
+
+      // Append new product codes and names in bulk
+      $("[id$='--product_code']").last().append(productCodeFragment);
+      $("[id$='--product_name']").last().append(productNameFragment);
+
+      // Update upper and lower limits for existing products
+      updates.forEach(({ productId, upperLimit, lowerLimit }) => {
+        $("[id$='--product_code']").each(function () {
+          if ($(this).val() == productId) {
+            $(this).closest("tr").find("[id$='--upper_limit']").val(upperLimit);
+            $(this).closest("tr").find("[id$='--lower_limit']").val(lowerLimit);
+          }
+        });
+      });
+
+      // Trigger the department add button after all updates
+    //   $("#departmentAddButton").trigger("click");
+      $(".page-loader").remove();
+      console.log({ excistingprods });
+    }
+
+    // Function to handle file input change and read the uploaded file
+    const handleFileUpload = async () => {
+      document
+        .getElementById("my_file")
+        .addEventListener("change", async () => {
+          $("body").append(
+            `<div class="page-loader" style=""><div class="spinner-wrap"><div class="spinner-border loading-spinner-icon" role="status"></div></div></div>`
+          );
+          const file = document.getElementById("my_file").files[0];
+          const data = await file.arrayBuffer();
+          const workbook = XLSX.read(data);
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+          const jsonData = XLSX.utils.sheet_to_json(worksheet);
+          console.log(jsonData);
+          await addProduct(jsonData); 
+        });
+    };
+
+    handleFileUpload();
+  });
+</script>

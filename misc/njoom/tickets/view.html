@@ -1,0 +1,560 @@
+<script>
+  if (
+    document.referrer.includes("/le_workflow-type-entity-3") &&
+    (document.referrer.includes("/edit") ||
+      document.referrer.includes("/create"))
+  ) {
+    localStorage.removeItem("data_ids");
+    console.log('local storage "data_ids" cleaned');
+  } else if (
+    document.referrer.includes("/le_workflow-type-entity-4") &&
+    (document.referrer.includes("/edit") ||
+      document.referrer.includes("/create"))
+  ) {
+    localStorage.removeItem("shifts_id");
+    console.log('local storage "shifts_id" cleaned');
+  }
+</script>
+<!----------------------------------------- DONE BY MOMEN ----------------------------------------------------->
+<style>
+  .status-list {
+    display: none !important;
+  }
+
+  #show {
+    display: inline-block !important;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .visible {
+    display: flex !important;
+  }
+
+  .add_margin {
+    margin-bottom: 5vh;
+  }
+</style>
+<div
+  id="err-div"
+  class="flash-wrapper"
+  style="padding-bottom: 0; padding-top: 0"
+>
+  <div id="CustomErrorMessage" class="Errormessage hidden">
+    <ul>
+      <li class="mssg"></li>
+    </ul>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $(
+      "#main-content > div > div.main-area.clearfix > div > ol > div.invoice-actions.btn-group.dropdown-btn-group > div:nth-child(9)"
+    ).hide();
+  });
+
+  $(window).load(() => {
+    $(".status-list").attr("id", "show");
+    $("#main-content .container").eq(0).prepend($("#err-div"));
+
+    if (
+      $(".breadcrumb-item").length == 2 &&
+      $(".breadcrumb-item")
+        .eq(0)
+        .find("a")
+        .attr("href")
+        .includes("le_workflow-type-entity-8")
+    ) {
+      let wfId =
+        location.pathname.split("/")[location.pathname.split("/").length - 1];
+
+      // Update to تحت المراجة when new instance is created
+      // $.get(`/v2/api/entity/le_workflow-type-entity-8/${wfId}/1`).then((ohdaData) => {
+      //   if (!ohdaData.follow_up_status_id) {
+      //     let updateStat = {
+      //       follow_up_status_id: 52,
+      //     };
+
+      //     $.ajax({
+      //       type: "POST",
+      //       contentType: "application/json",
+      //       url: `/v2/api/entity/le_workflow-type-entity-8/${wfId}/fields`,
+      //       accepts: ["application/json"],
+      //       data: JSON.stringify(updateStat),
+      //     })
+      //       .then((res) => {
+      //         console.log(`Thank You`);
+      //         location.reload();
+      //       })
+      //       .fail((res) => {
+      //         console.log(`Error Code ${res.status} has happened, Res" ${JSON.stringify(res)}`);
+      //       });
+      //   }
+      // });
+
+      // Create new journal on change status to تم المراجعة
+      $(".status-list .dropdown-menu li a[href*='/53']").click(function (e) {
+        e.preventDefault();
+
+        $.get(`/v2/api/entity/le_workflow-type-entity-8/${wfId}/3`)
+          .then((ohdaData) => {
+            let transArr = [];
+            let attach = [];
+            var sumDebit = 0;
+            var sumCredit = 0;
+            var tax = 0;
+            let journalDate = ohdaData.start_date;
+
+            ohdaData.attachments.forEach((file) => {
+              attach.push(file.file_id);
+            });
+
+            ohdaData["le_workflow-type-entity-8_custom_data"][
+              "le_custom_data_le_workflow-type-entity-8_le_custom_data_le_workflow-type-entity-8_info"
+            ].forEach((trans) => {
+              var addDebit = trans.debit;
+              var addCredit = trans.credit;
+              var taxDebit = trans.add_vat == 1 ? trans.debit * 0.15 : 0;
+
+              tax += taxDebit;
+              sumDebit += addDebit;
+              sumCredit += addCredit;
+              transArr.push({
+                currency_credit: parseFloat(addCredit).toFixed(2),
+                currency_debit: parseFloat(addDebit).toFixed(2),
+                currency_code: ohdaData.budget_currency,
+                description: trans.description,
+                alter_description: "",
+                journal_account_id: trans.account_name,
+                subkey: null,
+                debit: parseFloat(addDebit).toFixed(2),
+                credit: parseFloat(addCredit).toFixed(2),
+                currency_rate: 1,
+              });
+            });
+
+            return [
+              ohdaData,
+              sumDebit,
+              sumCredit,
+              transArr,
+              journalDate,
+              attach,
+              tax,
+            ];
+          })
+          .then((res) => {
+            var ohdaData = res[0];
+            var sumDebit = res[1];
+            var sumCredit = res[2];
+            var transArr = res[3];
+            var journalDate = res[4];
+            var attach = res[5];
+            var tax = res[6];
+
+            var taxBalance = sumCredit - sumDebit;
+
+            transArr.push({
+              currency_credit: 0,
+              currency_debit: parseFloat(taxBalance).toFixed(2),
+              currency_code: ohdaData.budget_currency,
+              description: "",
+              alter_description: "",
+              journal_account_id: "11481",
+              subkey: null,
+              debit: parseFloat(taxBalance).toFixed(2),
+              credit: 0,
+              currency_rate: 1,
+            });
+
+            let postJournalData = {
+              Journal: {
+                attachment: attach.toString(),
+                is_automatic: 0,
+                description: ohdaData.description,
+                alter_description: "",
+                currency_code: ohdaData.budget_currency,
+                entity_type: "work_order",
+                total_debit: parseFloat(sumDebit).toFixed(2),
+                total_credit: parseFloat(sumCredit).toFixed(2),
+                currency_credit: parseFloat(sumCredit).toFixed(2),
+                currency_debit: parseFloat(sumDebit).toFixed(2),
+                staff_id: ohdaData.staff_id,
+                entity_id: wfId,
+                branch_id: ohdaData.branch_id,
+                date: journalDate,
+                draft: 0,
+              },
+              JournalTransaction: transArr,
+            };
+
+            $.get(
+              `/v2/api/entity/journal/list/1?filter[entity_id]=${wfId}&filter[entity_type]=work_order`
+            ).then((jour) => {
+              if (jour.data.length == 0) {
+                console.log(postJournalData);
+                $.ajax({
+                  type: "POST",
+                  contentType: "application/json",
+                  url: `/api2/journals`,
+                  accepts: ["application/json"],
+                  data: JSON.stringify(postJournalData),
+                })
+                  .then(() => {
+                    let updateStat = {
+                      follow_up_status_id: 53,
+                    };
+                    $.ajax({
+                      type: "POST",
+                      contentType: "application/json",
+                      url: `/v2/api/entity/le_workflow-type-entity-8/${wfId}/fields`,
+                      accepts: ["application/json"],
+                      data: JSON.stringify(updateStat),
+                    });
+                  })
+                  .then(() => {
+                    console.log(`تم المراجعة بنجاح`);
+                    location.reload();
+                  })
+                  .fail((res) => {
+                    $("#err-div").addClass("add-margin");
+                    $("#err-div .Errormessage#CustomErrorMessage").removeClass(
+                      "hidden"
+                    );
+                    $("#err-div .mssg").html(
+                      `لا يمكن حفظ القيد لوجود أخطاء ببيانات العهدة. يمكنك <a style="font-weight: bold" href="/v2/owner/entity/le_workflow-type-entity-8/${wfId}/edit">تعديل</a> بيانات العهدة.`
+                    );
+                    $("#err-div .Errormessage#CustomErrorMessage").addClass(
+                      "visible"
+                    );
+                    console.log(
+                      `Error Code ${
+                        res.status
+                      } has happened, Res" ${JSON.stringify(
+                        res.responseJSON.message
+                      )}`
+                    );
+                  });
+              } else {
+                location.href = `/v2/owner/workflow/update_status/le_workflow-type-entity-8/${wfId}/53`;
+              }
+            });
+          });
+      });
+
+      // Create journal on change status to معتمد
+      $(".status-list .dropdown-menu li a[href*='/54']").click(function (e) {
+        e.preventDefault();
+
+        $.get(`/v2/api/entity/le_workflow-type-entity-8/${wfId}/3`)
+          .then((ohdaData) => {
+            let transArr = [];
+            let attach = [];
+            var sumDebit = 0;
+            var sumCredit = 0;
+            var tax = 0;
+            let journalDate = ohdaData.start_date;
+
+            ohdaData.attachments.forEach((file) => {
+              attach.push(file.file_id);
+            });
+
+            ohdaData["le_workflow-type-entity-8_custom_data"][
+              "le_custom_data_le_workflow-type-entity-8_le_custom_data_le_workflow-type-entity-8_info"
+            ].forEach((trans) => {
+              var addDebit = trans.debit;
+              var addCredit = trans.credit;
+              var taxDebit = trans.add_vat == 1 ? trans.debit * 0.15 : 0;
+
+              tax += taxDebit;
+              sumDebit += addDebit;
+              sumCredit += addCredit;
+              transArr.push({
+                currency_credit: parseFloat(addCredit).toFixed(2),
+                currency_debit: parseFloat(addDebit).toFixed(2),
+                currency_code: ohdaData.budget_currency,
+                description: trans.description,
+                alter_description: "",
+                journal_account_id: trans.account_name,
+                subkey: null,
+                debit: parseFloat(addDebit).toFixed(2),
+                credit: parseFloat(addCredit).toFixed(2),
+                currency_rate: 1,
+              });
+            });
+
+            return [
+              ohdaData,
+              sumDebit,
+              sumCredit,
+              transArr,
+              journalDate,
+              attach,
+              tax,
+            ];
+          })
+          .then((res) => {
+            var ohdaData = res[0];
+            var sumDebit = res[1];
+            var sumCredit = res[2];
+            var transArr = res[3];
+            var journalDate = res[4];
+            var attach = res[5];
+            var tax = res[6];
+
+            var taxBalance = sumCredit - sumDebit;
+
+            transArr.push({
+              currency_credit: 0,
+              currency_debit: parseFloat(taxBalance).toFixed(2),
+              currency_code: ohdaData.budget_currency,
+              description: "",
+              alter_description: "",
+              journal_account_id: "11481",
+              subkey: null,
+              debit: parseFloat(taxBalance).toFixed(2),
+              credit: 0,
+              currency_rate: 1,
+            });
+
+            let postJournalData = {
+              Journal: {
+                attachment: attach.toString(),
+                is_automatic: 0,
+                description: ohdaData.description,
+                alter_description: "",
+                currency_code: ohdaData.budget_currency,
+                entity_type: "work_order",
+                total_debit: parseFloat(sumDebit).toFixed(2),
+                total_credit: parseFloat(sumCredit).toFixed(2),
+                currency_credit: parseFloat(sumCredit).toFixed(2),
+                currency_debit: parseFloat(sumDebit).toFixed(2),
+                staff_id: ohdaData.staff_id,
+                entity_id: wfId,
+                branch_id: ohdaData.branch_id,
+                date: journalDate,
+                draft: 0,
+              },
+              JournalTransaction: transArr,
+            };
+
+            $.get(
+              `/v2/api/entity/journal/list/1?filter[entity_id]=${wfId}&filter[entity_type]=work_order`
+            ).then((jour) => {
+              if (jour.data.length == 0) {
+                $.ajax({
+                  type: "POST",
+                  contentType: "application/json",
+                  url: `/api2/journals`,
+                  accepts: ["application/json"],
+                  data: JSON.stringify(postJournalData),
+                })
+                  .then(() => {
+                    let updateStat = {
+                      follow_up_status_id: 54,
+                    };
+                    $.ajax({
+                      type: "POST",
+                      contentType: "application/json",
+                      url: `/v2/api/entity/le_workflow-type-entity-8/${wfId}/fields`,
+                      accepts: ["application/json"],
+                      data: JSON.stringify(updateStat),
+                    });
+                  })
+                  .then(() => {
+                    console.log(`معتمد بنجاح`);
+                    location.reload();
+                  })
+                  .fail((res) => {
+                    $("#err-div").addClass("add-margin");
+                    $("#err-div .Errormessage#CustomErrorMessage").removeClass(
+                      "hidden"
+                    );
+                    $("#err-div .mssg").html(
+                      `لا يمكن حفظ القيد لوجود أخطاء ببيانات العهدة. يمكنك <a style="font-weight: bold" href="/v2/owner/entity/le_workflow-type-entity-8/${wfId}/edit">تعديل</a> بيانات العهدة.`
+                    );
+                    $("#err-div .Errormessage#CustomErrorMessage").addClass(
+                      "visible"
+                    );
+                    console.log(
+                      `Error Code ${
+                        res.status
+                      } has happened, Res" ${JSON.stringify(
+                        res.responseJSON.message
+                      )}`
+                    );
+                  });
+              } else {
+                location.href = `/v2/owner/workflow/update_status/le_workflow-type-entity-8/${wfId}/54`;
+              }
+            });
+          });
+      });
+
+      // Edit journal
+      if (
+        document.referrer.includes(
+          `/v2/owner/entity/le_workflow-type-entity-8/${wfId}/edit`
+        )
+      ) {
+        $.get(`/v2/api/entity/le_workflow-type-entity-8/${wfId}/3`)
+          .then((ohdaData) => {
+            let transArr = [];
+            let attach = [];
+            var sumDebit = 0;
+            var sumCredit = 0;
+            var tax = 0;
+            let journalDate = ohdaData.start_date;
+
+            ohdaData.attachments.forEach((file) => {
+              attach.push(file.file_id);
+            });
+
+            ohdaData["le_workflow-type-entity-8_custom_data"][
+              "le_custom_data_le_workflow-type-entity-8_le_custom_data_le_workflow-type-entity-8_info"
+            ].forEach((trans) => {
+              var addDebit = trans.debit;
+              var addCredit = trans.credit;
+              var taxDebit = trans.add_vat == 1 ? trans.debit * 0.15 : 0;
+
+              tax += taxDebit;
+              sumDebit += addDebit;
+              sumCredit += addCredit;
+              transArr.push({
+                currency_credit: parseFloat(addCredit).toFixed(2),
+                currency_debit: parseFloat(addDebit).toFixed(2),
+                currency_code: ohdaData.budget_currency,
+                description: trans.description,
+                alter_description: "",
+                journal_account_id: trans.account_name,
+                subkey: null,
+                debit: parseFloat(addDebit).toFixed(2),
+                credit: parseFloat(addCredit).toFixed(2),
+                currency_rate: 1,
+              });
+            });
+
+            return [
+              ohdaData,
+              sumDebit,
+              sumCredit,
+              transArr,
+              journalDate,
+              attach,
+              tax,
+            ];
+          })
+          .then((res) => {
+            var ohdaData = res[0];
+            var sumDebit = res[1];
+            var sumCredit = res[2];
+            var transArr = res[3];
+            var journalDate = res[4];
+            var attach = res[5];
+            var tax = res[6];
+
+            var taxBalance = sumCredit - sumDebit;
+
+            transArr.push({
+              currency_credit: 0,
+              currency_debit: parseFloat(taxBalance).toFixed(2),
+              currency_code: ohdaData.budget_currency,
+              description: "",
+              alter_description: "",
+              journal_account_id: "11481",
+              subkey: null,
+              debit: parseFloat(taxBalance).toFixed(2),
+              credit: 0,
+              currency_rate: 1,
+            });
+
+            let postJournalData;
+
+            $.get(
+              `/v2/api/entity/journal/list/1?filter[entity_id]=${wfId}&filter[entity_type]=work_order`
+            ).then((jour) => {
+              if (jour.data.length == 1) {
+                console.log(postJournalData);
+                let jourId = jour.data[0].id;
+                $.ajax({
+                  type: "POST",
+                  contentType: "application/json",
+                  url: `/api2/journals`,
+                  accepts: ["application/json"],
+                  data: JSON.stringify({
+                    Journal: {
+                      id: jourId,
+                      attachment: attach.toString(),
+                      is_automatic: 0,
+                      description: ohdaData.description,
+                      alter_description: "",
+                      currency_code: ohdaData.budget_currency,
+                      entity_type: "work_order",
+                      total_debit: parseFloat(sumDebit).toFixed(2),
+                      total_credit: parseFloat(sumCredit).toFixed(2),
+                      currency_credit: parseFloat(sumCredit).toFixed(2),
+                      currency_debit: parseFloat(sumDebit).toFixed(2),
+                      staff_id: ohdaData.staff_id,
+                      entity_id: wfId,
+                      branch_id: ohdaData.branch_id,
+                      date: journalDate,
+                      draft: 0,
+                    },
+                    JournalTransaction: transArr,
+                  }),
+                })
+                  .then(() => {
+                    let updateStat = {
+                      follow_up_status_id: ohdaData.follow_up_status_id,
+                    };
+                    $.ajax({
+                      type: "POST",
+                      contentType: "application/json",
+                      url: `/v2/api/entity/le_workflow-type-entity-8/${wfId}/fields`,
+                      accepts: ["application/json"],
+                      data: JSON.stringify(updateStat),
+                    });
+                  })
+                  .then(() => {
+                    console.log(`تم التعديل`);
+                    location.reload();
+                  })
+                  .fail((res) => {
+                    $("#err-div").addClass("add-margin");
+                    $("#err-div .Errormessage#CustomErrorMessage").removeClass(
+                      "hidden"
+                    );
+                    $("#err-div .mssg").html(
+                      `لا يمكن حفظ القيد لوجود أخطاء ببيانات العهدة. يمكنك <a style="font-weight: bold" href="/v2/owner/entity/le_workflow-type-entity-8/${wfId}/edit">تعديل</a> بيانات العهدة.`
+                    );
+                    $("#err-div .Errormessage#CustomErrorMessage").addClass(
+                      "visible"
+                    );
+                    console.log(
+                      `Error Code ${
+                        res.status
+                      } has happened, Res" ${JSON.stringify(
+                        res.responseJSON.message
+                      )}`
+                    );
+                  });
+              }
+            });
+          });
+      }
+    } else {
+      $(
+        "#main-content > div > div.main-area.clearfix > div > ol > div.invoice-actions.btn-group.dropdown-btn-group > div:nth-child(9)"
+      ).show();
+    }
+  });
+</script>
+<!------------------------------------------------------------------------------------------------------------->
+
+<!-------------------- CREATE TICKETS APPOINTMENT ---------------------->
+<!-- <script src="https://www.ostar.com.sa/v2/entity/files/get_implementer_studio_file/99130"></script> -->
+
+<!-------------------- CLOSE TICKETS ---------------------->
+<script src="https://www.ostar.com.sa/v2/entity/files/get_implementer_studio_file/64297"></script>

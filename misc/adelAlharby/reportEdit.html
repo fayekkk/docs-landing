@@ -1,0 +1,70 @@
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      console.log("here");
+      if (window.location.href.includes("reports/work_orders")) {
+        console.log("here");
+        var styleElement = document.createElement("style");
+     
+
+        var cssRules = ` #PaymentTable > div.report > div > table > tbody  td:nth-child(2),
+          #PaymentTable > div.report > div > table > thead > tr > th:nth-child(2),
+          #PaymentTable > div.report > div > table > tbody  td:nth-child(3),
+          #PaymentTable > div.report > div > table > thead > tr > th:nth-child(3),
+          #PaymentTable > div.report > div > table > tbody  td:nth-child(4),
+          #PaymentTable > div.report > div > table > thead > tr > th:nth-child(4),
+          #PaymentTable > div.report > div > table > tbody  td:nth-child(7),
+          #PaymentTable > div.report > div > table > thead > tr > th:nth-child(7),    
+            #PaymentTable > div.report > div > table > tbody  td:nth-child(16),
+          #PaymentTable > div.report > div > table > thead > tr > th:nth-child(16),
+          #PaymentTable > div.report > div > table > tbody  td:nth-child(19),
+          #PaymentTable > div.report > div > table > thead > tr > th:nth-child(19)
+           {
+            display: none;
+          }`;
+        styleElement.appendChild(document.createTextNode(cssRules));
+        document.head.appendChild(styleElement);
+      }
+    }, 500);
+  });
+</script>
+
+
+<style>
+.clientfooter .container{
+  display: none;
+}
+
+</style>
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      console.log("here");
+      if (window.location.href.includes("madytech.net/client")) {
+        console.log("here");
+        var styleElement = document.createElement("style");
+     
+
+        var cssRules = ` 
+        .clientfooter .container{
+          display: none;
+          }  `;
+        styleElement.appendChild(document.createTextNode(cssRules));
+        document.head.appendChild(styleElement);
+      }
+      if (window.location.href.includes("madytech.net/login")) {
+        console.log("here");
+        var styleElement = document.createElement("style");
+     
+
+        var cssRules = ` 
+         .footer-bottom {
+          display: none;
+          }  `;
+        styleElement.appendChild(document.createTextNode(cssRules));
+        document.head.appendChild(styleElement);
+      }
+
+    }, 200);
+  });
+</script>

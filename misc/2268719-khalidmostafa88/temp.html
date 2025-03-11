@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    .invoice-address {
+      border-top: 3px double #000000;
+      margin: 35px 0;
+      padding-top: 25px;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: left;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: left;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    .total-table td {
+      border-left: 1px solid #555555;
+    }
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    .notes-block {
+      margin: 50px 0 0 0;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    .qr-code img {
+      margin-top: 10px;
+    }
+    .hidden {
+      display: none;
+    }
+    #listing_table th:nth-child(1),
+    #listing_table th:nth-child(6) {
+      width: 5%;
+    }
+    #listing_table th:nth-child(5){
+        width: 7%;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="left" valign="top">
+              <img
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                style="width: 100%"
+              />
+            </td>
+            <td align="left" valign="top" style="display: none">
+              <div id="business_info" class="editable-area">
+                {%business_info%}
+              </div>
+            </td>
+            <td style="display: none" valign="top" align="right" id="qr_code">
+              <p id="invoice_title" class="editable-area invoice-name">
+                {%invoice_title%}
+              </p>
+              <div class="qr-code">{%sa_qr_code_image%}<br /></div>
+            </td>
+          </tr>
+        </table>
+
+        <div class="invoice-address">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="50%" align="left" valign="top">
+                <table border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td valign="top" style="float: left">
+                      <strong id="field1" class="editable-area"
+                        >{%field1%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" valign="top">
+                      <div id="client_info" class="editable-area">
+                        {%client_info%}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr id="shipping_options" style="display: none">
+                    <td valign="top" style="float: left">
+                      <br /><strong id="label_ship" class="editable-area"
+                        >{%label_ship%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" valign="top">
+                      <br />
+                      <div id="ship_info" class="editable-area">
+                        {%ship_info%}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td width="50%" valign="top" align="right">
+                <table
+                  id="invoice_basics"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="right"
+                >
+                  <tr>
+                    <td align="right">
+                      <strong class="editable-area" id="label_invoice_no"
+                        >{%label_invoice_no%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%invoice_number%}
+                    </td>
+                  </tr>
+                  <tr {%refund_invoice_number_condition%}>
+                    <td align="right">
+                      <strong class="editable-area" id="refund_label_invoice_no"
+                        >{%refund_invoice_no_title%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%refund_invoice_number%}
+                    </td>
+                  </tr>
+                  <!-- InvoiceDate -->
+                  <tr>
+                    <td align="right">
+                      <strong class="editable-area" id="label_date"
+                        >{%label_date%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%invoice_date%}
+                    </td>
+                  </tr>
+                  <!-- /InvoiceDate -->
+                </table>
+                <custom_field
+                  id="custom_fields"
+                  style="clear: both"
+                  class="editable-area"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="right"
+                >
+                  {%custom_fields%}
+                </custom_field>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div id="items-list">{%items_list%}</div>
+
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <script>
+          function setQrPlace() {
+            var totalTable = document.querySelector(
+              "#items-list>table:nth-child(2)"
+            );
+            var emptyTds = totalTable.querySelectorAll("tr td:first-child");
+            var rowCount = totalTable.rows.length;
+            var qrCode = document.getElementById("qr_code");
+            emptyTds[0].setAttribute("rowspan", rowCount);
+            emptyTds[0].innerHTML = qrCode.innerHTML;
+            for (var i = 1; i < rowCount; i++) {
+              emptyTds[i].classList.add("hidden");
+            }
+          }
+
+          try {
+            setQrPlace();
+          } catch (e) {}
+        </script>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+  </body>
+</html>

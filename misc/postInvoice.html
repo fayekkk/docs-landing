@@ -1,0 +1,61 @@
+<script>
+  let body = {
+    Invoice: {
+      staff_id: 0,
+      po_number: 26,
+      client_id: 1,
+      is_offline: true,
+      currency_code: "SAR",
+      client_email: "client@example.com",
+      draft: "0",
+      discount: 0,
+      discount_amount: 0,
+      deposit: 0,
+      deposit_type: 0,
+      notes: "string",
+      html_notes: "string",
+      invoice_layout_id: 58,
+      follow_up_status: null,
+      work_order_id: null,
+      requisition_delivery_status: null,
+      pos_shift_id: null,
+    },
+    InvoiceItem: [
+      {
+        item: "string",
+        description: "this is the order number",
+        unit_price: 100,
+        quantity: 1,
+        product_id: "1",
+        tax1: 0,
+        tax2: 0,
+        col_3: "this is the order date",
+      },
+    ],
+    Payment: [
+      {
+        payment_method: "cash",
+        amount: 100,
+        transaction_id: "123",
+        treasury_id: 1,
+        staff_id: 0,
+      },
+    ],
+  };
+
+  fetch(`/api2/invoices`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  })
+    .then((res) => res.json())
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+</script>

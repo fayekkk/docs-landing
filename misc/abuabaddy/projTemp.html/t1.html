@@ -1,0 +1,63 @@
+<table
+  class="mce-inline-non-editable-area mce-hide-table-options"
+  border="1"
+  cellpadding="0"
+  cellspacing="0"
+  style="width: 100%"
+>
+  <thead>
+    <tr>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >البيان</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >المقاس</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >البند</span
+        >
+      </th>
+      <th>
+        <span
+          class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >الكمية</span
+        >
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <!--% foreach({{Data.le_deliveryrecipt.le_deliveryrecipt_le_deliveryrecipt_recipt_items}} as {{le_deliveryrecipt_le_deliveryrecipt_recipt_items_row}}) { %-->
+    <tr>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_deliveryrecipt_le_deliveryrecipt_recipt_items_row.description2}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_deliveryrecipt_le_deliveryrecipt_recipt_items_row.size}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_deliveryrecipt_le_deliveryrecipt_recipt_items_row.single_line_field}}</span
+        >
+      </td>
+      <td>
+        <span class="mce-inline-non-editable-area mce-inline-placeholder"
+          >{{le_deliveryrecipt_le_deliveryrecipt_recipt_items_row.quantity}}</span
+        >
+      </td>
+    </tr>
+    <!--% } %-->
+  </tbody>
+</table>
+<p>test</p>

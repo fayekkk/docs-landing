@@ -1,0 +1,2182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title></head
+  ><style type="text/css">
+    @import url(https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap);
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: 0 0;
+      font: 12px Arial, Helvetica, sans-serif;
+      font-family: "Red Hat Display", sans-serif !important;
+      font-size: 17px !important;
+      font-weight: 200;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: 0 0 !important;
+      color: #213242;
+    }
+    .invoice-inner {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    bold_title {
+      font-weight: 700;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .total-table td {
+      border-left: 1px solid #213242;
+    }
+    .total-row {
+      background-color: transparent !important;
+      border: 0 !important;
+      font-weight: 700;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    td,
+    th,
+    tr {
+      page-break-inside: avoid !important;
+    }
+    .qr-code img {
+      margin-top: 10px;
+    }
+    #cover table {
+      padding: 0 110px;
+      margin: 0;
+      height: 18cm;
+    }
+    #cover table h1 {
+      font-size: 100px;
+      font-weight: 900 !important;
+      line-height: 1;
+    }
+    #cover table a {
+      font-size: 20px;
+      font-weight: 300;
+    }
+    #cover table a,
+    #thank a {
+      color: #213242;
+      text-decoration: none;
+    }
+    #det {
+      color: #fff;
+    }
+    #det p {
+      font-size: 20px;
+    }
+    #det table th {
+      text-align: left;
+      font-weight: 100;
+    }
+    #det table td {
+      text-align: left;
+      font-weight: 300;
+    }
+    #benefits .cont,
+    #det .cont,
+    #thank .cont {
+      padding: 2.75cm 110px 0;
+      margin: 0;
+      height: 18cm;
+    }
+    #plan1 .cont,
+    #plan2 .cont,
+    #plan3 .cont,
+    #proposal .cont {
+      padding: 2.75cm 110px 0;
+      margin: 0;
+      height: 17cm;
+    }
+    #accounting h2,
+    #customer h2,
+    #det h2,
+    #eta h2,
+    #hr h2,
+    #mobile h2,
+    #modules h2,
+    #operations h2,
+    #pos h2,
+    #sales h2,
+    #supply h2,
+    #zatca h2 {
+      height: 3cm;
+    }
+    #accounting h2,
+    #customer h2,
+    #hr h2,
+    #operations h2,
+    #sales h2,
+    #supply h2 {
+      padding: 2.75cm 0 0 110px;
+    }
+    #mobile h2,
+    #pos h2 {
+      padding: 2.75cm 0 0 225px;
+    }
+    #ess h2 {
+      padding: 2.75cm 600px 0 225px;
+      height: 4cm;
+    }
+    #det p {
+      height: 1.5cm;
+    }
+    #det table,
+    hr {
+      margin-bottom: 1cm;
+    }
+    #client_info {
+      font-weight: 300;
+    }
+    #summary .cont {
+      padding: 2.75cm 110px 0 450px;
+      margin: 0;
+      height: 20cm;
+    }
+    #summary .cont div {
+      line-height: 1.4;
+    }
+    #eta .cont,
+    #modules .cont,
+    #zatca .cont {
+      padding: 2.75cm 650px 0 110px;
+      margin: 0;
+      height: 18cm;
+    }
+    #modules .cont div {
+      padding-right: 100px;
+    }
+    #best .cont {
+      padding: 8.5cm 850px 0 110px;
+      margin: 0;
+    }
+    #best .par {
+      margin-top: 10px;
+    }
+    #accounting .cont,
+    #customer .cont,
+    #hr .cont,
+    #operations .cont,
+    #sales .cont,
+    #supply .cont {
+      padding: 0 550px 0 110px;
+      margin: 0;
+      height: 15cm;
+    }
+    #accounting .cont div,
+    #customer .cont div,
+    #hr .cont div,
+    #operations .cont div,
+    #sales .cont div,
+    #supply .cont div {
+      padding-right: 100px;
+    }
+    #ess .cont,
+    #mobile .cont {
+      padding: 0 600px 0 110px;
+      margin: 0;
+      height: 14cm;
+    }
+    #pos .cont {
+      padding: 0 650px 0 110px;
+      margin: 0;
+      height: 15cm;
+    }
+    #summary img {
+      width: 120px;
+    }
+    #benefits img {
+      width: auto;
+      height: 38px;
+    }
+    #modules img {
+      width: 25px;
+      height: auto;
+    }
+    #accounting img,
+    #customer img,
+    #hr img,
+    #operations img,
+    #sales img,
+    #supply img {
+      width: auto;
+      height: 25px;
+    }
+    #benefits span,
+    h2 {
+      font-size: 45px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+    #accounting table th,
+    #benefits table th,
+    #customer table th,
+    #hr table th,
+    #modules table th,
+    #operations table th,
+    #sales table th,
+    #supply table th {
+      text-align: left;
+      width: 40%;
+    }
+    #benefits table {
+      table-layout: fixed;
+    }
+    #benefits table,
+    #ess table,
+    #mobile table,
+    #pos table,
+    #sale table {
+      margin-top: 2cm;
+    }
+    #modules table {
+      margin-top: 1cm;
+    }
+    #ess table td:first-child,
+    #mobile table td:first-child,
+    #pos table td:first-child {
+      width: 30%;
+      padding-bottom: 10px;
+    }
+    #benefits table td,
+    #benefits table th {
+      padding: 0 10px 10px 0;
+      vertical-align: top;
+    }
+    #modules table td,
+    #modules table th {
+      height: 2cm;
+    }
+    #accounting table td #supply table th,
+    #accounting table th,
+    #customer table td,
+    #customer table th,
+    #hr table td,
+    #hr table th,
+    #operations table td,
+    #operations table th,
+    #sales table td,
+    #sales table th,
+    #supply table td {
+      height: 1.5cm;
+    }
+    #modules table th {
+      font-size: 22px;
+    }
+    #accounting table th,
+    #customer table th,
+    #hr table th,
+    #operations table th,
+    #sales table th,
+    #supply table th {
+      font-size: 17px;
+    }
+    #hr table td,
+    #modules table td,
+    #sales table td,
+    #supply table td {
+      width: 7%;
+    }
+    #accounting table td,
+    #customer table td,
+    #operations table td {
+      width: 2%;
+    }
+    #benefits table tr:nth-child(3) td,
+    #benefits table tr:nth-child(3) th {
+      padding-bottom: 30px;
+      vertical-align: top;
+    }
+    #accounting div,
+    #customer div,
+    #hr div,
+    #mobile div,
+    #operations div,
+    #sales div,
+    #supply div {
+      margin-bottom: 25px;
+    }
+    #ess div,
+    #footer div,
+    #pos div {
+      margin-bottom: 10px;
+    }
+    .head td:first-child {
+      width: 57%;
+    }
+    #plan1 .head td:first-child,
+    #plan2 .head td:first-child,
+    #plan3 .head td:first-child {
+      width: 80%;
+    }
+    #plan1 .head td:last-child,
+    #plan2 .head td:last-child,
+    #plan3 .head td:last-child {
+      font-weight: 700;
+      font-size: 20px;
+    }
+    #items-list,
+    .all {
+      margin-top: 2cm;
+    }
+    #listing_table th {
+      text-align: center;
+    }
+    #listing_table th,
+    .all table th {
+      background-color: #213242;
+      color: #fff;
+      font-weight: 400;
+    }
+    #listing_table td {
+      text-align: center;
+    }
+    #listing_table td:nth-child(2),
+    #listing_table td:nth-child(3) {
+      text-align: left;
+    }
+    #listing_table td:first-child,
+    #listing_table th:first-child {
+      width: 5% !important;
+    }
+    #listing_table td:nth-child(2),
+    #listing_table th:nth-child(2) {
+      width: 15% !important;
+    }
+    #listing_table td:nth-child(3),
+    #listing_table th:nth-child(3) {
+      width: 40% !important;
+    }
+    #listing_table td:last-child,
+    #listing_table th:last-child,
+    .listing-table:nth-child(2) td:last-child {
+      width: 15% !important;
+    }
+    #listing_table td:nth-child(4),
+    #listing_table td:nth-child(5),
+    #listing_table th:nth-child(4),
+    #listing_table th:nth-child(5) {
+      width: 12.5% !important;
+    }
+    .listing-table:nth-child(2) td:nth-child(2),
+    .listing-table:nth-child(2) th:nth-child(2) {
+      width: 25% !important;
+    }
+    .listing-table:nth-child(2) td:first-child,
+    .listing-table:nth-child(2) th:first-child {
+      width: auto !important;
+    }
+    .all table,
+    .listing-table {
+      border-collapse: collapse;
+    }
+    .all table td,
+    .all table th,
+    .listing-table td,
+    .listing-table th {
+      border: 1px solid #213242 !important;
+    }
+    .listing-table:nth-child(2) tr:first-child td:last-child,
+    .listing-table:nth-child(2) tr:first-child td:nth-child(2) {
+      background-color: #213242;
+      color: #fff;
+    }
+    .all table th,
+    .listing-table th {
+      padding: 6px;
+    }
+    .all table td,
+    .listing-table td {
+      text-align: left;
+      padding: 6px;
+      vertical-align: middle;
+    }
+    .listing-table:nth-child(2) td:last-child {
+      text-align: center;
+    }
+    .total-row td:last-child,
+    .total-row td:nth-child(2) {
+      background-color: #43b82b !important;
+      color: #fff;
+    }
+    .listing-table:nth-child(2) {
+      margin-top: -1px;
+    }
+    .listing-table:nth-child(2) td:first-child {
+      border: 0 !important;
+      background-color: transparent !important;
+    }
+    .all table th {
+      text-align: left;
+    }
+    .val {
+      width: 50%;
+      text-align: center !important;
+    }
+    .val img {
+      width: 10%;
+      height: auto;
+    }
+    #eta,
+    #zatca {
+      color: #fff;
+    }
+    #eta .par,
+    #zatca .par {
+      padding-top: 8.85cm;
+    }
+    #thank h2 {
+      font-size: 100px;
+      font-weight: 900 !important;
+    }
+    #thank h3 {
+      font-size: 45px;
+      padding-top: 2.5cm;
+    }
+    #thank .par {
+      font-size: 20px;
+    }
+    .notes-block,
+    .par {
+      font-weight: 200 !important;
+    }
+    .notes-block {
+      height: 11cm;
+      margin: 50px 0 0 0;
+    }
+    .par {
+      height: 4cm;
+      line-height: 1.4;
+    }
+    .cont div {
+      line-height: 1.4;
+    }
+    .blue {
+      color: #0052ba;
+    }
+    .purple {
+      color: #8b1dca;
+    }
+    .lime {
+      color: #80c342;
+    }
+    .red {
+      color: #e51b71;
+    }
+    .orange {
+      color: #f17434;
+    }
+    .green {
+      color: #38a592;
+    }
+    .sky {
+      color: #00adef;
+    }
+    .pg {
+      width: 33.51cm;
+      height: 20.98cm;
+      position: relative;
+    }
+    .bg {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .bg_cover {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64be7074087c9_blobid1690202214365.png);
+    }
+    .bg_det {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64bf7512231b7_blobid1690268939089.png);
+    }
+    .bg_sum {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64bf802397904_blobid1690271769688.png);
+    }
+    .bg_ben {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64bf88c7e32ef_blobid1690273979192.png);
+    }
+    .bg_mod {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64bfaae6a3c67_blobid1690282720301.png);
+    }
+    .bg_best {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64bfbd5fe7694_blobid1690287451734.png);
+    }
+    .bg_sales {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64bff81f7d0c9_blobid1690302470329.png);
+    }
+    .bg_acc {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64c001d64f085_blobid1690304969331.png);
+    }
+    .bg_supp {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64c012c2abf6d_blobid1690309302990.png);
+    }
+    .bg_hr {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64c0131c3dcef_blobid1690309382104.png);
+    }
+    .bg_cust {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64c01359e0346_blobid1690309445985.png);
+    }
+    .bg_op {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64c013a2861bf_blobid1690309529675.png);
+    }
+    .bg_mob {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64c026347fba1_blobid1690314277287.png);
+    }
+    .bg_ess {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64c02676e7d2c_blobid1690314344497.png);
+    }
+    .bg_pos {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64c026a3e7367_blobid1690314385035.png);
+    }
+    .bg_proposal {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64c0390b126b1_blobid1690319097038.png);
+    }
+    .bg_plan {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64c0b4bed0be3_blobid1690350779623.png);
+    }
+    .bg_zatca {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64c0c3fdca35e_blobid1690354681667.png);
+    }
+    .bg_eta {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64c0cb41b6332_blobid1690356541716.png);
+    }
+    .bg_thank {
+      background: url(https://daftraadmin.daftra.com/files/5376781d/logos/64c0cd1330e96_blobid1690357008486.png);
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <div class="pg bg bg_cover" id="cover">
+          <table width="100%">
+            <tr>
+              <td>
+                <img
+                  id="logo"
+                  class="editable-area"
+                  src="{%logo%}"
+                  width="{%logo-width%}"
+                  height="{%logo-height%}"
+                />
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td valign="bottom">
+                <h1>Service<br />Quotation</h1>
+              </td>
+              <td align="right" valign="bottom">
+                <a href="https://www.daftra.com/" target="_blank"
+                  >www.daftra.com</a
+                >
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="pg bg bg_det" id="det">
+          <div class="cont">
+            <h2>Quotation Details</h2>
+            <p>Quote Info</p>
+            <table width="60%">
+              <tr>
+                <th>Quotation No.</th>
+                <th>Company Site ID</th>
+                <th>Issue Date</th>
+                <th>Expiration Date</th>
+              </tr>
+              <tr>
+                <td>{%invoice_no%}</td>
+                <td>{%client_number%}</td>
+                <td>{%invoice_date%}</td>
+                <td>{%due_date%}</td>
+              </tr>
+            </table>
+            <hr style="border: 1px solid #fff; width: 60%" />
+            <p>This quotation has been prepared to</p>
+            <div id="client_info" class="editable-area">{%client_info%}</div>
+          </div>
+        </div>
+        <div class="pg bg bg_sum" id="summary">
+          <div class="cont">
+            <h2>Executive Summary</h2>
+            <div class="notes-block">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td>
+                    <div class="editable-area" id="footer">
+                      <div>
+                        In the modern business landscape, digital transformation
+                        is crucial for ensuring continuity, growth, and success.
+                        As a leading provider of Enterprise Resource Planning
+                        (ERP) systems, Daftra understands the importance of
+                        digitalization and is committed to meeting the needs of
+                        entrepreneurs by offering an exceptional experience
+                        through its integrated cloud-based system.
+                      </div>
+                      <div>
+                        At Daftra, we are driven by the needs of our clients and
+                        constantly seek ways to help them develop their
+                        businesses. We tailor our program to meet changing needs
+                        and always take our clients' opinions and feedback into
+                        serious consideration to ensure their complete
+                        satisfaction in managing their companies and businesses.
+                      </div>
+                      <div>
+                        Integration is at the core of what we do. We seamlessly
+                        integrate Sales, Accounting, Inventory, CRM, HRM, and
+                        operations, providing a comprehensive view of business
+                        performance. This allows our clients to identify areas
+                        of strength and weakness and issue detailed reports
+                        accordingly, enabling them to make informed decisions.
+                      </div>
+                      <div>
+                        We have a clear vision for the future, which we are
+                        actively shaping every day in our offices in Cairo,
+                        Dammam, and Riyadh. Our team of passionate experts is
+                        dedicated to providing the best experience for our
+                        clients and driving their success in the ever-changing
+                        business world.
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div style="text-align: right">
+              <img
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                width="{%logo-width%}"
+                height="{%logo-height%}"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="pg bg bg_ben" id="benefits">
+          <div class="cont">
+            <img
+              src="https://daftraadmin.daftra.com/files/5376781d/logos/64bfa2326ed6c_blobid1690280491257.png"
+              alt=""
+              title="Group 58193.png"
+              width="100%"
+            /><span style="margin-left: 2px">aftra</span>&nbsp;<span
+              class="blue"
+              >Benefits</span
+            >
+            <table width="100%">
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bfa5825d920_blobid1690281337118.png"
+                    alt=""
+                    title="Group 34802.png"
+                    width="56"
+                    height="66"
+                  />
+                </td>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bfa59420e57_blobid1690281360607.png"
+                    alt=""
+                    title="Group 34814.png"
+                    width="64"
+                    height="64"
+                  />
+                </td>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bfa59fa1d5c_blobid1690281373794.png"
+                    alt=""
+                    title="Group 34813.png"
+                    width="68"
+                    height="62"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>Safe & Secure</th>
+                <th>User Manual</th>
+                <th>Always Connected</th>
+              </tr>
+              <tr>
+                <td>
+                  Your data is entirely private, protected, and continuously
+                  auto-backed up on Daftra secure servers using 256-bit SSL
+                  encryption technology for increased security.
+                </td>
+                <td>
+                  Daftra user manuals are available to help you learn and
+                  execute any system function. Use the user manual to learn
+                  about all the features and advantages of Daftra.
+                </td>
+                <td>
+                  Daftra is cloud-based, your business is never out of reach.
+                  Access and manage your business, anywhere, anytime, from any
+                  device, consistently updated and intact.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bfa5ada89b3_blobid1690281387169.png"
+                    alt=""
+                    title="Group 34797.png"
+                    width="68"
+                    height="64"
+                  />
+                </td>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bfa5bf42c97_blobid1690281404418.png"
+                    alt=""
+                    title="Page-1.png"
+                    width="68"
+                    height="64"
+                  />
+                </td>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bfa5cc3201f_blobid1690281417509.png"
+                    alt=""
+                    title="Group 34796.png"
+                    width="58"
+                    height="64"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>Personalized Experience</th>
+                <th>Free Lifetime Update</th>
+                <th>Fast Customer Support</th>
+              </tr>
+              <tr>
+                <td>
+                  Curated with personalization prioritized, start from scratch
+                  or find fully customizable templates, upload your logo and
+                  maintain your brand.
+                </td>
+                <td>
+                  Daftra is constantly expanding to better serve you. Whatever
+                  plan you choose, you will receive free updates indefinitely
+                </td>
+                <td>
+                  Daftra support is prepared to meet your every inquiry, round
+                  the clock, to satisfaction.
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="pg bg bg_mod" id="modules">
+          <div class="cont">
+            <h2><span>Daftra</span>&nbsp;<span class="blue">Modules</span></h2>
+            <div class="par">
+              At Daftra, our top priority is managing your business more
+              eciently so you can get back to other crucial activities to grow
+              your business. Our fully integrated business modules make it
+              easier to manage your operation seamlessly without burning out.
+            </div>
+            <table width="100%">
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bfacd0c5827_blobid1690283214126.png"
+                    alt=""
+                    title="receipt.png"
+                    width="44"
+                    height="49"
+                  />
+                </td>
+                <th>Sales</th>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bface02eddd_blobid1690283229894.png"
+                    alt=""
+                    title="cash-multiple.png"
+                    width="52"
+                    height="38"
+                  />
+                </td>
+                <th>Accounting</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bface93d737_blobid1690283239520.png"
+                    alt=""
+                    title="package-variant-closed.png"
+                    width="44"
+                    height="49"
+                  />
+                </td>
+                <th>Inventory</th>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bfacf35fe25_blobid1690283249697.png"
+                    alt=""
+                    title="account-multiple-outline.png"
+                    width="52"
+                    height="39"
+                  />
+                </td>
+                <th>Human Resources</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bfacfda15dc_blobid1690283260203.png"
+                    alt=""
+                    title="clipboard-text (3).png"
+                    width="44"
+                    height="49"
+                  />
+                </td>
+                <th>Operations</th>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bfad0ae1f14_blobid1690283272997.png"
+                    alt=""
+                    title="account-tie.png"
+                    width="39"
+                    height="44"
+                  />
+                </td>
+                <th>CRM</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="pg bg bg_best" id="best">
+          <div class="cont">
+            <h2>Best in Class ERP System</h2>
+            <div class="par">
+              With an easy-to-use and fully customizable user interface
+            </div>
+          </div>
+        </div>
+        <div class="pg bg bg_sales" id="sales">
+          <h2>
+            <span class="purple">Sales</span>&nbsp;<span>Management</span>
+          </h2>
+          <div class="cont">
+            <div>
+              Cover sales from professional invoicing to estimates and
+              quotations. Track client payments, installments, and set up
+              insurance coverage.
+            </div>
+            <div>
+              Ease client payments by oering multiple payment gateways including
+              online payment. Sell in-person and on-the-go, with cloud POS.
+            </div>
+            <div>
+              Set commission-based sales targets and track your teams’
+              performance.
+            </div>
+            <table width="100%">
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bffa9a414c4_blobid1690303119367.png"
+                    alt=""
+                    title="Group 57687.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Invoicing & Quotation</th>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bffab021537_blobid1690303148079.png"
+                    alt=""
+                    title="Group 29731.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Point of Sale</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bffacaa37a8_blobid1690303164949.png"
+                    alt=""
+                    title="Group 29728.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Offers & Price List</th>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bffae9aac6f_blobid1690303194533.png"
+                    alt=""
+                    title="Group 29730.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Insurance Management</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bffb2650f5c_blobid1690303230059.png"
+                    alt=""
+                    title="Group 58177.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>E-Invoice Software</th>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bffb26ac4dc_blobid1690303244565.png"
+                    alt=""
+                    title="Group 29732.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Sales Targets & Commissions</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64bffb2718150_blobid1690303257825.png"
+                    alt=""
+                    title="Group 29729.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Installments Management</th>
+                <td></td>
+                <th></th>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="pg bg bg_acc" id="accounting">
+          <h2>
+            <span class="lime">Accounting</span>&nbsp;<span>Management</span>
+          </h2>
+          <div class="cont">
+            <div>
+              Track transactions. Track revenue and expenses. Find automatic and
+              accurate books and journal entries.
+            </div>
+            <div>
+              Using a ready-made and customizable chart of accounts, you can
+              manage funds between branches based on your business structure.
+            </div>
+            <div>
+              Real-time income and cash flow figures, general ledger, balance
+              sheet, and profit and loss reports will assist you in making
+              better decisions.
+            </div>
+            <table width="100%">
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c00f7224e04_blobid1690308458603.png"
+                    alt=""
+                    title="Group -2.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Chart of Accounts & Journals Accounting</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c00f86b2faf_blobid1690308479667.png"
+                    alt=""
+                    title="Group -1.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Finance & Expense Tracking</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c00fb67a5f1_blobid1690308520282.png"
+                    alt=""
+                    title="Group -3.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Assets Management</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c00fcf37464_blobid1690308547780.png"
+                    alt=""
+                    title="Group 57687.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Cheque Cycle</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c0b3fd175ef_blobid1690350586629.png"
+                    alt=""
+                    title="Group 576687.png"
+                    width="38"
+                    height="39"
+                  />
+                </td>
+                <th>Cost Centers</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="pg bg bg_supp" id="supply">
+          <h2>
+            <span class="red">Supply Chain</span>&nbsp;<span>Management</span>
+          </h2>
+          <div class="cont">
+            <div>
+              Manage products and services with Daftra complete and customizable
+              inventory platform.
+            </div>
+            <div>
+              Track stock level, issue purchase orders, replenish stock and
+              always fulfill orders.
+            </div>
+            <div>
+              Transfer items and track inventory transactions across multiple
+              warehouses and branches.
+            </div>
+            <div>
+              Run stocktaking reports and take charge of your inventory across
+              warehouses and online.
+            </div>
+            <table width="100%">
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c016621a6aa_blobid1690310223203.png"
+                    alt=""
+                    title="Group -5.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Inventory Management</th>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c016808aa24_blobid1690310254716.png"
+                    alt=""
+                    title="Group -3.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Requisition Management</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c01696e1ea8_blobid1690310284649.png"
+                    alt=""
+                    title="Group 57687.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Product Management</th>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c016b05ec72_blobid1690310307428.png"
+                    alt=""
+                    title="Group -4.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Stocktaking</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c016ccc71ce_blobid1690310333621.png"
+                    alt=""
+                    title="Group -2.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Purchases Management</th>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c016e2d6457_blobid1690310359626.png"
+                    alt=""
+                    title="Group 58181.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Purchase Cycle</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c016f77c136_blobid1690310382159.png"
+                    alt=""
+                    title="Group -1.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Suppliers Management</th>
+                <td></td>
+                <th></th>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="pg bg bg_hr" id="hr">
+          <h2>
+            <span class="orange">Human Resources</span>&nbsp;<span
+              >Management</span
+            >
+          </h2>
+          <div class="cont">
+            <div>Set up the HRM according to your policy.</div>
+            <div>
+              Customize your own organizational structure, manage employees’
+              records, contracts, attendance, restriction rules and shifts.
+            </div>
+            <div>
+              Create your own salary components, and generate payroll and pay
+              slips automatically using trackable timesheets.
+            </div>
+            <div>
+              Monitor sta performance and get insights from a dynamic dedicated
+              HR dashboard and integrated HR reporting
+            </div>
+            <table width="100%">
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c01e0f22993_blobid1690312193691.png"
+                    alt=""
+                    title="Group -1.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Employees Management</th>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c01e2764c1f_blobid1690312219809.png"
+                    alt=""
+                    title="Group 57687.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Payroll</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c01e40b6134_blobid1690312242157.png"
+                    alt=""
+                    title="Group -3.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Attendance Management</th>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c01e5f49beb_blobid1690312272938.png"
+                    alt=""
+                    title="Group -4.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Contracts</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c01e846814f_blobid1690312297403.png"
+                    alt=""
+                    title="Group -2.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Organizational Structure</th>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c01ea106cd5_blobid1690312337170.png"
+                    alt=""
+                    title="Group -5.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Requests</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="pg bg bg_cust" id="customer">
+          <h2>
+            <span class="green">Customer Relationship</span>&nbsp;<span
+              >Management</span
+            >
+          </h2>
+          <div class="cont">
+            <div>
+              Connect with your clients anywhere, anytime and elevate your
+              Sales.
+            </div>
+            <div>
+              Add clients’ data, create categorized profiles with our contact
+              management system, follow up with transactions and payments.
+            </div>
+            <div>
+              Offer clients memberships and track their consumption and
+              attendance.
+            </div>
+            <div>
+              Manage client appointments, notify them and set auto-reminders via
+              email or SMS across our various integrated services.
+            </div>
+            <table width="100%">
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c020012cadb_blobid1690312701435.png"
+                    alt=""
+                    title="Group 57687.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Clients Follow-Up</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c0200be7fda_blobid1690312714785.png"
+                    alt=""
+                    title="Group -4.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Loyalty Points</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c0202ea59f6_blobid1690312729448.png"
+                    alt=""
+                    title="Group -2.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Memberships</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c0204dc72f0_blobid1690312761308.png"
+                    alt=""
+                    title="Group -3.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Points & Credits</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c0204d6a6d8_blobid1690312773845.png"
+                    alt=""
+                    title="Group -1.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Clients Attendance</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="pg bg bg_op" id="operations">
+          <h2>
+            <span class="sky">Operations</span>&nbsp;<span>Management</span>
+          </h2>
+          <div class="cont">
+            <div>
+              Manage efficient project management operations. Create work
+              orders, set up projects and track project expenses.
+            </div>
+            <div>
+              Manage online bookings, assign designated employees, and schedule
+              appointments according to employees’ shifts.
+            </div>
+            <div>
+              Log your hours with Time Tracking, your teams’ and collaborating
+              freelancers’ hours and instantly invoice clients with them.
+            </div>
+            <div>
+              Keep an eye on finances with profit and loss reports and get a
+              realtime view of your project performance and progress as you go.
+            </div>
+            <table width="100%">
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c0218ced6c8_blobid1690313087988.png"
+                    alt=""
+                    title="Group 57687.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Work Orders</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c021a6ef470_blobid1690313114102.png"
+                    alt=""
+                    title="Group -1.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Bookings Management</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c021cac407b_blobid1690313153134.png"
+                    alt=""
+                    title="Group -2.png"
+                    width="58"
+                    height="57"
+                  />
+                </td>
+                <th>Time Tracking</th>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c021e1e6d6d_blobid1690313173135.png"
+                    alt=""
+                    title="Group -3.png"
+                    width="58"
+                    height="58"
+                  />
+                </td>
+                <th>Rental Management</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="pg bg bg_mob" id="mobile">
+          <h2>Daftra Mobile App</h2>
+          <div class="cont">
+            <div>
+              With Daftra Mobile app, you can access your account anytime
+              anywhere and have the full access to all features to manage your
+              business operations seamlessly.
+            </div>
+            <div>
+              Daftra Apps are available on both App Store for iOS devices and
+              Google Play & Huawei AppGallery for Android OS devices.
+            </div>
+            <table width="100%">
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c0271381fb3_blobid1690314503762.png"
+                    title="Group 58152.png"
+                    width="180"
+                    height="auto"
+                    caption="false"
+                  />
+                </td>
+                <td rowspan="3" valign="top">
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c61a1bb1b64_blobid1690704409340.png"
+                    alt=""
+                    title="surface1 (1).png"
+                    width="auto"
+                    height="175"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c0272ecde5c_blobid1690314525950.png"
+                    alt=""
+                    title="Group 58151.png"
+                    width="180"
+                    height="auto"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c027464668b_blobid1690314554922.png"
+                    alt=""
+                    title="Group 58153.png"
+                    width="180"
+                    height="auto"
+                  />
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="pg bg bg_ess" id="ess">
+          <h2>Daftra ESS Attendance App</h2>
+          <div class="cont">
+            <div>
+              Using Daftra ESS, your employees can log their attendance for
+              sign-in and sign-out remotely without being at the company's
+              headquarters. Daftra ESS supports dierent Sign-in features:
+            </div>
+            <ul>
+              <li>Sign-in with location restriction by using GPS.</li>
+              <li>Sign-in with photo restriction by using mobile camera.</li>
+              <li>
+                Sign-in with IP Network restriction by detecting mobile internet
+                connection.
+              </li>
+            </ul>
+            <table width="100%">
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c0271381fb3_blobid1690314503762.png"
+                    title="Group 58152.png"
+                    width="180"
+                    height="auto"
+                    caption="false"
+                  />
+                </td>
+                <td rowspan="3" valign="top">
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c61a1bb1b64_blobid1690704409340.png"
+                    alt=""
+                    title="surface1 (1).png"
+                    width="auto"
+                    height="175"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c0272ecde5c_blobid1690314525950.png"
+                    alt=""
+                    title="Group 58151.png"
+                    width="180"
+                    height="auto"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c027464668b_blobid1690314554922.png"
+                    alt=""
+                    title="Group 58153.png"
+                    width="180"
+                    height="auto"
+                  />
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="pg bg bg_pos" id="pos">
+          <h2>Daftra (POS) App</h2>
+          <div class="cont">
+            <div>
+              Daftra Point-of-Sale is a fast and flexible app that meet all
+              retail and shop owners’ requirements to issue sales invoices
+              through a unique and user-friendly interface that supports both
+              English and Arabic. Monitor the performance of many branches
+              through one integrated system.<br />Daftra POS App supports:
+            </div>
+            <ul>
+              <li>Dierent Printer, Barcode devices, and Electronic Scales.</li>
+              <li>Adding products under dierent categories.</li>
+              <li>
+                Working oine with the ability to synchronize all sales Online.
+              </li>
+              <li>Multiple Payment Methods for customer satisfaction.</li>
+            </ul>
+            <table width="100%">
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c0271381fb3_blobid1690314503762.png"
+                    title="Group 58152.png"
+                    width="180"
+                    height="auto"
+                    caption="false"
+                  />
+                </td>
+                <td rowspan="3" valign="top">
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c61a1bb1b64_blobid1690704409340.png"
+                    alt=""
+                    title="surface1 (1).png"
+                    width="auto"
+                    height="175"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c0272ecde5c_blobid1690314525950.png"
+                    alt=""
+                    title="Group 58151.png"
+                    width="180"
+                    height="auto"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://daftraadmin.daftra.com/files/5376781d/logos/64c027464668b_blobid1690314554922.png"
+                    alt=""
+                    title="Group 58153.png"
+                    width="180"
+                    height="auto"
+                  />
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="pg bg bg_proposal" id="proposal">
+          <div class="cont">
+            <table class="head" width="100%">
+              <tr>
+                <td valign="middle"><h2>Our Proposal</h2></td>
+                <td valign="middle">
+                  According to your company’s needs, we recommend
+                  the&nbsp;<strong
+                    style="font-weight: 700 !important"
+                    class="plan_type"
+                    >Advanced Plan</strong
+                  >.
+                </td>
+              </tr>
+            </table>
+            <div id="items-list">{%items_list%}</div>
+          </div>
+        </div>
+        <div class="pg bg bg_plan" id="plan1">
+          <div class="cont">
+            <table class="head" width="100%">
+              <tr>
+                <td valign="middle"><h2>Plan Features</h2></td>
+                <td valign="middle" class="plan_type">Advanced Plan</td>
+              </tr>
+            </table>
+            <table class="all" width="100%">
+              <tr>
+                <td valign="top" width="49%" style="padding: 0 !important">
+                  <table id="sales_feat" width="100%">
+                    <tr>
+                      <th colspan="2">Sales Management</th>
+                    </tr>
+                    <tr>
+                      <td>Invoices & Quotes</td>
+                      <td class="val invs"></td>
+                    </tr>
+                    <tr>
+                      <td>Cloud POS</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Price List</td>
+                      <td class="val price_list"></td>
+                    </tr>
+                    <tr>
+                      <td>Offers</td>
+                      <td class="val offer"></td>
+                    </tr>
+                    <tr>
+                      <td>Sales Commissions</td>
+                      <td class="val comm"></td>
+                    </tr>
+                    <tr>
+                      <td>Installments</td>
+                      <td class="val install"></td>
+                    </tr>
+                    <tr>
+                      <td>Loyalty Points</td>
+                      <td class="val loyal"></td>
+                    </tr>
+                    <tr>
+                      <td>Offine POS Terminals</td>
+                      <td class="val off_pos"></td>
+                    </tr>
+                  </table>
+                </td>
+                <td width="1%"></td>
+                <td valign="top" width="49%" style="padding: 0 !important">
+                  <table id="supp_feat" width="100%">
+                    <tr>
+                      <th colspan="2">Supply Chain Management</th>
+                    </tr>
+                    <tr>
+                      <td>Unlimited Products</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Purchase Management</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Suppliers Management</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Track Stock & Stocking</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Bundles</td>
+                      <td class="val bundle"></td>
+                    </tr>
+                    <tr>
+                      <td>Purchase Cycle</td>
+                      <td class="val pur_cycle"></td>
+                    </tr>
+                    <tr>
+                      <td>Expenses Distribution</td>
+                      <td class="val exp_dis"></td>
+                    </tr>
+                    <tr>
+                      <td>Warehouses</td>
+                      <td class="val warehouse"></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="pg bg bg_plan" id="plan2">
+          <div class="cont">
+            <table class="head" width="100%">
+              <tr>
+                <td valign="middle"><h2>Plan Features</h2></td>
+                <td valign="middle" class="plan_type">Advanced Plan</td>
+              </tr>
+            </table>
+            <table class="all" width="100%">
+              <tr>
+                <td valign="top" width="49%" style="padding: 0 !important">
+                  <table id="acc_feat" width="100%">
+                    <tr>
+                      <th colspan="2">Accounting Management</th>
+                    </tr>
+                    <tr>
+                      <td>Expenses & Incomes</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Chart of accounts</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Auto Journal Entries</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Cost Centers</td>
+                      <td class="val cost"></td>
+                    </tr>
+                    <tr>
+                      <td>Assets & Depreciation</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Ledger Reports</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Cheques Cycle</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Treasuries & Banks</td>
+                      <td class="val bank"></td>
+                    </tr>
+                    <tr>
+                      <td>Financial Statements</td>
+                      <td class="val checked"></td>
+                    </tr>
+                  </table>
+                </td>
+                <td width="1%"></td>
+                <td valign="top" width="49%" style="padding: 0 !important">
+                  <table id="hr_feat" width="100%">
+                    <tr>
+                      <th colspan="2">Human Resources Management</th>
+                    </tr>
+                    <tr>
+                      <td>Employees</td>
+                      <td class="val emp"></td>
+                    </tr>
+                    <tr>
+                      <td>Payroll</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Attendance</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Contracts</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Organization Structure</td>
+                      <td class="val checked"></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="pg bg bg_plan" id="plan3">
+          <div class="cont">
+            <table class="head" width="100%">
+              <tr>
+                <td valign="middle"><h2>Plan Features</h2></td>
+                <td valign="middle" class="plan_type">Advanced Plan</td>
+              </tr>
+            </table>
+            <table class="all" width="100%">
+              <tr>
+                <td valign="top" width="49%" style="padding: 0 !important">
+                  <table id="cust_feat" width="100%">
+                    <tr>
+                      <th colspan="2">Customer Relationship Management</th>
+                    </tr>
+                    <tr>
+                      <td>Clients</td>
+                      <td class="val client"></td>
+                    </tr>
+                    <tr>
+                      <td>Follow Up Clients</td>
+                      <td class="val checked"></td>
+                    </tr>
+                    <tr>
+                      <td>Memberships</td>
+                      <td class="val member"></td>
+                    </tr>
+                    <tr>
+                      <td>SMS Integration</td>
+                      <td class="val sms"></td>
+                    </tr>
+                  </table>
+                </td>
+                <td width="1%"></td>
+                <td valign="top" width="49%" style="padding: 0 !important">
+                  <table id="gen_feat" width="100%">
+                    <tr>
+                      <th colspan="2">General</th>
+                    </tr>
+                    <tr>
+                      <td>Extra Users</td>
+                      <td class="val user"></td>
+                    </tr>
+                    <tr>
+                      <td>Extra Branches</td>
+                      <td class="val branch"></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+            <table class="all" width="49%" style="margin-top: 20px !important">
+              <tr>
+                <td valign="top" style="padding: 0 !important">
+                  <table id="op_feat" width="100%">
+                    <tr>
+                      <th colspan="2">Operations Management</th>
+                    </tr>
+                    <tr>
+                      <td>Workflow</td>
+                      <td class="val workflow"></td>
+                    </tr>
+                    <tr>
+                      <td>Rental Units</td>
+                      <td class="val rental"></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="pg bg bg_zatca" id="zatca">
+          <div class="cont">
+            <h2>E-Invoicing Compliance</h2>
+            <div class="par">
+              Daftra is a compliant e-invoicing solution provider that meets the
+              regulations of ZATCA in Saudi Arabic, providing taxpayers with a
+              reliable and ecient way to meet their invoicing needs while
+              ensuring compliance with authority requirements.
+            </div>
+          </div>
+        </div>
+        <div class="pg bg bg_eta" id="eta">
+          <div class="cont">
+            <h2>E-Invoicing Compliance</h2>
+            <div class="par">
+              Daftra is a compliant e-invoicing solution provider that meets the
+              regulations of the Egyptian Tax Authority in Egypt, providing
+              taxpayers with a reliable and ecient way to meet their invoicing
+              needs while ensuring compliance with authority requirements.
+            </div>
+          </div>
+        </div>
+        <div class="pg bg bg_thank" id="thank">
+          <div class="cont">
+            <h2>Thank you</h2>
+            <h3>For inquiries</h3>
+            <br />
+            <div class="par">
+              <strong style="font-weight: 700 !important"
+                >Sales Department</strong
+              ><br /><a
+                style="font-size: 20px !important"
+                href="mailto:sales@daftra.com"
+                >sales@daftra.com</a
+              ><br /><span class="phone"></span>
+            </div>
+            <div style="padding-top: 3.5cm">
+              <img
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                width="{%logo-width%}"
+                height="{%logo-height%}"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display: none" class="country">{%client_country%}</div>
+    <div style="display: none" class="curr">{%invoice_currency_code%}</div>
+    <div style="display: none" class="tax">{%tax-total%}</div>
+    <script>
+      function hideEInv() {
+        var e = parseFloat(
+            document.querySelector(".tax").innerHTML.split("&nbsp;")[0]
+          ),
+          n = document.querySelector(".country").innerText;
+        0 < e
+          ? "Saudi Arabia" == n || "المملكة العربية السعودية" == n
+            ? (document.querySelector("#eta").style.display = "none")
+            : ("Egypt" == n ||
+                "مصر" == n ||
+                (document.querySelector("#eta").style.display = "none"),
+              (document.querySelector("#zatca").style.display = "none"))
+          : ((document.querySelector("#eta").style.display = "none"),
+            (document.querySelector("#zatca").style.display = "none"));
+      }
+      function changePhone() {
+        var e = document.querySelector(".country").innerText;
+        document.querySelector(".phone").innerText =
+          "Saudi Arabia" == e || "المملكة العربية السعودية" == e
+            ? "+966 115201555"
+            : "Kuwait" == e || "الكويت" == e
+            ? "+965 22204185"
+            : "Jordan" == e || "الأردن" == e
+            ? "+962 62229418"
+            : "Qatar" == e || "قطر" == e
+            ? "+974 40197704"
+            : "United Arab Emirates" == e || "الإمارات العربية المتحدة" == e
+            ? "+971 44397201"
+            : "Egypt" == e || "مصر" == e
+            ? "+20 1501692068"
+            : "+966 115201555";
+      }
+      function checkFeatures() {
+        for (
+          var e = document.querySelectorAll(".val"), n = 0;
+          n < e.length;
+          n++
+        )
+          e[n].classList.contains("checked")
+            ? (e[n].innerHTML =
+                "<img src='https://daftraadmin.daftra.com/files/5376781d/logos/64c0ecbe2abd1_blobid1690365115600.png' title='MDI - check-bold - Copy.png' width='20'height='auto' />")
+            : e[n].classList.contains("unchecked") &&
+              (e[n].innerHTML =
+                "<img src='https://daftraadmin.daftra.com/files/5376781d/logos/64c0ecc88b1af_blobid1690365126164.png' title='MDI - close-thick - Copy.png' width='20' height='auto' />");
+      }
+      function currEn() {
+        for (
+          var e = document.querySelector(".curr").innerText,
+            n = document.querySelectorAll(
+              "#listing_table tbody td:nth-child(5)"
+            ),
+            t = document.querySelectorAll("#listing_table tbody td:last-child"),
+            c = document.querySelectorAll(
+              ".listing-table:nth-child(2) td:last-child"
+            ),
+            r = 0;
+          r < n.length;
+          r++
+        )
+          "SAR" == e
+            ? ((n[r].innerHTML = n[r].innerHTML.replace("ر.س", "SR")),
+              (t[r].innerHTML = t[r].innerHTML.replace("ر.س", "SR")))
+            : "KWD" == e
+            ? ((n[r].innerHTML = n[r].innerHTML.replace("د.ك", "KD")),
+              (t[r].innerHTML = t[r].innerHTML.replace("د.ك", "KD")))
+            : "OMR" == e
+            ? ((n[r].innerHTML = n[r].innerHTML.replace("ر.ع", "OMR")),
+              (t[r].innerHTML = t[r].innerHTML.replace("ر.ع", "OMR")))
+            : "AED" == e
+            ? ((n[r].innerHTML = n[r].innerHTML.replace("د.إ", "AED")),
+              (t[r].innerHTML = t[r].innerHTML.replace("د.إ", "AED")))
+            : "QAR" == e
+            ? ((n[r].innerHTML = n[r].innerHTML.replace("ر.ق", "QR")),
+              (t[r].innerHTML = t[r].innerHTML.replace("ر.ق", "QR")))
+            : "BHD" == e &&
+              ((n[r].innerHTML = n[r].innerHTML.replace("د.ب", "BD")),
+              (t[r].innerHTML = t[r].innerHTML.replace("د.ب", "BD")));
+        for (var d = 0; d < c.length; d++)
+          "SAR" == e
+            ? (c[d].innerHTML = c[d].innerHTML.replace("ر.س", "SR"))
+            : "KWD" == e
+            ? (c[d].innerHTML = c[d].innerHTML.replace("د.ك", "KD"))
+            : "OMR" == e
+            ? (c[d].innerHTML = c[d].innerHTML.replace("ر.ع", "OMR"))
+            : "AED" == e
+            ? (c[d].innerHTML = c[d].innerHTML.replace("د.إ", "AED"))
+            : "QAR" == e
+            ? (c[d].innerHTML = c[d].innerHTML.replace("ر.ق", "QR"))
+            : "BHD" == e &&
+              (c[d].innerHTML = c[d].innerHTML.replace("د.ب", "BD"));
+      }
+      function appChange() {
+        var e,
+          n,
+          t,
+          c,
+          r,
+          d,
+          o,
+          l,
+          a = document.querySelectorAll("#listing_table tbody td:nth-child(2)"),
+          u = document.querySelectorAll(".plan_type"),
+          i = document.querySelector(".curr").innerText;
+        l =
+          "SAR" == i
+            ? ((e = "37.5 SR /month/extra"),
+              (n = "5 Included\n37.5 SR /month/extra"),
+              (t = "8.25 SR /month/each"),
+              (c = "3 Included\n7.5 SR /month/extra"),
+              (r = "6 Included\n7.5 SR /month/extra"),
+              (d = "10 Included\n7.5 SR /month/extra"),
+              (o = "22.5 SR /month/extra"),
+              "75 SR /month/extra")
+            : "KWD" == i
+            ? ((e = "3.03 KD /month/extra"),
+              (n = "5 Included\n3.03 KD /month/extra"),
+              (t = "0.67 KD /month/each"),
+              (c = "3 Included\n0.61 KD /month/extra"),
+              (r = "6 Included\n0.61 KD /month/extra"),
+              (d = "10 Included\n0.61 KD /month/extra"),
+              (o = "1.82 KD /month/extra"),
+              "6.06 KD /month/extra")
+            : "OMR" == i
+            ? ((e = "3.85 OMR /month/extra"),
+              (n = "5 Included\n3.85 OMR  /month/extra"),
+              (t = "0.85 OMR /month/each"),
+              (c = "3 Included\n0.77 OMR /month/extra"),
+              (r = "6 Included\n0.77 OMR /month/extra"),
+              (d = "10 Included\n0.77 OMR /month/extra"),
+              (o = "2.31 OMR /month/extra"),
+              "7.7 OMR /month/extra")
+            : "AED" == i
+            ? ((e = "36.73 AED /month/extra"),
+              (n = "5 Included\n36.73 AED /month/extra"),
+              (t = "8.08 AED /month/each"),
+              (c = "3 Included\n7.35 AED /month/extra"),
+              (r = "6 Included\n7.35 AED /month/extra"),
+              (d = "10 Included\n7.35 AED /month/extra"),
+              (o = "22.04 AED /month/extra"),
+              "73.46 AED /month/extra")
+            : "QAR" == i
+            ? ((e = "36.41 QR /month/extra"),
+              (n = "5 Included\n36.41 QR /month/extra"),
+              (t = "8.01 QR /month/each"),
+              (c = "3 Included\n7.28 QR /month/extra"),
+              (r = "6 Included\n7.28 QR /month/extra"),
+              (d = "10 Included\n7.28 QR /month/extra"),
+              (o = "21.85 QR /month/extra"),
+              "72.82 QR /month/extra")
+            : ((e = "$10 /month/extra"),
+              (n = "5 Included\n$10 /month/extra"),
+              (t = "$2.2 /month/each"),
+              (c = "3 Included\n$2 /month/extra"),
+              (r = "6 Included\n7$2 /month/extra"), 
+              (d = "10 Included\n$2 /month/extra"),
+              (o = "$6 /month/extra"),
+              "$20 /month/extra");
+        for (var s = 0; s < a.length; s++) {
+          if (-1 < a[s].innerText.indexOf("الأساسية")) {
+            a[s].innerText = "Basic Plan";
+            for (var m = 0; m < u.length; m++) u[m].innerText = "Basic Plan";
+            (document.querySelector(".invs").innerText = "100 / month"),
+              document.querySelector(".price_list").classList.add("unchecked"),
+              document.querySelector(".offer").classList.add("unchecked"),
+              document.querySelector(".comm").classList.add("unchecked"),
+              document.querySelector(".install").classList.add("unchecked"),
+              document.querySelector(".loyal").classList.add("unchecked"),
+              document.querySelector(".off_pos").classList.add("unchecked"),
+              document.querySelector(".bundle").classList.add("unchecked"),
+              document.querySelector(".pur_cycle").classList.add("unchecked"),
+              document.querySelector(".exp_dis").classList.add("unchecked"),
+              (document.querySelector(".warehouse").innerText = "1"),
+              document.querySelector(".cost").classList.add("unchecked"),
+              (document.querySelector(".bank").innerText = "2"),
+              (document.querySelector(".client").innerText = "100"),
+              document.querySelector(".member").classList.add("unchecked"),
+              document.querySelector(".sms").classList.add("unchecked"),
+              (document.querySelector(".emp").innerText = t),
+              (document.querySelector(".user").innerText = o),
+              document.querySelector(".branch").classList.add("unchecked"),
+              document.querySelector(".workflow").classList.add("unchecked"),
+              (document.querySelector(".rental").innerText = c);
+          }
+          if (-1 < a[s].innerText.indexOf("المتقدمة")) {
+            a[s].innerText = "Advanced Plan";
+            for (m = 0; m < u.length; m++) u[m].innerText = "Advanced Plan";
+            (document.querySelector(".invs").innerText = "500 / month"),
+              document.querySelector(".price_list").classList.add("checked"),
+              document.querySelector(".offer").classList.add("checked"),
+              document.querySelector(".comm").classList.add("unchecked"),
+              document.querySelector(".install").classList.add("unchecked"),
+              document.querySelector(".loyal").classList.add("unchecked"),
+              document.querySelector(".off_pos").classList.add("unchecked"),
+              document.querySelector(".bundle").classList.add("checked"),
+              document.querySelector(".pur_cycle").classList.add("unchecked"),
+              document.querySelector(".exp_dis").classList.add("unchecked"),
+              (document.querySelector(".warehouse").innerText = "3"),
+              document.querySelector(".cost").classList.add("checked"),
+              (document.querySelector(".bank").innerText = "5"),
+              (document.querySelector(".client").innerText = "300"),
+              document.querySelector(".member").classList.add("checked"),
+              document.querySelector(".sms").classList.add("unchecked"),
+              (document.querySelector(".emp").innerText = t),
+              (document.querySelector(".user").innerText = o),
+              (document.querySelector(".branch").innerText = l),
+              document.querySelector(".workflow").classList.add("unchecked"),
+              (document.querySelector(".rental").innerText = r);
+          }
+          if (-1 < a[s].innerText.indexOf("اللامحدودة")) {
+            a[s].innerText = "Premium Plan";
+            for (m = 0; m < u.length; m++) u[m].innerText = "Premium Plan";
+            (document.querySelector(".invs").innerText = "Unlimited"),
+              document.querySelector(".price_list").classList.add("checked"),
+              document.querySelector(".offer").classList.add("checked"),
+              document.querySelector(".comm").classList.add("checked"),
+              document.querySelector(".install").classList.add("checked"),
+              document.querySelector(".loyal").classList.add("checked"),
+              (document.querySelector(".off_pos").innerText = e),
+              document.querySelector(".bundle").classList.add("checked"),
+              document.querySelector(".pur_cycle").classList.add("checked"),
+              document.querySelector(".exp_dis").classList.add("checked"),
+              (document.querySelector(".warehouse").innerText = n),
+              document.querySelector(".cost").classList.add("checked"),
+              (document.querySelector(".bank").innerText = "Unlimited"),
+              (document.querySelector(".client").innerText = "Unlimited"),
+              document.querySelector(".member").classList.add("checked"),
+              document.querySelector(".sms").classList.add("checked"),
+              (document.querySelector(".emp").innerText = t),
+              (document.querySelector(".user").innerText = o),
+              (document.querySelector(".branch").innerText = l),
+              document.querySelector(".workflow").classList.add("checked"),
+              (document.querySelector(".rental").innerText = d);
+          }
+        }
+      }
+      function changeVATName() {
+        for (
+          var e = document.querySelectorAll(
+              ".listing-table:nth-child(2) td:nth-child(2) strong"
+            ),
+            n = 0;
+          n < e.length;
+          n++
+        )
+          "VAT15" == e[n].innerHTML.split(" ")[0] &&
+            (e[n].innerHTML = "VAT " + e[n].innerHTML.split(" ")[1]);
+      }
+      try {
+        hideEInv(),
+          appChange(),
+          changePhone(),
+          changeVATName(),
+          checkFeatures(),
+          currEn();
+      } catch (e) {
+        console.log(e);
+      }
+    </script>
+  </body>
+</html>

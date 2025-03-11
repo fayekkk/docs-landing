@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: transparent;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding:  0;
+    }
+
+    /* start of listing_table */
+    #items-list{
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    #items-list div{
+      height: 0px !important;
+    }
+    #listing_table{
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    #listing_table th,
+    #listing_table td {
+      border: none;
+      text-align: center;
+      color: #394d70;
+      padding: 2px;
+    }
+    #listing_table td {
+      font-size: 13px;
+
+    }
+    #listing_table th {
+      border-left: 1px solid #394d70;
+      border-bottom: 1px solid #394d70;
+      border-top: 1px solid #394d70;
+      border-radius: 8px;
+      background-color: transparent;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    #listing_table th:last-child {
+      border-right: 1px solid #394d70;
+    }
+    #listing_table tbody tr:nth-child(1) td {
+      border-top: 1px solid #394d70;
+      border-left: 1px solid #394d70;
+      border-bottom: 2px solid transparent;
+      border-radius: 8px 8px 0 0;
+    }
+    #listing_table th:nth-child(1) {
+      width: 10%;
+    }
+    #listing_table th:nth-child(2) {
+      width: 40%;
+    }
+    #listing_table th:nth-child(3) {
+      width: 10%;
+    }
+    #listing_table th:nth-child(4) {
+      width: 20%;
+    }
+    #listing_table th:nth-child(5) {
+      width: 20%;
+    }
+    #listing_table tbody tr:nth-child(1) td:last-child {
+      border-right: 1px solid #394d70;
+    }
+    #listing_table tbody td {
+      border-left: 1px solid #394d70;
+    }
+    #listing_table tbody td:last-child {
+      border-right: 1px solid #394d70;
+    }
+    #listing_table tbody tr:last-child td {
+      border-bottom: 1px solid #394d70;
+      border-top: 2px solid transparent;
+
+      border-radius: 0 0 8px 8px;
+    }
+    #listing_table tbody td:nth-child(2) {
+      padding: 0.25cm 0;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+
+    .bg {
+      z-index: -90000;
+      position: absolute;
+      left: 0px;
+      background-image: url("https://s7ss7sss7.daftra.com/files/e9d0b2af/logos/656847829a8e2_blobid1701332863155.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      opacity: 0.2;
+      width: 90%;
+      margin-left: 5%;
+      margin-left: 5%;
+      height: 12.7cm;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <div class="bg" style="top: 0cm"></div>
+        <div id="items-list">{%items_list%}</div>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function addNewRows() {
+        var selectedDiv = document.querySelector("#items-list");
+        while (selectedDiv.offsetHeight < 440) {
+          const newTr = document.createElement("tr");
+          for (var x = 0; x < 5; x++) {
+            var newTd = document.createElement("td");
+            newTd.style.height = "10px";
+            newTr.appendChild(newTd);
+          }
+
+          document.querySelector("#listing_table tbody").appendChild(newTr);
+        }
+      }
+      try {
+        addNewRows();
+      } catch (error) {
+        console.log(error);
+      }
+      function repeatBg() {
+        var invoiceHeight =
+          document.querySelector(".invoice-inner").offsetHeight;
+        var pageHeight = document.querySelector(".bg").offsetHeight;
+        var numPages = Math.ceil(invoiceHeight / pageHeight) ;
+        var bg = document.querySelector(".bg");
+        var topDis = parseFloat(bg.style.top.replace("cm", ""));
+        for (var i = 1; i < numPages; i++) {
+          var newBg = document.createElement("div");
+          newBg.setAttribute("class", "bg");
+          topDis = topDis + 13;
+          console.log(topDis);
+          newBg.style.top = topDis + "cm";
+          bg.parentNode.insertBefore(newBg, bg.nextSibling);
+        }
+      }
+      try {
+        repeatBg();
+      } catch (e) {
+        console.log(e);
+      }
+  
+    </script>
+  </body>
+</html>

@@ -1,0 +1,176 @@
+<style>
+  #template-container {
+    width: 8cm;
+    padding: 10px 15px;
+    margin: auto;
+  }
+  /* header Styles */
+  #header {
+    direction: ltr;
+    width: 100%;
+    border-spacing: 0;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    text-align: center;
+    margin: 20px 0;
+    font-size: 11px;
+  }
+  #header td {
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+  }
+  #header tr:nth-child(1) td {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  #header tr:nth-child(2) td:nth-child(1) {
+    width: 25%;
+  }
+  #header tr:nth-child(2) td:nth-child(2) {
+    width: 25%;
+  }
+  #header tr:nth-child(2) td:nth-child(3) {
+    width: 25%;
+  }
+  #header tr:nth-child(2) td:nth-child(4) {
+    width: 25%;
+  }
+  /* items styles */
+  #items {
+    direction: ltr;
+    width: 100%;
+    border-spacing: 0;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    text-align: center;
+    margin: 20px 0;
+    font-size: 11px;
+  }
+  #items td:nth-child(1) {
+    background-color: #e5e5e5;
+    width: 35%;
+  }
+  #items td:nth-child(2) {
+    width: 65%;
+  }
+
+  #items td {
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    padding: 2.5px;
+  }
+  /* overTime styles */
+  #overTime {
+    direction: ltr;
+    width: 100%;
+    border-spacing: 0;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    text-align: center;
+    margin: 20px 0;
+    font-size: 11px;
+  }
+  #overTime tr:nth-child(1) td:nth-child(1) {
+    width: 50%;
+  }
+  #overTime tr:nth-child(1) td:nth-child(2) {
+    width: 50%;
+  }
+  #overTime td {
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+  }
+</style>
+<div id="template-container">
+  <table id="header">
+    <tbody>
+      <tr>
+        <td colspan="100%">مركز ركن راحتي الرياضي</td>
+      </tr>
+      <tr>
+        <td colspan="2">Client</td>
+        <td colspan="2">{{Data.le_invoice-items.client}}</td>
+      </tr>
+      <tr>
+        <td>Invoice Date</td>
+        <td>{{Data.le_invoice-items.date}}</td>
+        <td>Staff</td>
+        <td>{{Data.le_invoice-items.assigned_staff}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table id="items">
+    <tbody>
+      <tr>
+        <td>Start Time</td>
+        <td id="curr_time">{{Data.le_invoice-items.time}}</td>
+      </tr>
+      <tr>
+        <td>Item Name</td>
+        <td>{{Data.le_invoice-items.item_name}}</td>
+      </tr>
+      <tr>
+        <td>Price</td>
+        <td>{{Data.le_invoice-items.item_price}}</td>
+      </tr>
+      <tr>
+        <td>Commission Rate</td>
+        <td id="commission_rate">{{Data.le_invoice-items.commission_rate}}</td>
+      </tr>
+      <tr>
+        <td>Commission Amount</td>
+        <td id="commission_amout">
+          {{Data.le_invoice-items.commission_amout}}
+        </td>
+      </tr>
+      <tr style="display: none">
+        <td>Item Over Time</td>
+        <td>{{Data.le_invoice-items.overtime}}</td>
+      </tr>
+      <tr>
+        <td>Over Time Commission</td>
+        <td id="over_time_commm">
+          {{Data.le_invoice-items.overtime_commission}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<p>
+  <script>
+    try {
+      var overTime = document.getElementById("over_time_commm").innerText;
+      if (overTime == "") {
+        overTime = "0";
+      }
+      var commission_amout =
+        document.getElementById("commission_amout").innerText;
+      if (commission_amout == "") {
+        commission_amout = "0";
+      }
+      var commission_rate =
+        document.getElementById("commission_rate").innerText;
+      if (commission_rate == "") {
+        commission_rate = "0";
+      }
+    } catch (error) {}
+    function convertTime() {
+      var currTime = document.getElementById("curr_time").innerText.trim();
+      if (currTime.split(" ").length == 1) {
+        var myTime = parseInt(currTime.split(":")[0]);
+        if (myTime > 11) {
+          document.getElementById("curr_time").innerText =
+            myTime - 12 + ":" + currTime.split(":")[1] + " pm ";
+        } else {
+          document.getElementById("curr_time").innerText =
+            myTime + ":" + currTime.split(":")[1] + " am ";
+        }
+      }
+    }
+    try {
+      convertTime();
+    } catch (error) {
+      console.log(error);
+    }
+  </script>
+</p>

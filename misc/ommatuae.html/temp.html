@@ -1,0 +1,543 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0 0 0;
+    }
+    .invoice-address {
+      border-top: 3px double #000000;
+      margin: 10px 0;
+      padding-top: 10px;
+      direction: ltr;
+    }
+
+    bold_title {
+      font-weight: bold;
+    }
+
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .listing-table:nth-child(2) {
+      direction: ltr;
+      text-align: left;
+    }
+    .listing-table:nth-child(2) * {
+      text-align: left !important;
+    }
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: right;
+      padding: 6px 4px;
+    }
+
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+
+    .total-table td {
+      border-right: 1px solid #555555;
+    }
+
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+
+    .notes-block * {
+      font-style: normal !important;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    #business_info {
+      line-height: 1.4;
+    }
+    #listing_table {
+      direction: ltr;
+    }
+    #listing_table th:last-child,
+    #listing_table td:last-child {
+      border-left: 1px solid #555555 !important;
+      border-right: 1px solid #555555 !important;
+    }
+    #listing_table th:last-child {
+      border-right: 1px solid #555555;
+    }
+
+    #label_subtotal {
+      width: 65px;
+    }
+
+    #label_field3,
+    #label_field4 {
+      width: 55px;
+    }
+
+    #items-list > table:nth-child(2) tr td:nth-child(1) {
+      width: 60%;
+    }
+
+    #listing_table th,
+    #listing_table td {
+      text-align: center;
+    }
+
+    #listing_table th:nth-child(2),
+    #listing_table td:nth-child(2) {
+      text-align: right;
+    }
+    #listing_table th:nth-child(1),
+    #listing_table td:nth-child(1) {
+      border-left: 1px solid #555555;
+      border-right: 1px solid #555555 !important;
+    }
+
+    .invoice-inner {
+      margin: 0 25px;
+    }
+
+    /* th#label_field5,
+      #listing_table td:nth-child(5) {
+        display: none;
+      } */
+    .qr-code img {
+      margin-top: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+    /* .bank-accounts {
+        display: none;
+      } */
+    #more_info td {
+      padding: 5px 3px;
+    }
+    #en_invoice_total_spelled {
+      margin-top: 20px;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table
+          width="100%"
+          border="0"
+          cellspacing="0"
+          cellpadding="0"
+          style="direction: ltr"
+        >
+          <tr>
+            <td align="left" valign="top">
+              <img
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                width="{%logo-width%}"
+                height="{%logo-height%}"
+              />
+            </td>
+            <td align="left" valign="top">
+              <div id="business_info" class="editable-area">
+                {%business_info%}
+              </div>
+            </td>
+            <td valign="top" align="left">
+              <p id="invoice_title" class="editable-area invoice-name">
+                {%invoice_title%}
+              </p>
+              <div class="qr-code">{%qr_code_image%}<br /></div>
+            </td>
+          </tr>
+        </table>
+
+        <div class="invoice-address">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="50%" align="left" valign="top">
+                <table border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td valign="top" style="float: right">
+                      <strong id="field1" class="editable-area"
+                        >{%field1%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" valign="top">
+                      <div id="client_info" class="editable-area">
+                        {%client_info%}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr id="shipping_options" style="display: none">
+                    <td valign="top" style="float: right">
+                      <br /><strong id="label_ship" class="editable-area"
+                        >{%label_ship%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" valign="top">
+                      <br />
+                      <div id="ship_info" class="editable-area">
+                        {%ship_info%}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td width="50%" valign="top" align="right">
+                <table
+                  id="invoice_basics"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="left"
+                >
+                  <tr>
+                    <td align="right">
+                      <strong class="editable-area" id="label_invoice_no"
+                        >{%label_invoice_no%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="right">
+                      {%invoice_number%}
+                    </td>
+                  </tr>
+                  <tr {%refund_invoice_number_condition%}>
+                    <td align="right">
+                      <strong class="editable-area" id="refund_label_invoice_no"
+                        >{%refund_invoice_no_title%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%refund_invoice_number%}
+                    </td>
+                  </tr>
+                  <!-- InvoiceDate -->
+                  <tr>
+                    <td align="left">
+                      <strong class="editable-area" id="label_date"
+                        >{%label_date%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="right">
+                      {%invoice_date%}
+                    </td>
+                  </tr>
+                  <!-- /InvoiceDate -->
+                </table>
+                <div style="display: none">
+                  <custom_field
+                    id="custom_fields"
+                    style="clear: both; display: none"
+                    class="editable-area"
+                    border="0"
+                    cellspacing="0"
+                    cellpadding="0"
+                    align="left"
+                  >
+                    {%custom_fields%}
+                  </custom_field>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div id="items-list">{%items_list%}</div>
+        <p style="text-align: center !important" id="en_invoice_total_spelled">
+          <!-- {%invoice_total_spelled%} -->
+        </p>
+        <div style="display: none" id="invoice_total">{%invoice_total%}</div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function hundleTotals() {
+        var allRows = document.querySelectorAll("#listing_table tbody tr");
+        var qtyCounter = 0;
+        var flag = 0;
+        var flag2 = 0;
+        var itamscount = 0;
+        for (var i = 0; i < allRows.length; i++) {
+          if (allRows[i].cells[0].innerText.trim() == "group") {
+            flag = 1;
+          } else if (allRows[i].cells[0].innerText.trim() == "normal") {
+            flag = 0;
+          }
+          if (flag == 1) {
+            qtyCounter =
+              qtyCounter +
+              parseFloat(allRows[i].cells[1].innerText.replace(/,/g, ""));
+            itamscount = itamscount + 1;
+          }
+
+          if (
+            allRows[i].cells[0].innerText.trim() == "group" ||
+            allRows[i].cells[0].innerText.trim() == "normal"
+          ) {
+            console.log({ i: i });
+            console.log(flag);
+            console.log(flag2);
+            if (flag2 == 1) {
+              allRows[i].cells[2].innerText = "";
+              allRows[i].cells[3].innerText = "";
+              if (allRows[0].cells.length == 5) {
+                allRows[i].cells[4].innerText = "";
+              }
+              allRows[i].cells[1].innerText = qtyCounter;
+              if (i == 0) {
+                allRows[i].setAttribute("style", "display : none !important");
+              }
+              qtyCounter = 0;
+            } else {
+              qtyCounter = 0;
+              allRows[i].setAttribute("style", "display : none !important");
+            }
+          }
+          if (i == allRows.length - 1 && flag2 == 1) {
+            var newRow = document.createElement("tr");
+            var newtd1 = document.createElement("td");
+            newtd1.innerText = "Total no. of Chicks";
+            var newtd2 = document.createElement("td");
+            newtd2.innerText = qtyCounter;
+            var newtd3 = document.createElement("td");
+            var newtd4 = document.createElement("td");
+            newRow.appendChild(newtd1);
+            newRow.appendChild(newtd2);
+            newRow.appendChild(newtd3);
+            newRow.appendChild(newtd4);
+            if (allRows[0].cells.length == 5) {
+              var newtd5 = document.createElement("td");
+              newRow.appendChild(newtd5);
+            }
+            document.querySelector("#listing_table tbody").appendChild(newRow);
+          }
+          if (allRows[i].cells[0].innerText.trim() == "group") {
+            flag2 = 1;
+            allRows[i].cells[0].innerText = "Total no. of Chicks";
+            itamscount = 0;
+          } else if (allRows[i].cells[0].innerText.trim() == "normal") {
+            flag2 = 0;
+            allRows[i].cells[0].innerText = "Total no. of Chicks";
+            itamscount = 0;
+          }
+        }
+      }
+      try {
+        hundleTotals();
+      } catch (error) {
+        console.log(error);
+      }
+      function toggleShow() {
+        var invtitle = document.querySelector("#invoice_title").innerText;
+        if (invtitle != "Preform Invoice") {
+          document.querySelector("#showOrHide").style.display = "none";
+          document.querySelector("#showOrHide1").style.display = "none";
+    
+
+          document.querySelector(
+            ".listing-table:nth-child(2) tr:nth-last-child(1)"
+          ).style.display = "none";
+          document.querySelector(
+            ".listing-table:nth-child(2) tr:nth-last-child(2)"
+          ).style.display = "none";
+        }else{
+          document.querySelector(".hidedata").style.display = "none";
+          document.querySelector(".hidedata1").style.display = "none";
+          document.querySelector(".hidedata2").style.display = "none";
+        }
+      }
+      try {
+        toggleShow();
+      } catch (error) {
+        console.log(error);
+      }
+      var ones = [
+        "",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+      ];
+      var tens = [
+        "",
+        "",
+        "twenty",
+        "thirty",
+        "forty",
+        "fifty",
+        "sixty",
+        "seventy",
+        "eighty",
+        "ninety",
+      ];
+      var teens = [
+        "ten",
+        "eleven",
+        "twelve",
+        "thirteen",
+        "fourteen",
+        "fifteen",
+        "sixteen",
+        "seventeen",
+        "eighteen",
+        "nineteen",
+      ];
+
+      function convert_billions(num) {
+        if (num >= 1000000000) {
+          return (
+            convert_billions(Math.floor(num / 1000000000)) +
+            " billion " +
+            convert_millions(num % 1000000000)
+          );
+        } else {
+          return convert_millions(num);
+        }
+      }
+      function convert_millions(num) {
+        if (num >= 1000000) {
+          return (
+            convert_millions(Math.floor(num / 1000000)) +
+            " million " +
+            convert_thousands(num % 1000000)
+          );
+        } else {
+          return convert_thousands(num);
+        }
+      }
+
+      function convert_thousands(num) {
+        if (num >= 1000) {
+          return (
+            convert_hundreds(Math.floor(num / 1000)) +
+            " thousand " +
+            convert_hundreds(num % 1000)
+          );
+        } else {
+          return convert_hundreds(num);
+        }
+      }
+
+      function convert_hundreds(num) {
+        if (num > 99) {
+          return (
+            ones[Math.floor(num / 100)] + " hundred " + convert_tens(num % 100)
+          );
+        } else {
+          return convert_tens(num);
+        }
+      }
+
+      function convert_tens(num) {
+        if (num < 10) return ones[num];
+        else if (num >= 10 && num < 20) return teens[num - 10];
+        else {
+          return tens[Math.floor(num / 10)] + " " + ones[num % 10];
+        }
+      }
+
+      function convert(num) {
+        console.log(convert_billions(num));
+        if (num == 0) return "zero";
+        else return convert_billions(num);
+      }
+      function convertFN(num, maincurrency, floatCurr) {
+        var myIntNum = parseInt(num.split(".")[0]);
+        var myFloatNum = parseInt(num.split(".")[1]);
+        return (
+          convert(myIntNum) +
+          " " +
+          maincurrency +
+          " and " +
+          convert(myFloatNum) +
+          " " +
+          floatCurr
+        );
+      }
+
+      try {
+        var myNum = String(
+          parseFloat(
+            document
+              .getElementById("invoice_total")
+              .innerText.replace(/[\$,]/g, "")
+          ).toFixed(2)
+        );
+        document.getElementById("en_invoice_total_spelled").innerText =
+          convertFN(myNum, "dirhams ", "fils");
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

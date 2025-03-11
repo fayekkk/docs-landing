@@ -1,0 +1,450 @@
+<style>
+  * {
+    word-break: keep-all !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    border-collapse: collapse !important;
+  }
+  .indent-td td:nth-child(2),
+  .indent-td td:nth-child(3),
+  .indent-td td:nth-child(5) {
+    display: none;
+  }
+  td {
+    padding: 3px !important;
+  }
+  .replace_template_notes {
+    display: none;
+  }
+  .indent-td * {
+    line-height: 13px !important;
+    padding: 2px !important;
+  }
+  .indent-td td:nth-child(5) {
+    width: 40% !important;
+    vertical-align: sub !important;
+    font-size: 12px !important;
+  }
+  .indent-td td:nth-child(1) {
+    width: 5% !important;
+  }
+  .indent-td td:nth-child(7) {
+    width: 15% !important;
+  }
+  .indent-td td:nth-child(8) {
+    width: 15% !important;
+  }
+  .indent-td td:nth-child(9) {
+    width: 15% !important;
+  }
+  .indent-td td:nth-child(6) {
+    width: 12% !important;
+    vertical-align: sub !important;
+  }
+  .indent-td td:nth-child(6) img {
+    width: 120px !important;
+  }
+  .indent-td td:nth-child(6) * {
+    /* width: 50% !important; */
+    font-size: 10px !important;
+    vertical-align: sub !important;
+  }
+  .indent-td td:nth-child(1) {
+    display: none;
+  }
+  /* .indent-td td:nth-child(1) {
+        display: none;
+      } */
+  .clientObj {
+    display: none;
+  }
+  .indent-td a {
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+  }
+  .indent-td a * {
+    text-align: right;
+    /* display: inline-block; */
+    /* width: 100%; */
+    margin: auto;
+  }
+  .indent-td td {
+    font-size: 11px !important;
+  }
+  .ClientData {
+    border: none !important;
+    width: 100% !important;
+    font-size: 10px !important;
+    margin-bottom: 20px !important;
+  }
+  .ClientData * {
+    border: none !important;
+    font-size: 10px !important;
+    padding: 2px !important;
+  }
+  .ClientData td {
+    width: 25% !important;
+    border: none !important;
+    font-size: 10px !important;
+    padding: 2px !important;
+    direction: rtl !important;
+    text-align: center !important;
+  }
+  .Allpage {
+    min-height: 26cm;
+    /* margin-bottom: ; */
+  }
+  .tabless .New:nth-child(1) {
+    display: none !important;
+  }
+  .New * {
+    padding: 1px !important;
+    font-size: 11px !important;
+  }
+  /* .ClientData tr:nth-child(1) {
+        display: none;
+      } */
+  .Allpage {
+    padding: 0 !important;
+  }
+  .Allpage * {
+    padding: 0 !important;
+  }
+  .bolds {
+    font-weight: bold;
+  }
+  .new_head td span {
+    background-color: #ffffe1;
+  }
+  .customspan {
+    background-color: #ffffe1;
+    margin: 0 5%;
+  }
+  .noborders {
+    border: none !important;
+    padding-bottom: 5px !important;
+  }
+  .tabless {
+    border-top: none !important;
+  }
+  .tabless tr:nth-child(1){
+    border: none !important;
+    display: none !important;
+  }
+</style>
+<div style="width: 98%; margin: 0 1%">
+  <!--% foreach({{Data.le_prints.le_prints_le_prints_clients}} as {{le_prints_le_prints_clients_row}}) { %-->
+  <div
+    style="page-break-before: always !important; padding-top: 5px !important"
+  >
+    <table class="ClientData">
+      <tbody>
+        <tr class="bolds">
+          <td>إسم الحساب</td>
+          <td class="clientName"></td>
+          <td>رقم الهاتف</td>
+          <td class="clientMobile"></td>
+        </tr>
+        <tr>
+          <td>رقم الحساب</td>
+          <td class="clientCode"></td>
+          <td>رقم الفاكس</td>
+          <td class="clientCity"></td>
+        </tr>
+      </tbody>
+    </table>
+    <table
+      style="page-break-inside: avoid !important; border: transparent"
+      class="tabless"
+    >
+      <tbody>
+        <tr class="Allpage">
+          <td colspan="100%">
+            <div style="page-break-inside: avoid !important"></div>
+            <div class="clientObj">
+              {{le_prints_le_prints_clients_row.codes}}
+            </div>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_prints_le_prints_clients_row.formatted_text}}</span
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!--% } %-->
+</div>
+<div id="errmsg"></div>
+<div style="display: none">
+  <div id="currencycode">{{Data.le_prints.currencycode}}</div>
+  <div id="currencyrate">{{Data.le_prints.currencyrate}}</div>
+</div>
+<p>
+  <script>
+    function addcolspans() {
+      var allinden = document.querySelectorAll(".indent-td");
+      for (var i = 0; i < allinden.length; i++) {
+        allinden[i].cells[3].setAttribute("colspan", 4);
+      }
+    }
+    try {
+      addcolspans();
+    } catch (error) {
+      console.log(error);
+      //   document.getElementById("errmsg").innerText = error;
+    }
+    function clientsdata() {
+      var clients = document.querySelectorAll(".clientObj");
+      for (var i = 0; i < clients.length; i++) {
+        var client = clients[i].innerText;
+        var data = JSON.parse(client);
+        console.log({ data: data });
+
+        document.querySelectorAll(".clientName")[i].innerText =
+          data.business_name;
+        document.querySelectorAll(".clientCode")[i].innerText =
+          data.client_number;
+        document.querySelectorAll(".clientCity")[i].innerText =
+          data.postal_code;
+        document.querySelectorAll(".clientMobile")[i].innerText = data.phone1;
+      }
+    }
+    try {
+      clientsdata();
+    } catch (error) {
+      console.log(error);
+      //   document.getElementById("errmsg").innerText = error;
+    }
+    function addheights() {
+      var allpage = document.querySelectorAll(".tabless");
+      for (var i = 0; i < allpage.length; i++) {
+        allpage[0].style.marginBottom = "100px";
+        // document.getElementById("errmsg").innerText =
+        //   document.getElementById("errmsg").innerText +
+        //   "-" +
+        //   allpage[i].offsetHeight;
+      }
+    }
+    try {
+      addheights();
+    } catch (error) {
+      console.log(error);
+    }
+    function addheaders() {
+      var allTables = document.querySelectorAll(".tabless");
+      for (var i = 0; i < allTables.length; i++) {
+        var newTr = document.createElement("tr");
+        newTr.classList.add("indent-td");
+        var headers = [
+          "",
+          "",
+          "",
+          "التاريخ",
+          "",
+          "الوصف",
+          "  العملية - مدين",
+          "العملية - دائن",
+          "الرصيد",
+          "الرصيد - دائن",
+        ];
+
+        for (var j = 0; j < headers.length; j++) {
+          var newTd = document.createElement("td");
+          newTd.classList.add("noborders");
+          if (j == 3) {
+            newTd.setAttribute("colspan", "4");
+          }
+          var newSpan = document.createElement("span");
+          newSpan.setAttribute("class", "customspan");
+          newSpan.innerText = headers[j];
+          newSpan.style.width = "90%";
+          newSpan.style.border = "1px solid #000";
+          newSpan.style.display = "block";
+
+          newTd.appendChild(newSpan);
+          newTr.appendChild(newTd);
+        }
+
+        allTables[i]
+          .querySelectorAll(".indent-td")[0]
+          .parentElement.insertBefore(
+            newTr,
+            allTables[i].querySelectorAll(".indent-td")[0]
+          );
+      }
+    }
+
+    try {
+      addheaders();
+    } catch (error) {
+      console.log(error);
+      // document.getElementById("errmsg").innerText = error;
+    }
+    function hundleTable() {
+      var tables = document.querySelectorAll(".tabless");
+      for (var i = 0; i < tables.length; i++) {
+        var subttl1 = 0;
+        var subttl2 = 0;
+        var allRows = tables[i].querySelectorAll(".indent-td");
+        if (allRows.length == 0) {
+          tables[i].querySelector(".New:last-child").cells[0].innerText =
+            "الإجمالي ";
+        }
+        if (
+          tables[i]
+            .querySelector(".New:last-child")
+            .cells[4].innerText.trim("") == "0.00"
+        ) {
+          tables[i].querySelector(".New:last-child").cells[3].innerText =
+            " مدين " +
+            tables[i].querySelector(".New:last-child").cells[3].innerText;
+        } else {
+          tables[i].querySelector(".New:last-child").cells[3].innerText =
+            " دائن " +
+            tables[i].querySelector(".New:last-child").cells[4].innerText;
+        }
+        for (var j = 0; j < allRows.length; j++) {
+          // if (allRows[j].cells[6].innerText.trim() == "") {
+          //   allRows[j].cells[6].innerText = (
+          //     parseFloat(allRows[j].cells[7].innerText.replace(/,/g, "")) * -1
+          //   )
+          //     .toFixed(2)
+          //     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          // }
+          // console.log({ zz: allRows[j].cells[6].innerText });
+          // if (j > 0) {
+          //   subttl1 =
+          //     subttl1 +
+          //     parseFloat(allRows[j].cells[6].innerText.replace(/,/g, ""));
+          // }
+          // allRows[j].cells[6].setAttribute("colspan", "2");
+          // allRows[j].cells[7].style.display = "none";
+          // balance 8 9
+          if (allRows[j].cells[8].innerText.trim() == "0.00") {
+            if (j > 0) {
+              allRows[j].cells[8].innerText =
+                " د/ " + allRows[j].cells[9].innerText;
+            }
+
+            //  (
+            //   parseFloat(allRows[j].cells[9].innerText.replace(/,/g, "")) * -1
+            // )
+            //   .toFixed(2)
+            //   .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          } else {
+            if (j > 0) {
+              allRows[j].cells[8].innerText =
+                " م / " + allRows[j].cells[8].innerText;
+            }
+          }
+          if (j > 0) {
+            // subttl2 =
+            //   subttl2 +
+            //   parseFloat(allRows[j].cells[8].innerText.replace(/,/g, ""));
+          }
+          allRows[j].cells[8].setAttribute("colspan", "2");
+          allRows[j].cells[9].style.display = "none";
+
+          tables[i]
+            .querySelector(".New:nth-child(3)")
+            .cells[0].setAttribute("colspan", "8");
+          tables[i].querySelector(".New:nth-child(3)").cells[0].innerText =
+            "Opening Balance";
+          tables[i].querySelector(".New:nth-child(3)").style.display = "none";
+
+          // tables[i]
+          //   .querySelector(".New:last-child")
+          //   .cells[1].setAttribute("colspan", "2");
+          // tables[i].querySelector(".New:last-child").cells[1].innerText =
+          //   subttl1.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+          tables[i]
+            .querySelector(".New:last-child")
+            .cells[3].setAttribute("colspan", "2");
+
+          tables[i].querySelector(".New:last-child").cells[0].innerText =
+            "الإجمالي ";
+          tables[i]
+            .querySelector(".New:last-child")
+            .cells[0].setAttribute("colspan", "5");
+          // tables[i].querySelector(".New:last-child").cells[3].innerText =
+          //   subttl2.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+          // tables[i].querySelector(".New:last-child").cells[2].style.display =
+          //   "none";
+          tables[i].querySelector(".New:last-child").cells[4].style.display =
+            "none";
+          console.log({ subttl1: subttl1 });
+          // console.log({ subttl2: subttl2 });
+        }
+      }
+    }
+    try {
+      hundleTable();
+    } catch (error) {
+      console.log(error);
+    }
+    function removeemp() {
+      var allInst = document.querySelectorAll(".indent-td");
+      for (var i = 0; i < allInst.length; i++) {
+        var allP = allInst[i].cells[5].querySelectorAll("p");
+        for (var j = 0; j < allP.length; j++) {
+          if (allP[j].innerText.trim() == "") {
+            allP[j].style.display = "none";
+          }
+        }
+      }
+    }
+    try {
+      removeemp();
+    } catch (error) {
+      console.log(error);
+    }
+    function removeemp2() {
+      var allInst = document.querySelectorAll(".indent-td");
+      for (var i = 0; i < allInst.length; i++) {
+        var allP = allInst[i].cells[5].querySelectorAll("div");
+        for (var j = 0; j < allP.length; j++) {
+          if (allP[j].innerText.trim() == "") {
+            allP[j].style.display = "none";
+          }
+        }
+      }
+    }
+    try {
+      removeemp2();
+    } catch (error) {
+      console.log(error);
+    }
+    function hideClidnts() {
+      var allRows = document.querySelectorAll(".tabless");
+      for (var i = 0; i < allRows.length; i++) {
+        allRows[i].querySelectorAll(".New")[0].style.display = "none";
+      }
+    }
+    try {
+      hideClidnts();
+    } catch (error) {
+      console.log(error);
+    }
+  </script>
+  <script>
+    function reSwap() {
+      // indent-td 3 5
+      var rows = document.querySelectorAll(".indent-td");
+      for (var j = 0; j < rows.length; j++) {
+        var cells = rows[j].cells;
+        var temp = cells[3].innerHTML;
+        cells[3].innerHTML = cells[5].innerHTML;
+        cells[5].innerHTML = temp;
+      }
+    }
+    try {
+      reSwap();
+    } catch (error) {
+      console.log(error);
+      document.querySelector("#errmsg").innerHTML = error;
+    }
+  </script>
+</p>

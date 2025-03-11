@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <style type="text/css">
+    @media print {
+      body {
+        max-width: 90% !important;
+        width: 90% !important;
+        margin: 0 auto !important;
+        background: #fff;
+        padding: 0 !important;
+      }
+      body > div > div.invoice-inner {
+        margin: 10px auto !important;
+      }
+      .invoice-wrap {
+        margin: auto !important;
+        width: 100% !important;
+      }
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: "Almarai", sans-serif !important;
+      direction: rtl;
+    }
+    body {
+      background: #ffffff;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+    .invoice-wrap {
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: right;
+      padding: 6px 4px;
+      width: auto !important;
+    }
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    .total-table td {
+      border-right: 1px solid #555555;
+    }
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    strong_tag {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .notes-block {
+      margin: 10px 0 0 0;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+    .qr-code {
+      margin-top: 10px;
+      text-align: center;
+    }
+    #label_unit_price {
+      width: 30px;
+    }
+    #inv_data {
+      width: 100%;
+      text-align: right;
+    }
+    #inv_data br {
+      display: none;
+    }
+    #inv_data td {
+      margin: 0 !important;
+      text-align: right !important;
+      display: table-cell !important;
+      width: 100%;
+      min-width: 100%;
+    }
+    #totals {
+      width: 100%;
+    }
+    #totals td {
+      padding: 4px 0;
+    }
+    #currAdd1,
+    #currAdd2 {
+      direction: ltr;
+    }
+    #currAdd1 br,
+    #currAdd2 br {
+      display: none;
+    }
+    #business_info p {
+      padding: 3px 0;
+    }
+    #invoice_title {
+      font-size: 16px !important;
+      font-weight: 100;
+    }
+    body > div > div > table > tbody > tr > td:nth-child(1) {
+      display: block;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    body > div > div > table > tbody > tr > td:nth-child(2) {
+      /* display: block; */
+      text-align: center;
+    }
+
+    body > div > div > div.invoice-address {
+      margin-top: 5px;
+    }
+
+    body
+      > div
+      > div
+      > div.invoice-address
+      > table
+      > tbody
+      > tr
+      > td:nth-child(3) {
+      display: block;
+      text-align: right;
+      margin-top: 10px;
+    }
+
+    #invoice_basics > tbody > tr:nth-child(1) > td:nth-child(1) {
+      text-align: right;
+    }
+
+    body > div > div.invoice-inner {
+      margin: 10px;
+    }
+
+    #items-list > table:nth-child(2) > tbody > tr > td:nth-child(1) {
+      display: none;
+    }
+
+    #listing_table {
+      font-size: 10px;
+    }
+    #listing_table td,
+    #listing_table th {
+      text-align: center;
+      border-left: none !important;
+      border-right: none !important;
+      border-bottom: none !important;
+      border-top: 1px dotted black !important;
+    }
+    #listing_table th {
+      background-color: transparent;
+    }
+    #listing_table tr:last-child td {
+      border-bottom: 1px dotted black !important;
+    }
+    #label_quantity {
+      width: 20px;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #siteNAme {
+      font-size: 14px;
+      font-weight: bold;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="left" valign="top">
+              <img
+                style="vertical-align: top; margin-bottom: 10px"
+                id="logo"
+                class="editable-area"
+                src="https://loveyourhome.daftara.com/files/52e55d87/logos/65ace4e7d5b95_blobid1705829606781.png"
+                width="{%logo-width%}"
+                height="{%logo-height%}"
+              />
+              <h1>
+                <p id="invoice_title" class="editable-area invoice-name">
+                  {%invoice_title%}
+                </p>
+              </h1>
+              <div id="business_info" class="editable-area">
+                <p id="siteNAme">{%site_business_name%}</p>
+                <p>الرقم الضريبي {%site_bn1%}</p>
+                <p>
+                  الرقم الموحد
+                  <br />
+                  920012275
+                </p>
+              </div>
+            </td>
+          </tr>
+        </table>
+        <br />
+
+        <table id="inv_data">
+          <tr>
+            <td>التاريخ : {%invoice_date%}</td>
+          </tr>
+          <tr>
+            <td>العميل : {%client_business_name%}</td>
+          </tr>
+          <tr>
+            <td>رقم الفاتورة : {%invoice_no%}</td>
+          </tr>
+        </table>
+
+        <br />
+
+        <div id="items-list">{%items_list%}</div>
+        <table id="totals">
+          <tr>
+            <td colspan="100%" style="text-align: right; display: table-cell">
+              (جميع الأسعار شاملة لضريبة القيمة المضافة)
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="
+                width: 50%;
+                font-size: 15px;
+                font-weight: bold;
+                display: table-cell;
+                text-align: right;
+              "
+            >
+              الإجمالى
+            </td>
+            <td
+              id="currAdd1"
+              style="
+                width: 50%;
+                font-size: 15px;
+                font-weight: bold;
+                display: table-cell;
+                text-align: left;
+              "
+            >
+              {%invoice_total%}
+            </td>
+          </tr>
+          <tr>
+            <td style="font-size: 13px; display: table-cell; text-align: right">
+              المدفوع
+            </td>
+            <td
+              id="currAdd2"
+              style="font-size: 13px; display: table-cell; text-align: left"
+            >
+              {%paid%}
+            </td>
+          </tr>
+        </table>
+        <div style="text-align: center">
+          الاستبدال او الاسترجاع خلال 48 ساعة
+        </div>
+        <div id="invoice_currency_code" style="display: none">
+          {%invoice_currency_code%}
+        </div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="qr-code">{%sa_qr_code_image%}</div>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+  </body>
+</html>

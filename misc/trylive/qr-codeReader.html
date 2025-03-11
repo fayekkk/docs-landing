@@ -1,0 +1,137 @@
+<!-- <script>
+  function parseQRCodeData(qrCodeData) {
+    // Split the QR code data into individual components
+    const components = qrCodeData.match(/(\d{10})(\d{4})(\w+)(\d{8})?/);
+
+    if (components && components.length === 5) {
+      return {
+        productCode: components[1],
+        additionalCode: components[3],
+        expirationDate: components[4] ? components[4] : "",
+      };
+    } else {
+      return {
+        productCode: "",
+        additionalCode: "",
+        expirationDate: "",
+      };
+    }
+  }
+
+  // Example usage
+  let var1 = "010880004064653210ftp22e2611122051921009717300518";
+  let var2 = "01008149130210341123122010h1e23j08421024917311219";
+  let var3 = "010880000097110010pgb22e03611220525210207";
+  let var4 = "010880012177388110pth23g6241123072021011717310719";
+  let var5 = "010880000097767610etz22b03011220305210041";
+  let var6 = "010880000097057810pga22i16111220906210109";
+  let var7 = "010880000094386210pul24a02211231223210002";
+  let var8 = "010880000094377010tcr22c47711220406210002";
+  let var9 = "010880004061704410pta21k58311211117210001";
+  let var10 = "010880004068499210pte24e19811240422210041";
+  let var11 = "010880012170839510pte24e19311240503210084";
+  let var12 = "010880004060055810pte24b13311240213210092";
+  let var13 = "010880000097225110pte22g22111220729210015";
+  let var14 = "010880004062784510ptl22f07111220530210205";
+  let var15 = 1.08e46; // This is the scientific notation number
+  let var16 = "010085207200701810io23010311123051917260519";
+  let var17 = "010880004065204510fmn20g0421120072721003517280726";
+
+  console.log(parseQRCodeData(var2));
+  // // Output: { productCode: '0108800040', additionalCode: 'FTP23C708', expirationDate: '20310321' }
+
+  // console.log(parseQRCodeData(qrCodeData2));
+  // // Output: { productCode: '0108800000', additionalCode: 'CGC23K198', expirationDate: '20311109' }
+
+  // console.log(parseQRCodeData(qrCodeData3));
+  // // Output: { productCode: '0108800000', additionalCode: 'PTL24C078', expirationDate: '' }
+
+  // console.log(parseQRCodeData(qrCodeData4));
+  // // Output: { productCode: '0108800121', additionalCode: 'PTH24C454', expirationDate: '20320306' }
+  // console.log(parseQRCodeData(qrCodeData6));
+</script> -->
+<script>
+  function parseQRCodeData(qrCodeData) {
+    // Split the QR code data into individual components
+    const components = qrCodeData.match(/(\d{10})(\d{4})(\w+)(\d{8})?/);
+
+    if (components && components.length === 5) {
+      return {
+        productCode: components[1],
+        additionalCode: components[3],
+        expirationDate: components[4] ? components[4] : "",
+      };
+    } else {
+      return {
+        productCode: "",
+        additionalCode: "",
+        expirationDate: "",
+      };
+    }
+  }
+  function extractLotAndExpiry(input) {
+    // Regular expression to match the pattern
+    const regex = /(\d{24})([a-z]{3}\d{2}[a-z]\d{3}).*?(\d{6})?/;
+    const match = input.match(regex);
+
+    if (match) {
+      const fullCode = match[1];
+      const lotNumber = match[2];
+      const expiryShort = match[3];
+
+      let expiryLong = "";
+      if (expiryShort) {
+        const day = expiryShort.slice(0, 2);
+        const month = expiryShort.slice(2, 4);
+        const year = expiryShort.slice(4, 6);
+        expiryLong = `20${year}/${month}/${day}`;
+      }
+
+      return {
+        fullCode,
+        lotNumber,
+        expiryShort,
+        expiryLong,
+      };
+    }
+
+    return null;
+  }
+
+  // Test the function with your data
+  const testData = [
+    "010880004064653210ftp22e2611122051921009717300518",
+    "01008149130210341123122010h1e23j08421024917311219",
+    "010880000097110010pgb22e03611220525210207",
+    "010880012177388110pth23g6241123072021011717310719",
+    "010880000097767610etz22b03011220305210041",
+    "010880000097057810pga22i16111220906210109",
+    "010880000094386210pul24a02211231223210002",
+    "010880000094377010tcr22c47711220406210002",
+    "010880004061704410pta21k58311211117210001",
+    "010880004068499210pte24e19811240422210041",
+    "010880012170839510pte24e19311240503210084",
+    "010880004060055810pte24b13311240213210092",
+    "010880000097225110pte22g22111220729210015",
+    "010880004062784510ptl22f07111220530210205",
+    "010085207200701810io23010311123051917260519",
+    "010880004065204510fmn20g0421120072721003517280726",
+  ];
+
+  testData.forEach((item, index) => {
+    const result = extractLotAndExpiry(item);
+    if (result) {
+      console.log(`Item ${index + 1}:`);
+      console.log(`  Full Code: ${result.fullCode}`);
+      console.log(`  LOT Number: ${result.lotNumber}`);
+      console.log(`  Expiry (Short): ${result.expiryShort || "N/A"}`);
+      console.log(`  Expiry (Long): ${result.expiryLong || "N/A"}`);
+      console.log("---");
+    } else {
+      console.log(`Item ${index + 1}: No match found`);
+      console.log("---");
+    }
+    let res = parseQRCodeData(item);
+    console.log(res);
+  });
+</script>

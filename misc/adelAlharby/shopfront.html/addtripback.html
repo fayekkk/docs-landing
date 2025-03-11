@@ -1,0 +1,470 @@
+<style>
+  .report:nth-child(1) th,
+  .report:nth-child(1) td {
+    width: auto !important;
+  }
+</style>
+<script>
+  $(window).on("load", function () {
+    setTimeout(() => {
+      if (window.location.href.includes("reports/work_orders")) {
+        function getIndexesByInnerText(tableId, searchStrings) {
+          let table;
+          if (
+            document.querySelectorAll(".report")[0].querySelectorAll("table")
+              .length > 1
+          ) {
+            table = document
+              .querySelectorAll(".report")[0]
+              .querySelectorAll("table")[1];
+          } else {
+            table = document
+              .querySelectorAll(".report")[0]
+              .querySelectorAll("table")[0];
+          }
+          const indexes = [];
+          const tablecells = table.querySelectorAll("tr:nth-child(1) th");
+          console.log(tablecells);
+
+          for (let i = 0; i < tablecells.length; i++) {
+            const cell = tablecells[i];
+            for (let j = 0; j < searchStrings.length; j++) {
+              if (searchStrings[j].trim() == cell.innerText.trim()) {
+                indexes.push(i + 1);
+                console.log(tablecells[i].innerText);
+                console.log(searchStrings[j].trim());
+              }
+            }
+          }
+          return indexes;
+        }
+        const searchStrings = ["مسمى", "تاريخ البدء", "تاريخ التسليم", "موظف"];
+        const indexes = getIndexesByInnerText("PaymentTable", searchStrings);
+        console.log(indexes);
+        var styleElement = document.createElement("style");
+        var cssRules = "";
+        for (let k = 0; k < indexes.length; k++) {
+          if (k != indexes.length - 1) {
+            cssRules += ` #PaymentTable > div.report > div > table > tbody  td:nth-child(${indexes[k]}),
+                          #PaymentTable > div.report > div > table > thead > tr > th:nth-child(${indexes[k]}),`;
+          } else {
+            cssRules += ` #PaymentTable > div.report > div > table > tbody  td:nth-child(${indexes[k]}),
+                          #PaymentTable > div.report > div > table > thead > tr > th:nth-child(${indexes[k]})`;
+          }
+        }
+        // cssRules += ` #PaymentTable > div.report > div > table > tbody  td:nth-child(4),
+        //                 #PaymentTable > div.report > div > table > thead > tr > th:nth-child(4)`;
+        cssRules += `{
+                      display: none;
+                  }`;
+
+        styleElement.appendChild(document.createTextNode(cssRules));
+        document.head.appendChild(styleElement);
+        var allsubtotal = document.querySelectorAll(".subtotal");
+        let table;
+        if (
+          document.querySelectorAll(".report")[0].querySelectorAll("table")
+            .length > 1
+        ) {
+          table = document
+            .querySelectorAll(".report")[0]
+            .querySelectorAll("table")[1];
+        } else {
+          table = document
+            .querySelectorAll(".report")[0]
+            .querySelectorAll("table")[0];
+        }
+        const tablecells = table.querySelectorAll("tr:nth-child(1) th");
+        const tablRows = table.querySelectorAll("tr");
+        const emptycells = table.querySelectorAll(".empty-row td");
+        const subheadcells = table.querySelectorAll(".sub-head td");
+        for (let l = 0; l < tablRows.length; l++) {
+          if (tablRows[l].cells.length <= 2) {
+            tablRows[l].cells[0].setAttribute(
+              "style",
+              "display:table-cell !important"
+            );
+            if (tablRows[l].cells.length > 1) {
+              tablRows[l].cells[1].setAttribute(
+                "style",
+                "display:table-cell !important"
+              );
+            }
+          }
+        }
+        for (let l = 0; l < subheadcells.length; l++) {
+          subheadcells[l].setAttribute(
+            "colspan",
+            tablecells.length - indexes.length - 0
+          );
+        }
+        for (let l = 0; l < emptycells.length; l++) {
+          emptycells[l].setAttribute(
+            "colspan",
+            tablecells.length - indexes.length - 0
+          );
+        }
+        for (let l = 0; l < allsubtotal.length; l++) {
+          allsubtotal[l].cells[0].setAttribute(
+            "colspan",
+            tablecells.length - indexes.length - 1
+          );
+        }
+        document
+          .querySelectorAll(".section-net")[0]
+          .cells[0].setAttribute(
+            "colspan",
+            tablecells.length - indexes.length - 1
+          );
+      }
+    }, 3000);
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link
+  href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+  rel="stylesheet"
+/>
+<script>
+  $(window).on("load", function () {
+    setTimeout(() => {
+      if (window.location.href.includes("client/workflows/view/")) {
+        console.log("herererer");
+        const newDiv = $("<div >").attr("id", "trip_data");
+        $("#WorkOrderBlock").hide();
+        $("#WorkOrderBlock").after(newDiv);
+
+        // ***************************************************************************************
+
+        const tripId = window.location.pathname.split("/")[4];
+        fetch(
+          `https://durobalhijrah.daftara.com/v2/api/entity/le_workflow-type-entity-4/${tripId}/4`,
+          {
+            method: "GET",
+            headers: {
+              apikey: "bceffccefa6ab4014732bb7093d284bc37794bf4",
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Response:", data);
+            renderTripData(data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+        function renderTripData(data) {
+          const tripContainer = document.getElementById("trip_data");
+          tripContainer.innerHTML = `
+            <table id="trip_header">
+                <tr>
+                    <td>No: ${data.number}</td>
+                    <td><img alt="" src="/files/images/site-logos/64edf3cb8673b_C95746A3_DA79_4CCD_8C39_B750383AAF62.jpeg" style="width:150px"></td>
+                    <td></td>
+                </tr>
+            </table>
+            <div class="table_title">بيانات الرحلة Trip Info</div>
+            <table id="TripInfo">
+                <thead>
+                    <tr>
+                        <th>نوع المركبة<br>Type of vehicles</th>
+                        <th>مسمى التشغيلة<br>Trip Title</th>
+                        <th>رقم المشرف<br>Group leader No</th>
+                        <th>المشرف<br>Group leader</th>
+                        <th>الجنسية<br>Nationality</th>
+                        <th class="clientTh">الوكيل<br>Agent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${
+                          data["le_workflow-type-entity-4_custom_data"]
+                            .vehicle_type
+                        }</td>
+                        <td>${data.title}</td>
+                        <td>${
+                          data["le_workflow-type-entity-4_custom_data"]
+                            .leader_no
+                        }</td>
+                        <td>${
+                          data["le_workflow-type-entity-4_custom_data"]
+                            .leader_name
+                        }</td>
+                        <td>${
+                          data["le_workflow-type-entity-4_custom_data"]
+                            .nationality
+                        }</td>
+                        <td>${data.work_order_client.business_name}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="table_title">بيانات نسك Nusuk Info</div>
+            <table class="NusuK">
+                <thead>
+                    <tr>
+                        <th>عدد المسافرين</th>
+                        <th>رقم المجموعة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data["le_workflow-type-entity-4_custom_data"][
+                      "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_nusuks"
+                    ]
+                      .map(
+                        (nusuk) => `
+                        <tr>
+                            <td>${
+                              nusuk.passengers_no ? nusuk.passengers_no : ""
+                            }</td>
+                            <td>${nusuk.nusuk_no ? nusuk.nusuk_no : ""}</td>
+                        </tr>
+                    `
+                      )
+                      .join("")}
+                </tbody>
+            </table>
+            <div class="table_title">الطيران Flights</div>
+            <table class="flights" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>الوقت<br>Time</th>
+                        <th>التاريخ<br>Date</th>
+                        <th>إلى<br>To</th>
+                        <th>من<br>From</th>
+                        <th>رقم الرحلة<br>Flight No</th>
+                        <th>شركة الطيران<br>Airline Co</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data["le_workflow-type-entity-4_custom_data"][
+                      "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_flys"
+                    ]
+                      .map(
+                        (flight) => `
+                        <tr>
+                            <td>${flight.etd ? flight.etd : ""}</td>
+                            <td>${flight.date ? flight.date : ""}</td>
+                            <td>${flight.to ? flight.to : ""}</td>
+                            <td>${flight.from ? flight.from : ""}</td>
+                            <td>${flight.flight_no ? flight.flight_no : ""}</td>
+                            <td>${
+                              flight.flight_com ? flight.flight_com : ""
+                            }</td>
+                        </tr>
+                    `
+                      )
+                      .join("")}
+                </tbody>
+            </table>
+            <div class="table_title">الفنادق Hotels</div>
+            <table class="Hotels">
+                <thead>
+                    <tr>
+                        <th>الفندق HOTEL</th>
+                        <th>المدينة CITY</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data["le_workflow-type-entity-4_custom_data"][
+                      "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_hotels"
+                    ]
+                      .map(
+                        (hotel) => `
+                        <tr>
+                            <td>${hotel.hotel ? hotel.hotel : ""}</td>
+                            <td>${hotel.city ? hotel.city : ""}</td>
+                        </tr>
+                    `
+                      )
+                      .join("")}
+                </tbody>
+            </table>
+
+
+            <div class="table_title">الفنادق Hotels</div>
+            <table style="width:100%">
+                <thead>
+                    <tr>
+                  <th>  الوقت TIME</th>
+                  <th>التاريخ DATE</th>
+                  <th> إلى TO</th>
+                  <th>  من FROM</th>
+                  <th>   مسار route</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data["le_workflow-type-entity-4_custom_data"][
+                      "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_transportations"
+                    ]
+                      .map(
+                        (transport, index) => `
+                        <tr>
+                            <td>${transport.time ? transport.time : ""}</td>
+                            <td>${transport.date ? transport.date : ""}</td>
+                            <td>${transport.to ? transport.to : ""}</td>
+                            <td>${transport.from ? transport.from : ""}</td>
+                            <td>${index + 1}</td>
+                        </tr>
+                    `
+                      )
+                      .join("")}
+                </tbody>
+            </table>  
+            <p><img src="/files/d5e2718e/logos/66def44722d06_blobid1725887555319.png" alt="" title="نموذج التشغيل  (3).png" style="width: 100%;margin-top:20px"></p>
+        `;
+        }
+        $("#pdf_button").attr("href", "#").attr("id", "download-btn");
+        document
+          .getElementById("download-btn")
+          .addEventListener("click", function () {
+            const content = document.getElementById("trip_data");
+            if (!content) {
+              console.error("Content div not found!");
+              return;
+            }
+
+            const { jsPDF } = window.jspdf;
+
+            // Create a new jsPDF instance
+            const doc = new jsPDF({
+              orientation: "portrait",
+              unit: "mm",
+              format: "a4",
+              putOnlyUsedFonts: true,
+              floatPrecision: 16,
+            });
+
+            // Use html2canvas to render the content with a higher scale
+            html2canvas(content, { scale: 2, useCORS: true })
+              .then((canvas) => {
+                const imgData = canvas.toDataURL("image/png");
+                const imgWidth = 210;
+                const pageHeight = doc.internal.pageSize.height;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+
+                let position = 0;
+
+                // Add the image to the PDF
+                doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                // If the image height is greater than the page height, add a new page
+                while (heightLeft >= 0) {
+                  position = heightLeft - imgHeight;
+                  doc.addPage();
+                  doc.addImage(
+                    imgData,
+                    "PNG",
+                    0,
+                    position,
+                    imgWidth,
+                    imgHeight
+                  );
+                  heightLeft -= pageHeight;
+                }
+
+                doc.save("trip_information.pdf");
+              })
+              .catch((error) => {
+                console.error("Error generating PDF: ", error);
+              });
+          });
+
+        // ***************************************************************************************
+
+        let styleTag = `    <style>
+      #trip_data {
+        background-color: transparent;
+        background-image: url(/files/d5e2718e/logos/66c5c9712c158_blobid1724238189593.jpg);
+        background-size: contain;
+        background-blend-mode: color-burn;
+        padding: 20px;
+        border-radius: 8px;
+        width: 21cm;
+        height: 27.9cm;
+        margin: auto;
+        font-family: "Rubik", sans-serif;
+      }
+      #trip_data,
+      #trip_data * {
+        direction: rtl;
+      }
+      #trip_data table,
+      #trip_data th,
+      #trip_data td {
+        border-left: none !important;
+        border-right: none !important;
+        border-top: none !important;
+        border-bottom: none !important;
+        text-align: center !important;
+        font-size: 13px !important;
+        font-weight: bold;
+      }
+      #trip_data table {
+        border-spacing: 10px 5px !important;
+        border-collapse: separate !important;
+      }
+      #trip_data th {
+        background-color: #054ba6;
+        color: #fff !important;
+      }
+      #trip_data td {
+        background-color: #f1f1f1;
+      }
+      #trip_data th,
+      #trip_data td {
+        padding: 5px 5px !important;
+      }
+      #trip_header {
+        width: 100%;
+      }
+      .table_title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 13px;
+        padding: 7px;
+        background-color: transparent !important;
+      }
+      #trip_header td {
+        background-color: transparent !important;
+      }
+      #trip_header td:nth-child(1) {
+        color: red;
+        vertical-align: sub;
+        width: 25%;
+        font-size: 15px !important;
+      }
+      #trip_header td:nth-child(2) {
+        text-align: center;
+        width: 50%;
+      }
+      #trip_header td:nth-child(3) {
+        width: 25%;
+      }
+      .NusuK,
+      .Hotels {
+        width: 70% !important;
+        margin: 0 15% !important;
+      }
+      .clientTh {
+        width: 25%;
+      }
+      .vehicletype,
+      .airfrom {
+        direction: ltr;
+      }
+    </style>`;
+        document.head.insertAdjacentHTML("beforeend", styleTag);
+      }
+    }, 300);
+  });
+</script>

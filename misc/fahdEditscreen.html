@@ -1,0 +1,268 @@
+<style>
+  .late_th,
+  .late_td,
+  .loc_th,
+  .loc_td {
+    display: table-cell !important;
+  }
+</style>
+<style>
+  #label_tax2,
+  .tax2 {
+    display: none !important;
+  }
+  .col-5 {
+    display: none !important;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      console.log(InvoiceId);
+      var MainFn = () => {
+        let InvoiceId = document.getElementById("InvoiceLayout").value;
+        if (InvoiceId == 15 || InvoiceId == 16) {
+          console.log("got");
+          function createCol(
+            prevTh,
+            prevTd,
+            colTitle,
+            classTh,
+            classTd,
+            colInput
+          ) {
+            var rowsNum = $("#listing_table tr").length;
+
+            if (
+              document.querySelectorAll("#listing_table tr:nth-child(1) th")
+                .length == 14 ||
+              document.querySelectorAll("#listing_table tr:nth-child(1) th")
+                .length == 15
+            ) {
+              // Clone TH and attach change event listener
+              $(prevTh).after(
+                $("th.col-3")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-3", classTh)
+                  .replace("", colTitle)
+              );
+
+              $(prevTd).after(
+                $("td.col-3")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-3", classTd)
+                  .replace("item_col_3", colInput)
+              );
+            } else {
+              if (
+                document.querySelectorAll("#listing_table tr:last-child td")
+                  .length == 14 ||
+                document.querySelectorAll("#listing_table tr:last-child td")
+                  .length == 15
+              ) {
+                $(`#listing_table tr:last-child ${prevTd}`).after(
+                  $("#listing_table tr:last-child td.col-3")
+                    .clone()
+                    .wrap("<p>")
+                    .parent()
+                    .html()
+                    .replace("col-3", classTd)
+                    .replace("item_col_3", colInput)
+                );
+              }
+            }
+
+            $("." + colInput).attr("placeholder", "");
+            $("." + colInput).attr("name", "");
+            $("#InvoiceLayout").triggerHandler("change", ["def"]);
+          }
+
+          // adding the columns when screen is loaded
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "رقم الكتالوج",
+            "late_th",
+            "late_td",
+            "late_input"
+          );
+
+          createCol(
+            ".late_th",
+            ".late_td",
+            "رقم البند التجارى  ",
+            "loc_th",
+            "loc_td",
+            "loc_input"
+          );
+          var allrows = document.querySelectorAll("#listing_table tr");
+          for (let i = 1; i < allrows.length; i++) {
+            allrows[i]
+              .querySelector(".loc_td textarea")
+              .addEventListener("change", () => {
+                console.log("ssssssss");
+                if (
+                  allrows[i].querySelector("td:nth-child(5) .staffselect")
+                    .value == "إختر الوحدة"
+                ) {
+                  allrows[i].querySelector(".col-5 textarea").value =
+                    allrows[i].querySelector(".loc_td textarea").value +
+                    "/////" +
+                    "";
+                } else {
+                  allrows[i].querySelector(".col-5 textarea").value =
+                    allrows[i].querySelector(".loc_td textarea").value +
+                    "/////" +
+                    allrows[i].querySelector("td:nth-child(5) .staffselect")
+                      .value;
+                }
+              });
+          }
+
+          const searchableSelector = () => {
+            var allrows = document.querySelectorAll("#listing_table tr");
+            for (let i = 1; i < allrows.length; i++) {
+              console.log(allrows[i]);
+              if (!allrows[i].querySelector(".late_td select")) {
+                const selector = document.createElement("select");
+                selector.style.width = "100%";
+                selector.setAttribute("class", "staffselect");
+                const option = document.createElement("option");
+                option.textContent = "إختر الوحدة";
+                option.style.textAlign = "center";
+                selector.appendChild(option);
+                let options = [
+                  "PCS",
+                  "BKT",
+                  "BOX",
+                  "SET",
+                  "PACKET",
+                  "EA",
+                  "ROLL",
+                  "CTN",
+                  "BAG",
+                  "GAL",
+                  "LOT",
+                  "DZ",
+                  "M",
+                  "FT",
+                  "CN",
+                  "LS",
+                ];
+                for (var n = 0; n < options.length; n++) {
+                  const option = document.createElement("option");
+                  option.textContent = options[n];
+                  option.style.textAlign = "center";
+                  selector.appendChild(option);
+                }
+                console.log("yessssssss");
+                allrows[i].querySelector(".late_td").innerHTML = "";
+                allrows[i].querySelector(".late_td").appendChild(selector);
+
+                allrows[i]
+                  .querySelector("td:nth-child(5) .staffselect")
+                  .addEventListener("change", () => {
+                    if (
+                      allrows[i].querySelector("td:nth-child(5) .staffselect")
+                        .value == "إختر الوحدة"
+                    ) {
+                      allrows[i].querySelector(".col-5 textarea").value =
+                        allrows[i].querySelector("td:nth-child(6) textarea")
+                          .value +
+                        "/////" +
+                        "";
+                    } else {
+                      allrows[i].querySelector(".col-5 textarea").value =
+                        allrows[i].querySelector("td:nth-child(6) textarea")
+                          .value +
+                        "/////" +
+                        allrows[i].querySelector("td:nth-child(5) .staffselect")
+                          .value;
+                    }
+                  });
+              }
+            }
+          };
+          // adding the columns on add item click
+          $("#AddItem").on("click", () => {
+            createCol(
+              "th.col-3",
+              "td.col-3",
+              "رقم الكتالوج",
+              "late_th",
+              "late_td",
+              "late_input"
+            );
+
+            createCol(
+              ".late_th",
+              ".late_td",
+              "رقم البند التجارى  ",
+              "loc_th",
+              "loc_td",
+              "loc_input"
+            );
+            var allrows = document.querySelectorAll("#listing_table tr");
+            for (let i = 1; i < allrows.length; i++) {
+              allrows[i]
+                .querySelector(".loc_td textarea")
+                .addEventListener("change", () => {
+                  console.log("ssssssss");
+                  if (
+                    allrows[i].querySelector("td:nth-child(5) .staffselect")
+                      .value == "إختر الوحدة"
+                  ) {
+                    allrows[i].querySelector(".col-5 textarea").value =
+                      allrows[i].querySelector(".loc_td textarea").value +
+                      "/////" +
+                      "";
+                  } else {
+                    allrows[i].querySelector(".col-5 textarea").value =
+                      allrows[i].querySelector(".loc_td textarea").value +
+                      "/////" +
+                      allrows[i].querySelector("td:nth-child(5) .staffselect")
+                        .value;
+                  }
+                });
+            }
+            searchableSelector();
+          });
+          document.querySelector(".late_th").innerText = "الوحدة";
+          document.querySelector(".loc_th").innerText = "تصنيف مخصص";
+
+          searchableSelector();
+
+          var allrows = document.querySelectorAll("#listing_table tr");
+          for (var j = 1; j < allrows.length; j++) {
+            allrows[j].querySelector(".loc_td textarea").value = allrows[j]
+              .querySelector(".col-5 textarea")
+              .value.split("/////")[0];
+            if (
+              allrows[j].querySelector(".col-5 textarea").value.split("/////")
+                .length == 2 &&
+              allrows[j].querySelector(".late_td .staffselect ")
+            ) {
+              allrows[j].querySelector(".late_td .staffselect ").value =
+                allrows[j]
+                  .querySelector(".col-5 textarea")
+                  .value.split("/////")[1]
+                  .trim();
+            }
+          }
+        }
+      };
+      MainFn();
+      document
+        .getElementById("InvoiceLayout")
+        .addEventListener("change", () => {
+          MainFn();
+        });
+    }, 1000);
+  });
+</script>

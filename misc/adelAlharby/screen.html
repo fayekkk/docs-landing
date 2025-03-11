@@ -1,0 +1,224 @@
+<style>
+  .container-le_workflow-type-entity-3_custom_data-datatobass {
+    display: none;
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      console.log("sssss");
+
+      const ExcelReader = async () => {
+        document
+          .querySelector('[data-izam1-forms1-file-input-file="attachments"]')
+          .addEventListener("change", async () => {
+            const data = await document
+              .querySelector(
+                '[data-izam1-forms1-file-input-file="attachments"]'
+              )
+              .files[0].arrayBuffer();
+            const workbook = XLSX.read(data);
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+            document.querySelector(
+              "#le_workflow-type-entity-3_custom_data-datatobass"
+            ).value = JSON.stringify(jsonData, null, 2);
+          });
+      };
+      ExcelReader();
+      function addEvents() {
+        let i = 0;
+        while (
+          document.querySelector(
+            `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${i}--from`
+          )
+        ) {
+          document.querySelector(
+            `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${i}--tripnofly`
+          ).style.display = "none";
+          document.querySelector(
+            `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${i}--fly_company`
+          ).style.display = "none";
+          document.querySelector(
+            `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${i}--date`
+          ).style.display = "none";
+          document.querySelector(
+            `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${i}--trip_time`
+          ).style.display = "none";
+          document.querySelector(
+            `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${i}--hall_no
+                 `
+          ).style.display = "none";
+          // from event *********************** toggle show *********************
+
+          $(
+            `#le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${i}--from`
+          ).on("select2:select", function (e) {
+            const selectedValue = e.params.data.id; // Access selected value
+            console.log("Selected value 11:", selectedValue);
+            console.log(i);
+
+            if (
+              $(
+                `#le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--to`
+              )
+                .val()
+                .trim() == "option 3" ||
+              $(
+                `#le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--from`
+              )
+                .val()
+                .trim() == "option 3"
+            ) {
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--tripnofly`
+              ).style.display = "block";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--fly_company`
+              ).style.display = "block";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--date`
+              ).style.display = "block";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--trip_time`
+              ).style.display = "block";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--hall_no
+                 `
+              ).style.display = "block";
+            } else {
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--tripnofly`
+              ).style.display = "none";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--fly_company`
+              ).style.display = "none";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--date`
+              ).style.display = "none";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--trip_time`
+              ).style.display = "none";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--hall_no
+                 `
+              ).style.display = "none";
+            }
+          });
+          //   to event
+          $(
+            `#le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${i}--to`
+          ).on("select2:select", function (e) {
+            const selectedValue = e.params.data.id; // Access selected value
+            console.log("Selected value:", selectedValue);
+            console.log(selectedValue);
+            if (
+              $(
+                `#le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--to`
+              )
+                .val()
+                .trim() == "option 3" ||
+              $(
+                `#le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--from`
+              )
+                .val()
+                .trim() == "option 3"
+            ) {
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--tripnofly`
+              ).style.display = "block";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--hall_no
+                 `
+              ).style.display = "block";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--fly_company`
+              ).style.display = "block";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--date`
+              ).style.display = "block";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--trip_time`
+              ).style.display = "block";
+            } else {
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--hall_no
+                 `
+              ).style.display = "none";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--tripnofly`
+              ).style.display = "none";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--fly_company`
+              ).style.display = "none";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--date`
+              ).style.display = "none";
+              document.querySelector(
+                `.container-le_workflow-type-entity-3_custom_data-le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details--${
+                  i - 1
+                }--trip_time`
+              ).style.display = "none";
+            }
+          });
+
+          i++;
+        }
+      }
+      addEvents();
+      document.querySelector(".add-row").addEventListener("click", () => {
+        addEvents();
+      });
+    }, 500);
+  });
+</script>

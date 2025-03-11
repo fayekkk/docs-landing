@@ -1,0 +1,329 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    #inv__info {
+      width: 100%;
+      margin-bottom: 15px;
+      font-weight: bold;
+      font-size: 11px;
+    }
+    #inv__info td:nth-child(1) {
+      text-align: left;
+      width: 65%;
+    }
+    #inv__info td:nth-child(2) {
+      text-align: right;
+      width: 35%;
+      direction: rtl;
+    }
+    #listing_table {
+      border-right: 1px solid black;
+      text-align: center;
+    }
+    #listing_table th {
+      background-color: #fff;
+      border-left: 1px solid black;
+      border-bottom: 1px solid black;
+      border-top: 1px solid black;
+      padding: 3px;
+    }
+    #listing_table td {
+      background-color: #fff;
+      border-left: 1px solid black;
+      padding: 3px;
+      border-bottom: 1px solid black;
+    }
+    #listing_table th:nth-child(1),
+    #listing_table td:nth-child(1),
+    #listing_table th:nth-child(5),
+    #listing_table td:nth-child(5) {
+      display: none;
+    }
+    .listing-table:nth-child(2) {
+      display: none !important;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table id="logo">
+          <tr>
+            <td>{%site_logo%}</td>
+          </tr>
+        </table>
+        <table id="inv__info">
+          <tr>
+            <td></td>
+            <td style="text-align: center">{%invoice_date%}</td>
+          </tr>
+          <tr>
+            <td>INVOICE NO : {%invoice_no%}</td>
+            <td style="text-align: center">فاتورة رقم {%invoice_no%}</td>
+          </tr>
+          <tr>
+            <td>PROJECT : {%PROJECT%}</td>
+            <td>إلى : {%client_business_name%}</td>
+          </tr>
+          <tr>
+            <td>SCOPE OF WORKS : {%SCOPE OF WORKS%}</td>
+            <td>مجال العمل : {%SCOPE OF WORKS%}</td>
+          </tr>
+          <tr>
+            <td>CONTRACT NO : {%CONTRACT NO%}</td>
+            <td>رقم العقد : {%CONTRACT NO%}</td>
+          </tr>
+          <tr>
+            <td>INVOICE NO : {%INVOICE NO%}</td>
+            <td>رقم الفاتورة : {%INVOICE NO%}</td>
+          </tr>
+          <tr>
+            <td>TAAWON ALMUSTAQBAL FOR GENERAL CONTRACTING ESTABLISHMENT :</td>
+            <td>
+              رقم ضريبة القيمة المضافة لشركة {%client_first_name%} :
+              {%client_bn1%}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="100%" style="text-align: center">
+              الرقم الضريبي لتعاون المستقبل : 310373023500003
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right">SUPPLIER NO : 22600</td>
+            <td>السادة {%client_business_name%}</td>
+          </tr>
+        </table>
+        <div
+          style="
+            text-align: left;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: underline;
+          "
+        >
+          INTERNAL PAINT
+        </div>
+        <div id="items-list">{%items_list%}</div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function addttlRow() {
+        // getsubtotal
+        var allRows = document.querySelectorAll("#listing_table tbody tr");
+        var subtotal = 0;
+        for (var i = 0; i < allRows.length; i++) {
+          subtotal += parseFloat(
+            allRows[i].cells[6].innerText.replace(/,/g, "")
+          );
+        }
+        // add rows
+        var newrow = document.createElement("tr");
+        var newcell1 = document.createElement("td");
+        newcell1.style.border = "none";
+        var newcell2 = document.createElement("td");
+        newcell2.setAttribute("colspan", "2");
+        var newcell3 = document.createElement("td");
+        newcell3.classList.add("removeCurr");
+        newcell1.style.display = "table-cell";
+        newcell2.style.display = "table-cell";
+        newcell3.style.display = "table-cell";
+        newcell1.setAttribute("rowspan", "6");
+        newcell1.innerHTML = '{%sa_qr_code_image%}';
+        if (document.querySelectorAll("#listing_table thead th").length == 7) {
+          newcell1.setAttribute("colspan", "2");
+        } else {
+          newcell1.setAttribute("colspan", "3");
+        }
+        newcell2.innerText = "TOTAL INTERNAL";
+        newcell3.innerText = subtotal;
+
+        newrow.appendChild(newcell1);
+        newrow.appendChild(newcell2);
+        newrow.appendChild(newcell3);
+        document.querySelector("#listing_table tbody").appendChild(newrow);
+        // new 2
+        var newrow = document.createElement("tr");
+        var newcell2 = document.createElement("td");
+        newcell2.setAttribute("colspan", "2");
+        newcell2.style.height = "10px";
+        var newcell3 = document.createElement("td");
+        newcell3.classList.add("removeCurr");
+
+        newcell1.style.display = "table-cell";
+        newcell2.style.display = "table-cell";
+        newcell3.style.display = "table-cell";
+        newcell2.style.border = "none";
+        newcell3.style.border = "none";
+        newrow.appendChild(newcell2);
+        newrow.appendChild(newcell3);
+        document.querySelector("#listing_table tbody").appendChild(newrow);
+        // new 3
+        var newrow = document.createElement("tr");
+        var newcell2 = document.createElement("td");
+        newcell2.setAttribute("colspan", "2");
+
+        var newcell3 = document.createElement("td");
+        newcell3.classList.add("removeCurr");
+
+        newcell1.style.display = "table-cell";
+        newcell2.style.display = "table-cell";
+        newcell3.style.display = "table-cell";
+        newcell2.style.borderTop = "1px solid black";
+        newcell3.style.borderTop = "1px solid black";
+        newcell2.innerText = "TOTAL INT+EXT";
+        newcell3.innerText = subtotal;
+
+        newrow.appendChild(newcell2);
+        newrow.appendChild(newcell3);
+        document.querySelector("#listing_table tbody").appendChild(newrow);
+        // new 4
+        var newrow = document.createElement("tr");
+        var newcell2 = document.createElement("td");
+        newcell2.setAttribute("colspan", "2");
+
+        var newcell3 = document.createElement("td");
+        newcell3.classList.add("removeCurr");
+
+        newcell1.style.display = "table-cell";
+        newcell2.style.display = "table-cell";
+        newcell3.style.display = "table-cell";
+        newcell2.innerText = "VAT 15%";
+        newcell3.innerText = "{%tax-total%}";
+        newrow.appendChild(newcell2);
+        newrow.appendChild(newcell3);
+        document.querySelector("#listing_table tbody").appendChild(newrow);
+        // new 5
+        var newrow = document.createElement("tr");
+        var newcell2 = document.createElement("td");
+        newcell2.setAttribute("colspan", "2");
+
+        var newcell3 = document.createElement("td");
+        newcell3.classList.add("removeCurr");
+
+        newcell1.style.display = "table-cell";
+        newcell2.style.display = "table-cell";
+        newcell3.style.display = "table-cell";
+        newcell2.innerHTML = "PERFORMANCE BOND @<span class='prefVal'></span>";
+        newcell3.innerHTML = "<span class='prefFinalVal'></span>";
+        newrow.appendChild(newcell2);
+        newrow.appendChild(newcell3);
+        document.querySelector("#listing_table tbody").appendChild(newrow);
+        // new 6
+        var newrow = document.createElement("tr");
+        var newcell2 = document.createElement("td");
+        newcell2.setAttribute("colspan", "2");
+
+        var newcell3 = document.createElement("td");
+        newcell3.classList.add("removeCurr");
+
+        newcell1.style.display = "table-cell";
+        newcell2.style.display = "table-cell";
+        newcell3.style.display = "table-cell";
+        newcell2.innerText = "TOTAL INT+EXT";
+        newcell3.innerText = "{%invoice_total%}";
+        newrow.appendChild(newcell2);
+        newrow.appendChild(newcell3);
+        document.querySelector("#listing_table tbody").appendChild(newrow);
+      }
+      try {
+        addttlRow();
+      } catch (error) {
+        console.log(error);
+      }
+      function getret() {
+        var allRows = document.querySelectorAll(
+          ".listing-table:nth-child(2) tr"
+        );
+        for (var i = 0; i < allRows.length; i++) {
+          if (allRows[i].cells[1].innerText.indexOf("خصم ضمان أعمال") != -1) {
+            document.querySelector(".prefVal").innerText = allRows[
+              i
+            ].cells[1].innerText.substring(16, 19);
+            document.querySelector(".prefFinalVal").innerText =
+              allRows[i].cells[2].innerText;
+          }
+        }
+      }
+      try {
+        getret();
+      } catch (error) {
+        console.log(error);
+      }
+      function removeCurr() {
+        var allremoveCurr = document.querySelectorAll(".removeCurr");
+        for (var i = 0; i < allremoveCurr.length; i++) {
+          console.log(allremoveCurr[i].innerText);
+          console.log(allremoveCurr[i].innerText.trim() != "");
+          console.log(i);
+          if (i != 1) {
+            if (i == 4) {
+              if (allremoveCurr[i].innerText.trim() != "") {
+                console.log(i);
+                allremoveCurr[i].innerText =
+                  "(" +
+                  (
+                    parseFloat(allremoveCurr[i].innerText.replace(/,/g, "")) *
+                    -1
+                  )
+                    .toFixed(2)
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                  ")";
+              }
+            } else {
+              allremoveCurr[i].innerText = parseFloat(
+                allremoveCurr[i].innerText.replace(/,/g, "")
+              )
+                .toFixed(2)
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+          }
+        }
+      }
+      try {
+        removeCurr();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

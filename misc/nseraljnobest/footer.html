@@ -1,0 +1,110 @@
+<style>
+  #new_totals {
+    width: 100%;
+    border-spacing: 0;
+    text-align: center;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+  }
+  #new_totals td {
+    padding: 2px;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+  }
+  #new_totals tr:nth-child(1) td:nth-child(1) {
+    width: 75%;
+  }
+  #new_totals tr:nth-child(1) td:nth-child(2) {
+    width: 15%;
+  }
+  #new_totals tr:nth-child(1) td:nth-child(3) {
+    width: 10%;
+  }
+</style>
+<table id="new_totals">
+  <tbody>
+    <tr>
+      <td rowspan="3" style="border: none"></td>
+      <td>الاجمالى</td>
+      <td class="removecurr">{%invoice_subtotal%}</td>
+    </tr>
+    <tr>
+      <td>قيمة الخصم</td>
+      <td class="removecurr" id="discam">
+        {%discount%} // {%item-discount-total%}
+      </td>
+    </tr>
+    <tr>
+      <td>القيمة المضافة</td>
+      <td class="removecurr">{%tax-total%}</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">{%invoice_total_spelled%}</td>
+      <td>الصافى</td>
+      <td class="removecurr">{%invoice_total%}</td>
+    </tr>
+  </tbody>
+</table>
+<table id="signs" style="text-align: center; width: 100%; direction: rtl">
+  <tbody>
+    <tr>
+      <td style="width: 40%"></td>
+      <td style="width: 20%">البائع {%sales_person%}</td>
+      <td style="width: 40%">
+        رقم الصفحة
+        <span class="page" style="display: inline-block; margin: 0 10px">
+        </span>
+        من
+        <span
+          class="topage"
+          style="display: inline-block; margin: 0 10px"
+        ></span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<script>
+  function hundleTtl() {
+    var discam = document.getElementById("discam").innerText;
+    document.getElementById("discam").innerText =
+      parseFloat(discam.split("//")[0].replace(/,/g, "")) +
+      parseFloat(discam.split("//")[1].replace(/,/g, ""));
+    var removecurr = document.querySelectorAll(".removecurr");
+    for (var i = 0; i < removecurr.length; i++) {
+      removecurr[i].innerText = parseFloat(
+        removecurr[i].innerText.replace(/,/g, "")
+      )
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+  }
+  function subst() {
+    // Decoding the invoice page url to detect page number
+    var vars = {};
+    var x = document.location.search.substring(1).split("&");
+    for (var i in x) {
+      var z = x[i].split("=", 2);
+      vars[z[0]] = unescape(z[1]);
+    }
+    // Adding Pagination Text
+    var x = [
+      "frompage",
+      "topage",
+      "page",
+      "webpage",
+      "section",
+      "subsection",
+      "subsubsection",
+    ];
+    for (var i in x) {
+      var y = document.getElementsByClassName(x[i]);
+      for (var j = 0; j < y.length; ++j) y[j].textContent = vars[x[i]];
+    }
+  }
+  try {
+    hundleTtl();
+    subst();
+  } catch (error) {
+    console.log(error);
+  }
+</script>

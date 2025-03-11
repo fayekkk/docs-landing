@@ -1,0 +1,24 @@
+<script>
+  fetch(`/v2/api/entity/le_custom_data_client/1/fields`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      date: "2024-12-05 00:00:00",
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((response) => {
+      console.log("Response:", response);
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+    });
+</script>

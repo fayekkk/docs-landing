@@ -1,0 +1,312 @@
+<style>
+  .count-cell,
+  .item-qty {
+    pointer-events: none;
+    background-color: #eee;
+  }
+  .late_th,
+  .loc_th,
+  .late_td,
+  .loc_td,
+  .loca_th,
+  .loca_td,
+  .shootingPrice_th,
+  .shootingPrice_td,
+  .shootingQty_th,
+  .shootingQty_td {
+    display: table-cell !important;
+  }
+  .csutom-editable-area {
+    width: 97%;
+    padding: 0 4px;
+    overflow: hidden;
+    line-height: 17px;
+    height: 45px;
+    resize: none;
+    background: 0 0;
+    margin: 0;
+    font-size: 12px;
+  }
+
+  .custom-editable-input {
+    border: 0;
+    background: 0 0;
+    padding: 6px 0;
+  }
+</style>
+<script>
+  $(document).on("change", "#InvoiceLayout", function () {
+    let layout_id = $("#InvoiceLayout").val();
+    if (layout_id == "5") {
+      console.log("not that simple");
+
+      function createCol(prevTh, prevTd, colTitle, classTh, classTd, colInput) {
+        var rowsNum = $("#listing_table tr").length;
+
+        if (
+          document.querySelectorAll("#listing_table tr:nth-child(1) th")
+            .length == 14 ||
+          document.querySelectorAll("#listing_table tr:nth-child(1) th")
+            .length == 15 ||
+          document.querySelectorAll("#listing_table tr:nth-child(1) th")
+            .length == 16 ||
+          document.querySelectorAll("#listing_table tr:nth-child(1) th")
+            .length == 17 ||
+          document.querySelectorAll("#listing_table tr:nth-child(1) th")
+            .length == 18
+        ) {
+          // Clone TH and attach change event listener
+          $(prevTh).after(
+            $("th.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTh)
+              .replace("الوحدة <br> Unit", colTitle)
+          );
+
+          $(prevTd).after(
+            $("td.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTd)
+              .replace("item_col_3", colInput)
+          );
+        } else {
+          if (
+            document.querySelectorAll("#listing_table tr:last-child td")
+              .length < 19
+          ) {
+            $(`#listing_table tr:last-child ${prevTd}`).after(
+              $("#listing_table tr:last-child td.col-3")
+                .clone()
+                .wrap("<p>")
+                .parent()
+                .html()
+                .replace("col-3", classTd)
+                .replace("item_col_3", colInput)
+            );
+          }
+        }
+
+        $("." + colInput).attr("placeholder", "");
+        $("." + colInput).attr("name", "");
+        $("#InvoiceLayout").triggerHandler("change", ["def"]);
+      }
+      // adding the columns when screen is loaded
+      createCol(
+        "th.col-3",
+        "td.col-3",
+        "رقم الكتالوج",
+        "late_th",
+        "late_td",
+        "late_input"
+      );
+
+      createCol(
+        "th.col-3",
+        "td.col-3",
+        "رقم البند التجارى  ",
+        "loc_th",
+        "loc_td",
+        "loc_input"
+      );
+      createCol(
+        "th.col-3",
+        "td.col-3",
+        "رقم البند التجارى  ",
+        "loca_th",
+        "loca_td",
+        "loca_input"
+      );
+      createCol(
+        "th.col-3",
+        "td.col-3",
+        "رقم البند التجارى  ",
+        "shootingPrice_th",
+        "shootingPrice_td",
+        "shootingPrice_input"
+      );
+      createCol(
+        "th.col-3",
+        "td.col-3",
+        "رقم البند التجارى  ",
+        "shootingQty_th",
+        "shootingQty_td",
+        "shootingQty_input"
+      );
+      setTimeout(() => {
+        let allRows = document.querySelectorAll("#listing_table tr");
+        for (let i = 1; i < allRows.length; i++) {
+          /********************** Crate And append inputs ******************************/
+
+          let PrepDaysPrice = document.createElement("input");
+          PrepDaysPrice.setAttribute("id", "PrepDaysPrice");
+          PrepDaysPrice.setAttribute(
+            "class",
+            "custom-editable-input csutom-editable-area "
+          );
+          PrepDaysPrice.setAttribute("type", "number");
+          let PrepDays = document.createElement("input");
+          PrepDays.setAttribute("id", "PrepDays");
+          PrepDays.setAttribute(
+            "class",
+            "custom-editable-input csutom-editable-area "
+          );
+          PrepDays.setAttribute("type", "number");
+          let ShootngDays = document.createElement("input");
+          ShootngDays.setAttribute("id", "ShootngDays");
+          ShootngDays.setAttribute(
+            "class",
+            "custom-editable-input csutom-editable-area "
+          );
+          let shootingPrice = document.createElement("input");
+          shootingPrice.setAttribute("id", "shootingPrice");
+          shootingPrice.setAttribute(
+            "class",
+            "custom-editable-input csutom-editable-area "
+          );
+          let shootingQty = document.createElement("input");
+          shootingQty.setAttribute("id", "shootingQty");
+          shootingQty.setAttribute(
+            "class",
+            "custom-editable-input csutom-editable-area "
+          );
+          ShootngDays.setAttribute("type", "number");
+          allRows[i].querySelector(".late_td").innerHTML = "";
+          allRows[i].querySelector(".late_td").appendChild(ShootngDays);
+          allRows[i].querySelector(".loc_td").innerHTML = "";
+          allRows[i].querySelector(".loc_td").appendChild(PrepDays);
+          allRows[i].querySelector(".loca_td").innerHTML = "";
+          allRows[i].querySelector(".loca_td").appendChild(PrepDaysPrice);
+          allRows[i].querySelector(".shootingPrice_td").innerHTML = "";
+          allRows[i]
+            .querySelector(".shootingPrice_td")
+            .appendChild(shootingPrice);
+          allRows[i].querySelector(".shootingQty_td").innerHTML = "";
+          allRows[i].querySelector(".shootingQty_td").appendChild(shootingQty);
+          /********************** addEventListeners ******************************/
+          allRows[i].querySelector("#PrepDaysPrice").value = 1;
+          allRows[i].querySelector("#PrepDays").value = 1;
+          allRows[i].querySelector("#ShootngDays").value = 1;
+          allRows[i].querySelector("#shootingPrice").value = 1;
+          allRows[i].querySelector("#shootingQty").value = 1;
+          allRows[i].querySelector(".unit-price input").value = 1;
+
+          allRows[i]
+            .querySelector(".late_td input")
+            .addEventListener("change", (e) => {
+              console.log(e.target.value);
+              allRows[i].querySelector(".unit-price input").value =
+                allRows[i].querySelector("#shootingPrice").value *
+                  allRows[i].querySelector("#ShootngDays").value *
+                  allRows[i].querySelector("#shootingQty").value +
+                allRows[i].querySelector("#PrepDaysPrice").value *
+                  allRows[i].querySelector("#PrepDays").value;
+            });
+          allRows[i]
+            .querySelector(".loc_td input")
+            .addEventListener("change", (e) => {
+              console.log(e.target.value);
+              allRows[i].querySelector(".unit-price input").value =
+                allRows[i].querySelector("#shootingPrice").value *
+                  allRows[i].querySelector("#ShootngDays").value *
+                  allRows[i].querySelector("#shootingQty").value +
+                allRows[i].querySelector("#PrepDaysPrice").value *
+                  allRows[i].querySelector("#PrepDays").value;
+            });
+          allRows[i]
+            .querySelector(".loca_td input")
+            .addEventListener("change", (e) => {
+              console.log(e.target.value);
+              allRows[i].querySelector(".unit-price input").value =
+                allRows[i].querySelector("#shootingPrice").value *
+                  allRows[i].querySelector("#ShootngDays").value *
+                  allRows[i].querySelector("#shootingQty").value +
+                allRows[i].querySelector("#PrepDaysPrice").value *
+                  allRows[i].querySelector("#PrepDays").value;
+            });
+          allRows[i]
+            .querySelector(".shootingPrice_td input")
+            .addEventListener("change", (e) => {
+              console.log(e.target.value);
+              allRows[i].querySelector(".unit-price input").value =
+                allRows[i].querySelector("#shootingPrice").value *
+                  allRows[i].querySelector("#ShootngDays").value *
+                  allRows[i].querySelector("#shootingQty").value +
+                allRows[i].querySelector("#PrepDaysPrice").value *
+                  allRows[i].querySelector("#PrepDays").value;
+            });
+          allRows[i]
+            .querySelector(".shootingQty_td input")
+            .addEventListener("change", (e) => {
+              console.log(e.target.value);
+              allRows[i].querySelector(".unit-price input").value =
+                allRows[i].querySelector("#shootingPrice").value *
+                  allRows[i].querySelector("#ShootngDays").value *
+                  allRows[i].querySelector("#shootingQty").value +
+                allRows[i].querySelector("#PrepDaysPrice").value *
+                  allRows[i].querySelector("#PrepDays").value;
+            });
+        }
+      }, 300);
+
+      // adding the columns on add item click
+      $("#AddItem").on("click", () => {
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "رقم الكتالوج",
+          "late_th",
+          "late_td",
+          "late_input"
+        );
+
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "رقم البند التجارى  ",
+          "loc_th",
+          "loc_td",
+          "loc_input"
+        );
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "رقم البند التجارى  ",
+          "loca_th",
+          "loca_td",
+          "loca_input"
+        );
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "رقم البند التجارى  ",
+          "shootingPrice_th",
+          "shootingPrice_td",
+          "shootingPrice_input"
+        );
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "رقم البند التجارى  ",
+          "shootingQty_th",
+          "shootingQty_td",
+          "shootingQty_input"
+        );
+      });
+      setTimeout(() => {
+        document.querySelector(".late_th").innerText = "أيام التصوير";
+        document.querySelector(".loc_th").innerText = "أيام التحضير";
+        document.querySelector(".loca_th").innerText = "سعر أيام التحضير";
+        document.querySelector(".shootingPrice_th").innerText =
+          "سعر أيام التصوير";
+        document.querySelector(".shootingQty_th").innerText =
+          "كمية أيام التصوير";
+      }, 250);
+    }
+  });
+</script>

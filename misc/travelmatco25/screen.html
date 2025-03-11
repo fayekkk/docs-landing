@@ -1,0 +1,49 @@
+<script>
+  // item-unit-price  item-id
+
+  $(document).ready(function () {
+    setTimeout(() => {
+      fetch(`/v2/api/entity/le_purcase_price_control/list/1`, {
+        method: "GET",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          let staffs = data.data;
+          let currUser = USER.staff_id;
+          console.log({ currUser: currUser });
+          console.log({ staffs: staffs });
+
+          let filteredData = staffs.filter((item) => item.staff2 == currUser);
+          console.log(filteredData);
+
+          if (currUser != 0 && filteredData.length == 0) {
+            $(document).on("change", ".item-unit-price", function () {
+              const $this = $(this);
+              const currentCurrencyId = $this.attr("currId");
+              const itemIdValue = $this.closest("tr").find(".item-id").val();
+              if (!currentCurrencyId) {
+                $this.attr("currId", itemIdValue);
+                if ($this.val() != 0) {
+                  $this.val(0).trigger("change");
+                }
+              } else {
+                if (currentCurrencyId !== itemIdValue) {
+                  if ($this.val() != 0) {
+                    $this.val(0).trigger("change");
+                  }
+                  const itemIdValue = $this
+                    .closest("tr")
+                    .find(".item-id")
+                    .val();
+                  $this.attr("currId", itemIdValue);
+                }
+              }
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }, 250);
+  });
+</script>

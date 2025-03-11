@@ -1,0 +1,31 @@
+<style>
+  .late_td,
+  .late_th {
+    display: table-cell !important;
+  }
+</style>
+
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      $(document).on("change", ".item-id", function () {
+        if ($(this).val()) {
+          setTimeout(() => {
+            console.log("changed");
+            console.log(product.buy_price);
+            if (product.buy_price) {
+              if ($(this).closest("tr").find(".col-4 textarea").val() != "") {
+                $(this)
+                  .closest("tr")
+                  .find(".col-4 textarea")
+                  .val(product.buy_price);
+              }
+            }
+          }, 250);
+        } else {
+          $(this).closest("tr").find(".col-4 textarea").val("");
+        }
+      });
+    }, 400);
+  });
+</script>

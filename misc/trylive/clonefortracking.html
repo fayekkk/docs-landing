@@ -1,0 +1,33 @@
+<script>
+  $(document).ready(function () {
+    function cloneRow() {
+      var $lastRow = $(".itemRow").last();
+      var $selectedRow = $(".itemRow")
+      var $newRow = $lastRow.clone();
+      var lastIndex = parseInt(
+        $lastRow
+          .find("textarea, input, select")
+          .first()
+          .attr("id")
+          .match(/\d+/)[0]
+      );
+      var newIndex = lastIndex + 1;
+      $newRow.find("textarea, input, select").each(function () {
+        var $element = $(this);
+        var name = $element.attr("name");
+        var id = $element.attr("id");
+
+        if (name) {
+          name = name.replace(/\[\d+\]/, "[" + newIndex + "]");
+          $element.attr("name", name);
+        }
+        if (id) {
+          id = id.replace(/\d+/, newIndex);
+          $element.attr("id", id);
+        }
+      });
+      $lastRow.after($newRow);
+    }
+    cloneRow();
+  });
+</script>

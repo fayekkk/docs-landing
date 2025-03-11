@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: right;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    .total-table td {
+      border-right: 1px solid #555555;
+    }
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+
+    #headData {
+      width: 100%;
+      border-spacing: 0;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    #headData td {
+      padding: 2px;
+    }
+    .leftalign {
+      text-align: left;
+      width: 15%;
+    }
+    .bordered {
+      border: 1px solid black;
+      text-align: center;
+      width: 15%;
+    }
+    .rightalign {
+      text-align: right;
+      width: 15%;
+    }
+    .centeralign {
+      text-align: center;
+      width: 55%;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+
+    #listing_table {
+      direction: ltr;
+    }
+    #listing_table {
+      width: 100%;
+      border-spacing: 0;
+      border-bottom: 1px solid #000;
+      border-right: 1px solid #000;
+      text-align: center !important;
+    }
+    #listing_table th {
+      font-weight: 700;
+      font-weight: 13px;
+      background-color: #ed7d31;
+      border-top: 1px solid #000;
+      border-left: 1px solid #000;
+      border-bottom: none !important;
+      border-right: none !important;
+      text-align: center;
+      padding: 4px 2px;
+    }
+    #listing_table th:nth-child(1),
+    #listing_table td:nth-child(1) {
+      background-color: #ed7d31;
+      text-align: center;
+    }
+    #listing_table td {
+      padding: 4px 5px;
+
+      font-weight: 100;
+      font-weight: 12px;
+      border-top: 1px solid #000;
+      border-left: 1px solid #000;
+      border-bottom: none !important;
+      border-right: none !important;
+      text-align: center;
+      width: auto;
+    }
+    /* 1   3 4 5 */
+
+    /* #listing_table th:nth-child(2),
+    #listing_table td:nth-child(2), */
+    #listing_table th:nth-child(6),
+    #listing_table td:nth-child(6),
+    #listing_table th:nth-child(7),
+    #listing_table td:nth-child(7),
+    #listing_table th:nth-child(8),
+    #listing_table td:nth-child(8),
+    #listing_table th:nth-child(9),
+    #listing_table td:nth-child(9),
+    #listing_table th:nth-child(10),
+    #listing_table td:nth-child(10) {
+      display: none;
+    }
+    #signs {
+      width: 100%;
+      direction: rtl;
+      border-spacing: 5px;
+    }
+    #signs td:nth-child(1) {
+      border: 1px solid #e5e5e5;
+      text-align: right;
+      width: 50%;
+      color: #ce927e;
+      padding: 5px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    #signs td:nth-child(2) {
+      border: 1px solid #e5e5e5;
+      text-align: left;
+      width: 50%;
+      color: #ce927e;
+      padding: 5px;
+      vertical-align: sub;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    #client_info {
+      text-align: right;
+      direction: ltr;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <div style="padding-top: 10px"></div>
+
+        <table id="headData">
+          <tbody>
+            <tr>
+              <td class="leftalign">رقم أمر الشراء</td>
+              <td class="bordered">{%PO NO%}</td>
+              <td class="rightalign">PO#</td>
+              <td class="centeralign">مؤسسة روائع الكتب التجارية</td>
+            </tr>
+            <tr>
+              <td class="leftalign">رقم الحساب</td>
+              <td class="bordered">{%Account No%}</td>
+              <td class="rightalign">ACCOUNT#</td>
+              <td class="centeralign">VAT : 302077526400003</td>
+            </tr>
+            <tr>
+              <td class="leftalign">رقم التسليم</td>
+              <td class="bordered">{%invoice_no%}{%Delivery No%}</td>
+              <td class="rightalign">D/N#</td>
+              <td class="centeralign">CR : 3550027113</td>
+            </tr>
+            <tr>
+              <td class="leftalign">التاريخ</td>
+              <td class="bordered">{%Delivery Date%} {%invoice_date%}</td>
+              <td class="rightalign">DATE</td>
+              <td class="centeralign"></td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="client_info">{%client_info%}</div>
+        <div id="items-list">{%items_list%}</div>
+        <table id="signs">
+          <tr>
+            <td>
+              اسم المستلم وتوقيعه <br />Reciver name and signature
+              <br />
+
+              <br />
+              الرقم الوظيفى <br />
+              Emp
+              <br />
+
+              <br />
+              الجوال <br />
+              Mobile
+              <br />
+
+              <br />
+              التاريخ <br />
+              Date
+            </td>
+            <td>
+              تعليمات خاصة
+              <br />
+              Special instructions<br />
+              {%invoice_notes%}
+            </td>
+          </tr>
+        </table>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function addUnits() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 1; i < allRows.length; i++) {
+          allRows[i].cells[6].style.direction = "ltr";
+          // 2 for unit
+          if (allRows[i].cells[6].innerText.trim().split(" ").length > 1) {
+            // allRows[i].cells[2].innerText =
+            //   allRows[i].cells[6].innerText.split(" ")[0];
+            allRows[i].cells[2].innerText =
+              allRows[i].cells[6].querySelector("span").innerText;
+            allRows[i].cells[6].querySelector("span").style.display = "none";
+          }
+        }
+      }
+      try {
+        addUnits();
+      } catch (error) {
+        console.log(error);
+      }
+
+      function reSwap() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        if (allRows[0].cells.length == 8) {
+          for (var i = 0; i < allRows.length; i++) {
+            var SKU = allRows[i].cells[0].innerHTML;
+            var itemName = allRows[i].cells[1].innerHTML;
+            var Unit = allRows[i].cells[2].innerHTML;
+            var vat = allRows[i].cells[3].innerHTML;
+            var ttl = allRows[i].cells[4].innerHTML;
+            var price = allRows[i].cells[5].innerHTML;
+            var qty = allRows[i].cells[6].innerHTML;
+            var subttl = allRows[i].cells[7].innerHTML;
+
+            allRows[i].cells[0].innerHTML = SKU;
+            allRows[i].cells[1].innerHTML = itemName;
+            allRows[i].cells[2].innerHTML = Unit;
+            allRows[i].cells[3].innerHTML = qty;
+            allRows[i].cells[4].innerHTML = price;
+            allRows[i].cells[5].innerHTML = subttl;
+            allRows[i].cells[5].style.display = "none";
+
+            allRows[i].cells[6].innerHTML = vat;
+            allRows[i].cells[7].innerHTML = ttl;
+          }
+        } else {
+          for (var i = 0; i < allRows.length; i++) {
+            var SKU = allRows[i].cells[0].innerHTML;
+            var itemName = allRows[i].cells[1].innerHTML;
+            var Unit = allRows[i].cells[2].innerHTML;
+            var vat = allRows[i].cells[3].innerHTML;
+            var ttl = allRows[i].cells[4].innerHTML;
+            var price = allRows[i].cells[5].innerHTML;
+            var qty = allRows[i].cells[6].innerHTML;
+            var discound = allRows[i].cells[7].innerHTML;
+            var subttl = allRows[i].cells[8].innerHTML;
+
+            allRows[i].cells[0].innerHTML = SKU;
+            allRows[i].cells[1].innerHTML = itemName;
+            allRows[i].cells[2].innerHTML = Unit;
+            allRows[i].cells[3].innerHTML = qty;
+            allRows[i].cells[4].innerHTML = price;
+            allRows[i].cells[5].innerHTML = discound;
+            allRows[i].cells[6].innerHTML = subttl;
+            allRows[i].cells[6].style.display = "none";
+            allRows[i].cells[7].innerHTML = vat;
+            allRows[i].cells[8].innerHTML = ttl;
+          }
+        }
+      }
+      try {
+        reSwap();
+      } catch (error) {
+        console.log(error);
+      }
+      function addserials() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var newth = document.createElement("th");
+        newth.innerHTML = "S/N";
+        allRows[0].insertBefore(newth, allRows[0].cells[0]);
+        for (var i = 1; i < allRows.length; i++) {
+          var allRows = document.querySelectorAll("#listing_table tr");
+          var newtd = document.createElement("td");
+          newtd.innerHTML = i;
+          allRows[i].insertBefore(newtd, allRows[i].cells[0]);
+        }
+      }
+      try {
+        addserials();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

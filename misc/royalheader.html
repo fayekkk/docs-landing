@@ -1,0 +1,108 @@
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap");
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  tr,
+  td,
+  th {
+    page-break-inside: avoid !important;
+  }
+
+  .ar {
+    text-align: right;
+    direction: rtl;
+  }
+
+  th,
+  td {
+    text-align: center;
+    padding: 4px;
+  }
+  table,
+  td {
+    border: 0 !important;
+    vertical-align: middle;
+  }
+  #invoice_title {
+    font-size: 22px;
+    font-weight: 700;
+  }
+  img {
+    height: 2.5cm;
+  }
+</style>
+<div style="margin-bottom: -30px; height: 190px; background-color: transparent">
+  <table width="100%" style="table-layout: fixed; margin: 0; padding: 0">
+    <tr>
+      <td style="text-align: left; vertical-align: top; " >
+        <span style="font-size: 17px !important; font-weight: bold"
+          >Royal Center Trading Co</span
+        >
+        <br />
+        <span style="font-size: 12px !important;">
+
+          Riyadh - Sinaea Kadem - Al Gameia St.
+        </span>
+        <br />C.R: 1010766247
+
+        <br />Vat No: {%site_bn1%}
+     
+        <br />
+        Mobile No : 0556467888
+        <br />
+        <img
+          src="https://hhumgg.daftra.com/files/9cc98aba/logos/65644729df494_blobid1701070627626.png"
+          alt=""
+          title="stamp 1 (1).png"
+          style="margin-top: 20px; height: 2.7cm"
+        />
+      </td>
+      <td style="text-align: center">
+        <img
+          id="logo"
+          class="editable-area"
+          src="https://hhumgg.daftra.com/files/images/site-logos/64ddd25aba84b_WhatsApp_Image_2023_08_17_at_10_38_19_AM.jpeg"
+          width="220"
+          height="110"
+          style="height: auto; vertical-align: top"
+        />
+        <br />
+        <br />
+        <br />
+        <span
+          style="
+            display: inline-block;
+            background-color: #e5e5e5 !important;
+            border: 1px solid black !important;
+            border-radius: 10px !important;
+            padding: 4px 20px;
+          "
+          id="invoice_title"
+          class="editable-area invoice-name"
+        >
+          {%invoice_title%}
+        </span>
+      </td>
+      <td class="ar" style="text-align: right; vertical-align: top">
+        <span style="font-size: 20px; font-weight: bold"
+          >شركة رويال سنتر التجارية</span
+        >
+        <br />الرياض - الصناعية القديمة - شارع الجمعية<br />س.ت: 1010766247<br />الرقم
+        الضريبي: {%site_bn1%}
+        <br />
+        رقم الجوال : 0556467888
+        <br />
+        <img
+          src="https://hhumgg.daftra.com/files/9cc98aba/logos/6570443177200_blobid1701856300441.png"
+          alt=""
+          title="stamp 2.png"
+          style="margin-top: 20px; margin-right: 35px"
+        />
+      </td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,479 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0;
+      padding: 0;
+    }
+    /* Inv_title */
+    #Inv_title {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 15px 0;
+    }
+    /* inv_data */
+    #inv_data {
+      width: 100%;
+      border-spacing: 0;
+      font-size: 14px;
+    }
+    #inv_data td {
+      padding: 3px 0;
+    }
+    #inv_data tr:nth-child(1) td:nth-child(1) {
+      width: 12%;
+      text-align: left;
+    }
+    #inv_data tr:nth-child(1) td:nth-child(2) {
+      width: 26%;
+      text-align: left;
+    }
+    #inv_data tr:nth-child(1) td:nth-child(3) {
+      width: 24%;
+      text-align: left;
+    }
+    #inv_data tr:nth-child(1) td:nth-child(3) img {
+      width: 70%;
+      margin: 0 15%;
+    }
+    #inv_data tr:nth-child(1) td:nth-child(4) {
+      width: 26%;
+      text-align: right;
+    }
+    #inv_data tr:nth-child(1) td:nth-child(5) {
+      width: 12%;
+      text-align: right;
+    }
+
+    #inv_data td:nth-child(1) {
+      width: 12%;
+      text-align: left;
+    }
+    #inv_data td:nth-child(2) {
+      width: 26%;
+      text-align: left;
+    }
+    #inv_data td:nth-child(3) {
+      width: 24%;
+      text-align: right;
+    }
+
+    #inv_data td:nth-child(4) {
+      width: 26%;
+      text-align: right;
+    }
+
+    #site_data {
+      width: 100%;
+      border-spacing: 0;
+      font-size: 14px;
+    }
+    #site_data td:nth-child(1) {
+      width: 50%;
+      padding: 3px 0;
+      text-align: left;
+    }
+    #site_data td:nth-child(2) {
+      width: 50%;
+      padding: 3px 0;
+      text-align: right;
+    }
+    /* 
+
+        Amount Excluding <br />Vat (sr) ****         القيمة بدون الضريبة ( ريال )
+
+    Amount With Vat(sr) **** القيمة شاملة <br />  الضريبة   (  ريال )
+      */
+    #listing_table th {
+      padding: 3px 2px;
+      background-color: #fff !important;
+    }
+    #listing_table tr:nth-child(2) th {
+      border-top: none !important;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #listing_table * {
+      border: none !important;
+    }
+    #listing_table {
+      border-right: 1px solid black !important;
+      border-top: 1px solid black !important;
+      margin-top: 10px;
+    }
+    #listing_table th,
+    #listing_table td {
+      border-left: 1px solid black !important;
+      border-bottom: 1px solid black !important;
+      text-align: center !important;
+    }
+    #listing_table td {
+      font-size: 14px;
+      padding: 5px 0;
+    }
+    /* totals */
+    #totals {
+      border-top: 1px solid black;
+      width: 100%;
+      border-spacing: 0;
+      font-size: 14px;
+      margin-top: 10px;
+      padding-top: 5px;
+    }
+    #totals td {
+      padding: 2px 0;
+    }
+    #totals td:nth-child(1) {
+      text-align: left;
+      width: 35%;
+    }
+    #totals td:nth-child(2) {
+      width: 35%;
+      text-align: right;
+    }
+    #totals td:nth-child(3) {
+      width: 30%;
+      text-align: right;
+    }
+    /* signs */
+    #signs {
+      width: 100%;
+
+      border-spacing: 0;
+      font-size: 14px;
+      direction: rtl;
+      text-align: right;
+      margin-top: 10px;
+    }
+    #signs td {
+      padding: 5px 0;
+    }
+    #signs td:nth-child(1) {
+      width: 30%;
+    }
+    #signs td:nth-child(2) {
+      width: 30%;
+    }
+    #signs td:nth-child(3) {
+      width: 30%;
+    }
+    #listing_table th:nth-child(7),
+    #listing_table td:nth-child(7) {
+      display: none;
+    }
+    #adresss td br {
+      display: none;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <div id="Inv_title">{%invoice_title%}</div>
+        <table id="inv_data">
+          <tr>
+            <td>Date:</td>
+            <td>{%invoice_date%}</td>
+            <td rowspan="100%">{%sa_qr_code_image%}</td>
+            <td>{%invoice_date%}</td>
+            <td>: التاريخ</td>
+          </tr>
+          <tr>
+            <td>Invoice No</td>
+            <td>{%invoice_no%}</td>
+            <td>{%invoice_no%}</td>
+            <td>: فاتورة رقم</td>
+          </tr>
+          <tr>
+            <td colspan="2">VAT# 311748513300003</td>
+            <td colspan="2" style="text-align: right">
+              الرقم الضريبي : 311748513300003
+            </td>
+          </tr>
+        </table>
+        <table id="site_data">
+          <tr>
+            <td style="font-weight: bold">National adress</td>
+            <td style="font-weight: bold">العنوان الوطنى</td>
+          </tr>
+          <tr>
+            <td>ALMANAHEL Tech. cont.co</td>
+            <td>{%site_business_name%}</td>
+          </tr>
+          <tr>
+            <td>2761 Omar Ibn Abdulaziz Branch Ar Rabwah Dist. RIYADH</td>
+            <td>2761 عمر بن عبدالعزيز الفرعى حى الربوة الرياض</td>
+          </tr>
+          <tr>
+            <td>CR No. 1010907456</td>
+            <td>س.ت 1010907456</td>
+          </tr>
+
+          <tr>
+            <td style="font-weight: bold">Client Name:</td>
+            <td style="font-weight: bold">العميل</td>
+          </tr>
+          <tr>
+            <td>{%custom_إسم_العميل_باللغة_الإنجليزية_field_28%}</td>
+            <td>{%client_business_name%}</td>
+          </tr>
+          <tr>
+            <td>Client VAT # {%client_bn1%}</td>
+            <td>الرقم الضريبى للعميل : {%client_bn1%}</td>
+          </tr>
+          <tr>
+            <td>Client Mobile {%client_mobile%}</td>
+            <td>{%client_mobile%} : جوال العميل</td>
+          </tr>
+          <tr>
+            <td>Client Email {%client_email%}</td>
+            <td>{%client_email%} : بريد العميل</td>
+          </tr>
+          <tr id="adresss">
+            <td>
+              Client Adress {%custom_عنوان_العميل_باللغة_الإنجليزية_field_29%}
+            </td>
+            <td>{%client_full_address%} : عنوان العميل</td>
+          </tr>
+        </table>
+
+        <div id="items-list">{%items_list%}</div>
+        <table id="totals">
+          <tbody>
+            <tr>
+              <td>Total without VAT</td>
+              <td>الإجمالى غير شامل ضريبة القيمة المضافة</td>
+              <td id="invoice_subtotal">{%invoice_subtotal%}</td>
+            </tr>
+            <tr>
+              <td>Value added tax 15% (VAT)</td>
+              <td>ضريبة القيمة المضافة 15%</td>
+              <td>{%tax-total%}</td>
+            </tr>
+            <tr>
+              <td>Book a bussiness guarantee</td>
+              <td>حجز ضمان الأعمال</td>
+              <td id="guarantee">0</td>
+            </tr>
+            <tr>
+              <td>Down payment discount</td>
+              <td>خصم الدفعة المقدمة</td>
+              <td id="disc1">0</td>
+            </tr>
+            <tr>
+              <td>VAT refunded for advance payment</td>
+              <td>ضريبة القيمة المضافة المستردة للدفعة المقدمة</td>
+              <td id="vat1">0</td>
+            </tr>
+            <tr>
+              <td>Discount from the customer</td>
+              <td>خصميات من طرف العميل</td>
+              <td id="disc2">0</td>
+            </tr>
+            <tr>
+              <td>VAT refunded for customer discount</td>
+              <td>ضريبة القيمة المضافة المستردة لخصميات العميل</td>
+              <td id="vat2">0</td>
+            </tr>
+            <tr>
+              <td>The total includes VAT</td>
+              <td>المجموع شامل ضريبة القيمة المضافة</td>
+              <td>{%invoice_total%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="signs">
+          <tbody>
+            <tr>
+              <td>الحسابات</td>
+              <td>الإدارة</td>
+              <td>المستلم</td>
+            </tr>
+            <tr>
+              <td>الإسم /</td>
+              <td>الإسم /</td>
+              <td>الإسم /</td>
+            </tr>
+            <tr>
+              <td>التوقيع /</td>
+              <td>التوقيع /</td>
+              <td>التوقيع /</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function insertCol(index, colLabel, labelId, cellClass) {
+        if (
+          document.querySelectorAll("#listing_table thead tr th").length == 7
+        ) {
+          var tbl = document.getElementById("listing_table");
+
+          for (i = 0; i < tbl.rows.length; i++) {
+            var newCell = tbl.rows[i].insertCell(index);
+            newCell.classList.add(cellClass);
+          }
+          var firstCell = tbl.rows[0].cells[index];
+          firstCell.outerHTML = "<th id=" + labelId + ">" + colLabel + "</th>";
+        }
+      }
+      try {
+        insertCol(6, " Discount **** خصم  ", "discount_th", "discounts");
+      } catch (error) {
+        console.log(error);
+      }
+      function discountCheck() {
+        allTh = document.querySelectorAll("#listing_table thead tr th");
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          var itemNo = allRows[i].cells[0].innerText;
+          var Desc = allRows[i].cells[1].innerText;
+          var Varper = allRows[i].cells[2].innerText;
+          var amountWithVat = allRows[i].cells[3].innerText;
+          var price = allRows[i].cells[4].innerText;
+          var Qty = allRows[i].cells[5].innerText;
+          var discount = allRows[i].cells[6].innerText;
+          var subtotal = allRows[i].cells[7].innerText;
+          allRows[i].cells[0].innerText = itemNo;
+          allRows[i].cells[1].innerText = Desc;
+          allRows[i].cells[2].innerText = price;
+          allRows[i].cells[3].innerText = Qty;
+          allRows[i].cells[4].innerText = subtotal;
+          allRows[i].cells[5].innerText = Varper;
+          allRows[i].cells[6].innerText = discount;
+          allRows[i].cells[7].innerText = amountWithVat;
+        }
+      }
+      try {
+        discountCheck();
+      } catch (error) {
+        console.log(error);
+      }
+
+      function UpdateHeader() {
+        var oldHeader = document.querySelectorAll("#listing_table thead tr th");
+        var newTr = document.createElement("tr");
+        for (var i = 0; i < oldHeader.length; i++) {
+          var newTh = document.createElement("th");
+          newTh.style.direction = "rtl";
+          newTh.innerText = oldHeader[i].innerText.split("****")[1];
+          oldHeader[i].innerText = oldHeader[i].innerText.split("****")[0];
+          newTr.appendChild(newTh);
+        }
+        document.querySelector("#listing_table thead ").appendChild(newTr);
+      }
+      try {
+        UpdateHeader();
+      } catch (error) {
+        console.log(error);
+      }
+      //   خصم ضمان الأعمال
+      function guarantee() {
+        var totalsRows = document.querySelectorAll(
+          ".listing-table:nth-child(2) tr"
+        );
+        var flag1 = 0;
+        var flag2 = 0;
+        for (var i = 0; i < totalsRows.length; i++) {
+          if (
+            totalsRows[i].cells[1].innerText.trim().substr(0, 15) ==
+            "خصم ضمان أعمال "
+          ) {
+            document.getElementById("guarantee").innerText =
+              totalsRows[i].cells[2].innerText;
+            document.getElementById("invoice_subtotal").innerText =
+              (
+                parseFloat(totalsRows[i].cells[2].innerText.replace(/,/g, "")) *
+                  -1 +
+                parseFloat(
+                  document
+                    .getElementById("invoice_subtotal")
+                    .innerText.replace(/,/g, "")
+                )
+              )
+                .toFixed(2)
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " ر.س ";
+          } else if (totalsRows[i].cells[1].innerText.trim() == "دفعات مقدمة") {
+            document.getElementById("disc1").innerText =
+              totalsRows[i].cells[2].innerText;
+          } else if (
+            totalsRows[i].cells[1].innerText.trim() == "ضريبة دفعة مقدمة"
+          ) {
+            flag1 = 1;
+            document.getElementById("vat1").innerText =
+              totalsRows[i].cells[2].innerText;
+          } else if (
+            totalsRows[i].cells[1].innerText.trim() == "خصميات من طرف العميل"
+          ) {
+            document.getElementById("disc2").innerText =
+              totalsRows[i].cells[2].innerText;
+          } else if (
+            totalsRows[i].cells[1].innerText.trim() ==
+            "ضريبة مستردة لخصميات العميل"
+          ) {
+            flag2 = 1;
+            document.getElementById("vat2").innerText =
+              totalsRows[i].cells[2].innerText;
+            // document.getElementById("vat1").innerText = "0";
+          }
+        }
+        console.log({ flag1: flag1 });
+        console.log({ flag2: flag2 });
+
+        if (flag1 == 0 && flag2 == 0) {
+          document.getElementById("vat1").innerText =
+            "{%custom_tax1_field_24%}";
+          document.getElementById("vat2").innerText =
+            "{%custom_tax2_field_25%}";
+        } else if (flag1 == 0 && flag2 == 1) {
+          document.getElementById("vat1").innerText = "0";
+        } else if (flag1 == 1 && flag2 == 0) {
+          document.getElementById("vat2").innerText = "0";
+        }
+      }
+      try {
+        guarantee();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

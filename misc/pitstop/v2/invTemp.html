@@ -1,0 +1,612 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: verdana, geneva, sans-serif !important;
+    }
+
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+
+    #header {
+      width: 100%;
+      text-align: center;
+      border: none !important;
+    }
+    #header h3 {
+      margin: 0 !important;
+    }
+    #header td {
+      width: 33%;
+      padding: 3px;
+      border: none !important;
+    }
+    #header img {
+      width: 80%;
+      margin: 0 10%;
+    }
+    #dates {
+      width: 100%;
+      text-align: right;
+      border: none !important;
+      margin-top: 15px;
+    }
+    #dates td {
+      width: 50%;
+      padding: 3px;
+      border: none !important;
+    }
+    #invData {
+      width: 100%;
+      text-align: left;
+      border: none !important;
+      margin-top: 15px;
+    }
+    #invData td {
+      padding: 3px;
+      border: none !important;
+      text-align: right;
+      font-weight: bold;
+    }
+    #invData tr:nth-child(2) td:nth-child(1) {
+      width: 20%;
+    }
+    #invData tr:nth-child(2) td:nth-child(2) {
+      width: 20%;
+    }
+    #invData tr:nth-child(2) td:nth-child(3) {
+      width: 30%;
+    }
+    #invData tr:nth-child(2) td:nth-child(4) {
+      width: 30%;
+    }
+    #listing_table {
+      width: 100%;
+      margin-top: 25px;
+    }
+    #listing_table th {
+      font-weight: bold !important;
+    }
+    #listing_table th:nth-child(1) {
+      width: 10% !important;
+    }
+    #listing_table th:nth-child(2) {
+      width: 50% !important;
+    }
+    #listing_table th:nth-child(3) {
+      width: 15% !important;
+    }
+    #listing_table th:nth-child(4) {
+      width: 25% !important;
+    }
+    #listing_table span {
+      display: inline-block !important;
+      width: 100% !important;
+      text-align: center !important;
+    }
+    #listing_table {
+      width: 100%;
+      text-align: right;
+      border-spacing: 0;
+      border-bottom: 1px solid black !important;
+      border-right: 1px solid black !important;
+    }
+    #listing_table th,
+    #listing_table td {
+      background-color: #fff;
+      border-left: 1px solid black !important;
+      border-top: 1px solid black !important;
+      border-bottom: none !important;
+      border-right: none !important;
+      padding: 1px 3px;
+    }
+    .terms {
+      border: 3px double #000 !important;
+      border-radius: 5px;
+      text-align: right;
+      padding: 3px;
+    }
+    .noborder {
+      border: none !important;
+    }
+    .noborder * {
+      border: none !important;
+    }
+    .sqr {
+      display: inline-block;
+      width: 17px;
+      height: 17px;
+      margin-bottom: -5px;
+    }
+    #otherSigns {
+      border: none !important;
+      margin-top: 20px;
+      width: 100%;
+    }
+    #otherSigns * {
+      border: none !important;
+    }
+    #otherSigns2 {
+      width: 100%;
+      border: none !important;
+      margin-top: 20px;
+    }
+    #otherSigns2 * {
+      border: none !important;
+      font-size: 15px;
+      font-weight: bold !important;
+    }
+    #otherSigns td:nth-child(1) {
+      width: 50%;
+      font-size: 12px !important;
+    }
+    #otherSigns td:nth-child(2) {
+      width: 50%;
+      font-size: 15px;
+      font-weight: bold !important;
+    }
+    .signs3 {
+      width: 100%;
+      margin: 15px 0;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table id="header">
+          <tbody>
+            <tr>
+              <td>
+                <h3>شركة نقطة الإنطلاق</h3>
+                <br />لصيانة السيارات <br />
+                س.ت 4030493657 <br />
+                جدة – شارع صاري <br />
+                ورشة رقم 3
+              </td>
+              <td>
+                <img
+                  src="https://pitstop.daftra.com/files/fb0eb5a4/logos/678269068e316_blobid1736599810531.png"
+                  alt=""
+                  title="673ef4c60f312_pxdsitstop_logo_pdf_high_res_1.png"
+                />
+                <br />
+                <h1>{%invoice_title%}</h1>
+                <br />
+                <span style="color: red; font-weight: bold; font-size: 15px">
+                  {%invoice_no%}
+                </span>
+              </td>
+              <td>
+                <h3>Pit Stop Company</h3>
+                <br />Car Workshop <br />C.R.: 4030493657 <br />Jeddah - Sari St
+                <br />Workshop #3
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="dates">
+          <tbody>
+            <tr>
+              <td>التاريخ :{%invoice_date%}</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="invData">
+          <tbody>
+            <tr>
+              <td colspan="2">إسم العميل : {%client_business_name%}</td>
+              <td>تاريخ دخول السيارة : {%start date%}</td>
+              <td>تاريخ خروج السيارة : {%delivery date%}</td>
+            </tr>
+
+            <tr>
+              <td>نوع السيارة : {%brand%}</td>
+              <td>موديل : {%vehicle model%}</td>
+              <td>رقم السيارة : {%platelicense%}</td>
+              <td>تيليفون العميل : {%client_mobile%}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div id="items-list">{%items_list%}</div>
+
+        <table class="noborder signs3">
+          <tbody>
+            <tr>
+              <td>
+                توقيع العميل : ...........................................
+              </td>
+              <td>
+                توقيع المستلم : ...........................................
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <table
+          class="noborder"
+          style="margin-top: 15px !important; width: 100%"
+        >
+          <tr>
+            <td
+              class="terms"
+              style="
+                border: 3px double #000 !important;
+                border-radius: 10px;
+                text-align: right;
+                padding: 3px;
+                width: 50% !important;
+                vertical-align: baseline;
+                font-weight: bold;
+                line-height: 1.5;
+              "
+            >
+              <h3 style="text-align: center !important">شروط التصليح</h3>
+              1 - أتعهد بتسديد أجرة الاصلاح عند اصلاح السيارة بما فى ذلك قيمة
+              قطع الغيار والمواد الاخرى
+              <br />
+              2 - للورشة الحق فى فك السيارة لاجراء الاصلاحات اللازمة كما لها
+              الحق فى تجربة السيارة قبل الاصلاح وبعده خارج الورشة
+              <br />
+              3 - ان الورشة غير مسئولة عن الاغراض الموجودة بالسيارة التى لم
+              يعلن<br />
+              عنها صاحبها عند تسليم السيارة كما لا يحق له المطالبة فى حال
+              فقدانها او تلفها عند استلام السيارة
+              <br />
+              4 - الورشة غير مسئولة عن السيارة عند التأخر فى استلامها<br />
+              من قبل العميل بعد مرور شهر من انتهاء الإصلاح
+              <br />
+              5 - اذا تم فحص السيارة ولم يتمكن العميل من تأمين القطع خلال 15
+              يوماً فالورشة غير مسئولة عن السيارة
+            </td>
+            <td class="noborder">
+              <img
+                src="https://pitstop.daftra.com/files/fb0eb5a4/logos/67827351395c7_blobid1736602445986.png"
+                alt=""
+                title="pngwing.c11om (1).png"
+                style="width: 100%"
+              />
+              <table id="afterCar">
+                <tbody>
+                  <tr>
+                    <td>
+                      <span
+                        style="border: 1px solid !important"
+                        class="sqr"
+                      ></span>
+                      ولاعة
+                    </td>
+                    <td>
+                      <span
+                        style="border: 1px solid !important"
+                        class="sqr"
+                      ></span>
+                      الكفر الإحتياطى
+                    </td>
+                    <td>
+                      <span
+                        style="border: 1px solid !important"
+                        class="sqr"
+                      ></span>
+                      الطاسات
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span
+                        style="border: 1px solid !important"
+                        class="sqr"
+                      ></span>
+                      مرايا
+                    </td>
+                    <td>
+                      <span
+                        style="border: 1px solid !important"
+                        class="sqr"
+                      ></span>
+                      المكيف
+                    </td>
+                    <td>
+                      <span
+                        style="border: 1px solid !important"
+                        class="sqr"
+                      ></span>
+                      العفريتة
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <table id="otherSigns">
+          <tbody>
+            <tr>
+              <td>
+                اقر بان جميع الاعمال المبينه اعلاه قد انجزت وقد استلمت السيارة
+                بحالة جيدة
+              </td>
+              <td>
+                إسم العميل :
+                ..........................................................
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                التوقيــــــع :
+                ..........................................................
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="otherSigns2">
+          <tbody>
+            <tr>
+              <td>اسم المسئول : ...........................</td>
+              <td>توقيع : ...........................</td>
+              <td>توقيع المحاسب : ...........................</td>
+            </tr>
+            <tr>
+              <td colspan="100%">
+                توقيع صاحب السيارة بالاستلام :
+                ..............................................................................................................
+              </td>
+            </tr>
+          </tbody>
+        </table> -->
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+      </div>
+      <div style="display: none">
+        <div id="discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function getttl() {
+        var totalTr =
+          '   <tr>   <td colspan="100%"> المبلغ المتفق عليه :    <span id="totalcost" style="width: 60px !important">{%invoice_total%}</span><span id="ar_invoice_total_spelled">{%invoice_total_spelled%}</span>  </td>  </tr>';
+        document.querySelector("#listing_table tbody").innerHTML =
+          document.querySelector("#listing_table tbody").innerHTML + totalTr;
+      }
+      try {
+        getttl();
+      } catch (error) {
+        console.log(error);
+      }
+      function swap() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          var band = allRows[i].cells[0].innerHTML;
+          var price = allRows[i].cells[1].innerHTML;
+          var qty = allRows[i].cells[2].innerHTML;
+          var ttl = allRows[i].cells[3].innerHTML;
+          allRows[i].cells[0].innerHTML = qty;
+          allRows[i].cells[1].innerHTML = band;
+          allRows[i].cells[2].innerHTML = price;
+          allRows[i].cells[3].innerHTML = ttl;
+          allRows[i].cells[3].style.display = "none";
+        }
+      }
+      try {
+        swap();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+    <script>
+      function numberToWordsArabic(number) {
+        var units = [
+          "",
+          "واحد",
+          "اثنان",
+          "ثلاثة",
+          "أربعة",
+          "خمسة",
+          "ستة",
+          "سبعة",
+          "ثمانية",
+          "تسعة",
+          "عشرة",
+          "أحد عشر",
+          "اثنا عشر",
+          "ثلاثة عشر",
+          "أربعة عشر",
+          "خمسة عشر",
+          "ستة عشر",
+          "سبعة عشر",
+          "ثمانية عشر",
+          "تسعة عشر",
+        ];
+
+        var tens = [
+          "",
+          "",
+          "عشرون",
+          "ثلاثون",
+          "أربعون",
+          "خمسون",
+          "ستون",
+          "سبعون",
+          "ثمانون",
+          "تسعون",
+        ];
+
+        var scales = [
+          "",
+          "ألف",
+          "مليون",
+          "مليار",
+          "تريليون",
+          "كوادريليون",
+          "كوينتليون",
+          "سكستليون",
+          "سبتليون",
+          "أوكتليون",
+          "نونليون",
+          "ديسليون",
+        ];
+
+        if (number === 0) {
+          return "صفر";
+        }
+
+        var words = "";
+
+        if (number < 0) {
+          words += "سالب ";
+          number = Math.abs(number);
+        }
+
+        var scaleIndex = 0;
+
+        while (number > 0) {
+          var triplet = number % 1000;
+          number = Math.floor(number / 1000);
+
+          if (triplet > 0) {
+            var tripletWords = "";
+
+            var hundreds = Math.floor(triplet / 100);
+            var tensAndUnits = triplet % 100;
+
+            if (hundreds > 0) {
+              if (hundreds == 1) {
+                tripletWords += " مئة";
+              } else if (hundreds == 2) {
+                tripletWords += " مائتان";
+              } else if (hundreds == 3) {
+                tripletWords += " ثلاثمائة  ";
+              } else if (hundreds == 4) {
+                tripletWords += " اربعمائة ";
+              } else if (hundreds == 5) {
+                tripletWords += " خمسمائة ";
+              } else if (hundreds == 6) {
+                tripletWords += " ستمائة ";
+              } else if (hundreds == 7) {
+                tripletWords += " سبعمائة ";
+              } else if (hundreds == 8) {
+                tripletWords += " ثمانمائة ";
+              } else if (hundreds == 9) {
+                tripletWords += " تسعمائة ";
+              }
+            }
+            if (tensAndUnits > 0) {
+              if (tripletWords !== "") {
+                tripletWords += " و";
+              }
+
+              if (tensAndUnits < 20) {
+                tripletWords += units[tensAndUnits];
+              } else {
+                var tensDigit = Math.floor(tensAndUnits / 10);
+                var unitsDigit = tensAndUnits % 10;
+
+                if (tensDigit > 0) {
+                  if (unitsDigit === 1) {
+                    tripletWords += units[unitsDigit] + " و";
+                  } else if (unitsDigit > 1) {
+                    tripletWords += units[unitsDigit] + " و";
+                  }
+
+                  tripletWords += tens[tensDigit];
+                }
+              }
+            }
+            if (scaleIndex > 0) {
+              if (triplet === 1) {
+                tripletWords += " " + scales[scaleIndex];
+              } else if (triplet >= 2 && triplet <= 10) {
+                tripletWords += " " + scales[scaleIndex] + "";
+              } else if (triplet > 10) {
+                tripletWords += " " + scales[scaleIndex];
+              }
+            }
+
+            if (words !== "") {
+              words = tripletWords + " و" + words;
+            } else {
+              words = tripletWords;
+            }
+          }
+
+          scaleIndex++;
+        }
+        return words;
+      }
+      function convertFN(num, maincurrency, floatCurr) {
+        var myIntNum = parseInt(num.split(".")[0]);
+        var myFloatNum = parseInt(num.split(".")[1]);
+        return (
+          numberToWordsArabic(myIntNum) +
+          " " +
+          maincurrency +
+          " و " +
+          numberToWordsArabic(myFloatNum) +
+          " " +
+          floatCurr +
+          " فقط"
+        );
+      }
+      try {
+        var myNum = String(
+          parseFloat(
+            document
+              .getElementById("totalcost")
+              .innerText.replace(/[\$,]/g, "")
+              .replace("(", "")
+              .replace(")", "")
+          ).toFixed(2)
+        );
+        document.getElementById("ar_invoice_total_spelled").innerText =
+          convertFN(myNum, "ريال", "هلله");
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

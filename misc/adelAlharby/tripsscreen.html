@@ -1,0 +1,150 @@
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      function addEvents() {
+        document.querySelector(
+          `#CustomModelField34`
+        ).parentElement.style.display = "none";
+        document.querySelector(
+          `#CustomModelField35`
+        ).parentElement.style.display = "none";
+        document.querySelector(
+          `#CustomModelField36`
+        ).parentElement.style.display = "none";
+        document.querySelector(
+          `#CustomModelField37`
+        ).parentElement.style.display = "none";
+
+        document.querySelector(
+          `#CustomModelField44`
+        ).parentElement.style.display = "none";
+        document.querySelector(
+          `#CustomModelField45`
+        ).parentElement.style.display = "none";
+        // from event *********************** toggle show *********************
+        $(`#CustomModelField38`).on("change", function () {
+          if (
+            document.querySelector("#CustomModelField39").value.trim() ==
+              "مطار جدة" ||
+            document.querySelector("#CustomModelField39").value.trim() ==
+              "مطار المدينة" ||
+            document.querySelector("#CustomModelField39").value.trim() ==
+              "مطار ينبع" ||
+            document.querySelector("#CustomModelField39").value.trim() ==
+              "مطار الطائف" ||
+            document.querySelector("#CustomModelField38").value.trim() ==
+              "مطار جدة" ||
+            document.querySelector("#CustomModelField38").value.trim() ==
+              "مطار المدينة" ||
+            document.querySelector("#CustomModelField38").value.trim() ==
+              "مطار ينبع" ||
+            document.querySelector("#CustomModelField38").value.trim() ==
+              "مطار الطائف"
+          ) {
+            document.querySelector(
+              `#CustomModelField34`
+            ).parentElement.style.display = "block";
+            document.querySelector(
+              `#CustomModelField35`
+            ).parentElement.style.display = "block";
+            document.querySelector(
+              `#CustomModelField36`
+            ).parentElement.style.display = "block";
+            document.querySelector(
+              `#CustomModelField37`
+            ).parentElement.style.display = "block";
+
+            document.querySelector(
+              `#CustomModelField44`
+            ).parentElement.style.display = "block";
+            document.querySelector(
+              `#CustomModelField45`
+            ).parentElement.style.display = "block";
+          } else {
+            document.querySelector(
+              `#CustomModelField34`
+            ).parentElement.style.display = "none";
+            document.querySelector(
+              `#CustomModelField35`
+            ).parentElement.style.display = "none";
+            document.querySelector(
+              `#CustomModelField36`
+            ).parentElement.style.display = "none";
+            document.querySelector(
+              `#CustomModelField37`
+            ).parentElement.style.display = "none";
+
+            document.querySelector(
+              `#CustomModelField44`
+            ).parentElement.style.display = "none";
+            document.querySelector(
+              `#CustomModelField45`
+            ).parentElement.style.display = "none";
+          }
+        });
+        //   to event
+        $(`#CustomModelField39`).on("change", function () {
+          if (
+            document.querySelector("#CustomModelField39").value.trim() ==
+              "مطار جدة" ||
+            document.querySelector("#CustomModelField39").value.trim() ==
+              "مطار المدينة" ||
+            document.querySelector("#CustomModelField39").value.trim() ==
+              "مطار ينبع" ||
+            document.querySelector("#CustomModelField39").value.trim() ==
+              "مطار الطائف" ||
+            document.querySelector("#CustomModelField38").value.trim() ==
+              "مطار جدة" ||
+            document.querySelector("#CustomModelField38").value.trim() ==
+              "مطار المدينة" ||
+            document.querySelector("#CustomModelField38").value.trim() ==
+              "مطار ينبع" ||
+            document.querySelector("#CustomModelField38").value.trim() ==
+              "مطار الطائف"
+          ) {
+            document.querySelector(
+              `#CustomModelField34`
+            ).parentElement.style.display = "block";
+            document.querySelector(
+              `#CustomModelField35`
+            ).parentElement.style.display = "block";
+            document.querySelector(
+              `#CustomModelField36`
+            ).parentElement.style.display = "block";
+            document.querySelector(
+              `#CustomModelField37`
+            ).parentElement.style.display = "block";
+
+            document.querySelector(
+              `#CustomModelField44`
+            ).parentElement.style.display = "block";
+            document.querySelector(
+              `#CustomModelField45`
+            ).parentElement.style.display = "block";
+          } else {
+            document.querySelector(
+              `#CustomModelField34`
+            ).parentElement.style.display = "none";
+            document.querySelector(
+              `#CustomModelField35`
+            ).parentElement.style.display = "none";
+            document.querySelector(
+              `#CustomModelField36`
+            ).parentElement.style.display = "none";
+            document.querySelector(
+              `#CustomModelField37`
+            ).parentElement.style.display = "none";
+
+            document.querySelector(
+              `#CustomModelField44`
+            ).parentElement.style.display = "none";
+            document.querySelector(
+              `#CustomModelField45`
+            ).parentElement.style.display = "none";
+          }
+        });
+      }
+      addEvents();
+    }, 500);
+  });
+</script>

@@ -1,0 +1,487 @@
+<style>
+  * {
+    font-family: sans-serif !important;
+  }
+
+  .sticky-footer {
+    margin: 0px 20px;
+  }
+
+  .sticky-footer .invoice-info {
+    border-bottom: 3px solid rgb(255, 128, 0);
+    border-top: 3px solid rgb(255, 128, 0);
+    padding: 3px 0;
+    position: relative;
+  }
+
+  .sticky-footer p {
+    font-weight: bold;
+    font-size: 11px;
+    text-align: center;
+  }
+
+  .sticky-footer table tbody {
+    font-weight: bold;
+    font-size: 11px;
+  }
+
+  .sticky-footer table.invoice-total tbody p {
+    text-align: center;
+  }
+
+  .sticky-footer div.quantity-total {
+    background: #c0c0c0;
+    border: 1px solid black;
+    display: inline-block;
+    position: absolute;
+    top: 30%;
+    left: 0;
+    padding: 5px 10px;
+    height: fit-content;
+    width: 10%;
+  }
+
+  .sticky-footer div.quantity-total p {
+    margin: 0;
+  }
+
+  .sticky-footer div.quantity-total p:nth-child(2) {
+    font-size: 12px;
+    margin-top: 3px;
+  }
+
+  table.footer-table {
+    width: 90%;
+    margin: 5px auto;
+  }
+
+  table.footer-table tr td {
+    text-align: center;
+  }
+
+  table.footer-table tr td:nth-child(1),
+  table.footer-table tr td:nth-child(3) {
+    width: 40%;
+    position: relative;
+  }
+
+  table.footer-table tr td span:nth-child(2) {
+    display: inline-block;
+    position: absolute;
+    left: 50%;
+    margin-left: -50%;
+    width: 100%;
+    letter-spacing: 0.5px;
+    font-weight: normal;
+  }
+
+  table.footer-table tr td span:nth-child(1) {
+    float: right;
+  }
+
+  table.footer-table tr td span:nth-child(3) {
+    float: left;
+  }
+</style>
+
+<div class="sticky-footer">
+  <div class="invoice-info">
+    <div style="display: inline-block; width: 85%">
+      <table class="invoice-total" style="width: 100%">
+        <tbody>
+          <tr>
+            <td rowspan="4">
+              <table style="width: 100%" class="mainTbles">
+                <tbody>
+                  <tr>
+                    <td>
+                      <span id="total_before_any_discount"></span>
+                      <span class="currency-code"
+                        >{%invoice_currency_code%}</span
+                      >
+                    </td>
+                    <td><span>الإجمالي</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span id="items_discount">{%item-discount-total%}</span>
+                    </td>
+                    <td><span>الخصم</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span id="total_before_discount"
+                        >{%invoice_subtotal%}</span
+                      >
+                    </td>
+                    <td><span>الإجمالي</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="format" id="first_discount"
+                        >{%custom_خصم_1_قيمة_field_8%}
+                        <span style="margin: 0" class="currency-code"
+                          >{%invoice_currency_code%}
+                        </span></span
+                      >
+                    </td>
+                    <td><span> {%custom_مسمى_خصم_1_field_10%}</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span id="total_after_first_discount"></span>
+                      <span class="currency-code"
+                        >{%invoice_currency_code%}</span
+                      >
+                    </td>
+                    <td><span>الإجمالي</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="format">{%custom_خصم_2_قيمة_field_9%}</span>
+                      <span style="margin: 0" class="currency-code"
+                        >{%invoice_currency_code%}
+                      </span>
+                    </td>
+                    <td><span> {%custom_مسمى_خصم_2_field_11%}</span></td>
+                  </tr>
+                  <tr style="display: none">
+                    <td><span id="discount">{%discount%}</span></td>
+                    <td><span>الخصم</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span id="total_after_discount"></span>
+                      <span style="margin: 0" class="currency-code"
+                        >{%invoice_currency_code%}
+                      </span>
+                    </td>
+                    <td><span>المبلغ قبل الضريبة</span></td>
+                  </tr>
+                  <tr>
+                    <td><span>{%tax-total%}</span></td>
+                    <td><span>ضريبة القيمة المضافة 15%</span></td>
+                  </tr>
+                  <tr>
+                    <td><span>{%invoice_total%}</span></td>
+                    <td><span>الإجمالي بعد الضريبة</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+            <td style="padding: 10px"></td>
+          </tr>
+          <tr>
+            <td>
+              <p style="margin: 0; font-size: 13px">
+                <span
+                  >حسابنا لدي البنك الأهلي / بأسم مؤسسة معروف المتميزة للتجارة
+                </span>
+              </p>
+              <p style="margin: 0; font-size: 13px">
+                <span>IBAN : SA 08100000 221589 75000105</span>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 10px"></td>
+          </tr>
+          <tr>
+            <td>
+              <span style="font-size: 11px">{%invoice_total_spelled%}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="quantity-total">
+      <p>مجموع الكميات</p>
+      <p>{%invoice_item_qty%}</p>
+    </div>
+  </div>
+  <table class="footer-table">
+    <tbody>
+      <tr>
+        <td>
+          <span>اسم المستلم</span> <span>...........................</span>
+          <span>Received Name</span>
+        </td>
+        <td style="width: 20%"></td>
+        <td>
+          <span>اسم المندوب</span> <span>...........................</span>
+          <span>Pre. Name</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span>التوقيع</span> <span>...........................</span>
+          <span>Signature</span>
+        </td>
+        <td style="width: 20%"></td>
+        <td>
+          <span>التوقيع</span> <span>...........................</span>
+          <span>Signature</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size: 12px">
+    طريق الملك فهد الفرعى - الرياض - المملكة العربية السعودية - الرمز البريدي
+    12634 - رقم المبني 6193
+  </p>
+</div>
+<script>
+  // <![CDATA[
+  function formatNumber(container) {
+    console.log(container.innerHTML);
+    var num = Number(container.innerHTML);
+    var parts = num.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    console.log(parts);
+    if (parts[1]) {
+      if (parts[1].length == 1) {
+        parts[1] = parts[1] + "0";
+      }
+    } else if (!parts[1]) {
+      parts[1] = "00";
+    }
+    console.log(parts);
+    container.innerHTML = parts.join(".");
+  }
+  // parseFloat(str.replace(/[^\d.-]/g, '').replace(',', ''))
+  function totalBeforeDiscount() {
+    var totalAfterDiscountSpan = document.querySelector(
+      "span#total_after_discount"
+    );
+    var totalBeforeAnyDiscountSpan = document.querySelector(
+      "span#total_before_any_discount"
+    );
+    var totalBeforeDiscount = parseFloat(
+      document
+        .querySelector("span#total_before_discount")
+        .innerHTML.replace(/,/g, "")
+    );
+    var itemsDiscount = parseFloat(
+      document.querySelector("span#items_discount").innerHTML.replace(/,/g, "")
+    );
+    var firstDiscount = parseFloat(
+      document.querySelector("span#first_discount").innerHTML.replace(/,/g, "")
+    );
+    var totalAfterFirstDiscountSpan = document.querySelector(
+      "span#total_after_first_discount"
+    );
+    totalBeforeAnyDiscountSpan.innerHTML = totalBeforeDiscount + itemsDiscount;
+    formatNumber(totalBeforeAnyDiscountSpan);
+    totalAfterFirstDiscountSpan.innerHTML = totalBeforeDiscount - firstDiscount;
+    formatNumber(totalAfterFirstDiscountSpan);
+    var discount = parseFloat(
+      document.querySelector("span#discount").innerHTML.replace(/,/g, "")
+    );
+    totalAfterDiscountSpan.innerHTML = (totalBeforeDiscount - discount).toFixed(
+      2
+    );
+    formatNumber(totalAfterDiscountSpan);
+  }
+  try {
+    totalBeforeDiscount();
+  } catch (e) {
+    console.log(e);
+  }
+  //   function handleCurrencyCode(currencyCodeSpan) {
+  //     var currenciesArr = [
+  //       {
+  //         currencyCodeEnglish: "AFN", // Afghan Afghani
+  //         currencyCodeArabic: "؋",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "ALL", // Albanian Lek
+  //         currencyCodeArabic: "Lek",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "DZD", // Algerian Dinar
+  //         currencyCodeArabic: "د.ج",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "AED", // United Arab Emirates Dirham
+  //         currencyCodeArabic: "د.إ.",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "EGP", // Egyptian Pound
+  //         currencyCodeArabic: "ج.م.",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "EUR", // Euro
+  //         currencyCodeArabic: "€",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "USD", // US Dollar
+  //         currencyCodeArabic: "$",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "INR", // Indian Rupee
+  //         currencyCodeArabic: "ر.إ",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "JPY", // Japanese Yen
+  //         currencyCodeArabic: "¥",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "GBP", // British Pound
+  //         currencyCodeArabic: "ج.إ.",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "SAR", // Saudi Riyal
+  //         currencyCodeArabic: "ر.س.",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "CAD", // Canadian Dollar
+  //         currencyCodeArabic: "C$",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "CHF", // Swiss Franc
+  //         currencyCodeArabic: "CHF",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "AUD", // Australian Dollar
+  //         currencyCodeArabic: "A$",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "BRL", // Brazilian Real
+  //         currencyCodeArabic: "R$",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "CNY", // Chinese Yuan
+  //         currencyCodeArabic: "¥",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "ZAR", // South African Rand
+  //         currencyCodeArabic: "ر.س",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "MXN", // Mexican Peso
+  //         currencyCodeArabic: "$",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "RUB", // Russian Ruble
+  //         currencyCodeArabic: "₽",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "SGD", // Singapore Dollar
+  //         currencyCodeArabic: "S$",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "TRY", // Turkish Lira
+  //         currencyCodeArabic: "₺",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "ARS", // Argentine Peso
+  //         currencyCodeArabic: "$",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "BDT", // Bangladeshi Taka
+  //         currencyCodeArabic: "৳",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "HKD", // Hong Kong Dollar
+  //         currencyCodeArabic: "HK$",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "IDR", // Indonesian Rupiah
+  //         currencyCodeArabic: "Rp",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "ILS", // Israeli New Shekel
+  //         currencyCodeArabic: "₪",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "KRW", // Korean Won
+  //         currencyCodeArabic: "₩",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "MYR", // Malaysian Ringgit
+  //         currencyCodeArabic: "RM",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "NZD", // New Zealand Dollar
+  //         currencyCodeArabic: "NZ$",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "NOK", // Norwegian Krone
+  //         currencyCodeArabic: "kr",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "PKR", // Pakistani Rupee
+  //         currencyCodeArabic: "روپیہ",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "PHP", // Philippine Peso
+  //         currencyCodeArabic: "₱",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "QAR", // Qatari Rial
+  //         currencyCodeArabic: "ر.ق",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "SEK", // Swedish Krona
+  //         currencyCodeArabic: "kr",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "THB", // Thai Baht
+  //         currencyCodeArabic: "฿",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "VND", // Vietnamese Dong
+  //         currencyCodeArabic: "₫",
+  //       },
+  //       {
+  //         currencyCodeEnglish: "YER", // Yemeni Rial
+  //         currencyCodeArabic: "ر.ي",
+  //       },
+  //     ];
+  //     for (var i = 0; i < currenciesArr.length; i++) {
+  //       if (
+  //         currenciesArr[i]["currencyCodeEnglish"] == currencyCodeSpan.innerHTML
+  //       ) {
+  //         currencyCodeSpan.innerHTML = currenciesArr[i]["currencyCodeArabic"];
+  //       }
+  //     }
+  //   }
+  function handleDiscounts() {
+    var currencyCodeSpans = document.querySelectorAll("span.currency-code");
+    console.log(currencyCodeSpans);
+
+    for (var i = 0; i < currencyCodeSpans.length; i++) {
+      console.log(currencyCodeSpans[i]);
+      handleCurrencyCode(currencyCodeSpans[i]);
+    }
+    var formatNumberSpans = document.querySelectorAll("span.format");
+    for (var j = 0; j < formatNumberSpans.length; j++) {
+      formatNumber(formatNumberSpans[j]);
+    }
+  }
+  try {
+    handleDiscounts();
+  } catch (e) {
+    console.log(e);
+  }
+  // ]]>
+  function replaceCurrency(parentElement) {
+    var currencyElements =
+      parentElement.getElementsByClassName("currency-code");
+
+    for (var i = 0; i < currencyElements.length; i++) {
+      if (currencyElements[i].innerText.trim() === "SAR") {
+        currencyElements[i].innerText = "ر.س";
+      }
+    }
+  }
+
+  try {
+    // Example usage:
+    var tableElement = document.querySelector(".mainTbles"); // Get the first table
+    console.log(tableElement);
+    replaceCurrency(tableElement);
+  } catch (error) {
+    console.log(error);
+  }
+</script>

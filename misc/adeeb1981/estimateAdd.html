@@ -1,0 +1,101 @@
+<style>
+  .late_td,
+  .late_th {
+    display: table-cell !important;
+  }
+</style>
+
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      async function createCol(
+        prevTh,
+        prevTd,
+        colTitle,
+        classTh,
+        classTd,
+        colInput
+      ) {
+        if (
+          document.querySelectorAll("#listing_table tr:nth-child(1) .late_th")
+            .length == 0
+        ) {
+          // Clone TH and attach change event listener
+          $(prevTh).after(
+            $("th.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTh)
+              .replace("", colTitle)
+          );
+
+          $(prevTd).after(
+            $("td.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTd)
+              .replace("item_col_4", colInput)
+          );
+        } else if (
+          !document.querySelector("#listing_table tr:last-child .late_td")
+        ) {
+          $(`#listing_table tr:last-child ${prevTd}`).after(
+            $("#listing_table tr:last-child td.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTd)
+              .replace("item_col_4", colInput)
+          );
+        }
+
+        $("." + colInput).attr("placeholder", "");
+        $("." + colInput).attr("name", "");
+
+        document.querySelector(".late_th").innerText = "Buy Price";
+      }
+
+      // adding the columns when screen is loaded
+      createCol(
+        "th.col-3",
+        "td.col-3",
+        "إختيار العاملة ",
+        "late_th",
+        "late_td",
+        "late_input"
+      );
+      $(".late_td textarea").val("");
+      $(document).on("click", "#AddItem", function () {
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "إختيار العاملة ",
+          "late_th",
+          "late_td",
+          "late_input"
+        );
+      });
+      $(document).on("change", ".item-id", function () {
+        if ($(this).val()) {
+          setTimeout(() => {
+            console.log("changed");
+            console.log(product.buy_price);
+            if (product.buy_price) {
+              $(this)
+                .closest("tr")
+                .find(".late_td textarea")
+                .val(product.buy_price);
+            }
+          }, 250);
+        } else {
+          $(this).closest("tr").find(".late_td textarea").val("");
+        }
+      });
+    }, 400);
+  });
+</script>

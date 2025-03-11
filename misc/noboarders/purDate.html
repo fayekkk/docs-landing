@@ -1,0 +1,70 @@
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      function screenCode() {
+        var allPurchaseOrderCustomFields = document.querySelectorAll(
+          "#PurchaseOrderCustomFields .field-row"
+        );
+        let invDate = $("#PurchaseOrderDate").val();
+        // Split the date string into components
+        const dateParts = invDate.split("-"); // ['04', '11', '2024']
+        const month = parseInt(dateParts[1], 10) - 1; // Month is 0-indexed
+        const day = parseInt(dateParts[0], 10);
+        const year = parseInt(dateParts[2], 10);
+
+        // Create a new Date object
+        const gregorianDate = new Date(year, month, day);
+        console.log("Parsed Gregorian Date:", gregorianDate);
+        // const gregorianDate = new Date(Date.parse(invDate));
+        // // gregorianDate.setDate(gregorianDate.getDate() - 1);
+        // console.log(gregorianDate);
+
+        // Subtract one day from the Gregorian date
+        const previousGregorianDate = new Date(gregorianDate.getTime());
+        // Create an instance of Intl.DateTimeFormat with the appropriate options
+        const formatter = new Intl.DateTimeFormat("ar-EG-u-ca-islamic", {
+          timeZone: "Africa/Cairo",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+        // Format the previous Gregorian date to Hijri
+        const hijriDate = formatter.format(previousGregorianDate);
+        console.log(hijriDate);
+        let flag = 0;
+        for (let i = 0; i < allPurchaseOrderCustomFields.length; i++) {
+          if (
+            allPurchaseOrderCustomFields[i].cells[0].querySelector("input")
+              .value == "Hijri Date<br>التاريخ الهجري"
+          ) {
+            flag = 1;
+
+            allPurchaseOrderCustomFields[i].cells[1].querySelector(
+              "input"
+            ).value = hijriDate;
+          }
+        }
+        if (flag == 0) {
+          $(".MoreFieldsListDropDown").click();
+          document.querySelector(
+            "#PurchaseOrderCustomFields .field-row:last-child td:nth-child(1) input"
+          ).value = "Hijri Date<br>التاريخ الهجري";
+          document.querySelector(
+            "#PurchaseOrderCustomFields .field-row:last-child td:nth-child(2) input"
+          ).value = hijriDate;
+        }
+      }
+      screenCode();
+      $(document).on("change", "#InvoiceLayout", function () {
+        setTimeout(() => {
+          screenCode();
+        }, 250);
+      });
+      $(document).on("change", "#PurchaseOrderDate", function () {
+        setTimeout(() => {
+          screenCode();
+        }, 250);
+      });
+    }, 500);
+  });
+</script>

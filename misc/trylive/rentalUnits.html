@@ -1,0 +1,42 @@
+<script>
+  //  fetch("/v2/api/entity/rental_price_rule_detail", {
+  //   method: "POST",
+  //   headers: {
+  //     Accept: "application/json",
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({
+  //             "day": "sunday",
+  //             "day_price": 0,
+  //             "hour_price": 200,
+  //             "price_rule_id": 3,
+  //             })
+  //         .then((response) => response.json())
+  //   .then((data) => {
+  //     console.log("Response:", data);
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error:", error);
+  //   })
+
+  fetch("/v2/api/entity/rental_price_rule_detail", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      day: "sunday",
+      day_price: 0,
+      hour_price: 200,
+      price_rule_id: 3,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Response:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+</script>

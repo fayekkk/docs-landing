@@ -1,0 +1,137 @@
+<style>
+  .col-2 textarea::placeholder {
+    color: transparent !important;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    function handleInvoiceLayout() {
+      const $invoiceLayout = $("#InvoiceLayout");
+
+      function toggleUnitPrice() {
+        const $labelUnitPrice = $("#label_unit_price");
+        const $unitPrice = $(".unit-price");
+        const $col2Textarea = $(".col-2 textarea");
+        if ($invoiceLayout.val() === "3") {
+          $labelUnitPrice.hide();
+          $unitPrice.hide();
+          $col2Textarea.attr("placeholder", "");
+        } else {
+          $labelUnitPrice.show();
+          $unitPrice.show();
+          $col2Textarea.attr("placeholder", "الوصف");
+        }
+      }
+
+      toggleUnitPrice();
+      $invoiceLayout.on("change", toggleUnitPrice);
+      $("#AddItem").on("click", toggleUnitPrice);
+    }
+
+    function handleItemNameInput() {
+      const $table = $("#listing_table");
+      const $col2Textarea = $(".col-2 textarea");
+      const $col3Textarea = $(".col-3 textarea");
+
+      function preventNonDigitInput() {
+        $col2Textarea.on("keypress", function (e) {
+          if (
+            $(this).closest("tr").find(".item_name").val().toLowerCase() !==
+              "group" &&
+            !/^\d+$/.test(e.key)
+          ) {
+            e.preventDefault();
+          }
+        });
+
+        $col3Textarea.on("keypress", function (e) {
+          if (!/^\d+$/.test(e.key)) {
+            e.preventDefault();
+          }
+        });
+      }
+
+      function updateUnitPriceOnChange() {
+        $table.on(
+          "change",
+          ".col-2 textarea, .col-3 textarea",
+          debounce(function () {
+            const $row = $(this).closest("tr");
+            const duration = $row.find(".col-2 textarea").val();
+            const price = $row.find(".col-3 textarea").val();
+            const unitPriceInput = $row.find(".unit-price input");
+            if (isNaN(duration * price)) {
+              unitPriceInput.val(0).change();
+            } else {
+              unitPriceInput.val(duration * price).change();
+            }
+          }, 300)
+        );
+      }
+
+      function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+          const context = this;
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+      }
+
+      preventNonDigitInput();
+      updateUnitPriceOnChange();
+
+      $(".item_name").on("change", preventNonDigitInput);
+      $("#AddItem").on("click", function () {
+        preventNonDigitInput();
+        updateUnitPriceOnChange();
+      });
+    }
+
+    function handleGroupItem() {
+      const $table = $("#listing_table");
+
+      $table.on("input", ".select-item textarea", function () {
+        const currentValue = $(this).val().toLowerCase();
+        if (currentValue === "group") {
+          const $row = $(this).closest("tr");
+          $row.find(".col-3 textarea").val(0).change().attr("disabled", true);
+          $row.find(".Quantity input").val(1).change().attr("disabled", true);
+          $row.find(".unit-price input").val(0).change().attr("disabled", true);
+          // $("#AddItem").click();
+          $row.find(".col-2 textarea").focus();
+        }
+      });
+    }
+    function foreditanddrafts() {
+      $(".select-item textarea").each(function () {
+        const currentValue = $(this).val().toLowerCase();
+        if (currentValue === "group") {
+          const $row = $(this).closest("tr");
+          $row.find(".col-3 textarea").val(0).change().attr("disabled", true);
+          $row.find(".Quantity input").val(1).change().attr("disabled", true);
+          $row.find(".unit-price input").val(0).change().attr("disabled", true);
+          $row.find(".col-2 textarea").focus();
+        }
+      });
+    }
+
+    if ($("#InvoiceLayout").val() === "3") {
+      handleInvoiceLayout();
+      handleItemNameInput();
+      handleGroupItem();
+      setTimeout(() => {
+        if ((window.location.href.split("/")[5] = "edit_estimate"))
+          foreditanddrafts();
+      }, 1000);
+    }
+
+    $("#InvoiceLayout").on("change", function () {
+      if ($(this).val() === "3") {
+        handleInvoiceLayout();
+        handleItemNameInput();
+        handleGroupItem();
+      }
+    });
+  });
+</script>

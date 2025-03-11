@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #ffffff;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 -10px;
+      padding: 0;
+    }
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      border-left: 1px solid #555555;
+      font-weight: bold;
+      text-align: center;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      border-bottom: none !important;
+      border-left: 1px solid #555555;
+      text-align: center;
+      padding: 5px 6px;
+      vertical-align: top;
+      height: 12px;
+    }
+    .listing-table tr:last-child td {
+      border-bottom: 1px solid #555555 !important;
+    }
+    .total-table td {
+      border-left: 1px solid #555555;
+    }
+    .total-table th:last-child,
+    .total-table td:last-child {
+      border-right: 1px solid #555555;
+    }
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    strong_tag {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    #invoice_title {
+      font-size: 18px;
+    }
+    .info {
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    .info td {
+      padding: 3px;
+      border: 1px solid;
+    }
+    .qr-code img {
+      height: 75px;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    .totals td {
+      padding: 3px;
+    }
+    .totals {
+      border: 1px solid #000;
+      border-top: none;
+      padding: 5px;
+    }
+    #items-list div {
+      display: none;
+    }
+    .invoice-address {
+      white-space: normal !important;
+      padding: 10px 0;
+    }
+    .listing-table th:first-child {
+      width: 10%;
+      border-right: none !important;
+    }
+    #listing_table td:nth-child(2) {
+      text-align: left;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="33%" valign="bottom">
+              <p>الرقم الضريبي {%site_bn1%}</p>
+            </td>
+            <td width="34%" align="center" valign="top">
+              <p id="invoice_title" class="editable-area invoice-name">
+                {%invoice_title%}
+              </p>
+            </td>
+            <td width="33%" align="left" valign="top">
+              <div class="qr-code">{%sa_qr_code_image%}<br /></div>
+            </td>
+          </tr>
+        </table>
+        <div class="invoice-address">
+          <table
+            border="0"
+            cellspacing="0"
+            cellpadding="0"
+            width="100%"
+            class="info"
+          >
+            <tr>
+              <td width="14%" align="right">رقم العميل</td>
+              <td width="24%" align="center">{%client_number%}</td>
+              <td width="12%" align="left">Customer ID</td>
+              <td width="12%" align="right">رقم الفاتورة</td>
+              <td width="24%" align="center">{%invoice_no%}</td>
+              <td width="14%" align="left">Invoice NO</td>
+            </tr>
+            <tr>
+              <td align="right">طريقة الدفع</td>
+              <td align="center">{%Payment Type%}</td>
+              <td align="left">Payment Type</td>
+              <td align="right">تاريخ الفاتورة</td>
+              <td align="center">{%invoice_date%}</td>
+              <td align="left">Invoice Date</td>
+            </tr>
+            <tr>
+              <td align="right">اسم العميل</td>
+              <td colspan="4" align="center">{%client_business_name%}</td>
+              <td align="left">Customer Name</td>
+            </tr>
+            <!--  <tr>
+              <td align="right">اسم العميل انجليزي</td>
+              <td colspan="4" align="center">
+                {%custom_client_name_en_field_9%}
+              </td>
+              <td align="left">Customer Name E</td>
+            </tr>-->
+            <tr>
+              <td align="right">الرقم الضريبي</td>
+              <td colspan="4" align="center">{%client_bn1%}</td>
+              <td align="left">VAT NO</td>
+            </tr>
+
+            <tr>
+              <td align="right">العنوان</td>
+              <td align="center" colspan="4">{%client_address%}</td>
+              <td align="left">Location</td>
+            </tr>
+          </table>
+        </div>
+
+        <div id="items-list" style="direction: ltr">{%items_list%}</div>
+        <div>
+          <table
+            width="100%"
+            border="0"
+            cellspacing="0"
+            cellpadding="0"
+            class="totals"
+          >
+            <tr>
+              <td width="15%" class="sub-before"></td>
+              <td>الاجمالي</td>
+              <td align="left">Subtotal SAR</td>
+              <td
+                rowspan="5"
+                width="45%"
+                align="left"
+                style="direction: ltr; line-height: 1.3"
+              >
+                NAIF ALWAN ALI ALSOHAIMI COMMERCIAL EST
+                <br />
+                مؤسسة نايف علوان علي السهيمي التجارية
+                <br />
+                Saudi National Bank البنك الاهلي
+                <br />
+                Account No: 01400027047400 <br />
+                IBAN: SA1510000001400027047400 <br />
+                Al Rajhi Bank مصرف الراجحي <br />
+                Account No: 618000010006086368155 <br />
+                IBAN: SA7580000618608016368155
+              </td>
+            </tr>
+            <tr>
+              <td class="discount"></td>
+              <td>الخصم</td>
+              <td align="left">Discount</td>
+            </tr>
+            <tr>
+              <td class="subtotal">{%invoice_total%}</td>
+              <td>صافي الفاتورة بدون ضريبة</td>
+              <td align="left">Total Before Vat</td>
+            </tr>
+            <tr>
+              <td class="vat"></td>
+              <td>مجموع الضريبة</td>
+              <td align="left">Total Invoice Amount</td>
+            </tr>
+
+            <tr>
+              <td class="total"></td>
+              <td>الإجمالي شامل الضريبة</td>
+              <td align="left">Total With Vat</td>
+            </tr>
+          </table>
+          <div
+            align="left"
+            style="
+              border: 1px solid #000;
+              border-top: none;
+              padding: 30px 0;
+              direction: ltr;
+            "
+          >
+            Received By Name
+            ..................................................... Sign
+            ..................................................... Sales Man
+            ......................................................
+          </div>
+        </div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div style="display: none">
+          <div id="discount">{%discount%}</div>
+          <div id="item-discount">{%item-discount-total%}</div>
+        </div>
+      </div>
+      <div style="display: none">
+        <div id="sub">{%invoice_subtotal%}</div>
+        <div id="tax">{%tax-total%}</div>
+        <div id="discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+        <div id="total">{%invoice_total%}</div>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function deleteCurrency() {
+        var totals = document.querySelectorAll(".totals tr td:first-child");
+
+        for (var i = 0; i < totals.length; i++) {
+          totals[i].innerText = parseFloat(
+            totals[i].innerText.replace(/[, ر س ]+/g, ""),
+            10
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      function autoFill() {
+        var mainTable = document.getElementById("listing_table");
+        var mainDiv = document.getElementById("items-list");
+        var mainDivHeight = mainDiv.offsetHeight;
+        while (mainDivHeight <= 450) {
+          var rowNum = mainTable.rows.length;
+          var newRow = mainTable.insertRow(rowNum);
+          for (var i = 0; i < mainTable.rows[0].cells.length; i++) {
+            var newCell = newRow.insertCell(i);
+          }
+          mainDivHeight = mainDiv.offsetHeight;
+        }
+      }
+      function swap(in1, in2, table_id) {
+        var table = document.getElementById(table_id);
+        for (var i = 0, row; (row = table.rows[i]); i++) {
+          var temp = row.cells[in1].innerHTML;
+          row.cells[in1].innerHTML = row.cells[in2].innerHTML;
+          row.cells[in2].innerHTML = temp;
+        }
+      }
+      function totalValues() {
+        var tot = document.getElementById("total").innerText;
+        tot = parseFloat(tot.replace(/[, ر س ]+/g, "").trim());
+        var sub = document.getElementById("sub").innerText;
+        sub = parseFloat(sub.replace(/[, ر س ]+/g, "").trim());
+        var tax = document.getElementById("tax").innerText;
+        tax = parseFloat(tax.replace(/[, ر س ]+/g, "").trim());
+        console.log(tax);
+        var discount = document.getElementById("discount").innerText;
+        discount = parseFloat(discount.replace(/[, ر س ]+/g, "").trim());
+        var itemDis = document.getElementById("item-discount").innerText;
+        itemDis = parseFloat(itemDis.replace(/[, ر س ]+/g, "").trim());
+        subBeforeDis = sub + itemDis;
+        subAfterDis = sub - discount;
+        var dis = itemDis + discount;
+        document.getElementsByClassName("total")[0].innerHTML = tot
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        document.getElementsByClassName("sub-before")[0].innerHTML =
+          subBeforeDis.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        document.getElementsByClassName("subtotal")[0].innerHTML = subAfterDis
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        document.getElementsByClassName("discount")[0].innerHTML = dis
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        document.getElementsByClassName("vat")[0].innerHTML = tax
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+      try {
+        swap(2, 5, "listing_table");
+        swap(3, 4, "listing_table");
+        swap(4, 5, "listing_table");
+        swap(5, 6, "listing_table");
+
+        totalValues();
+        deleteCurrency();
+        autoFill();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>
+

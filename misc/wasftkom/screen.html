@@ -1,0 +1,59 @@
+<script>
+  console.log("here");
+
+  if (USER.branch_id) {
+    if (USER.staff_id == 0 && USER.branch_id != 1) {
+      window.location.href =
+        "/owner/staffs/update_current_branch/1?last_url=L293bmVyL3NpdGVzL2Rhc2hib2FyZA%3D%3D";
+    }
+  }
+
+  if (USER.staff_id == 0 && USER.branch_id == 1) {
+    // if (
+    //   window.location.href.indexOf("/branches/edit") != -1 &&
+    //   window.location.href.indexOf("/branches/edit/1") != -1
+    // ) {
+    //   window.location.href = "/owner/sites/dashboard";
+    // }
+    // if (window.location.href.includes("/reports/report/")) {
+    //   console.log("here");
+    //   const originalUrl = window.location.href;
+    //   let modifiedUrl = originalUrl;
+    //   modifiedUrl = modifiedUrl.replace(/([&?]branch_id=)(&|$)/, "$2");
+    //   modifiedUrl = modifiedUrl.replace(/&?branch_id\[\]=\d*/, "");
+    //   console.log(modifiedUrl);
+    //   if (!modifiedUrl.includes("branch_id=1")) {
+    //     const separator = modifiedUrl.includes("?") ? "&" : "?";
+    //     modifiedUrl += `${separator}branch_id=1`;
+    //   }
+    //   modifiedUrl = modifiedUrl
+    //     .replace(/[&]{2,}/g, "&")
+    //     .replace(/&$/, "")
+    //     .replace(/\?&/, "?");
+    //   console.log(modifiedUrl);
+    //   if (modifiedUrl !== originalUrl) {
+    //     console.log(modifiedUrl);
+    //     window.location.href = modifiedUrl;
+    //   }
+    // }
+    // Check if the URL contains "reports/report"
+    // if (window.location.href.includes("/reports/report/")) {
+    //   const originalUrl = window.location.href;
+    //   let modifiedUrl = originalUrl;
+    //   modifiedUrl = modifiedUrl.replace(/([&?]branch_id=?[^&]*)/gi, "");
+    //   modifiedUrl = modifiedUrl.replace(/([&?]branch_id\[\]=?[^&]*)/gi, "");
+    //   console.log(modifiedUrl);
+    //   console.log(modifiedUrl.indexOf("branch_id"));
+    //   const separator = modifiedUrl.includes("?") ? "&" : "?";
+    //   modifiedUrl += `${separator}branch_id=1`;
+    //   modifiedUrl = modifiedUrl
+    //     .replace(/[&]{2,}/g, "&")
+    //     .replace(/\?&/, "?")
+    //     .replace(/&$/, "");
+    //   console.log(modifiedUrl !== originalUrl);
+    //   if (modifiedUrl !== originalUrl) {
+    //     window.location.href = modifiedUrl;
+    //   }
+    // }
+  }
+</script>

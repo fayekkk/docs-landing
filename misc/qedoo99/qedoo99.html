@@ -1,0 +1,376 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: transparent;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    #client_info {
+      width: 100%;
+      border-spacing: 3px 5px;
+      direction: rtl;
+      text-align: center;
+      color: #fff;
+    }
+    #client_info tr:nth-child(1) .bluespace {
+      background-color: #4899c6;
+      border: 1px solid #305c8b;
+      border-radius: 7px;
+      padding: 0;
+    }
+    #client_info tr:nth-child(1) .whitespace {
+      display: inline-block;
+      width: 84%;
+      float: left;
+      background-color: #fff;
+      border-radius: 7px;
+      border-right: 1px solid #305c8b;
+      height: 21px;
+    }
+    #client_info tr:nth-child(2) td:nth-child(1) {
+      width: 58.5%;
+    }
+    /* #client_info tr:nth-child(2) td:nth-child(2) {
+      width: 41.5%;
+    } */
+
+    #client_info tr:nth-child(2) td:nth-child(1) {
+      background-color: #4899c6;
+      border: 1px solid #305c8b;
+      border-radius: 7px;
+      padding: 0;
+    }
+    #client_info tr:nth-child(2) td:nth-child(1) .whitespace {
+      display: inline-block;
+      width: 72.4%;
+      float: left;
+      background-color: #fff;
+      border-radius: 7px;
+      border-right: 1px solid #305c8b;
+      height: 21px;
+    }
+    #client_info tr:nth-child(2) td:nth-child(2) {
+      background-color: #4899c6;
+      border: 1px solid #305c8b;
+      border-radius: 7px;
+      padding: 0;
+    }
+    #client_info tr:nth-child(2) td:nth-child(2) .whitespace {
+      display: inline-block;
+      width: 58.5%;
+      float: left;
+      background-color: #fff;
+      border-radius: 7px;
+      border-right: 1px solid #305c8b;
+      height: 21px;
+    }
+
+    #client_info tr:nth-child(3) td:nth-child(1) {
+      background-color: #4899c6;
+      border: 1px solid #305c8b;
+      border-radius: 7px;
+      padding: 0;
+    }
+    #client_info tr:nth-child(3) td:nth-child(1) .whitespace {
+      display: inline-block;
+      width: 72.4%;
+      float: left;
+      background-color: #fff;
+      border-radius: 7px;
+      border-right: 1px solid #305c8b;
+      height: 21px;
+    }
+    #client_info tr:nth-child(3) td:nth-child(2) {
+      background-color: #4899c6;
+      border: 1px solid #305c8b;
+      border-radius: 7px;
+      padding: 0;
+    }
+    #client_info tr:nth-child(3) td:nth-child(2) .whitespace {
+      display: inline-block;
+      width: 58.5%;
+      float: left;
+      background-color: #fff;
+      border-radius: 7px;
+      border-right: 1px solid #305c8b;
+      height: 21px;
+    }
+    #adrssss br {
+      display: none;
+    }
+    .whitespace {
+      color: #000 !important;
+    }
+    #listing_table th:nth-child(3),
+    #listing_table td:nth-child(3),
+    #listing_table th:nth-child(4),
+    #listing_table td:nth-child(4),
+    #listing_table th:nth-child(5),
+    #listing_table td:nth-child(5),
+    #listing_table th:nth-child(6),
+    #listing_table td:nth-child(6),
+    #listing_table th:nth-child(7),
+    #listing_table td:nth-child(7),
+    #listing_table th:nth-child(9),
+    #listing_table td:nth-child(9) {
+      display: none;
+    }
+    #listing_table {
+      border-spacing: 3px 4px;
+    }
+    #listing_table th,
+    #listing_table td {
+      border-radius: 7px;
+      border: 1px solid #305c8b;
+      padding: 3px 2px;
+      text-align: center;
+    }
+    #listing_table th {
+      background-color: #c9bbb8;
+      text-align: center;
+      font-weight: bold;
+      color: #fff;
+    }
+    #listing_table th:nth-child(1) {
+      width: 31.5%;
+    }
+    #listing_table th:nth-child(2) {
+      width: 48.8%;
+    }
+    #listing_table th:nth-child(8) {
+      width: 19.5%;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #new_totals {
+      width: 40%;
+      float: left;
+      direction: rtl;
+      border-spacing: 3px 5px;
+      text-align: center;
+    }
+    #new_totals td:nth-child(1) {
+      width: 50%;
+      background-color: #c9bbb8;
+      color: #fff;
+      border-radius: 7px;
+      border: 1px solid #305c8b;
+      font-size: 11px;
+      padding: 4px 2px;
+      font-weight: bold;
+    }
+    #new_totals td:nth-child(2) {
+      width: 50%;
+      border: 1px solid #305c8b;
+      border-radius: 7px;
+      padding: 4px 2px;
+    }
+
+    #invoice_total td:nth-child(1) {
+      background-color: #4899c6;
+    }
+    #invoice_total td:nth-child(2) {
+      background-color: #daf1ff;
+    }
+    #contactUs {
+      width: 100%;
+      direction: rtl;
+
+      text-align: center;
+    }
+    #contactUs td:nth-child(1) {
+      width: 14.7%;
+    }
+    #contactUs td:nth-child(1) img {
+      width: 100%;
+    }
+    #contactUs td:nth-child(2) {
+      width: 54.7;
+    }
+    #contactUs td:nth-child(3) {
+      width: 28.7%;
+    }
+    .bg {
+      z-index: -90000;
+      position: absolute;
+      left: 0px;
+      background-image: url("https://qedoo99.daftra.com/files/5ba65ce4/logos/65d4a0eec3a5b_blobid1708433643293.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      width: 100%;
+      height: 26.2cm;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <div class="bg" style="top: 0cm"></div>
+
+        <div id="inv_title">
+          <img
+            src="https://qedoo99.daftra.com/files/5ba65ce4/logos/65d352c6a0a0a_blobid1708348099942.png"
+            alt=""
+            title="shotitle.png"
+            style="width: 100%"
+          />
+        </div>
+        <table id="client_info">
+          <tbody>
+            <tr>
+              <td colspan="100%" class="bluespace">
+                إسم العميل
+                <span class="whitespace">{%client_business_name%}</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="bluespace">
+                الرقم الضريبى <span class="whitespace">{%client_bn1%}</span>
+              </td>
+              <td class="bluespace">
+                رقم الفاتورة <span class="whitespace">{%invoice_no%}</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="bluespace">
+                عنوان العميل
+                <span class="whitespace" id="adrssss"
+                  >{%client_full_address%}</span
+                >
+              </td>
+              <td class="bluespace">
+                تاريخ الفاتورة <span class="whitespace">{%invoice_date%}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="items-list">{%items_list%}</div>
+        <table id="new_totals">
+          <tbody>
+            <tr>
+              <td>الإجمالي</td>
+              <td>{%invoice_subtotal%}</td>
+            </tr>
+            <tr>
+              <td>القيمة المضافة 15%</td>
+              <td>{%tax-total%}</td>
+            </tr>
+            <tr id="invoice_total">
+              <td>الإجمالي</td>
+              <td>{%invoice_total%}</td>
+            </tr>
+            <tr id="paid">
+              <td>مدفوع</td>
+              <td>{%paid%}</td>
+            </tr>
+            <tr id="unpaid">
+              <td >الرصيد المستحق</td>
+              <td>{%unpaid%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="contactUs">
+          <tbody>
+            <tr>
+              <td>{%sa_qr_code_image%}</td>
+              <td>
+                <img
+                  src="https://qedoo99.daftra.com/files/5ba65ce4/logos/65d49cddd8c2a_blobid1708432602625.png"
+                  alt=""
+                  title="shobanks.png"
+                  style="width: 100%"
+                />
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="display: none">
+          <div id="discount">{%discount%}</div>
+          <div id="item-discount">{%item-discount-total%}</div>
+          <div id="invoice_title">{%invoice_title%}</div>
+        </div>
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function SwapAll() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        if (allRows[0].cells.length == 9) {
+          for (var i = 0; i < allRows.length; i++) {
+            var disc = allRows[i].cells[7].innerHTML;
+            var ttl = allRows[i].cells[8].innerHTML;
+            allRows[i].cells[7].innerHTML = ttl;
+            allRows[i].cells[8].innerHTML = disc;
+          }
+        }
+      }
+      try {
+        SwapAll();
+      } catch (error) {
+        console.log(error);
+      }
+      function repeatBg() {
+        var invoiceHeight =
+          document.querySelector(".invoice-inner").offsetHeight;
+        var pageHeight = document.querySelector(".bg").offsetHeight;
+        var numPages = Math.ceil(invoiceHeight / pageHeight);
+        var bg = document.querySelector(".bg");
+        var topDis = parseFloat(bg.style.top.replace("cm", ""));
+        for (var i = 1; i < numPages; i++) {
+          var newBg = document.createElement("div");
+          newBg.setAttribute("class", "bg");
+          topDis += 26.2;
+          console.log(topDis);
+          newBg.style.top = topDis + "cm";
+          bg.parentNode.insertBefore(newBg, bg.nextSibling);
+        }
+      }
+      try {
+        repeatBg();
+      } catch (e) {
+        console.log(e);
+      }
+      function hundleInvest(){
+        var invoicetitle = document.getElementById('invoice_title').innerText.trim()
+        if(invoicetitle == 'est'){
+          document.getElementById('paid').style.display='none'
+          document.getElementById('unpaid').style.display='none'
+          document.querySelector('#inv_title img').setAttribute('src','https://qedoo99.daftra.com/files/5ba65ce4/logos/65d4abb097324_blobid1708436397374.png')
+     
+        }
+      }
+      try {
+        hundleInvest()
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

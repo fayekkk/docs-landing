@@ -1,0 +1,73 @@
+<style>
+  .no_of_students {
+    padding: 6px 15px;
+    background-color: #e4ebf2;
+    font-size: 15px;
+    font-weight: bold;
+  }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(async function () {
+    setTimeout(async () => {
+      try {
+        const response = await fetch(
+          "/v2/api/entity/le_workflow-type-entity-1/list/-1?per_page=200",
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const data = await response.json();
+        console.log("Response:", data);
+
+        const dataIds = data.data.map((item) => item.id);
+        console.log({ dataIds: dataIds });
+
+        let numberofStudent = 0;
+
+        if (dataIds.length > 0) {
+          const fetchPromises = dataIds.map(async (id) => {
+            const fetchResponse = await fetch(
+              `/v2/api/entity/le_workflow-type-entity-1/${id}/4`,
+              {
+                method: "GET",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            const fetchData = await fetchResponse.json();
+            console.log({ data: fetchData });
+
+            const customDataLength =
+              fetchData["le_workflow-type-entity-1_custom_data"][
+                "le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_multiple_sub_forms"
+              ].length;
+
+            numberofStudent += customDataLength;
+          });
+
+          // Wait for all fetch requests to complete
+          await Promise.all(fetchPromises);
+
+          const newDiv = $("<div>").attr("class", "no_of_students");
+          $(newDiv).text(
+            "عدد طلاب الدورات المفتوحة  " + " : " + numberofStudent
+          );
+          $(
+            "#main-content > div.main-area > div > div.card.mb-3 > div.pages-head > div > div > div:nth-child(2)"
+          ).after(newDiv);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }, 250);
+  });
+</script>

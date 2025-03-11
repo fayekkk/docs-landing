@@ -1,0 +1,281 @@
+<style>
+  #the_body {
+    padding: 15px;
+  }
+  #trip_info {
+    width: 100%;
+    margin-bottom: 15px;
+    text-align: right;
+    border-top: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: none;
+    border-left: none;
+  }
+  #trip_info td {
+    padding: 3px;
+    border-top: none;
+    border-right: none;
+    border-bottom: 1px solid #e5e5e5;
+    border-left: 1px solid #e5e5e5;
+    font-size: 16px;
+  }
+  #trip_info td:nth-child(1) {
+    width: 15%;
+  }
+  #trip_info td:nth-child(2) {
+    width: 35%;
+  }
+  #trip_info td:nth-child(3) {
+    width: 15%;
+  }
+  #trip_info td:nth-child(4) {
+    width: 35%;
+  }
+  #from_to {
+    width: 100%;
+    margin-bottom: 15px;
+    text-align: right;
+    border-top: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: none;
+    border-left: none;
+  }
+  #from_to td {
+    padding: 4px;
+    border-top: none;
+    border-right: none;
+    border-bottom: 1px solid #e5e5e5;
+    border-left: 1px solid #e5e5e5;
+    font-size: 14px;
+  }
+  .bigdata td {
+    font-size: 16px;
+  }
+  #addAll {
+    text-align: center;
+    width: 100%;
+    border-top: 1px solid #000;
+    border-right: 1px solid #000;
+    border-bottom: none;
+    border-left: none;
+  }
+  #addAll td,
+  #addAll th {
+    border-top: 1px solid;
+    border-right: 1px solid;
+    border-bottom: 1px solid #000;
+    border-left: 1px solid #000;
+    font-size: 10px;
+  }
+  #addAll td:nth-child(9),
+  #addAll td:nth-child(10),
+  #addAll td:nth-child(11),
+  #addAll td:nth-child(12),
+  #addAll td:nth-child(13),
+  #addAll td:nth-child(14),
+  #addAll td:nth-child(15),
+  #addAll td:nth-child(16),
+  #addAll td:nth-child(17),
+  #addAll td:nth-child(18),
+  #addAll td:nth-child(19),
+  #addAll td:nth-child(20) {
+    display: none;
+  }
+  #addAll th {
+    background-color: #e5e5e5;
+  }
+  #addAll td:nth-child(1) {
+    width: 5%;
+  }
+  #addAll td:nth-child(2) {
+    width: 16%;
+  }
+  #addAll td:nth-child(3) {
+    width: 10%;
+  }
+  #addAll td:nth-child(4) {
+    width: 29%;
+  }
+  #addAll td:nth-child(5) {
+    width: 8%;
+  }
+  #addAll td:nth-child(6) {
+    width: 9%;
+  }
+  #addAll td:nth-child(7) {
+    width: 10%;
+  }
+  #addAll td:nth-child(8) {
+    width: 10%;
+  }
+</style>
+<div id="the_body">
+  <!--% foreach({{Data.le_workflow-type-entity-3.le_workflow-type-entity-3_custom_data.le_custom_data_le_workflow-type-entity-3_le_custom_data_le_workflow-type-entity-3_trip_details}} as {{le_workflow_type_entity_3_custom_data_row}}) { %-->
+  <div style="page-break-after: always">
+    <div>
+      <img
+        src="https://durobalhijrah.daftara.com/files/d5e2718e/logos/65b3dddc475e4_blobid1706286551829.png"
+        style="width: 60%; margin: 10px 20%"
+      />
+    </div>
+    <table id="trip_info" style="width: 99.9963%; height: 139.915px">
+      <tbody>
+        <tr>
+          <td>رقم الكشف</td>
+          <td colspan="3">{{Data.le_workflow-type-entity-3.number}}</td>
+        </tr>
+        <tr>
+          <td>الموسم :</td>
+          <td>
+            {{Data.le_workflow-type-entity-3.le_workflow-type-entity-3_custom_data.year}}
+          </td>
+          <td>الشركة الناقلة :</td>
+          <td>
+            {{Data.le_workflow-type-entity-3.work_order_client.business_name}}
+          </td>
+        </tr>
+        <tr>
+          <td>رمز الشركة :</td>
+          <td>
+            {{Data.le_workflow-type-entity-3.le_workflow-type-entity-3_custom_data.company_code}}
+          </td>
+          <td>رقم الحافلة :</td>
+          <td>{{le_workflow_type_entity_3_custom_data_row.number2}}</td>
+        </tr>
+        <tr>
+          <td>عدد المعتمرين</td>
+          <td>
+            {{Data.le_workflow-type-entity-3.le_workflow-type-entity-3_custom_data.passengers_no}}
+          </td>
+          <td>رقم اللوحة</td>
+          <td>{{le_workflow_type_entity_3_custom_data_row.number1}}</td>
+        </tr>
+        <tr>
+          <td>إسم الشركة :</td>
+          <td>
+            {{Data.le_workflow-type-entity-3.le_workflow-type-entity-3_custom_data.company_name}}
+          </td>
+          <td>تاريخ الكشف :</td>
+          <td>{{le_workflow_type_entity_3_custom_data_row.date}}</td>
+        </tr>
+        <tr>
+          <td>إسم السائق :</td>
+          <td>{{le_workflow_type_entity_3_custom_data_row.driver_name}}</td>
+          <td>جوال السائق :</td>
+          <td>{{le_workflow_type_entity_3_custom_data_row.driver_mobile}}</td>
+        </tr>
+        <tr>
+          <td colspan="2">جنسية السائق</td>
+          <td colspan="2">
+            {{le_workflow_type_entity_3_custom_data_row.driver_nationality}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br />
+    <table id="from_to" style="width: 99.9963%; height: 73.7501px">
+      <tbody>
+        <tr>
+          <td colspan="2" style="width: 51.1281%">من</td>
+          <td colspan="2" style="width: 48.7435%">إلى</td>
+        </tr>
+        <tr class="bigdata" style="height: 8.89205px">
+          <td colspan="2" style="width: 51.1281%; height: 8.89205px">
+            {{le_workflow_type_entity_3_custom_data_row.from}}
+          </td>
+          <td colspan="2" style="width: 48.7435%; height: 8.89205px">
+            {{le_workflow_type_entity_3_custom_data_row.to}}
+          </td>
+        </tr>
+        <tr class="airbort_check">
+          <td style="width: 22.5724%">رقم الرحلة</td>
+          <td style="width: 28.5557%">شركة الطيران</td>
+          <td style="width: 25.3658%">رقم الصالة</td>
+          <td style="width: 23.3776%">زمن الرحلة</td>
+        </tr>
+        <tr style="height: 8.89205px" class="airbort_check1">
+          <td style="width: 22.5724%; height: 8.89205px">
+            {{le_workflow_type_entity_3_custom_data_row.tripnofly}}
+          </td>
+          <td style="width: 28.5557%; height: 8.89205px">
+            {{le_workflow_type_entity_3_custom_data_row.fly_company}}
+          </td>
+          <td style="width: 25.3658%; height: 8.89205px">
+            {{le_workflow_type_entity_3_custom_data_row.hall_no}}
+          </td>
+          <td style="width: 23.3776%; height: 8.89205px">
+            {{le_workflow_type_entity_3_custom_data_row.trip_time}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!--% } %-->
+  <div id="datatopass">
+    <span id="datatopass11" style="display: none">
+      {{Data.le_workflow-type-entity-3.le_workflow-type-entity-3_custom_data.datatobass}}</span
+    >
+    <table id="addAll">
+      <thead>
+        <th>م</th>
+        <th>الوكيل</th>
+        <th>رقم المعتمر</th>
+        <th>اسم المعتمر</th>
+        <th>الجنسية</th>
+        <th>رقم الجواز</th>
+        <th>من فندق</th>
+        <th>الى فندق</th>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    function ExcelReader() {
+      var alldata = JSON.parse(
+        document.getElementById("datatopass11").innerText
+      );
+      if (alldata.length == 0) {
+        document.querySelector("#addAll ").style.display = "none";
+      } else {
+        for (var i = 0; i < alldata.length; i++) {
+          console.log(alldata[i]);
+          var newTr = document.createElement("tr");
+          var object = alldata[i];
+          for (var key in object) {
+            var newTd = document.createElement("td");
+            var value = object[key];
+            newTd.innerText = value;
+            newTr.appendChild(newTd);
+          }
+          document.querySelector("#addAll tbody").appendChild(newTr);
+        }
+      }
+    }
+    try {
+      ExcelReader();
+    } catch (error) {
+      console.log(error);
+    }
+    function removeAirbort() {
+      var allairport = document.querySelectorAll(".airbort_check");
+      var allairport1 = document.querySelectorAll(".airbort_check1");
+      for (var i = 0; i < allairport1.length; i++) {
+        if (
+          allairport1[i].cells[0].innerText.trim() == "" &&
+          allairport1[i].cells[1].innerText.trim() == "" &&
+          allairport1[i].cells[2].innerText.trim() == "" &&
+          allairport1[i].cells[3].innerText.trim() == ""
+        ) {
+          allairport[i].style.display = "none";
+          allairport1[i].style.display = "none";
+        }
+      }
+    }
+    try {
+      removeAirbort();
+    } catch (error) {
+      console.log(error);
+    }
+  </script>
+</div>

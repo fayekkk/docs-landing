@@ -1,0 +1,24 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      $("[id$='--purch_actual_cost']").attr("readonly", true);
+      $("[id$='--expenses_actual_cost']").attr("readonly", true);
+      $("[id$='--sales_cost']").attr("readonly", true);
+      $("[id$='--incomes_cost']").attr("readonly", true);
+      $("[id$='--requisitions_spend']").attr("readonly", true);
+      $("[id$='--requisitions_add']").attr("readonly", true);
+      $(
+        "#le_workflow-type-entity-2 > div.form-row > div.col-lg-12 > div.row > div > div > div > div > div.card-body.p-0 > div > div > div > div > div > div.btn-group.add-row.dropdown > button"
+      ).on("click", function () {
+        setTimeout(() => {
+          $("[id$='--purch_actual_cost']").attr("readonly", true);
+          $("[id$='--expenses_actual_cost']").attr("readonly", true);
+          $("[id$='--sales_cost']").attr("readonly", true);
+          $("[id$='--incomes_cost']").attr("readonly", true);
+          $("[id$='--requisitions_spend']").attr("readonly", true);
+          $("[id$='--requisitions_add']").attr("readonly", true);
+        }, 150);
+      });
+    }, 250);
+  });
+</script>

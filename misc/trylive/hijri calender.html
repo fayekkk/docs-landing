@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hijri Calendar</title>
+    <!-- <link rel="stylesheet" href="styles.css" /> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-hijri/2.1.1/moment-hijri.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+      }
+      #hijriDate {
+        font-size: 24px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>التقويم الهجري</h1>
+    <div id="hijriDate"></div>
+
+    <script>
+      function displayHijriDate() {
+        // Get the current Hijri date
+        const hijriDate = moment().format("iYYYY/iM/iD");
+
+        // Display the Hijri date
+        document.getElementById("hijriDate").innerText = hijriDate;
+      }
+
+      // Call the function on page load
+      displayHijriDate();
+    </script>
+  </body>
+</html>

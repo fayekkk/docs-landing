@@ -1,0 +1,286 @@
+<style>
+  .hidden-elem {
+    display: none !important;
+  }
+  .rtl-span {
+    display: inline-block;
+    direction: rtl;
+  }
+  .error-box span {
+    font-size: 12px;
+    padding: 4px 10px;
+    border: 1px solid rgba(224, 25, 49, 0.8);
+    background: rgba(224, 25, 49, 0.7);
+    color: #fff;
+    border-radius: 3px;
+  }
+  .error-box {
+    display: inline-block;
+    position: inherit;
+    margin-right: 20px;
+  }
+  .error-box:after {
+    border: 0;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    // adding new button HTML
+    var newButton = `<div class="col-md-12 col-sm-12" style="margin-bottom: 25px;">
+          <div class="m-r-md d-inline-flex">
+            <a id="calcBtn" class="ajust-invoice btn-info" style="padding: 8px 15px !important; display: inline-block;">احسب ضمان الأعمال</a>
+          </div>
+          <div style="display: inline-block; max-width: 100px;">
+            <label class="ui-input-label l-input-label adjust-tab-input-label">النسبة</label>
+            <input type="number" style="height: 40px;" placeholder="0" class="number discount-tab-input-discount ui-input l-input form-x3" step="any" value="" id="InvoiceRetention">
+          </div>
+          <div class="error-box hidden">
+            <span class="empty-value hidden-elem rtl-span">قم بإدخال نسبة ضمان الأعمال أولاً</span>
+            <span class="exceed-limit hidden-elem rtl-span">لا يمكن أن تتخطى النسبة 100%</span>
+          </div>
+        </div>`;
+    var tab = $("#tab-1 .row");
+    tab.prepend(newButton);
+
+    // getting second tax
+    var tax = parseFloat(
+      $("#Tax2Row td:nth-child(3)").text().replace(/,/g, "")
+    );
+    if (isNaN(tax)) {
+      tax = 0;
+    }
+
+    // checking if retention is zero or NaN then adding the adjustment label as ضمان أعمال
+    if (
+      isNaN(parseFloat($("#InvoiceRetention").val())) ||
+      parseFloat($("#InvoiceRetention").val()) == 0
+    ) {
+      $("#InvoiceAdjustmentLabel").val("خصم ضمان أعمال");
+    }
+
+    // calculating retention funtion
+    function calcRetention() {
+      var retentionValue = $("#InvoiceAdjustmentValue");
+      var total =
+        parseFloat($("#SubtotalValue").text().replace(/,/g, "")) + tax;
+      if (isNaN(total)) {
+        total = 0;
+      }
+
+      // calculating retention from subtotal
+      $("#InvoiceAdjustmentValue").val(
+        (parseFloat($("#InvoiceRetention").val() * 0.01) * total * -1).toFixed(
+          2
+        )
+      );
+      $("#InvoiceAdjustmentValue").change();
+
+      // getting retention value
+      function getRetPerc() {
+        let retPer = $("#InvoiceRetention").val();
+        return retPer;
+      }
+
+      // changing the adjustment label with the retention percentage
+      $("#InvoiceAdjustmentLabel").val(`خصم ضمان أعمال (${getRetPerc()}%)`);
+
+      // LOCAL STORAGE (saving new retention value)
+      localStorage.setItem("retention", $("#InvoiceRetention").val());
+    }
+
+    // changing التسوية to ضمان أعمال
+    let adjLbl = $(".discount-tab-input-label").eq(1);
+    if (adjLbl.text() == "التسوية") {
+      adjLbl.html(adjLbl.html().replace("التسوية", "خصم ضمان أعمال"));
+    }
+
+    setTimeout(function () {
+      // showing error box if retention was not entered after button click
+      $("#calcBtn").on("click", function () {
+        if (isNaN(parseFloat($("#InvoiceRetention").val()))) {
+          $(".error-box").removeClass("hidden-elem");
+          $(".empty-value").removeClass("hidden-elem");
+        } else {
+          $(".error-box").addClass("hidden-elem");
+          $(".empty-value").addClass("hidden-elem");
+        }
+        calcRetention();
+      });
+
+      // giving error message in case retention percentage exceeds 100%
+      $("#InvoiceRetention").on("input", function () {
+        if (parseFloat($("#InvoiceRetention").val()) > 100) {
+          $("#InvoiceRetention").val(100);
+          $(".error-box").removeClass("hidden-elem");
+          $(".exceed-limit").removeClass("hidden-elem");
+        } else {
+          $(".error-box").addClass("hidden-elem");
+          $(".exceed-limit").addClass("hidden-elem");
+        }
+      });
+    }, 500);
+
+    // LOCAL STORAGE (showing saved retention value)
+    var savedRet = localStorage.getItem("retention");
+    console.log(savedRet);
+    if (savedRet != 0) {
+      $("#InvoiceRetention").val(savedRet);
+    }
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      function screenCode() {
+        let invLayout = $("#InvoiceLayout").val();
+        if (invLayout == "12") {
+          $("#discount_type").empty();
+          $("#discount_type").append(
+            $("<option>", {
+              value: "fixed",
+              text: "مبلغ",
+            })
+          );
+          $("#discount_type").val("fixed").change();
+          $(
+            "#tab-1 > div > div:nth-child(3) > div > div > div > div.selectize-input.items.full.has-options.has-items > div"
+          ).text("مبلغ");
+          function addDiscounts() {
+            var $discinput1 = $("#CustomModelField25");
+            var $discinput2 = $("#CustomModelField26");
+            var discinput1VAL = parseFloat($discinput1.val());
+            var discinput2VAL = parseFloat($discinput2.val());
+            console.log(discinput1VAL + discinput2VAL);
+
+            $("#InvoiceDiscountAmount")
+              .val(discinput1VAL + discinput2VAL)
+              .change();
+
+            var $discinput3 = $("#CustomModelField27");
+            var $discinput4 = $("#CustomModelField28");
+            var $discinput5 = $("#CustomModelField29");
+            var discinput3VAL = parseFloat($discinput3.val());
+            var discinput4VAL = parseFloat($discinput4.val());
+            var discinput5VAL = parseFloat($discinput5.val());
+            $("#InvoiceAdjustmentLabel").val("خصم ضمان أعمال").change();
+            $("#InvoiceAdjustmentValue")
+              .val((discinput3VAL + discinput4VAL - discinput5VAL) * -1)
+              .change();
+          }
+          // numbers onl
+
+          $(document).ready(function () {
+            if (
+              isNaN($("#CustomModelField26").val()) ||
+              $("#CustomModelField26").val() < 0 ||
+              $("#CustomModelField26").val() == ""
+            ) {
+              $("#CustomModelField26").val("0");
+            }
+            if (
+              isNaN($("#CustomModelField27").val()) ||
+              $("#CustomModelField27").val() < 0 ||
+              $("#CustomModelField27").val() == ""
+            ) {
+              $("#CustomModelField27").val("0");
+            }
+            if (
+              isNaN($("#CustomModelField28").val()) ||
+              $("#CustomModelField28").val() < 0 ||
+              $("#CustomModelField28").val() == ""
+            ) {
+              $("#CustomModelField28").val("0");
+            }
+            if (
+              isNaN($("#CustomModelField29").val()) ||
+              $("#CustomModelField29").val() < 0 ||
+              $("#CustomModelField29").val() == ""
+            ) {
+              $("#CustomModelField29").val("0");
+            }
+            if (
+              isNaN($("#CustomModelField25").val()) ||
+              $("#CustomModelField25").val() < 0 ||
+              $("#CustomModelField25").val() == ""
+            ) {
+              $("#CustomModelField25").val("0");
+            }
+
+            $("#CustomModelField25").on("input", function () {
+              let inputValue = $(this).val();
+              console.log(isNaN(inputValue));
+              if (isNaN(inputValue) || inputValue < 0) {
+                $(this).val("0");
+              }
+            });
+            $("#CustomModelField26").on("input", function () {
+              let inputValue = $(this).val();
+              console.log(isNaN(inputValue));
+              if (isNaN(inputValue) || inputValue < 0) {
+                $(this).val("0");
+              }
+            });
+            $("#CustomModelField27").on("input", function () {
+              let inputValue = $(this).val();
+              if (isNaN(inputValue) || inputValue < 0) {
+                $(this).val("0");
+              }
+            });
+            $("#CustomModelField28").on("input", function () {
+              let inputValue = $(this).val();
+              if (isNaN(inputValue) || inputValue < 0) {
+                $(this).val("0");
+              }
+            });
+            $("#CustomModelField29").on("input", function () {
+              let inputValue = $(this).val();
+              if (isNaN(inputValue) || inputValue < 0) {
+                $(this).val("0");
+              }
+            });
+          });
+          $("#CustomModelField25").on("change", function () {
+            if ($(this).val() == "") {
+              $(this).val(0).change();
+            }
+            addDiscounts();
+          });
+          $("#CustomModelField26").on("change", function () {
+            if ($(this).val() == "") {
+              $(this).val(0).change();
+            }
+            addDiscounts();
+          });
+          $("#CustomModelField27").on("change", function () {
+            if ($(this).val() == "") {
+              $(this).val(0).change();
+            }
+            addDiscounts();
+          });
+          $("#CustomModelField28").on("change", function () {
+            if ($(this).val() == "") {
+              $(this).val(0).change();
+            }
+            addDiscounts();
+          });
+          $("#CustomModelField29").on("change", function () {
+            if ($(this).val() == "") {
+              $(this).val(0).change();
+            }
+            addDiscounts();
+          });
+        } else {
+          $("#CustomModelField25").off("change");
+          $("#CustomModelField26").off("change");
+          $("#CustomModelField27").off("change");
+          $("#CustomModelField28").off("change");
+          $("#CustomModelField29").off("change");
+        }
+      }
+      screenCode();
+      $("#InvoiceLayout").on("change", function () {
+        screenCode();
+      });
+    }, 400);
+  });
+</script>

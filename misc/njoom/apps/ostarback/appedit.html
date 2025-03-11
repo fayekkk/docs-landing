@@ -1,0 +1,1393 @@
+<style>
+  .newPara {
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+
+  .loading_text {
+    font-size: 9px;
+    margin-right: 5px;
+  }
+
+  .loading-image1 {
+    width: 10px;
+  }
+
+  .loading0 {
+    position: relative;
+  }
+
+  .loading1 {
+    position: relative;
+  }
+
+  .loading-image2 {
+    width: 10px;
+  }
+
+  .loading2 {
+    display: inline-block;
+    top: 177px;
+    left: 614px;
+  }
+
+  .error_date,
+  .app_count,
+  .apply_message {
+    font-size: 10px;
+    color: red;
+    width: 200px;
+    align-self: self-end;
+    text-align: center;
+    padding: 3px;
+    border-radius: 3px;
+    background: #ffe7e7;
+  }
+
+  span.app_count {
+    background: #39b1eb;
+    color: #fff;
+    font-weight: 700;
+    padding-bottom: 0;
+    padding: 3px;
+    padding-bottom: 1px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .app_count,
+  .count_message {
+    font-size: 11px;
+    color: #555555;
+    font-weight: bold;
+  }
+
+  .rez {
+    margin: 10px 0;
+    text-align: right;
+    width: 20px;
+    font-size: 20px;
+    height: 20px;
+  }
+
+  .custom_dates_container {
+    margin: 10px 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .custom_label {
+    font-size: inherit;
+  }
+
+  .custom_input {
+    width: 150px;
+  }
+
+  .apply {
+    position: relative;
+    margin: 10px 0 0;
+    color: #fff;
+    text-align: center;
+    background: #18b777;
+    padding: 5px;
+    width: 150px;
+    transition: 0.3s;
+    font-weight: bold;
+  }
+
+  .apply:hover {
+    background: #008000f2;
+    color: #fff;
+  }
+
+  .apply3 {
+    margin: 10px 0 0;
+    color: #fff;
+    text-align: center;
+    background: rgba(191, 4, 4, 0.7);
+    padding: 5px;
+    width: 150px;
+    transition: 0.3s;
+    font-weight: bold;
+  }
+
+  .apply3:hover {
+    opacity: 1;
+    color: #fff;
+  }
+
+  #PostForm button.btn-success {
+    pointer-events: none;
+    background-color: gray;
+  }
+
+  .bypass-checkbox {
+    line-height: 15px;
+    padding-right: 5px;
+    margin-bottom: 15px;
+  }
+
+  .bypass-checkbox label {
+    display: inline-block;
+    font-size: 11px;
+    margin: 0 2px;
+    vertical-align: bottom;
+    padding: 0;
+  }
+
+  span.app-count {
+    display: inline-block;
+    width: 20px;
+    line-height: 20px;
+    padding: 2px 4px;
+    background: #cee3ce;
+    border-radius: 5px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  p.app-count-message {
+    color: green;
+    font-size: 12px;
+    padding: 3px 8px;
+    width: 300px;
+    text-align: right;
+    padding-right: 0;
+  }
+
+  .red-star {
+    color: red;
+    margin: 3px;
+  }
+
+  .new-error-message {
+    margin-top: 2px;
+    background: rgba(224, 25, 49, 0.7);
+    border: 1px solid rgba(224, 25, 49, 0.8);
+    border-radius: 4px;
+    color: #fff;
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    position: absolute;
+    z-index: 100;
+  }
+
+  .new-error-message::after {
+    border-right: 6px solid transparent;
+    border-left: 7px solid transparent;
+    right: 17px;
+    left: auto;
+    border-bottom: 6px solid rgba(224, 25, 49, 0.8);
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: -6px;
+  }
+
+  label[for="ClientAppointmentActionId"],
+  label[for="ClientAppointmentActionId"] ~ div {
+    display: none !important;
+  }
+</style>
+
+<script>
+  $(document).ready(() => {
+    let allData, newReq;
+    let fridayRule;
+    getfridayRule().then((resp) => {
+      fridayRule = resp;
+    });
+    getNewActionList().then((actionList) => {
+      console.log("ActionList");
+      console.log(actionList);
+
+      for (let i = 0; i < actionList.length; i++) {
+        let newOption = `<option value="${actionList[i]}">${actionList[i]}</option> `;
+        $("#new_actions").append(newOption);
+      }
+      onActionSelect();
+    });
+
+    // =============== No Appointment for The Assigned Emps ===================
+    let allURLs = ["work_order", "client", "invoice"];
+    let allKeys = [
+      "WorkOrderAppointment",
+      "ClientAppointment",
+      "InvoiceAppointment",
+    ];
+
+    let allAppoints = [];
+    let allAppointsID = [];
+    let staffList = [];
+
+    let note1 = "";
+    let note2 = "";
+    let note3 = "";
+    let note4 = "";
+    let note5 = "";
+    let message;
+    let invoiceId = document.location.href.split("/").slice(-2)[0];
+    // =============== Elements To DOM ===================
+    let loadingForChecker =
+      '<img class="loading-image1" src="/files/7aae9582/logos/62ab8a530eaae_blobid1655409218887.gif">';
+    let loadingCirc0 =
+      '<div class="loading0">' +
+      '<img class="loading-image1" src="/files/7aae9582/logos/62ab8a530eaae_blobid1655409218887.gif">' +
+      '<span class="loading_text"> جاري استدعاء الفترات</span>' +
+      "</div>";
+    let loadingCirc1 =
+      '<div class="loading1">' +
+      '<img class="loading-image1" src="/files/7aae9582/logos/62ab8a530eaae_blobid1655409218887.gif">' +
+      '<span class="loading_text"> جاري استدعاء البيانات </span>' +
+      "</div>";
+    let loadingCirc2 =
+      '<div class="loading2">' +
+      '<img class="loading-image2" src="/files/7aae9582/logos/62ab8a530eaae_blobid1655409218887.gif">' +
+      "</div>";
+    let loadingCircAppointments =
+      '<div class="loading1">' +
+      '<img class="loading-image1" src="/files/7aae9582/logos/62ab8a530eaae_blobid1655409218887.gif">' +
+      '<span class="loading_text"> جاري تحديد المواعيد خلال الفترة  </span>' +
+      "</div>";
+    let dateFields =
+      `<div class="custom_dates_container">` +
+      `<div><label class="custom_label">من تاريخ</label><input class="date_from custom_input" type="date"></div><div></input>` +
+      `<label class="custom_label">إلى تاريخ</label><input class="date_to custom_input" type="date">` +
+      `</input></div><span class="error_date hidden" ></span> <span class="app_count hidden" ></span> </div>`;
+
+    let bypass = `<div class="bypass-checkbox"><input type="checkbox" id="by_pass"> <label> تخطي فحص المواعيد </label></div>`;
+
+    let selectDepartsMenu =
+      '<div class="custom_dates_container"><div><label class="custom_label">أقسام الشركة</label><select class="custom_select1" disabled><option value="-1">' +
+      " -- اختر القسم -- " +
+      "</option></select></div></div>";
+    let selectGroupsMenu =
+      '<div class="custom_dates_container"><div><label class="custom_label">المجموعات المتاحة</label><select class="custom_select2" disabled><option value="-1"> -- اختر المجموعة -- </option></select></div></div>';
+    let selectIntervalMenu =
+      '<div class="custom_dates_container"><div><label class="custom_label">فترات العمل</label><select class="custom_select0" disabled><option value="-1">' +
+      " -- اختر الفترة -- " +
+      "</option></select></div></div>";
+
+    let toggleInvStatus = `<div id="toggle__inv" class="custom-control custom-control-inline mr-0 custom-switch">جدولة الفاتورة: 
+            <input type="checkbox" class="custom-control-input plugin-item-checkbox" data-plugin-checkbox-id="105" id="105" name="105">
+            <label class="custom-control-label" for="105"></label>
+            </div>`;
+    let btn =
+      '<div class="custom_dates_container"><a class="apply">فحص المواعيد</a></div>';
+
+    let ChackResualtContainer = `<div><span  class="rez"></span> <span class="count_message"></span></div><div class='apply_message hidden'></div>`;
+    let appCountMessage = `<p class="app-count-message" style="color:green; padding:3px 8px;"> </p>`;
+
+    //=================== Add Element To DOM =================
+
+    $("div.date")
+      .before(dateFields)
+      .before(selectIntervalMenu)
+      .before(selectDepartsMenu)
+      .before(selectGroupsMenu)
+      .before(ChackResualtContainer)
+      .before(appCountMessage)
+      .before(btn)
+      .before(bypass);
+
+    setTimeout(() => {
+      if ($(".custom_select1").val() == -1) {
+        $(".custom_select2").attr("disabled", "disabled");
+      }
+    }, 100);
+
+    //===================== Disable main fields  ================
+    const disableFields = () => {
+      $("#ClientAppointmentDateDate").prop("disabled", "disabled");
+      $("#ClientAppointmentDateTime").prop("readonly", "readonly");
+      $("#ClientAppointmentDuration").prop("readonly", "readonly");
+    };
+
+    // ===================== Append new Action list =================
+
+    const newActionsList = `<div class="form-group new_actions_list">
+    <label for="new_action_list">الإجراءات</label>
+    <select id="new_actions" class=" form-control">
+      <option value="0"> -- اختر الإجراء </option> 
+      </select>
+    <div>`;
+    $(".col-md-4.col-sm-4").eq(3).append(newActionsList);
+    $(".col-md-4.col-sm-4").eq(3).find(".form-group").eq(0).addClass("hidden");
+
+    function getNewActionList() {
+      return new Promise((res) => {
+        $.ajax({
+          url: `/v2/api/entity/le_174/1`,
+          type: "GET",
+          success: (data) => {
+            console.log(data["le_174_le_174_add_actions"]);
+            res(
+              data["le_174_le_174_add_actions"].map((val) => {
+                return val["action_name"];
+              })
+            );
+          },
+          error: (e) => {
+            console.log(e);
+            res(e);
+          },
+        });
+      });
+    }
+
+    function onActionSelect() {
+      $("#new_actions").val(
+        $("#ClientAppointmentActionId").val() != ""
+          ? $("#ClientAppointmentActionId option:selected").text()
+          : 0
+      );
+      $("#new_actions").on("change", function () {
+        let allOptions = $("#ClientAppointmentActionId option");
+        let selectedOption = allOptions.filter((i, val) => {
+          return $(val).text() === $(this).val();
+        });
+        $("#ClientAppointmentActionId").val($(selectedOption).val()).change();
+        $("ul.dropdown-menu.inner.selectpicker .selected").removeClass(
+          "selected"
+        );
+        $(
+          `ul.dropdown-menu.inner.selectpicker li[data-original-index=${$(
+            selectedOption
+          ).val()}]`
+        ).addClass("selected");
+      });
+    }
+
+    //===================== Append red star for Actions Field =================
+    const star = `<span class="red-star">*</span>`;
+    const errorMessgae = `<div class="error-message">مطلوب</div>`;
+    const actionField = $("#new_actions");
+    actionField.on("change", () => {
+      $(actionField).parent().find(".new-error-message").remove();
+    });
+    $('label[for="new_action_list"]').append(star);
+    function checkActionValue() {
+      if (
+        $(actionField).val() == undefined ||
+        $(actionField).val() == "" ||
+        $(actionField).val() == 0
+      ) {
+        $(actionField).after(`<div class="new-error-message">مطلوب</div>`);
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    //===================== Check user name (Supers/Emps) ================
+
+    const isAdmin = () => {
+      let userName = $(".user-drop")
+        .find("a")
+        .find("span:last-child")
+        .clone()
+        .children()
+        .remove()
+        .end()
+        .text()
+        .trim();
+
+      if (userName == "عبدالرحمن عبدالله  المغذوي" || userName == "اسامة") {
+        console.log("is admin");
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    //   ====================== ShortCust ==========================
+
+    function clearChachShortCut() {
+      document.onkeyup = function (e) {
+        if (e.ctrlKey && e.shiftKey && e.which == 69) {
+          console.log("test ");
+          localStorage.removeItem("shifts_id");
+          localStorage.removeItem("data_ids");
+
+          location.reload();
+        }
+      };
+    }
+    clearChachShortCut();
+
+    //===================== Convert string to Time ================
+    function getDateFromHours(time) {
+      time = time.split(":");
+      let now = new Date();
+      return new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        ...time
+      );
+    }
+
+    //===================== Sum duration to time ==========================
+
+    let sumTime = (time1, time2) => {
+      let [h1, m1] = time1.split(":");
+      let [h2, m2] = time2.split(":");
+
+      return +h1 + +m1 / 60 + (+h2 + +m2 / 60);
+    };
+
+    //=================== Convert Number Format to Time ====================
+
+    function numberToTime(number) {
+      var decimalTimeString = number;
+      var n = new Date(0, 0);
+      n.setSeconds(+decimalTimeString * 60 * 60);
+      return n.toTimeString().slice(0, 5);
+    }
+
+    //===================== Check user name (Supers/Emps) ================
+
+    const isStaffAssigned = () => {
+      let hasStaffAssigned = false;
+      $.each($(".multiselect-container.dropdown-menu li"), (i) => {
+        let opt = $(".multiselect-container.dropdown-menu li").eq(i);
+        if (opt.find("input").is(":checked")) {
+          hasStaffAssigned = true;
+        }
+      });
+
+      return hasStaffAssigned;
+    };
+
+    //===================== Get Friday Rule =============================
+
+    function getfridayRule() {
+      return new Promise((res) => {
+        $.ajax({
+          url: `/v2/api/entity/le_165/1`,
+          type: "GET",
+          success: (data) => {
+            if (data.friday_active == 1) {
+              res(true);
+            } else {
+              res(false);
+            }
+          },
+          error: (e) => {
+            res(e);
+          },
+        });
+      });
+    }
+    //===================== Get Today =============================
+
+    function getToday() {
+      let now = new Date();
+      return `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+    }
+
+    //===================== Check dates before save =================
+
+    function checkDates() {
+      let selectedDate = (selectedDateParts) => {
+        let parts = selectedDateParts.split("-");
+        let mydate = new Date(parts[0], parts[1] - 1, parts[2]);
+        return mydate;
+      };
+
+      let mainDate = (mainDateParts) => {
+        let parts = mainDateParts.split("/");
+        let mydate = new Date(parts[2], parts[1] - 1, parts[0]);
+        return mydate;
+      };
+
+      if (
+        selectedDate($(".date_from").val()) ==
+        mainDate($("#ClientAppointmentDateDate").val())
+      ) {
+        alert(
+          "هناك خطأ بضبط التاريخ.. الرجاء التحقق من تطابق التاريخ المحدد بالفترة مع تاريخ الموعد بالأسفل"
+        );
+        return;
+      }
+    }
+
+    //===================== All Teams (Supers/Emps) ================
+    const getAllTeams = () => {
+      let newDepArr = [];
+
+      let workFlowId = [];
+      let dataIds = localStorage.getItem("data_ids");
+      if (dataIds != null && dataIds != "") {
+        let savedDeps = JSON.parse(localStorage.getItem("deps_options"));
+        for (let i = 0; i < savedDeps.length; i++) {
+          let listItemForDepartments = savedDeps[i];
+          $(".custom_select1").append(listItemForDepartments);
+        }
+        let savedGroups = JSON.parse(localStorage.getItem("groups_options"));
+        for (let i = 0; i < savedGroups.length; i++) {
+          let listItemForGroups = savedGroups[i];
+          $(".custom_select2").append(listItemForGroups);
+        }
+
+        $(".loading1").hide();
+        $(".loading2").hide();
+        $(".custom_select1, .custom_select2").removeAttr("disabled");
+      } else {
+        $.get(
+          "/v2/api/entity/le_workflow-type-entity-3/list/3?per_page=100",
+          (data) => {
+            let dataIdsArray = [];
+            let dataDebArray = [];
+            let dataGroupArray = [];
+            for (var i = 0; i < data["data"].length; i++) {
+              // console.log(data["data"][i])
+              dataIdsArray.push(data["data"][i]["id"]);
+
+              let thisData = data["data"][i];
+
+              let groupTitle = thisData["title"];
+              let groupID = thisData.id;
+
+              let depData =
+                thisData["le_workflow-type-entity-3_custom_data"][
+                  "le_custom_data_le_workflow-type-entity-3_group_dep"
+                ];
+
+              let departmentID = depData.id;
+              let departmentName = depData.name;
+              let groupSup =
+                thisData["le_workflow-type-entity-3_custom_data"][
+                  "le_custom_data_le_workflow-type-entity-3_group_sup"
+                ];
+              let superID = groupSup.id;
+              let superName = `${groupSup["name"]}_${groupSup["middle_name"]}_${groupSup["last_name"]}`;
+
+              let groupEmps =
+                thisData["le_workflow-type-entity-3_custom_data"].emp_ids;
+              // console.log('empl ' + groupEmps)
+              let empArray;
+              if (groupEmps != null) {
+                empArray = groupEmps.split(",");
+                workFlowId.push(empArray);
+              }
+
+              let listItemForDepartments;
+
+              if (newDepArr.indexOf(departmentName) == -1) {
+                newDepArr.push(departmentName);
+
+                listItemForDepartments = `<option id="option${i}" value=${departmentID} data-sup=${superID}>${departmentName}</option>`;
+                dataDebArray.push(listItemForDepartments);
+                $(".custom_select1").append(listItemForDepartments);
+              }
+
+              let listItemForGroups = `<option id="option${i}" value=${groupID} data-depid=${departmentID} data-supName=${superName} data-supID=${superID} data-emps=${empArray}>${groupTitle}</option>`;
+              dataGroupArray.push(listItemForGroups);
+              $(".custom_select2").append(listItemForGroups);
+            }
+            console.log(dataIdsArray);
+            localStorage.setItem("data_ids", JSON.stringify(dataIdsArray));
+            localStorage.setItem("deps_options", JSON.stringify(dataDebArray));
+            localStorage.setItem(
+              "groups_options",
+              JSON.stringify(dataGroupArray)
+            );
+
+            return workFlowId;
+          }
+        )
+          .then((x) => {
+            // console.log(workFlowId)
+          })
+          .then(() => {
+            $(".loading1").hide();
+            $(".loading2").hide();
+            $(".custom_select1").removeAttr("disabled");
+          });
+      }
+    };
+    //============= All Shifts ================
+
+    const getAllShifts = () => {
+      console.log("getAllShifts");
+      let saveShiftsIds = localStorage.getItem("shifts_id");
+      if (saveShiftsIds != null && saveShiftsIds != "") {
+        console.log("they are the same");
+        let saveShiftsOptions = JSON.parse(
+          localStorage.getItem("shifts_option")
+        );
+        for (let i = 0; i < saveShiftsOptions.length; i++) {
+          let listItem = saveShiftsOptions[i];
+          $(".custom_select0").append(listItem);
+        }
+        $(".loading0").hide();
+        $(".custom_select0").removeAttr("disabled");
+      } else {
+        $.get("/v2/api/entity/le_workflow-type-entity-4/list", (data) => {
+          console.log(data);
+
+          console.log("They are not the same");
+          localStorage.setItem("shifts_id", "");
+          localStorage.setItem("shifts_option", "");
+          let shiftIdsArray = [];
+          let shiftOptionsArray = [];
+          for (var i = 0; i < data["data"].length; i++) {
+            console.log("Shift Id " + data["data"][i]["id"]);
+            shiftIdsArray.push(data["data"][i]["id"]);
+            let intervalDetails =
+              data["data"][i]["le_workflow-type-entity-4_custom_data"];
+            let timeStartFrom = intervalDetails["start_from"];
+            let timeEndAt = intervalDetails["end_at"];
+            let duration = intervalDetails["duration"];
+            let listItem = `<option id="option${i}" value=${data["data"][i]["id"]} data-duration=${duration} data-start=${timeStartFrom} data-end=${timeEndAt}>${data["data"][i]["title"]}</option>`;
+            shiftOptionsArray.push(listItem);
+            $(".custom_select0").append(listItem);
+          }
+          localStorage.setItem("shifts_id", JSON.stringify(shiftIdsArray));
+          localStorage.setItem(
+            "shifts_option",
+            JSON.stringify(shiftOptionsArray)
+          );
+        }).then(() => {
+          $(".loading0").hide();
+          $(".custom_select0").removeAttr("disabled");
+        });
+      }
+    };
+
+    //===================== Customer Id ===============
+
+    const getCusID = () => {
+      let backLink = document.referrer;
+
+      let id = backLink
+        .split("/")
+        [backLink.split("/").length - 1].split("?")[0];
+
+      if (backLink.includes(`workflow_view`)) {
+        let entity = "1";
+        let URL = `/v2/api/entity/le_workflow-type-entity-${entity}/${id}/4`;
+        $.get(URL).done((data) => {
+          clientIDForPOST = data["client_id"];
+        });
+      } else if (backLink.includes(`invoices`)) {
+        let URL = `/v2/api/entity/invoice/${id}/1`;
+        $.get(URL).done((data) => {
+          clientIDForPOST = data["client_id"];
+        });
+      }
+    };
+
+    //===================== Set Notes Section ===============
+
+    const setNotes = () => {
+      message =
+        `تاريخ تسجيل الموعد ${getToday()}` +
+        "<br/>" +
+        note1 +
+        "<br/>" +
+        note2 +
+        "<br/>" +
+        note3 +
+        "<br/>" +
+        note4 +
+        "<br>" +
+        note5;
+      $(".note-editor").find("p").eq(0).html(message);
+      $("#ClientAppointmentBody").val(message);
+    };
+
+    //===================== Check Occupancy ===============
+
+    let allOccupEmps = [];
+    let allStartTimes = [];
+
+    //Function #1
+    //Function #1
+    const checkEmps = async () => {
+      if ($(".custom_select0").val() == -1) {
+        $(".apply_message").removeClass("hidden");
+        $(".apply_message").html(" يجب اختيار إحدى الفترات من القائمة ");
+        return;
+      }
+
+      if ($(".custom_select1").val() == -1) {
+        $(".apply_message").removeClass("hidden");
+        $(".apply_message").html(" يجب اختيار إحدى الأقسام من القائمة ");
+        return;
+      }
+
+      if ($(".custom_select2").val() == -1) {
+        $(".apply_message").removeClass("hidden");
+        $(".apply_message").html(" يجب اختيار إحدى المجموعات من القائمة ");
+        return;
+      }
+
+      if ($(".date_to").val() == "" || $(".date_from").val() == "") {
+        $(".apply_message").removeClass("hidden");
+        $(".apply_message").html(
+          " يجب ضبط التاريخ من و التاريخ إلى بشكل صحيح "
+        );
+        return;
+      }
+
+      $(".apply_message").addClass("hidden");
+      staffList = [];
+      let counter = 0;
+      let promises = [];
+      $(".rez").html(loadingForChecker);
+      console.log(allAppoints);
+
+      let newPromises = [];
+      $(".count_message").removeClass("hidden");
+      $(".count_message").html(
+        `تم فحص عدد <span class="current_count"></span> من أصل ${allAppoints.length} موعد`
+      );
+      const getData = async () => {
+        for (let i = 0; i < allAppoints.length; i++) {
+          let appID = Object.entries(allAppoints[i])[0][1].id;
+          let entity = Object.entries(allAppoints[i])[1][1];
+          let single = await $.get(`/api2/${entity}_appointments/${appID}`);
+          console.log(i);
+          $(".current_count").html(i + 1);
+          newPromises.push(single);
+        }
+        $(".count_message").addClass("hidden");
+        return newPromises;
+      };
+
+      await getData()
+        .then((responseList) => {
+          //   console.log(responseList);
+          console.log(allAppoints);
+          let staffAppointmentsCount = 0;
+          let appointmentsAssigendToStaff = [];
+          if (allAppoints.length != 0) {
+            $.each(responseList, (i, res) => {
+              counter++;
+              let assignedStaff =
+                res.data.FollowUpReminder.AssignedStaff.staff_id;
+              // console.log(selectedStaff, assignedStaff);
+              if (
+                selectedStaff.some((staffId) => {
+                  return assignedStaff.includes(staffId);
+                })
+              ) {
+                console.log(res.data);
+                staffAppointmentsCount++;
+                appointmentsAssigendToStaff.push({
+                  staffId: res.data.FollowUpReminder.AssignedStaff.staff_id,
+                  AppointmentDate: res.data.FollowUpReminder.date,
+                  appointmentStartTime: res.data.FollowUpReminder.start_time,
+                  appointmentEndTime: res.data.FollowUpReminder.end_time,
+                });
+              }
+
+              staffList.push(...assignedStaff);
+
+              appStartTime = res.data.FollowUpReminder.start_time;
+
+              appStartTime = appStartTime.split(":")[0];
+              allStartTimes.push(appStartTime);
+              // console.log("before " + startTime);
+              thatTime = startTime;
+            });
+            return {
+              empAppCount: staffAppointmentsCount,
+              empAppData: appointmentsAssigendToStaff,
+            };
+          } else {
+            return 0;
+          }
+        })
+        .then((checkedAppData) => {
+          console.log("Finished!");
+          CheckResult(checkedAppData);
+        });
+    };
+
+    //Calcuate end time for the selected period
+
+    let calcEndTime = function (startTime, duraction) {
+      let endTimeinNumber = sumTime(startTime, duraction);
+      console.log(endTimeinNumber);
+      let endTimeInString = numberToTime(endTimeinNumber);
+      console.log(endTimeInString);
+      let endTimeInTimeFormat = getDateFromHours(endTimeInString).getTime();
+      return { endTimeinNumber, endTimeInString, endTimeInTimeFormat };
+    };
+
+    //Function #2
+    const CheckResult = (checkedAppData) => {
+      // console.log(checkedAppData);
+      $(".rez").html("");
+      let empChecked, timeChecked;
+      let appCount = checkedAppData.empAppCount;
+      let howManyTimesTheRuleApplied = 0;
+
+      let employed = `<p style="color:red;font-size:11px;width:700px;font-weight:bold;">لا يمكن تعيين موظف لأكثر من موعد في نفس اليوم!</p>`;
+      let itsOk = `<p style="color:green;">&#10003;</p>`;
+      // console.log('appCount ' + appCount)
+      if (appCount == undefined) {
+        appCount = 0;
+      }
+      $(".app-count-message").html(
+        `المجموعة المحددة لديها عدد <span class="app-count">${appCount}</span> موعد خلال الفترة `
+      );
+
+      if (allAppoints.length != 0) {
+        let times = ((startTimeArr, endTimeArr, data) => {
+          data = checkedAppData;
+          startTimeArr = [];
+          endTimeArr = [];
+          let dayBooked = [];
+          console.log("lenght " + data.empAppData.length);
+          for (let i = 0; i < data.empAppData.length; i++) {
+            let day = {};
+            day.appointStart = getDateFromHours(
+              data.empAppData[i].appointmentStartTime
+            ).getTime();
+            day.appointEnd = getDateFromHours(
+              data.empAppData[i].appointmentEndTime
+            ).getTime();
+            dayBooked.push(day);
+          }
+          return dayBooked;
+        })();
+        console.log("That time is " + thatTime);
+        console.log("dayBooked " + JSON.stringify(times));
+
+        let endTimeFormat = calcEndTime(
+          thatTime,
+          $("#ClientAppointmentDuration").val()
+        ).endTimeInTimeFormat;
+        console.log(endTimeFormat);
+
+        let startTimeFormat = getDateFromHours(thatTime).getTime();
+
+        for (var x = 0; x < times.length; x++) {
+          console.log("Selected time start : " + startTimeFormat);
+          console.log("Selected time end : " + endTimeFormat);
+          console.log(
+            "Booked before time start " + x + " : " + times[x].appointStart
+          );
+          console.log(
+            "Booked before time end " + x + " : " + times[x].appointEnd
+          );
+
+          if (
+            startTimeFormat == times[x].appointStart ||
+            (startTimeFormat < times[x].appointStart &&
+              endTimeFormat > times[x].appointStart) ||
+            (startTimeFormat < times[x].appointEnd &&
+              endTimeFormat > times[x].appointEnd) ||
+            (startTimeFormat > times[x].appointStart &&
+              endTimeFormat < times[x].appointEnd) ||
+            (startTimeFormat < times[x].appointEnd &&
+              startTimeFormat > times[x].appointStart)
+          ) {
+            timeChecked = true;
+            howManyTimesTheRuleApplied += 1;
+            console.log("timeChecked " + timeChecked);
+
+            console.log("Selected time start : " + startTimeFormat);
+            console.log("Selected time end : " + endTimeFormat);
+            console.log(
+              "Booked before time start " + x + " : " + times[x].appointStart
+            );
+            console.log(
+              "Booked before time end " + x + " : " + times[x].appointEnd
+            );
+          }
+        }
+      } else {
+        timeChecked = false;
+        console.log("timeChecked " + timeChecked);
+      }
+
+      console.log("how much " + howManyTimesTheRuleApplied);
+      if (timeChecked && howManyTimesTheRuleApplied >= 1) {
+        EmpStatus = false;
+        $(".rez").html("");
+        $(".rez").html(employed);
+
+        console.log("some are busy!", EmpStatus);
+        $("#PostForm button.btn-success").css({
+          pointerEvents: "none",
+          background: "gray",
+        });
+      } else {
+        EmpStatus = true;
+
+        console.log("all are free!", EmpStatus);
+        $(".rez").html("");
+        $(".rez").html(itsOk);
+
+        $("#PostForm button.btn-success").css({
+          pointerEvents: "auto",
+          background: "#04a564",
+        });
+      }
+    };
+
+    // ======================= App Reset (Submit Button) =====================
+
+    const appReseter = () => {
+      EmpStatus = false;
+      $("#by_pass").attr("checked", false);
+      $("#PostForm button.btn-success").css({
+        pointerEvents: "none",
+        background: "gray",
+      });
+    };
+
+    //==========================================================
+    //=================== Fetch Data and Create Elements =======================
+    //===========================================================
+
+    $(".custom_select1").after(loadingCirc1);
+    $(".custom_select2").after(loadingCirc1);
+    $(".custom_select0").after(loadingCirc0);
+    getCusID();
+    getAllShifts();
+    getAllTeams();
+
+    //========================== Dates Range =======================
+
+    const DateInBetween = (start, end) => {
+      let allDates = [];
+      let firstDate = new Date(start);
+      let lastDate = new Date(end);
+      while (firstDate <= lastDate) {
+        firstDate.setDate(firstDate.getDate() + 1);
+        allDates.push(new Date(firstDate));
+      }
+      return allDates;
+    };
+
+    //==========================================================
+    //=========================  Start  ========================
+    //===========================================================
+
+    let dateDiff, durValue, startTime, textareaVal, clientIDForPOST;
+    let dateArr = [];
+    let empNames = [];
+    let dayOne, dayTwo;
+    let selectedStaff;
+    let EmpStatus = false;
+
+    $(".date_from, .date_to").change(() => {
+      disableFields();
+      $(".custom_select0").removeAttr("disabled");
+      $(".apply_message").addClass("hidden");
+      dateArr = [];
+      allAppoints = [];
+      appReseter();
+
+      let dateStartFull;
+      let dateFrom = $(".date_from").val();
+      if (dateFrom != "") {
+        $(".error_date").addClass("hidden");
+        console.log("fridayRule " + fridayRule);
+        if (!fridayRule) {
+          if (Date.parse(dateFrom).getDay() == 5) {
+            $(".date_from").val("");
+            $(".error_date").removeClass("hidden");
+            alert("لا يمكن اختيار يوم جمعة لحجز الموعد");
+            $(".error_date").html(` الرجاء اختيار يوم آخر في حقل "من تاريخ" `);
+            return;
+          }
+        }
+
+        let dateStartDay = Date.parse(dateFrom).getDate();
+        let dateStartMonth = Date.parse(dateFrom).getMonth() + 1;
+        let dateStartYear = Date.parse(dateFrom).getFullYear();
+        dateStartFull =
+          dateStartMonth + "/" + dateStartDay + "/" + dateStartYear;
+      } else {
+        $(".error_date").removeClass("hidden");
+        $(".error_date").html("قم بضبط التاريخ بشكل صحيح");
+        return;
+      }
+
+      let dateEndFull;
+      let dateTo = $(".date_to").val();
+
+      if (dateTo != "") {
+        $(".error_date").addClass("hidden");
+        if (!fridayRule) {
+          if (Date.parse(dateTo).getDay() == 5) {
+            $(".date_to").val("");
+            $(".error_date").removeClass("hidden");
+            alert("لا يمكن اختيار يوم جمعة لحجز الموعد");
+            $(".error_date").html(` الرجاء اختيار يوم آخر في حقل "إلى تاريخ" `);
+            return;
+          }
+        }
+
+        let dateEndDay = Date.parse(dateTo).getDate();
+        let dateEndMonth = Date.parse(dateTo).getMonth() + 1;
+        let dateEndYear = Date.parse(dateTo).getFullYear();
+        dateEndFull = dateEndMonth + "/" + dateEndDay + "/" + dateEndYear;
+        if (Date.parse(dateFrom) > Date.parse(dateTo)) {
+          $(".error_date").removeClass("hidden");
+          $(".error_date").html(
+            'يجب تحديد "التاريخ إلى" ليأتي بعد "التاريخ من"'
+          );
+          return;
+        }
+      } else {
+        $(".error_date").removeClass("hidden");
+        $(".error_date").html("قم بضبط التاريخ بشكل صحيح");
+        return;
+      }
+
+      let dateDiffMilli = Math.abs(Date.parse(dateFrom) - Date.parse(dateTo));
+      let dateDiffDays = Math.ceil(dateDiffMilli / (1000 * 60 * 60 * 24)) + 1;
+      note1 =
+        "المدة بالأيام: " +
+        dateDiffDays +
+        "يومًا " +
+        " :من تاريخ " +
+        dateStartFull +
+        "إلى تاريخ: " +
+        dateEndFull;
+      setNotes();
+
+      let eachDate = DateInBetween(dateStartFull, dateEndFull);
+      eachDate.map((v) => dateArr.push(v.toISOString().slice(0, 10)));
+      let splitTime = dateArr[0].split("-");
+      let formatedTime = `${splitTime[2]}/${splitTime[1]}/${splitTime[0]}`;
+      $("#ClientAppointmentDateDate").val(formatedTime);
+
+      if (startTime == "" || startTime == undefined) {
+        startTime = numberToTime(2);
+      }
+
+      let startDateTime = `${formatedTime} ${startTime}`;
+      $("#final_date_time_value").val(startDateTime);
+
+      dayOne = dateArr[0];
+      stt = dayOne.split("-");
+      dayOne = stt[2] + "/" + stt[1] + "/" + stt[0];
+      dayTwo = dateArr.slice(-1)[0];
+      stt2 = dayTwo.split("-");
+      dayTwo = stt2[2] + "/" + stt2[1] + "/" + stt2[0];
+
+      // console.log(dayOne, dayTwo);
+      $(".app_count").removeClass("hidden");
+      $(".app_count").html(loadingCircAppointments);
+
+      $.each(allURLs, (i, entity) => {
+        $.get(
+          `/api2/${entity}_appointments?date_from=${dayOne}&date_to=${dayTwo}`,
+          (data) => {
+            console.log("the data is ");
+            console.log(data.data);
+            let appoints = data.data;
+            if (appoints.length != 0) {
+              appoints = $.each(appoints, (i, v) => {
+                v.type = entity;
+              });
+            }
+            allAppoints.push(...appoints);
+            if (i == allURLs.length - 1) {
+              $(".app_count").removeClass("hidden");
+              $(".app_count").html(
+                `تم تحديد عدد ${allAppoints.length} موعد في خلال الفترة`
+              );
+            }
+          }
+        );
+      });
+    });
+
+    //======================= Select Intervals ====================
+
+    $(".custom_select0").change(() => {
+      let startValue = $(".custom_select0 option:selected").data("start");
+      // startValue = startValue.toString().split(".").join(":");
+      // startValue = parseFloat(startValue) < 10 ? `0${startValue}` : startValue;
+      startTime = numberToTime(startValue);
+      console.log("startTime " + startTime);
+      durValue = $(".custom_select0 option:selected").data("duration");
+      let dur = numberToTime(durValue);
+      let interval = $(".custom_select0 option:selected").text();
+      if (dateArr[0] == "" || dateArr[0] == undefined) {
+        alert("الرجاء ضبط تاريخ الموعد بشكل صحيح");
+        $(".custom_select0").val(-1);
+        $(".custom_select0").attr("disabled", "disabled");
+        return;
+      } else {
+        $(".custom_select1").removeAttr("disabled");
+      }
+
+      let splitTime = dateArr[0].split("-");
+      let formatedTime = `${splitTime[2]}/${splitTime[1]}/${splitTime[0]}`;
+
+      let startDateTime = `${formatedTime} ${startTime}`;
+      $("#final_date_time_value").val(startDateTime);
+      $("#ClientAppointmentDateDate").val(formatedTime);
+      $("#ClientAppointmentDuration").val(dur);
+      $("#ClientAppointmentDateTime").val(startTime);
+      // console.log(dur, startTime)
+      note2 = "في خلال: " + interval;
+      $(".apply_message").addClass("hidden");
+      setNotes();
+      appReseter();
+    });
+
+    //======================= Select Department ====================
+
+    $(".custom_select1").change(() => {
+      if ($(".custom_select0").val() == -1) {
+        $(".custom_select1").val(-1);
+        $(".custom_select1").attr("disabled", "");
+        alert("الرجاء تحديد الفترة");
+        return;
+      }
+      if ($(".custom_select1").val() == -1) {
+        $(".custom_select2").attr("disabled", "");
+      } else {
+        $(".custom_select2").attr("disabled", false);
+      }
+
+      $(".custom_select2 option:eq(0)").attr("selected", "selected");
+      let selectedDepName = $(".custom_select1 option:selected").text();
+      let selectedDepID = parseInt($(".custom_select1 option:selected").val());
+      $(".custom_select2 option").css({
+        display: "block",
+      });
+      $(".custom_select2 option")
+        .filter((idx, opt) => {
+          let groupID = $(opt).data("depid");
+          return groupID != selectedDepID;
+        })
+        .css({
+          display: "none",
+        });
+
+      note3 = "اسم القسم: " + selectedDepName;
+      $(".apply_message").addClass("hidden");
+      setNotes();
+      appReseter();
+    });
+
+    //======================= Select Group ====================
+
+    $(".custom_select2").change(() => {
+      let empArr = [];
+      empNames = [];
+      let group = $(".custom_select2 option:selected").text();
+      let supervisor = $(".custom_select2 :selected").data("supname");
+      $("#choose_staff_div").css({
+        display: "block",
+      });
+      $("#ClientAppointmentChooseStaff").attr("checked", "true");
+      $.each($(".multiselect-container.dropdown-menu li"), (i) => {
+        let opt = $(".multiselect-container.dropdown-menu li").eq(i);
+        opt.find("input").attr("checked", false);
+      });
+      $("#ClientAppointmentChooseStaff").on("click", function (e) {
+        var checkbox = $(this);
+        if (checkbox.is(":checked")) {
+          // do the confirmation thing here
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      let EmpsData = $(".custom_select2 :selected").data("emps");
+      // console.log(EmpsData);
+      // console.log(empArr);
+
+      if (EmpsData.toString().includes(",")) {
+        empArr = EmpsData.split(",").map(Number);
+      } else {
+        empArr.push(EmpsData);
+      }
+      // console.log(empArr);
+
+      $.each($(".multiselect-container.dropdown-menu li"), (i) => {
+        let opt = $(".multiselect-container.dropdown-menu li").eq(i);
+        let inputVal = opt.find("input");
+        let empID = parseInt(inputVal.val());
+
+        $("#fliter-staff").val(empArr);
+
+        if (!empArr.includes(empID)) {
+          opt.css({
+            display: "none",
+          });
+        } else {
+          // console.log(empArr);
+          opt.css({
+            display: "block",
+          });
+          opt.find("input").attr("checked", "true");
+
+          opt.find("input").on("click change", function (e) {
+            var checkbox = $(this);
+            // console.log(!checkbox.is(":checked"))
+            // do the confirmation thing here
+            e.preventDefault();
+            return false;
+          });
+          let empName = opt.find("label").text();
+          empNames.push(empName);
+        }
+      });
+
+      note4 = supervisor + "<br>" + "اسم المجموعة: " + group;
+      note5 = "أسماء الموظفين المعينيين:" + "<br>" + empNames.join("<br/>");
+
+      setNotes();
+
+      selectedStaff = empArr.map((x) => x.toString());
+      let thatTime;
+      $(".apply_message").addClass("hidden");
+      appReseter();
+    });
+
+    //===================== POST APPOINTMENTS =======================
+
+    const postFunction = () => {
+      // console.log("All appointments " + allAppoints);
+      // console.log("date array " + dateArr);
+      // console.log("this is " + clientIDForPOST);
+      let appointmentAction = $("#ClientAppointmentActionId").val();
+
+      if (allAppoints != 0) {
+        $.each(allAppoints, (i, val) => {
+          if (val[Object.keys(val)[0]].start_time == startTime) {
+            console.log("Booked!");
+          }
+        });
+      }
+
+      if (dateArr.length > 1) {
+        for (var i = 1; i < dateArr.length; i++) {
+          console.log(" the i now is " + i);
+
+          let appointBody = $(".note-editor").find("p").eq(0).text();
+          let thatDate = `${dateArr[i]} ${startTime}`;
+          let checked = $(
+            ".multiselect-container.dropdown-menu li input[checked='checked']"
+          );
+          if (checked.length == 0) {
+            alert(
+              "حدث خطا عند إنشاء الموعد.. الرجاء التواصل والإبلاغ عن الخطأ"
+            );
+          }
+          let empSelected = [];
+          for (var x = 0; x < checked.length; x++) {
+            empSelected.push(checked.eq(x).val());
+          }
+          console.log("select emp for api " + empSelected);
+          if (empSelected.length == 0) {
+            alert(
+              "حدث خطا عند إنشاء الموعد.. الرجاء التواصل والإبلاغ عن الخطأ"
+            );
+          }
+          AppointmentData = {
+            InvoiceAppointments: {
+              item_id: invoiceId,
+              body: appointBody,
+              date: thatDate,
+              start_time: startTime,
+              duration: durValue,
+              choose_staff: "1",
+              staff_id: empSelected,
+              action_id: appointmentAction,
+            },
+          };
+          console.log(JSON.stringify(AppointmentData));
+          $.ajax({
+            url: "/api2/invoice_appointments",
+            method: "POST",
+            contentType: "application/json",
+            accept: "application/json",
+            data: JSON.stringify(AppointmentData),
+          }).done(() => {
+            console.log("Success!");
+          });
+        }
+      }
+    };
+
+    //=================================
+
+    $("#by_pass").on("click", function (e) {
+      let newThis = $(this);
+      if (newThis.is(":checked")) {
+        $(".apply").trigger("click");
+      } else if (!newThis.is(":checked")) {
+        appReseter();
+      }
+    });
+
+    //onClick Event
+    $(".apply").click(() => {
+      if (!$("#by_pass").is(":checked")) {
+        appReseter();
+        checkEmps();
+        let checked = $(
+          ".multiselect-container.dropdown-menu li input[checked='checked']"
+        );
+        for (var x = 0; x < checked.length; x++) {
+          console.log(checked.eq(x).val());
+        }
+      } else {
+        $("#PostForm button.btn-success").css({
+          pointerEvents: "auto",
+          background: "#04a564",
+        });
+      }
+    });
+
+    $(".btn-success").click((e) => {
+      if (!isStaffAssigned() && !$("#by_pass").is(":checked")) {
+        e.preventDefault();
+        if (isAdmin()) {
+          alert(
+            'لا يمكن حفظ الموعد، لم يتم تحديد المجموعة بشكل صحيح، إن كانت لديك مشكلة تقنية الرجاء الضغط على "تخطي فحص الموعد" ثم محاولة الحفظ مرة أخرى'
+          );
+        } else {
+          alert(
+            "لا يمكن حفظ الموعد، لم يتم تحديد المجموعة بشكل صحيح، إن كانت لديك مشكلة تقنية الرجاء التواصل مع المدير المسئول"
+          );
+        }
+      } else {
+        if (document.referrer.includes("invoices/view")) {
+          e.preventDefault();
+
+          if (checkActionValue()) {
+            return;
+          }
+          checkDates();
+          console.log("this appointment from Invoice");
+          let id = document.referrer.split("/").slice(-1)[0];
+          let url = `/api2/invoices/${id}`;
+          //   window.open(`/owner/invoices/change_status/${id}/26`);
+          //   console.log("Status Changed!");
+          //   postFunction();
+          setTimeout(() => {
+            $("#PostForm").trigger("submit");
+          }, 500);
+        } else {
+          //postFunction();
+          //$("#PostForm").trigger("submit");
+          // window.location.replace("https://ostarssa.daftra.com/owner/appointments/index/0/1")
+        }
+      }
+    });
+  });
+</script>

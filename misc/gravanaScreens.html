@@ -1,0 +1,189 @@
+<!-- <script>
+  $(document).ready(function () {
+    hideColumns();
+    $("#AddItem").click(function () {
+      hideColumns();
+    });
+
+    function hideColumns() {
+      setTimeout(function () {
+        $("#label_tax2").hide();
+        $("td.tax2").hide();
+        $(".col-5").hide();
+        $("#label_tax1").html("الضرائب<br>VAT");
+        $("#label_item_discount").width(100);
+        $(".discount input").width(25);
+        $(".form-x3").width(50);
+        $("#label_tax1").width(75);
+        $("#label_item_discount").html("الخصم<br>Discount");
+        $(".item-tax1").width(75);
+        $("#InvoiceCustomFields tr:nth-child(3)").hide();
+        $("#InvoiceCustomFields tr:nth-child(4)").hide();
+      }, 50);
+    }
+  });
+</script> -->
+<script>
+  $(document).ready(() => {
+    $(document).on("change", "#InvoiceLayout", function () {
+      let layout_id = $("#InvoiceLayout").val();
+      if (layout_id == "31" || layout_id == "32") {
+        $("#label_tax1").html("الضرائب<br>VAT");
+        $("#label_item_discount").html("الخصم<br>Discount");
+        $("body").append(`<style>
+           .item-discount-type {
+            pointer-events: none !important;
+           }
+           #label_tax2,
+           .tax2,
+           .col-5 {
+            display: none!important;
+           }
+           .col-1 {
+            width: 5%;
+           } 
+           .col-1 textarea {
+            min-width: unset;
+           }
+           .col-2 textarea,
+           .col-3 textarea,
+           .col-4 textarea {
+            height: 100px!important;
+           }
+           .col-4 {
+            width: 5%
+           }
+           </style>
+           
+           `);
+
+        // assign class to title value field
+        let cstLbls = $(".field-row td:first-child input");
+        let cstVals = $(".field-row td:nth-child(2) input");
+        for (i = 0; i < cstLbls.length; i++) {
+          if (
+            cstLbls.eq(i).val() == "Sales " ||
+            cstLbls.eq(i).val() == "Sales المبيعات"
+          ) {
+            cstVals.eq(i).addClass("sales-person-field");
+          } else if (
+            cstLbls.eq(i).val() == "Title" ||
+            cstLbls.eq(i).val() == "Title العمل"
+          ) {
+            cstVals.eq(i).addClass("sales-title-field");
+          } else if (
+            cstLbls.eq(i).val() == "Attn" ||
+            cstLbls.eq(i).val() == "Attn. عناية"
+          ) {
+            cstVals.eq(i).addClass("client-person-field");
+          } else if (
+            cstLbls.eq(i).val() == "Job" ||
+            cstLbls.eq(i).val() == "Job الوظيفة"
+          ) {
+            cstVals.eq(i).addClass("client-title-field");
+          }
+        }
+
+        // get staff role
+        let currStaffId = USER.staff_id;
+        if (currStaffId > 0) {
+          $.get(`/v2/api/entity/staff/${currStaffId}/1`).then((staffData) => {
+            $(".sales-person-field").val(staffData.full_name);
+            let role = staffData.role.name;
+            $(".sales-title-field").val(role);
+          });
+        } else {
+          $.get(`/v2/api/entity/staff/1/1`).then((staffData) => {
+            $(".sales-person-field").val(staffData.full_name);
+            let role = staffData.role.name;
+            $(".sales-title-field").val(role);
+          });
+        }
+
+        // get staff name role on change salesperson
+        $(document).on("change", "#InvoiceSalesPersonId", function () {
+          let staffId = $(this).val();
+          if (staffId > 0) {
+            $.get(`/v2/api/entity/staff/${staffId}/1`).then((staffData) => {
+              $(".sales-person-field").val(staffData.full_name);
+              let role = staffData.role.name;
+              $(".sales-title-field").val(role);
+            });
+          } else {
+            $.get(`/v2/api/entity/staff/1/1`).then((staffData) => {
+              $(".sales-person-field").val(staffData.full_name);
+              let role = staffData.role.name;
+              $(".sales-title-field").val(role);
+            });
+          }
+        });
+
+        // get client name and role
+
+        let clientId = $("#InvoiceClientId").val();
+        console.log(clientId);
+        if (clientId > 0) {
+          $.get(`/v2/api/entity/client/${clientId}/1`).then((clientData) => {
+            $(".client-person-field").val(clientData.business_name);
+
+            if (clientData.custom_data) {
+              $(".client-title-field").val(clientData.custom_data.field_2);
+            } else {
+              $(".client-title-field").val("");
+            }
+          });
+        } else {
+          $.get(`/v2/api/entity/staff/1/1`).then((clientData) => {
+            $(".client-person-field").val(clientData.business_name);
+            if (clientData.custom_data) {
+              $(".client-title-field").val(clientData.custom_data.field_2);
+            } else {
+              $(".client-title-field").val("");
+            }
+          });
+        }
+        // get client name and role on change client
+        $(document).on("change", "#InvoiceClientId", function () {
+          let clientId = $(this).val();
+          if (clientId > 0) {
+            $.get(`/v2/api/entity/client/${clientId}/1`).then((clientData) => {
+              $(".client-person-field").val(clientData.business_name);
+              if (clientData.custom_data) {
+                $(".client-title-field").val(clientData.custom_data.field_2);
+              } else {
+                $(".client-title-field").val("");
+              }
+            });
+          } else {
+            $.get(`/v2/api/entity/staff/1/1`).then((clientData) => {
+              $(".client-person-field").val(clientData.business_name);
+              if (clientData.custom_data) {
+                $(".client-title-field").val(clientData.custom_data.field_2);
+              } else {
+                $(".client-title-field").val("");
+              }
+            });
+          }
+        });
+
+        // add english item name and description in their fields
+        $(document).on("change", ".item-id", function () {
+          $.get(`/v2/api/entity/product/${$(this).val()}/1`).then((proData) => {
+            $(this)
+              .closest("tr")
+              .find(".item-description")
+              .val(`${proData.custom_data.field_10}\n${proData.name}`);
+            $(this)
+              .closest("tr")
+              .find(".item_col_3")
+              .val(
+                `${proData.custom_data.field_7 || ""}\n\n${
+                  proData.description || ""
+                }`
+              );
+          });
+        });
+      }
+    });
+  });
+</script>

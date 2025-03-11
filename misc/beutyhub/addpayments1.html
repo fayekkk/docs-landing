@@ -1,0 +1,246 @@
+<!-- code_Invoices_owner_view -->
+
+<style>
+  .rowActionDropDown.dropdown-menu a {
+    padding: 8px;
+    display: block;
+  }
+  .rowActionDropDown.dropdown-menu a:hover {
+    cursor: pointer;
+    background: #e8e8e8;
+  }
+</style>
+
+<script>
+  $(document).ready(() => {
+    function addNewTab(
+      tab_id,
+      tab_dummy_id,
+      tab_title_attr,
+      tab_title,
+      api_link
+    ) {
+      let newNavTab = $(".nav-tabs.responsive li").eq(0).clone();
+      newNavTab.removeClass("active");
+      newNavTab.html(
+        `<a id="${tab_id}" aria-controls="NotesBlock" role="tab" data-toggle="tab" href="#${tab_dummy_id}" title="${tab_title_attr}" aria-expanded="true"><span class="one-line"> ${tab_title} </span></a>`
+      );
+      $(".nav-tabs.responsive").append(newNavTab);
+      $("div.tab-content").append(
+        `<div class="tab-pane" id="${tab_dummy_id}"></div>`
+      );
+      $(`#${tab_id}`).on("click", function () {
+        $("ul.nav-tabs li").removeClass("active");
+        $(".tab-pane").removeClass("active");
+        $(this).parent().addClass("active");
+        $(`#${tab_dummy_id}`).addClass("active");
+        $(`#${tab_dummy_id}`).html(
+          '<div class="notifcation-loader"><div class="inner-loader"></div></div>'
+        );
+        $(`#${tab_dummy_id}`).load(`${api_link} .list-table`);
+        const getDelLink = setInterval(() => {
+          let allLinks = $(
+            "#invoiceItems > table > tbody > tr > td.text-right.row-actions > div > div a:nth-child(3)"
+          );
+          if (allLinks.length != 0) {
+            clearInterval(getDelLink);
+            $(
+              "#invoiceItems > table > tbody > tr > td.text-right.row-actions > div > div a:nth-child(3)"
+            ).hide();
+          }
+        }, 100);
+      });
+    }
+    let invoiceID = location.href
+      .split("/")
+      .slice(-1)[0]
+      .split("#")[0]
+      .split("?")[0];
+
+    addNewTab(
+      "invoice_items",
+      "invoiceItems",
+      "سجل العمال",
+      "سجل العمال",
+      `/v2/owner/entity/le_invoice-items/list?filter[invoice_id]=${invoiceID}`
+    );
+  });
+</script>
+<style>
+  #payments_container {
+    width: 100%;
+    height: 500px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #e5e5e5;
+    display: none;
+    z-index: 99999;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+  #payments_table {
+    width: 80%;
+    margin: auto;
+    border: 1px solid black;
+    text-align: center;
+    direction: rtl;
+    border-spacing: 0;
+  }
+  #payments_table caption {
+    font-weight: bold;
+    font-size: 15px;
+    text-align: center;
+  }
+  #payments_table td {
+    border-bottom: 1px solid black;
+  }
+  #payments_table tr:last-child td {
+    border-bottom: none;
+  }
+  .hidden {
+    display: none;
+  }
+  #actionList {
+    width: 95%;
+    direction: rtl;
+    margin: auto;
+    margin-top: 10px;
+  }
+  #actionList td:nth-child(1) {
+    text-align: right;
+    width: 3%;
+  }
+  #actionList td:nth-child(1) span {
+    display: inline-block;
+    width: 50%;
+    margin: auto;
+    text-align: center;
+    background-color: red;
+    border-radius: 3px;
+  }
+  #actionList td:nth-child(2) {
+    width: 70%;
+  }
+  #actionList td:nth-child(3) {
+    width: 6%;
+    text-align: center;
+    background-color: rgb(2, 197, 2);
+    padding: 2px;
+    vertical-align: middle;
+    border-radius: 3px;
+    color: #fff;
+  }
+  #close,
+  #confirm {
+    cursor: pointer;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    let addPaymentsDiv = `
+    
+    <div id="payments_container">
+      <table id="actionList">
+        <tbody>
+          <tr>
+            <td><span id="close">X</span></td>
+            <td></td>
+            <td id="confirm">حفظ</td>
+          </tr>
+        </tbody>
+      </table>
+      <table id="payments_table">
+        <caption>
+          Invoice Payments
+        </caption>
+        <tbody>
+          <tr>
+            <td class="hidden">Payment Id</td>
+            <td>طريقة الدفع</td>
+            <td>الموظف </td>
+            <td>الخزينة </td>
+            <td>كمية الدفع</td>
+          </tr>
+          <tr>
+            <td class="hidden" id="Id_1"></td>
+            <td id="Payment_method_1"></td>
+            <td id="Payment_staff_1"></td>
+            <td id="Payment_treasury_1"></td>
+            <td id="Payment_amount_1"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    `;
+
+    const mulpaysbtn = document.createElement("button");
+    mulpaysbtn.setAttribute("class", "btn btn-default btn-sm quick-action-btn");
+    mulpaysbtn.setAttribute("id", "showpayments");
+    mulpaysbtn.innerText = "أضف عمليات دفع";
+    document.querySelector(".invoice-actions").innerHTML += addPaymentsDiv;
+    document
+      .querySelector(".invoice-actions")
+      .insertBefore(
+        mulpaysbtn,
+        document.querySelectorAll(".invoice-actions a")[3]
+      );
+    document.getElementById("showpayments").addEventListener("click", (e) => {
+      document.getElementById("payments_container").style.display =
+        "inline-block";
+    });
+    document.getElementById("close").addEventListener("click", (e) => {
+      document.getElementById("payments_container").style.display = "none";
+    });
+    const creatingStaffSelector = async () => {
+      // https://beautycenterv2.daftra.com/v2/api/entity/staff/list/1?per_page=300
+      const selector = document.createElement("select");
+      await $.ajax({
+        url: `/v2/api/entity/staff/list/1?per_page=300`,
+        method: "get",
+        contentType: "application/json",
+        accept: "application/json",
+      }).then((allstaff) => {
+        console.log(allstaff);
+        if (allstaff.data.length > 0) {
+          for (let i = 0; i < allstaff.data.length; i++) {
+            console.log(i);
+            let option = document.createElement("option");
+            option.innerText = allstaff.data[i].name;
+            option.setAttribute("value", allstaff.data[i].id);
+            selector.appendChild(option);
+          }
+        }
+        setTimeout(() => {
+          document.querySelector("#Payment_staff_1").appendChild(selector);
+        }, 2000);
+      });
+    };
+    creatingStaffSelector();
+    const creatingtreasurySelector = async () => {
+      // https://beautycenterv2.daftra.com/v2/api/entity/treasury/list/1?per_page=300
+      const selector = document.createElement("select");
+      await $.ajax({
+        url: `/v2/api/entity/treasury/list/1?per_page=300`,
+        method: "get",
+        contentType: "application/json",
+        accept: "application/json",
+      }).then((treasury) => {
+        console.log(treasury);
+        if (treasury.data.length > 0) {
+          for (let i = 0; i < treasury.data.length; i++) {
+            console.log(i);
+            let option = document.createElement("option");
+            option.innerText = treasury.data[i].name;
+            option.setAttribute("value", treasury.data[i].id);
+            selector.appendChild(option);
+          }
+        }
+        setTimeout(() => {
+          document.querySelector("#Payment_treasury_1").appendChild(selector);
+        }, 2000);
+      });
+    };
+    creatingtreasurySelector();
+  });
+</script>

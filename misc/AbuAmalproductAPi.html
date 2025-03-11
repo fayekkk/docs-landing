@@ -1,0 +1,18 @@
+<style>
+  .col-1 {
+    width: 350px;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      $(document).on("change", ".item_name", function () {
+        let value = $(this).closest("tr").find(".item-id").val();
+        $.get(`/v2/api/entity/product/${value}/1`).then((product) => {
+          console.log(product);
+          $(this).closest("tr").find(".col-4 textarea").val(product.unit_price);
+        });
+      });
+    }, 500);
+  });
+</script>

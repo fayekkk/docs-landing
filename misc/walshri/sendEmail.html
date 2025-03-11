@@ -1,0 +1,27 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      const clientid = parseInt(window.location.href.split("/")[6]);
+
+      fetch(`/v2/api/entity/client/${clientid}/1`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }).then((res) => {
+        return res.json().then((data) => {
+          console.log(data);
+          if (data.email) {
+            let data = ` <a href="/owner/clients/send_login_details/${clientid}"
+                           class="btn btn-default btn-sm btn-5 "
+                             >
+          <i class="fa fa-sign-in"></i> إرسال بيانات الدخول
+              </a>`;
+            $(".invoice-actions a:nth-child(2)").after(data);
+          }
+        });
+      });
+    }, 500);
+  });
+</script>

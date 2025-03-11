@@ -1,0 +1,162 @@
+<style>
+  .late_th,
+  .late_td {
+    display: table-cell !important;
+  }
+  .col-4 {
+    display: none !important;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      function hudleAll() {
+        if ($("#InvoiceLayout").val() == 2) {
+          const searchableSelector = () => {
+            const selector = document.createElement("select");
+            selector.style.width = "100%";
+            selector.setAttribute("id", "staffselect");
+            const option = document.createElement("option");
+            option.textContent = "إختر العاملة";
+            option.style.textAlign = "center";
+            selector.appendChild(option);
+
+            $.get(
+              `https://the1salonsa.daftra.com/v2/api/entity/le_service_providers_staff_list/list/1`
+            ).then((options) => {
+              options.data.forEach((optionText) => {
+                const option = document.createElement("option");
+                option.textContent = optionText.staff_name;
+                option.style.textAlign = "center";
+                selector.appendChild(option);
+              });
+            });
+
+            var allrows = document.querySelectorAll("#listing_table tr");
+            console.log(allrows.length);
+            for (let i = 1; i < allrows.length; i++) {
+              console.log("ddd");
+              if (!allrows[i].querySelector(".late_td select")) {
+                allrows[i].querySelector(".late_td").innerHTML = "";
+                allrows[i].querySelector(".late_td").appendChild(selector);
+              }
+              allrows[i]
+                .querySelector(".late_td #staffselect")
+                .addEventListener("change", () => {
+                  if (
+                    allrows[i].querySelector(".late_td #staffselect").value ==
+                    "إختر العاملة"
+                  ) {
+                    allrows[i].querySelector("td:nth-child(5) textarea").value =
+                      "";
+                  } else {
+                    allrows[i].querySelector("td:nth-child(5) textarea").value =
+                      allrows[i].querySelector(".late_td #staffselect").value;
+                  }
+                });
+            }
+          };
+
+          async function createCol(
+            prevTh,
+            prevTd,
+            colTitle,
+            classTh,
+            classTd,
+            colInput
+          ) {
+            var rowsNum = $("#listing_table tr").length;
+
+            if (rowsNum == 2) {
+              // Clone TH and attach change event listener
+              $(prevTh).after(
+                $("th.col-4")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-4", classTh)
+                  .replace("", colTitle)
+              );
+
+              $(prevTd).after(
+                $("td.col-4")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-4", classTd)
+                  .replace("item_col_4", colInput)
+              );
+            } else {
+              if (
+                !document.querySelector("#listing_table tr:last-child .late_td")
+              ) {
+                $(`#listing_table tr:last-child ${prevTd}`).after(
+                  $("#listing_table tr:last-child td.col-4")
+                    .clone()
+                    .wrap("<p>")
+                    .parent()
+                    .html()
+                    .replace("col-4", classTd)
+                    .replace("item_col_4", colInput)
+                );
+              }
+            }
+
+            $("." + colInput).attr("placeholder", "");
+            $("." + colInput).attr("name", "");
+            // $("#InvoiceLayout").triggerHandler("change", ["def"]);
+
+            searchableSelector();
+
+            document.querySelector(".late_th").innerText = "إختار العاملة";
+          }
+
+          // adding the columns when screen is loaded
+          createCol(
+            "th.col-4",
+            "td.col-4",
+            "إختيار العاملة ",
+            "late_th",
+            "late_td",
+            "late_input"
+          );
+
+          // adding the columns on add item click
+          $("#AddItem").on("click", () => {
+            createCol(
+              "th.col-4",
+              "td.col-4",
+              "إختيار العاملة ",
+              "late_th",
+              "late_td",
+              "late_input"
+            );
+          });
+        }
+      }
+      hudleAll();
+
+      function forEditScreen() {
+        setTimeout(() => {
+          var allrows = document.querySelectorAll("#listing_table tr");
+          for (let k = 1; k < allrows.length; k++) {
+            if (
+              allrows[i].querySelector("td:nth-child(5) textarea").value != ""
+            ) {
+              allrows[i].querySelector(".late_td #staffselect").value = allrows[
+                i
+              ].querySelector("td:nth-child(5) textarea").value;
+            }
+          }
+        }, 1000);
+      }
+      forEditScreen();
+      document.getElementById("InvoiceLayout").addEventListener("chane", () => {
+        hudleAll();
+        forEditScreen();
+      });
+    }, 1000);
+  });
+</script>

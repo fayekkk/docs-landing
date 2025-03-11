@@ -1,0 +1,196 @@
+<style>
+    .late_th,
+    .late_td {
+      display: block !important;
+    }
+  </style>
+  <script>
+    $(document).ready(() => {
+      if (USER.branch_id != 1) {
+        setTimeout(() => {
+          const searchableSelector = () => {
+            let branshId = USER.branch_id;
+  
+            const selector = document.createElement("select");
+            selector.style.width = "100%";
+            selector.setAttribute("id", "staffselect");
+            const option = document.createElement("option");
+            option.textContent = "إختر العاملة";
+            option.style.textAlign = "center";
+            selector.appendChild(option);
+  
+            if (branshId != 3) {
+              $.get(
+                `/v2/api/entity/staff/list/1?filter[branch_id]=${branshId}&per_page=1000000`
+              ).then((options) => {
+                options.data.forEach((optionText) => {
+                  if (optionText.role_id != 1 && optionText.role_id != 6) {
+                    const option = document.createElement("option");
+                    option.textContent = optionText.name;
+                    option.style.textAlign = "center";
+                    selector.appendChild(option);
+                  }
+                });
+              });
+            } else {
+              $.get(
+                `/v2/api/entity/staff/list/1?per_page=1000000`
+              ).then((options) => {
+                options.data.forEach((optionText) => {
+                  if (optionText.role_id != 1 && optionText.role_id != 6) {
+                    const option = document.createElement("option");
+                    option.textContent = optionText.name;
+                    option.style.textAlign = "center";
+                    selector.appendChild(option);
+                  }
+                });
+              });
+            }
+            var allrows = document.querySelectorAll("#listing_table tr");
+            console.log(allrows.length);
+            for (let i = 1; i < allrows.length; i++) {
+              console.log("ddd");
+              if (!allrows[i].querySelector("td:nth-child(5) select")) {
+                allrows[i].querySelector("td:nth-child(5)").innerHTML = "";
+                allrows[i].querySelector("td:nth-child(5)").appendChild(selector);
+  
+                allrows[i]
+                  .querySelector("td:nth-child(5) #staffselect")
+                  .addEventListener("change", () => {
+                    if (
+                      allrows[i].querySelector("td:nth-child(5) #staffselect")
+                        .value == "إختر العاملة"
+                    ) {
+                      allrows[i].querySelector("td:nth-child(3) textarea").value =
+                        "";
+                    } else {
+                      allrows[i].querySelector("td:nth-child(3) textarea").value =
+                        allrows[i].querySelector(
+                          "td:nth-child(5) #staffselect"
+                        ).value;
+                    }
+                  });
+              }
+            }
+          };
+  
+          async function createCol(
+            prevTh,
+            prevTd,
+            colTitle,
+            classTh,
+            classTd,
+            colInput
+          ) {
+            var rowsNum = $("#listing_table tr").length;
+  
+            if (rowsNum == 2) {
+              // Clone TH and attach change event listener
+              $(prevTh).after(
+                $("th.col-3")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-3", classTh)
+                  .replace("", colTitle)
+              );
+  
+              $(prevTd).after(
+                $("td.col-3")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-3", classTd)
+                  .replace("item_col_3", colInput)
+              );
+            } else {
+              $(`#listing_table tr:last-child ${prevTd}`).after(
+                $("#listing_table tr:last-child td.col-3")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-3", classTd)
+                  .replace("item_col_3", colInput)
+              );
+            }
+  
+            $("." + colInput).attr("placeholder", "");
+            $("." + colInput).attr("name", "");
+            $("#InvoiceLayout").triggerHandler("change", ["def"]);
+  
+            searchableSelector();
+  
+            document.querySelector(".late_th").innerText = "إختار العاملة";
+          }
+  
+          // adding the columns when screen is loaded
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "إختيار العاملة ",
+            "late_th",
+            "late_td",
+            "late_input"
+          );
+          $(document).on("change", ".item_name", function () {
+            setTimeout(() => {
+              var $closestTr = $(this).closest("tr");
+              var staffSelectValue = $closestTr.find("#staffselect").val();
+              if (staffSelectValue != "إختر العاملة") {
+                $closestTr.find("#staffselect").val(staffSelectValue);
+                $closestTr.find("#staffselect").trigger("change");
+                $closestTr.find(".col-2 textarea").val(staffSelectValue);
+              }
+            }, 250);
+          });
+  
+          // adding the columns on add item click
+          $("#AddItem").on("click", () => {
+            createCol(
+              "th.col-3",
+              "td.col-3",
+              "إختيار العاملة ",
+              "late_th",
+              "late_td",
+              "late_input"
+            );
+            $(document).on("change", ".item_name", function () {
+              setTimeout(() => {
+                var $closestTr = $(this).closest("tr");
+                var staffSelectValue = $closestTr.find("#staffselect").val();
+                if (staffSelectValue != "إختر العاملة") {
+                  $closestTr.find("#staffselect").val(staffSelectValue);
+                  $closestTr.find("#staffselect").trigger("change");
+                  $closestTr.find(".col-2 textarea").val(staffSelectValue);
+                }
+              }, 250);
+            });
+          });
+          setInterval(() => {
+            var saveDiv = document.querySelectorAll(
+              ".actions-btns .btn-group"
+            )[2];
+            var savedraftDiv = document.querySelectorAll(
+              ".actions-btns .btn-group"
+            )[1];
+            var allSelectors = document.querySelectorAll("#staffselect");
+            for (let i = 0; i < allSelectors.length; i++) {
+              if (allSelectors[i].value.trim() == "إختر العاملة") {
+                saveDiv.style.display = "none";
+                savedraftDiv.style.display = "none";
+                break;
+              }
+              if (i == allSelectors.length - 1) {
+                saveDiv.style.display = "inline-block";
+                savedraftDiv.style.display = "inline-block";
+              }
+            }
+          }, 200);
+        }, 1000);
+      }
+    });
+  </script>
+  

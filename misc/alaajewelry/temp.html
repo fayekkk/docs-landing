@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    #header {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+    #header tr:nth-child(1) td:nth-child(1) {
+      width: 40%;
+      text-align: right;
+    }
+    #header tr:nth-child(1) td:nth-child(2) {
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      width: 20%;
+    }
+    #header tr:nth-child(1) td:nth-child(3) {
+      width: 10%;
+    }
+    #header tr:nth-child(1) td:nth-child(4) {
+      text-align: right;
+      width: 30%;
+    }
+    #header tr:nth-child(2) td {
+      text-align: right;
+    }
+    #listing_table {
+      border-right: 1px solid black !important;
+      border-bottom: none !important;
+      border-left: none !important;
+      border-top: none !important;
+    }
+    #listing_table th {
+      padding: 3px;
+      text-align: center;
+      background-color: transparent !important;
+      border-bottom: 1px solid black !important;
+      border-left: 1px solid black !important;
+      border-top: 1px solid black !important;
+      border-right: none !important;
+    }
+    #listing_table td {
+      padding: 3px;
+      text-align: center;
+      background-color: transparent !important;
+      border-bottom: 1px solid black !important;
+      border-left: 1px solid black !important;
+      border-right: none !important;
+      border-top: none !important;
+    }
+    #listing_table th:nth-child(3),
+    #listing_table td:nth-child(3) {
+      display: none;
+    }
+    #listing_table th:nth-child(1) {
+      width: 30%;
+    }
+    #listing_table th:nth-child(2) {
+      width: 10%;
+    }
+    #listing_table th:nth-child(3) {
+      width: 10%;
+    }
+    #listing_table th:nth-child(4) {
+      width: 10%;
+    }
+    #listing_table th:nth-child(5) {
+      width: 10%;
+    }
+    #listing_table th:nth-child(6) {
+      width: 10%;
+    }
+    #listing_table th:nth-child(7) {
+      width: 10%;
+    }
+    #listing_table th:nth-child(8) {
+      width: 10%;
+    }
+    #listing_table th:nth-child(9) {
+      width: 10%;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    .qr-code img {
+      width: 100%;
+    }
+    .borderbtm {
+      border-bottom: 1px solid black;
+    }
+    .totals_tbl tr:nth-child(1) td,
+    .totals_tbl tr:nth-child(2) td,
+    .totals_tbl tr:nth-child(3) td {
+      font-weight: bold;
+    }
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table id="header">
+          <tbody>
+            <tr>
+              <td>إسم العميل: {%client_business_name%}</td>
+              <td rowspan="100%">{%invoice_title%}</td>
+              <td rowspan="100%"></td>
+              <td>رقم الفاتورة: {%invoice_no%}</td>
+            </tr>
+            <tr>
+              <td>الرقم الضريبى للعميل:{%client_bn1%}</td>
+              <td>تاريخ الفاتورة: {%created_time%} {%invoice_date%}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div id="items-list">{%items_list%}</div>
+        <table style="width: 100%; border-spacing: 0; margin-top: 10px">
+          <tbody>
+            <tr>
+              <td
+                style="width: 50%; border: 1px solid black; border-radius: 5px"
+              >
+                <table
+                  style="width: 100%; border-spacing: 0"
+                  class="totals_tbl"
+                >
+                  <tbody>
+                    <tr>
+                      <td class="borderbtm" style="padding: 4px">
+                        المبلغ قبل الضريبة
+                      </td>
+                      <td class="borderbtm" style="padding: 4px">
+                        <span class="removeCurr"> {%invoice_subtotal%}</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="borderbtm" style="padding: 4px">
+                        ضريبة القيمة المضافة
+                      </td>
+                      <td class="borderbtm" style="padding: 4px">
+                        <span class="removeCurr"> {%tax-total%}</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 4px">الإجمالى Total</td>
+                      <td style="padding: 4px">
+                        ( <span class="removeCurr"> {%invoice_total%} </span>)
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="100%" style="text-align: center">
+                        {%invoice_total_spelled%}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+              <td style="width: 35%"></td>
+              <td style="width: 15%" class="qr-code">{%sa_qr_code_image%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+      </div>
+      <div style="display: none">
+        <div id="discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function addSubttl() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var newTh = document.createElement("th");
+        newTh.innerHTML = "Taxable Amount <br> المبلغ الخاضع للضريبة";
+        allRows[0].insertBefore(newTh, allRows[0].cells[5]);
+        for (var i = 1; i < allRows.length; i++) {
+          var newTd = document.createElement("td");
+          newTd.innerText = (
+            parseFloat(allRows[i].cells[3].innerText.replace(/,/g, "")) *
+            parseFloat(allRows[i].cells[4].innerText.replace(/,/g, ""))
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          allRows[i].insertBefore(newTd, allRows[i].cells[5]);
+        }
+      }
+      try {
+        addSubttl();
+      } catch (error) {
+        console.log(error);
+      }
+      function removeCurr() {
+        var alltotals = document.querySelectorAll(".removeCurr");
+        for (var i = 0; i < alltotals.length; i++) {
+          alltotals[i].innerText = parseFloat(
+            alltotals[i].innerText.replace(/,/g, "")
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      try {
+        removeCurr();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

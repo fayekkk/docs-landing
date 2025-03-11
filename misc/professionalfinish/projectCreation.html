@@ -1,0 +1,289 @@
+<style>
+  .container-le_workflow-type-entity-1_custom_data-vendorname {
+    display: none;
+  }
+  /* approx_time  dropdown */
+  .collection-rows-container [class$="--approx_time"],
+  .collection-rows-container [class$="--dropdown"] {
+    display: none;
+  }
+</style>
+<script>
+  $(document).ready(async function () {
+    async function fetchSuppliers() {
+      const url =
+        "/v2/api/entity/supplier/list/1?filter[supplier_custom_data.type]=مقاول_باطن&per_page=70";
+      let suppliersData;
+
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json", 
+          },
+        });
+// 0
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        suppliersData = await response.json();
+      } catch (error) {
+        console.error("Error fetching suppliers:", error);
+        suppliersData = null;
+      }
+
+      return suppliersData;
+    }
+
+    async function fetchSuppliers() {
+      const url =
+        "/v2/api/entity/supplier/list/1?filter[supplier_custom_data.type]=مقاول_باطن&per_page=70";
+
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+      } catch (error) {
+        console.error("Error fetching suppliers:", error);
+        return null;
+      }
+    }
+
+    async function createVendorSelect() {
+      const data = await fetchSuppliers();
+      if (!data) return null;
+
+      const select = document.createElement("select");
+      select.className = "vendors-select";
+
+      const defaultOption = document.createElement("option");
+      defaultOption.textContent = "Select an option";
+      defaultOption.value = -1;
+      defaultOption.disabled = true;
+      defaultOption.selected = true;
+      select.appendChild(defaultOption);
+
+      data.data.forEach((item) => {
+        const option = document.createElement("option");
+        option.value = item.id;
+        option.textContent = item.business_name;
+        select.appendChild(option);
+      });
+
+      return select;
+    }
+
+    async function addDropDown() {
+      const dropdowns = $('[id$="--item_vendorr"]');
+      const vendorSelect = await createVendorSelect();
+
+      if (vendorSelect) {
+        dropdowns.each(function () {
+          if (
+            $(this).closest(".form-group").find(".vendors-select").length == 0
+          ) {
+            $(this).closest(".form-group").find(".select2-container").hide(); // for test
+            const newSelect = vendorSelect.cloneNode(true);
+            $(this).after(newSelect);
+            $(newSelect).select2();
+            // newSelect.val("-1").change();
+            $(".vendors-select").last().val("-1").change();
+          }
+        });
+      }
+      $(".vendors-select").on("change", function () {
+        const selectedValue = $(this).val();
+        const selectedOption = $(this).find("option:selected");
+        console.log(selectedValue);
+        console.log(selectedOption[0].textContent);
+        const newOption = $(
+          "<option value=" +
+            selectedValue +
+            ">" +
+            selectedOption[0].textContent +
+            "</option>"
+        );
+        console.log(newOption);
+        $(this).closest("tr").find("[id$='--item_vendorr']").append(newOption);
+        $(this)
+          .closest("tr")
+          .find("[id$='--item_vendorr']")
+          .val(selectedValue)
+          .change();
+      });
+    }
+
+    addDropDown();
+
+    $(
+      "#le_workflow-type-entity-1 > div.form-row > div.col-lg-12 > div.row > div.col-lg-12.col-md-12.col-xs-12 > div > div > div > div.card-body.p-0 > div > div > div > div > div > div.btn-group.add-row.dropdown > button"
+    ).on("click", function () {
+      setTimeout(() => {
+        console.log("here");
+        addDropDown();
+      }, 100);
+    });
+    // Required client
+    $('button[type="submit"]').eq(0).attr("class", true);
+    $("#client_id").on("change", function () {
+      if ($(this).val() == "") {
+        $('button[type="submit"]').eq(1).attr("disabled", true);
+      } else {
+        $('button[type="submit"]').eq(1).attr("disabled", false);
+      }
+    });
+
+    function addDisabled() {
+      $("[id$='--process_percent']").attr("disabled", true);
+      $("[id$='--ta3lya_percent']").attr("disabled", true);
+      $("[id$='--vendor_process_percent']").attr("disabled", true);
+      $("[id$='--ta3lya_vendor_process_percent']").attr("disabled", true);
+    }
+    addDisabled();
+
+    function addItemChanges() {
+      $("[id$='--project_item_name']").on("change", async function () {
+        console.log($(this).val());
+        let ItemId = $(this).val();
+
+        try {
+          const response = await fetch(
+            `/v2/api/entity/le_projectsItems/${ItemId}/1`,
+            {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const data = await response.json();
+          console.log("Response:", data);
+          // Item Number
+          $(this)
+            .closest("tr")
+            .find("[id$='--item_number_in_contract']")
+            .val(data.item_no);
+          // Unit
+          $(this).closest("tr").find("[id$='--unit']").val(data.unit);
+          // Price
+          $(this)
+            .closest("tr")
+            .find("[id$='--ttl_price']")
+            .val(data.lowest_price);
+          $(this)
+            .closest("tr")
+            .find("[id$='--item_description']")
+            .val(data.item_desc);
+
+          $(this)
+            .closest("tr")
+            .find("[id$='--ttl_price']")
+            .attr("lowestPrice", data.lowest_price);
+
+          // return data;
+        } catch (error) {
+          console.error("Error:", error);
+          // return null;
+        }
+      });
+    }
+   
+    $("[id$='--ttl_price']").on("change", async function () {
+      let lowest_price = parseFloat($(this).attr("lowestPrice"));
+      if (parseFloat($(this).val()) < lowest_price) {
+        $(this).val(lowest_price);
+      }
+    });
+    addItemChanges();
+    // Hundle Dates
+    setTimeout(() => {
+      $(".applyBtn ").on("click", function (e) {
+        console.log("date changes");
+
+        function formatDate(dateString) {
+          const [year, month, day] = dateString.split("-");
+
+          return `${day}/${month}/${year}`;
+        }
+        let projectstartDate = $("#start_date").val();
+        let projectdeliveryDate = $("#delivery_date").val();
+        let notdelivery = true;
+        if (projectdeliveryDate == "") {
+          notdelivery = false;
+        }
+        e.preventDefault();
+        $("[id$='--startingdate']").each(function () {
+          setTimeout(() => {
+            let startDate = $(this).val();
+            if (startDate < projectstartDate) {
+              console.log(formatDate(`${projectstartDate}`));
+              $(this)
+                .prev("input")
+                .val(formatDate(`${projectstartDate}`))
+                .change();
+            }
+          }, 400);
+        });
+        $("[id$='--finishingdate']").each(function () {
+          setTimeout(() => {
+            let startDate = $(this).val();
+            if (notdelivery) {
+              if (startDate > projectdeliveryDate) {
+                console.log(formatDate(`${projectdeliveryDate}`));
+                $(this)
+                  .prev("input")
+                  .val(formatDate(`${projectdeliveryDate}`))
+                  .change();
+              }
+            }
+          }, 400);
+        });
+      });
+    }, 250);
+
+    $(
+      "#le_workflow-type-entity-1 > div.form-row > div.col-lg-12 > div.row > div.col-lg-12.col-md-12.col-xs-12 > div > div > div > div.card-body.p-0 > div > div > div > div > div > div.btn-group.add-row.dropdown > button"
+    ).on("click", function (e) {
+      setTimeout(() => {
+        // addFilterToDropdown("[id$='--item_vendorr']", {
+        //   "filter[supplier_custom_data.type]": "مقاول باطن",
+        // });
+        addDisabled();
+        addItemChanges();
+
+        $("[id$='--ttl_price']").on("change", async function () {
+          let lowest_price = parseFloat($(this).attr("lowestPrice"));
+          if (parseFloat($(this).val()) < lowest_price) {
+            $(this).val(lowest_price);
+          }
+        });
+      }, 200);
+    });
+    // change title
+    $(
+      "#le_workflow-type-entity-1 > div.form-row > div:nth-child(1) > div > label"
+    ).html(
+      $(
+        "#le_workflow-type-entity-1 > div.form-row > div:nth-child(1) > div > label"
+      )
+        .html()
+        .replace("مسمى", "إسم المشروع")
+    );
+
+    $(
+      "#le_workflow-type-entity-1 > div.form-row > div:nth-child(6) > div > label"
+    ).text("المهندسين المعينين");
+  });
+</script>

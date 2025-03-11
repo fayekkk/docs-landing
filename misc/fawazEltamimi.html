@@ -1,0 +1,557 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+
+    .invoice-address {
+      border-top: 3px double #000000;
+      margin: 0 0 25px 0;
+      padding-top: 25px;
+    }
+
+    bold_title {
+      font-weight: bold;
+    }
+
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: right;
+      padding: 6px 4px;
+    }
+
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+
+    .total-table td {
+      border-right: 1px solid #555555;
+    }
+
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+
+    .notes-block {
+      margin: 50px 0 0 0;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    #listing_table th:last-child,
+    #listing_table td:last-child {
+      border-left: 1px solid #555555;
+    }
+
+    #label_subtotal {
+      width: 65px;
+    }
+
+    #label_field3,
+    #label_field4 {
+      width: 55px;
+    }
+
+    #items-list > table:nth-child(2) tr td:nth-child(1) {
+      width: 60%;
+    }
+
+    #listing_table th,
+    #listing_table td {
+      text-align: center;
+    }
+
+    #listing_table th:nth-child(2),
+    #listing_table td:nth-child(2) {
+      text-align: right;
+    }
+
+    .invoice-inner {
+      margin: 0 25px;
+    }
+
+    /* th#label_field5,
+    #listing_table td:nth-child(5) {
+      display: none;
+    } */
+    .qr-code img {
+      margin-top: 10px;
+    }
+
+    /* .hidden {
+      display: none;
+    } */
+    #invoice_title {
+      font-size: 16px !important;
+    }
+    #header_table td {
+      width: 33%;
+    }
+    #header_table td:nth-child(1) {
+      text-align: left;
+    }
+    #header_table td:nth-child(2) {
+      text-align: center;
+    }
+    #header_table td:nth-child(3) {
+      text-align: right;
+    }
+    #header_table {
+      width: 100%;
+    }
+    #business_info br {
+      display: none !important;
+    }
+    .listing-table:nth-child(2) td:nth-child(2) {
+      border-left: 1px solid black !important;
+      border-right: 1px solid black !important;
+    }
+    .listing-table:nth-child(2) td:nth-child(3) {
+      border-left: 1px solid black !important;
+    }
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table
+          width="100%"
+          border="0"
+          cellspacing="0"
+          cellpadding="0"
+          style="direction: ltr"
+          id="header_table"
+        >
+          <tr>
+            <td align="right" valign="top">
+              <img
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                width="{%logo-width%}"
+                height="{%logo-height%}"
+              />
+            </td>
+
+            <td valign="top" align="left" style="text-align: center">
+              <p id="invoice_title" class="editable-area invoice-name">
+                {%invoice_title%}
+              </p>
+              <div class="qr-code">{%sa_qr_code_image%}<br /></div>
+            </td>
+            <td align="right" valign="top" style="width: 33%">
+              <div id="business_info" class="editable-area">
+                {%business_info%}
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <div class="invoice-address">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="50%" align="right" valign="top">
+                <table border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td valign="top" style="float: right">
+                      <strong id="field1" class="editable-area"
+                        >{%field1%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" valign="top">
+                      <div id="client_info" class="editable-area">
+                        {%client_info%}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr id="shipping_options" style="display: none">
+                    <td valign="top" style="float: right">
+                      <br /><strong id="label_ship" class="editable-area"
+                        >{%label_ship%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" valign="top">
+                      <br />
+                      <div id="ship_info" class="editable-area">
+                        {%ship_info%}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td width="50%" valign="top" align="left">
+                <table
+                  id="invoice_basics"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="left"
+                >
+                  <tr>
+                    <td align="left">
+                      <strong class="editable-area" id="label_invoice_no"
+                        >{%label_invoice_no%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" align="right">
+                      {%invoice_number%}
+                    </td>
+                  </tr>
+                  <tr {%refund_invoice_number_condition%}>
+                    <td align="right">
+                      <strong class="editable-area" id="refund_label_invoice_no"
+                        >{%refund_invoice_no_title%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%refund_invoice_number%}
+                    </td>
+                  </tr>
+                  <!-- InvoiceDate -->
+                  <tr>
+                    <td align="left">
+                      <strong class="editable-area" id="label_date"
+                        >{%label_date%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" align="right">
+                      {%invoice_date%}
+                    </td>
+                  </tr>
+                  <!-- /InvoiceDate -->
+                </table>
+                <custom_field
+                  id="custom_fields"
+                  style="clear: both"
+                  class="editable-area"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="left"
+                >
+                  {%custom_fields%}
+                </custom_field>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div id="items-list">{%items_list%}</div>
+
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+      </div>
+      <div style="display: none">
+        <div id="discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      var currency = "";
+      function detectCurrency() {
+        var unitPrice = document.querySelector(
+          "#listing_table tr td:nth-child(6)"
+        );
+        var price = unitPrice.innerText;
+        if (price.indexOf("ر.س") > -1) {
+          currency = " ر.س";
+        } else if (price.indexOf("SR") > -1) {
+          currency = " SR";
+        }
+      }
+
+      function hasDiscount() {
+        var discountValue = document.getElementById("discount").innerText;
+        var itemDiscount = document.getElementById("item-discount").innerText;
+        var hasInvoiceDiscount;
+        var hasItemDiscount;
+        if (parseFloat(itemDiscount) != 0) {
+          hasInvoiceDiscount = true;
+        } else {
+          hasInvoiceDiscount = false;
+        }
+
+        if (parseFloat(discountValue) != 0) {
+          hasItemDiscount = true;
+        } else {
+          hasItemDiscount = false;
+        }
+
+        return {
+          invoiceDiscount: hasInvoiceDiscount,
+          itemDiscount: hasItemDiscount,
+        };
+      }
+
+      function insertCol(index, colLabel, labelId, cellClass) {
+        var tbl = document.getElementById("listing_table");
+
+        for (i = 0; i < tbl.rows.length; i++) {
+          var newCell = tbl.rows[i].insertCell(index);
+          newCell.classList.add(cellClass);
+
+          //  newCell.innerText = parseFloat(tax[i].innerText.replace(/,/g, "")) + parseFloat(total[i].innerText.replace(/,/g, ""))
+        }
+        var firstCell = tbl.rows[0].cells[index];
+        firstCell.outerHTML = "<th id=" + labelId + ">" + colLabel + "</th>";
+        // firstCell.id = labelId
+        firstCell.style.cssText =
+          "border-top:1px solid #000;font-weight:bold;text-align:center;background:#e5e5e5";
+      }
+
+      function swap(in1, in2, table_id) {
+        var table = document.getElementById(table_id);
+        for (var i = 0, row; (row = table.rows[i]); i++) {
+          var temp = row.cells[in1].innerHTML;
+          row.cells[in1].innerHTML = row.cells[in2].innerHTML;
+          row.cells[in2].innerHTML = temp;
+        }
+      }
+      function calcSubtotalInc() {
+        var subTotal = document.querySelectorAll(
+          "#listing_table td:nth-child(6)"
+        );
+        var total = document.querySelectorAll("#listing_table td:nth-child(9)");
+        var price = document.querySelectorAll("#listing_table td:nth-child(3)");
+        var vatPercent = document.querySelectorAll(
+          "#listing_table td:nth-child(7)"
+        );
+
+        var discountTotal = parseFloat(
+          document.getElementById("discount").innerText.replace(/,/g, "")
+        );
+        var discountPercent = 0;
+        var sumSubtotal = 0;
+        var remaining = 1;
+        var vatCol = document.querySelectorAll(
+          "#listing_table td:nth-child(8)"
+        );
+
+        for (var i = 0; i < subTotal.length; i++) {
+          sumSubtotal += parseFloat(subTotal[i].innerText.replace(/,/g, ""));
+        }
+
+        if (discountTotal != 0) {
+          discountPercent = discountTotal / sumSubtotal;
+          remaining = 1 - discountPercent;
+        }
+
+        for (var i = 0; i < subTotal.length; i++) {
+          var newTotal = (
+            parseFloat(total[i].innerText.replace(/,/g, "")) / remaining
+          ).toFixed(2);
+
+          var hasTax = true;
+
+          var TaxPercentage = vatPercent[i].innerText.replace("%", "");
+
+          if (!parseInt(TaxPercentage)) {
+            hasTax = false;
+          }
+
+          if (
+            newTotal ==
+            parseFloat(subTotal[i].innerText.replace(/,/g, "")).toFixed(2)
+          ) {
+            if (!!hasTax) {
+              console.log("I Have Tax");
+              console.log(hasTax);
+              price[i].innerText = (
+                parseFloat(price[i].innerText.replace(/,/g, "")) / 1.15
+              ).toFixed(2);
+            }
+            subTotal[i].innerText = (
+              (parseFloat(total[i].innerText.replace(/,/g, "")) -
+                parseFloat(vatCol[i].innerText.replace(/,/g, ""))) /
+              remaining
+            ).toFixed(2);
+          }
+          console.log(newTotal);
+        }
+      }
+      function calcDisCol() {
+        var disCol = document.querySelectorAll(
+          "#listing_table td:nth-child(5)"
+        );
+        var subTotalCol = document.querySelectorAll(
+          "#listing_table td:nth-child(6)"
+        );
+        var totalWithVat = document.querySelectorAll(
+          "#listing_table td:nth-child(9)"
+        );
+        var vat = document.querySelectorAll("#listing_table td:nth-child(8)");
+        var qty = document.querySelectorAll("#listing_table td:nth-child(4)");
+        var price = document.querySelectorAll("#listing_table td:nth-child(3)");
+        for (var i = 0; i < disCol.length; i++) {
+          var subtotal =
+            parseFloat(qty[i].innerText.replace(/,/g, "")) *
+            parseFloat(price[i].innerText.replace(/,/g, ""));
+          var total =
+            parseFloat(totalWithVat[i].innerText.replace(/,/g, "")) -
+            parseFloat(vat[i].innerText.replace(/,/g, ""));
+          var discount = subtotal - total;
+          disCol[i].innerText = discount.toFixed(2);
+          subTotalCol[i].innerText = (subtotal - discount).toFixed(2);
+        }
+      }
+      try {
+        detectCurrency();
+
+        var mainTable = document.getElementById("listing_table");
+        var colCount = mainTable.rows[0].cells;
+
+        function discountCheck() {
+          allTh = document.querySelectorAll("#listing_table thead tr th");
+          var allRows = document.querySelectorAll("#listing_table tr");
+          if (allTh.length == 8) {
+            insertCol(7, " خصم <br> Discount  ", "discount_th", "discounts");
+
+            for (var i = 0; i < allRows.length; i++) {
+              var band = allRows[i].cells[0].innerText;
+              var desc = allRows[i].cells[1].innerText;
+              var varper = allRows[i].cells[2].innerText;
+              var vatam = allRows[i].cells[3].innerText;
+              var unit = allRows[i].cells[4].innerText;
+              var Qty = allRows[i].cells[5].innerText;
+              var price = allRows[i].cells[6].innerText;
+              var discount = allRows[i].cells[7].innerText;
+              var totbefvat = allRows[i].cells[8].innerText;
+              allRows[i].cells[0].innerText = band;
+              allRows[i].cells[1].innerText = desc;
+              allRows[i].cells[2].innerText = unit;
+              allRows[i].cells[3].innerText = price;
+              allRows[i].cells[4].innerText = Qty;
+              allRows[i].cells[5].innerText = discount;
+              allRows[i].cells[6].innerText = varper;
+              allRows[i].cells[7].innerText = vatam;
+              allRows[i].cells[8].innerText = totbefvat;
+            }
+          } else {
+            for (var i = 0; i < allRows.length; i++) {
+              var band = allRows[i].cells[0].innerText;
+              var desc = allRows[i].cells[1].innerText;
+              var varper = allRows[i].cells[2].innerText;
+              var vatam = allRows[i].cells[3].innerText;
+              var unit = allRows[i].cells[4].innerText;
+              var Qty = allRows[i].cells[5].innerText;
+              var price = allRows[i].cells[6].innerText;
+              var discount = allRows[i].cells[7].innerText;
+              var totbefvat = allRows[i].cells[8].innerText;
+              allRows[i].cells[0].innerText = band;
+              allRows[i].cells[1].innerText = desc;
+              allRows[i].cells[2].innerText = unit;
+              allRows[i].cells[3].innerText = price;
+              allRows[i].cells[4].innerText = Qty;
+              allRows[i].cells[5].innerText = discount;
+              allRows[i].cells[6].innerText = varper;
+              allRows[i].cells[7].innerText = vatam;
+              allRows[i].cells[8].innerText = totbefvat;
+            }
+          }
+        }
+        try {
+          discountCheck();
+        } catch (error) {
+          console.log(error);
+        }
+
+ 
+
+        var hasInvoiceDiscount = hasDiscount();
+        calcSubtotalInc();
+        if (hasInvoiceDiscount.invoiceDiscount) {
+          console.log("has discount");
+          calcDisCol();
+        }
+
+        if (
+          !hasInvoiceDiscount.invoiceDiscount &&
+          !hasInvoiceDiscount.itemDiscount
+        ) {
+          var mainTable = document.getElementById("listing_table");
+          for (var i = 0; i < mainTable.rows.length; i++) {
+            var tableCell = mainTable.rows[i].cells[4];
+            tableCell.classList.add("hidden");
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: black;
+      padding: 10px;
+    }
+
+    .invoice-inner {
+      margin: 0 5px;
+      padding: 0px 20px;
+    }
+
+    .invoice-address {
+      margin: 20px 0;
+    }
+
+    bold_title {
+      font-weight: bold;
+    }
+
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .listing-table th {
+      background-color: #e5e5e5;
+      border: 1px solid #555555;
+      font-weight: bold;
+      text-align: center;
+      padding: 6px 4px;
+      height: 10%;
+    }
+
+    .listing-table td {
+      border: 1px solid #555555;
+      text-align: center;
+      padding: 5px 6px;
+      vertical-align: center;
+    }
+
+    #items-list > table:nth-child(2) {
+      display: none;
+    }
+    #listing_table {
+      text-align: center !important;
+      background-color: #fff !important;
+      border-top: none !important;
+      border-left: none !important;
+      border-bottom: none !important;
+      border-right: 1px solid black !important;
+      font-size: 11px;
+    }
+    #listing_table th {
+      text-align: center !important;
+      background-color: #e5e5e5 !important;
+      border-top: 1px solid black !important;
+      border-left: 1px solid black !important;
+      border-bottom: 1px solid black !important;
+      border-right: none !important;
+      padding: 2px 2px;
+    }
+    #listing_table td {
+      text-align: center !important;
+      background-color: #fff !important;
+      border-top: none !important;
+      border-left: 1px solid black !important;
+      border-bottom: 1px solid black !important;
+      border-right: none !important;
+      padding: 2px 2px;
+    }
+    #listing_table th:nth-child(1) {
+      width: 5%;
+    }
+    #listing_table th:nth-child(2) {
+      width: 5%;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    .hidden {
+      display: none;
+    }
+    body {
+      font: 16px Arial, Helvetica, sans-serif;
+    }
+
+    .notes-block {
+      font-style: normal !important;
+      font-size: 12px !important;
+      font-weight: bold !important;
+    }
+    /* .notes-block span:first {
+      font-weight: 800;
+    } */
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div id="items-list">{%items_list%}</div>
+      <div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic; padding: 5px"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div style="display: none">
+        {%invoice_title%}
+        <div id="invoice-discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function swapAll(finalOrder) {
+        var allRows = document.querySelectorAll("#listing_table tr");
+
+        for (var x = 0; x < allRows.length; x++) {
+          var cells = allRows[x].cells;
+          var values = [];
+          for (var i = 0; i < cells.length; i++) {
+            values.push(cells[i].innerHTML);
+          }
+          var reorderedValues = [];
+          for (var i = 0; i < finalOrder.length; i++) {
+            reorderedValues.push(values[finalOrder[i]]);
+          }
+          for (var y = 0; y < cells.length; y++) {
+            cells[y].innerHTML = reorderedValues[y];
+          }
+        }
+      }
+
+      function hideColumn(tableSelector, columnIndex) {
+        var table = document.querySelector(tableSelector);
+
+        if (!table) {
+          console.error("Table not found with the given selector.");
+          return;
+        }
+
+        var rows = table.rows;
+
+        for (var i = 0; i < rows.length; i++) {
+          var cell = rows[i].cells[columnIndex];
+          if (cell) {
+            cell.classList.add("hidden");
+          }
+        }
+      }
+
+      function handleDiscountColumn(tableId) {
+        var table = document.getElementById(tableId);
+        if (!table) {
+          console.error("Table not found with the given ID.");
+          return;
+        }
+
+        var header = table.rows[0];
+        var discountColumnIndex = -1;
+
+        // Find the "discount" column index
+        for (var i = 0; i < header.cells.length; i++) {
+          if (header.cells[i].innerText.toLowerCase() === "discount") {
+            discountColumnIndex = i;
+            break;
+          }
+        }
+
+        // Remove the existing "discount" column
+        if (discountColumnIndex !== -1) {
+          for (var i = 0; i < table.rows.length; i++) {
+            table.rows[i].deleteCell(discountColumnIndex);
+          }
+        }
+      }
+
+      function handleTotalDiscount() {
+        // Select the elements by their IDs
+        var itemDiscountElement = document.getElementById("item-discount");
+        var invoiceDiscountElement =
+          document.getElementById("invoice-discount");
+        var totalDiscountElement = document.getElementById("total-discount");
+
+        if (
+          !itemDiscountElement ||
+          !invoiceDiscountElement ||
+          !totalDiscountElement
+        ) {
+          console.error("One or more elements not found.");
+          return;
+        }
+
+        // Extract and parse the float values
+        var itemDiscount =
+          parseFloat(itemDiscountElement.innerText.replace(/[^\d.-]/g, "")) ||
+          0;
+        var invoiceDiscount =
+          parseFloat(
+            invoiceDiscountElement.innerText.replace(/[^\d.-]/g, "")
+          ) || 0;
+
+        // Calculate the total discount
+        var totalDiscount = itemDiscount + invoiceDiscount;
+
+        // Insert the total discount into the totalDiscountElement
+        totalDiscountElement.innerText = totalDiscount.toFixed(2);
+      }
+
+      function appendRows(tableId) {
+        // Select the table
+        var table = document.getElementById(tableId);
+        if (!table) {
+          console.error("Table not found.");
+          return;
+        }
+
+        var numRows = table.rows.length;
+        var numCols = table.rows[0].cells.length;
+
+        // Create first row
+        var discountRow = document.createElement("tr");
+        var discountCell1 = document.createElement("td");
+        var discountCell2 = document.createElement("td");
+
+        // Set content for first row
+        discountCell1.textContent = "Discount:";
+        discountCell1.classList.add("discountText");
+        discountCell2.innerHTML =
+          '<span id="total-discount" class="hideDisc"></span>';
+
+        for (var i = 0; i < numCols - 2; i++) {
+          var emptyCell = document.createElement("td");
+          discountRow.appendChild(emptyCell);
+        }
+        discountRow.appendChild(discountCell1);
+        discountRow.appendChild(discountCell2);
+
+        // Append the first row to the table
+        table.appendChild(discountRow);
+
+        // Create second row
+        var totalRow = document.createElement("tr");
+        var totalCell1 = document.createElement("td");
+        var totalCell2 = document.createElement("td");
+
+        // Set content for second row
+        totalCell1.textContent = "Total (" + "{%invoice_currency_code%}" + ")";
+        totalCell2.innerHTML =
+          '<span id="invoice-total">{%invoice_total%}</span>';
+
+        for (var i = 0; i < numCols - 2; i++) {
+          var emptyCell = document.createElement("td");
+          totalRow.appendChild(emptyCell);
+        }
+        totalRow.appendChild(totalCell1);
+        totalRow.appendChild(totalCell2);
+
+        // Append the second row to the table
+        table.appendChild(totalRow);
+      }
+
+      function appendImageToCell(imageColumnIndex, targetColumnIndex) {
+        var table = document.getElementById("listing_table");
+        var rows = table.rows;
+
+        for (var i = 1; i < rows.length; i++) {
+          var cells = rows[i].cells;
+          var imgCell = cells[imageColumnIndex];
+          var targetCell = cells[targetColumnIndex];
+          targetCell.innerHTML =
+            imgCell.innerHTML + "<br>" + targetCell.innerHTML;
+          // Get the image from the imgCell
+          // var img = imgCell.querySelector("img");
+
+          // if (img) {
+          //   // Clone the image to append it to the target cell
+          //   var imgClone = img.cloneNode(true);
+          //   targetCell.appendChild(document.createElement("br"));
+          //   // targetCell.appendChild(document.createElement("br"));
+          //   targetCell.appendChild(imgClone);
+          // }
+        }
+      }
+
+      try {
+        handleDiscountColumn("listing_table");
+      } catch (e) {
+        console.log(e);
+      }
+      try {
+        appendImageToCell(2, 1);
+      } catch (e) {
+        console.log(e);
+      }
+      try {
+        swapAll([0, 4, 1, 2, 3, 5]);
+      } catch (e) {
+        console.log(e);
+      }
+      try {
+        appendRows("listing_table");
+      } catch (e) {
+        console.log(e);
+      }
+      try {
+        handleTotalDiscount();
+      } catch (e) {
+        console.log(e);
+      }
+      try {
+        hideColumn("#listing_table", 3);
+      } catch (e) {
+        console.log(e);
+      }
+      try {
+        hideColumn("#listing_table", 3);
+      } catch (e) {
+        console.log(e);
+      }
+      try {
+        document.getElementById("invoice-total").innerText = parseFloat(
+          document
+            .getElementById("invoice-total")
+            .innerText.replace(/[^\d.-]/g, "")
+        ).toFixed(2);
+      } catch (e) {
+        console.log(e);
+      }
+      function hundletablesubttl() {
+        var allRows = document.querySelectorAll("#listing_table tbody tr");
+        for (var i = 0; i < allRows.length; i++) {
+          allRows[i].cells[5].innerText =
+            parseFloat(allRows[i].cells[1].innerText.replace(/,/g, "")) *
+            parseFloat(allRows[i].cells[4].innerText.replace(/,/g, ""));
+        }
+        var ttlDiscount =
+          parseFloat(
+            document
+              .getElementById("invoice-discount")
+              .innerText.replace(/,/g, "")
+              .replace("$", "")
+          ) +
+          parseFloat(
+            document
+              .getElementById("item-discount")
+              .innerText.replace(/,/g, "")
+              .replace("$", "")
+          );
+        console.log(ttlDiscount);
+
+        document.querySelector(".hideDisc").innerText = ttlDiscount;
+        if (
+          parseFloat(
+            document.querySelector(".hideDisc").innerText.replace(/,/g, "")
+          ) == 0
+        ) {
+          document.querySelector(
+            ".hideDisc"
+          ).parentElement.parentElement.style.display = "none";
+        }
+      }
+      try {
+        hundletablesubttl();
+      } catch (error) {
+        console.log(error);
+      }
+      function getdiscpercent() {
+        // discountText
+        var allRows = document.querySelectorAll("#listing_table tbody tr");
+        var subttl = 0;
+        var hideDiscVal = parseFloat(
+          document
+            .querySelector(".hideDisc")
+            .innerText.replace(/,/g, "")
+            .replace("$", "")
+        );
+        if (hideDiscVal != 0) {
+          for (var i = 0; i < allRows.length; i++) {
+            subttl =
+              subttl +
+              parseFloat(allRows[i].cells[1].innerText.replace(/,/g, "")) *
+                parseFloat(allRows[i].cells[4].innerText.replace(/,/g, ""));
+            console.log({ subttl: subttl });
+          }
+
+          console.log(subttl);
+          console.log(hideDiscVal);
+          console.log(hideDiscVal / subttl);
+        }
+        document.querySelector(".discountText").innerText =
+          document.querySelector(".discountText").innerText +
+          " " +
+          ((hideDiscVal / subttl) * 100).toFixed(2) +
+          "%";
+      }
+      try {
+        getdiscpercent();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

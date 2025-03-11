@@ -1,0 +1,37 @@
+<!-- code_Posts_owner_post -->
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      let href = window.location.href;
+      if (href.indexOf("posts/post/2") != -1) {
+        console.log("yess");
+        document.querySelectorAll(
+          ".panel-default"
+        )[0].innerHTML += `<div id="ShowIframe" style="display:none"> <iframe id="myIframe" src="https://ahmedfayek.daftra.com/owner/appointments/add/236/2" name="my-iframe" width="100%" height="500" frameborder="0"></iframe> </div>`;
+        const iframe = document.getElementById("myIframe");
+        iframe.addEventListener("load", () => {
+          const iframeDoc =
+            iframe.contentDocument || iframe.contentWindow.document;
+          // Select the navigation items from the iframe
+          const navItems = iframeDoc.querySelector("#main-nav");
+          // navItems.style.display = "none";
+          // const navItems4 = iframeDoc.querySelector(".header ");
+          // navItems4.style.display = "none";
+          // const navItems2 = iframeDoc.querySelector(".fixed-div");
+          // navItems2.style.display = "none";
+          // const navItems3 = iframeDoc.querySelector("#main-content");
+          // navItems3.style.marginRight = "0";
+          // const navItems1 = iframeDoc.querySelector(".main-area");
+          // navItems1.style.paddingTop = "0";
+
+          $("#ShowIframe").show();
+          $(document).on("click", ".btn-success", function (e) {
+            e.preventDefault();
+            console.log("stopped");
+            iframeDoc.querySelector(".btn-success").click();
+          });
+        });
+      }
+    }, 500);
+  });
+</script>

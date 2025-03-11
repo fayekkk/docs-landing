@@ -1,0 +1,171 @@
+<style>
+  * {
+    margin: 0;
+    font-family: sans-serif !important;
+  }
+
+  div.StickyHeader {
+    margin-bottom: 0px;
+  }
+
+  div.header {
+    margin: 0 5px;
+  }
+
+  div.header table {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  div.header table:nth-child(1) tbody {
+    font-size: 13px;
+  }
+
+  .header table.invoice-info {
+    text-align: center;
+  }
+
+  .header table.invoice-info tbody {
+    font-size: 12px;
+  }
+
+  .header table.invoice-info tr > td {
+    position: relative;
+  }
+
+  .header table.invoice-info tr > td:nth-child(1) {
+    padding-left: 20px;
+  }
+
+  .header table.invoice-info tr > td:nth-child(2) {
+    padding-right: 20px;
+  }
+
+  .header table.invoice-info tr td span:nth-child(1) {
+    float: right;
+    font-size: 11.2px;
+  }
+
+  .header table.invoice-info tr td span:nth-child(2) {
+    display: inline-block;
+    position: absolute;
+    left: 50%;
+    margin-left: -50%;
+    width: 100%;
+  }
+
+  .header table.invoice-info tr td span:nth-child(3) {
+    float: left;
+    font-size: 11.2px;
+  }
+
+  .qr-code {
+    text-align: left;
+  }
+
+  .qr-code img {
+    margin-top: 3px;
+    width: 60%;
+  }
+</style>
+<div class="header">
+  <table style="width: 100%; margin-bottom: 5px">
+    <tbody>
+      <tr>
+        <td colspan="100%" style="text-align: right">
+          <img
+            src="https://msoliman7502024.daftra.com/files/f30149e3/logos/67bed17079f95_blobid1740558703063.png"
+            alt=""
+            title="67a89f863e389_بدون_عنوان (2).png"
+            width="30%"
+            style="padding-right: 26px"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td style="width: 40%">
+          <h1 class="business-name" style="font-size: 20px">
+            شركة معروف العربية المتميزة للتجارة
+          </h1>
+        </td>
+        <td style="width: 15%"></td>
+        <td style="width: 20%"></td>
+        <td rowspan="5" class="qr-code">{%qr_code_image%}</td>
+      </tr>
+      <tr>
+        <td>
+          <p><span>س.ت :</span> <span>{%site_bn2%}</span></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <span>هاتف:</span> <span>0112860061</span>
+            <span></span>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <!-- <p><span>هاتف المبيعات المركزيه : </span> <span></span></p> -->
+        </td>
+        <td style="font-size: 16px" colspan="2">{%invoice_title%}</td>
+ 
+      </tr>
+      <tr>
+        <td>
+          <p style="text-align: left">
+            <span style="float: right">الرقم الضريبي :</span>
+            <span style="text-align: center; padding-left: 30px"
+              >{%site_bn1%}</span
+            >
+            <span style="float: left">: VAT</span>
+          </p>
+        </td>
+        <td></td>
+        <td>
+          <p style="font-size: 16px"><span> فاتورة ضريبية B To B </span></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table style="width: 100%; margin-bottom: 5px" class="invoice-info">
+    <tbody>
+      <tr>
+        <td style="width: 35%"></td>
+        <td style="width: 65%">
+          <span>اسم العميل </span> <span>{%client_business_name%}</span>
+          <span> Customer Name </span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span>رقم الفاتورة</span> <span>{%invoice_no%}</span>
+          <span>Invoice No</span>
+        </td>
+        <td>
+          <span>رقم حساب العميل</span> <span>{%client_number%}</span>
+          <span></span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span>تاريخ الفاتورة</span>
+          <span style="padding-left: 10px">{%invoice_date%}</span>
+          <span>Invoice Date</span>
+        </td>
+        <td>
+          <span>الرقم الضريبي</span> <span>{%client_bn1%}</span>
+          <span>Tax Number</span>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <span>الهاتف - جوال</span> <span>{%client_phone%}</span>
+          <span>Tel - Mob</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

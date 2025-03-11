@@ -1,0 +1,1427 @@
+<style>
+    .newPara {
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 5px
+    }
+  
+    .loading_text {
+      font-size: 9px;
+      margin-right: 5px
+    }
+  
+    .loading-image1 {
+      width: 10px
+    }
+  
+    .loading0 {
+      position: relative
+    }
+  
+    .loading1 {
+      position: relative
+    }
+  
+    .loading-image2 {
+      width: 10px
+    }
+  
+    .loading2 {
+      display: inline-block;
+      top: 177px;
+      left: 614px
+    }
+  
+    .app_count,
+    .apply_message,
+    .error_date {
+      font-size: 10px;
+      color: red;
+      width: 200px;
+      align-self: self-end;
+      text-align: center;
+      padding: 3px;
+      border-radius: 3px;
+      background: #ffe7e7
+    }
+  
+    span.app_count {
+      background: #39b1eb;
+      color: #fff;
+      font-weight: 700;
+      padding-bottom: 0;
+      padding: 3px;
+      padding-bottom: 1px
+    }
+  
+    .hidden {
+      display: none
+    }
+  
+    .app_count,
+    .count_message {
+      font-size: 11px;
+      color: #555;
+      font-weight: 700
+    }
+  
+    .rez {
+      margin: 10px 0;
+      text-align: right;
+      width: 20px;
+      font-size: 20px;
+      height: 20px
+    }
+  
+    .custom_dates_container {
+      margin: 10px 0;
+      position: relative;
+      display: flex;
+      align-items: center
+    }
+  
+    .custom_label {
+      font-size: inherit
+    }
+  
+    .custom_input {
+      width: 150px
+    }
+  
+    .apply {
+      position: relative;
+      margin: 10px 0 0;
+      color: #fff;
+      text-align: center;
+      background: #18b777;
+      padding: 5px;
+      width: 150px;
+      transition: .3s;
+      font-weight: 700
+    }
+  
+    .apply:hover {
+      background: #008000f2;
+      color: #fff
+    }
+  
+    .apply3 {
+      margin: 10px 0 0;
+      color: #fff;
+      text-align: center;
+      background: rgba(191, 4, 4, .7);
+      padding: 5px;
+      width: 150px;
+      transition: .3s;
+      font-weight: 700
+    }
+  
+    .apply3:hover {
+      opacity: 1;
+      color: #fff
+    }
+  
+    #PostForm button.btn-success {
+      pointer-events: none;
+      background-color: gray
+    }
+  
+    .bypass-checkbox {
+      line-height: 15px;
+      padding-right: 5px;
+      margin-bottom: 15px
+    }
+  
+    .bypass-checkbox label {
+      display: inline-block;
+      font-size: 11px;
+      margin: 0 2px;
+      vertical-align: bottom;
+      padding: 0
+    }
+  
+    span.app-count {
+      display: inline-block;
+      width: 20px;
+      line-height: 20px;
+      padding: 2px 4px;
+      background: #cee3ce;
+      border-radius: 5px;
+      font-weight: 700;
+      text-align: center
+    }
+  
+    p.app-count-message {
+      color: green;
+      font-size: 12px;
+      padding: 3px 8px;
+      width: 300px;
+      text-align: right;
+      padding-right: 0
+    }
+  
+    .red-star {
+      color: red;
+      margin: 3px
+    }
+  
+    .new-error-message {
+      margin-top: 2px;
+      background: rgba(224, 25, 49, .7);
+      border: 1px solid rgba(224, 25, 49, .8);
+      border-radius: 4px;
+      color: #fff;
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      position: absolute;
+      z-index: 100
+    }
+  
+    .new-error-message::after {
+      border-right: 6px solid transparent;
+      border-left: 7px solid transparent;
+      right: 17px;
+      left: auto;
+      border-bottom: 6px solid rgba(224, 25, 49, .8);
+      content: "";
+      display: inline-block;
+      position: absolute;
+      top: -6px
+    }
+  
+    label[for=ClientAppointmentActionId],
+    label[for=ClientAppointmentActionId]~div {
+      display: none !important
+    }
+  </style>
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/moment.min.js"></script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.1.0/js/datepicker.min.js"></script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.1.0/js/i18n/datepicker.en.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+  <style>
+    table {
+      border-collapse: separate;
+      border-spacing: 10px;
+      width: 100%
+    }
+  
+    td,
+    th {
+      text-align: center
+    }
+  
+    tr:nth-child(even) {
+      background-color: #f2f2f2
+    }
+  
+    #myTable {
+      border: 1px solid #ddd
+    }
+  
+    #myTable th {
+      background-color: #4caf50
+    }
+  
+    #myTable tr:hover .overlay {
+      display: block
+    }
+  
+    #myTable .time {
+      font-size: smaller
+    }
+  
+    #myTable .status {
+      font-size: larger
+    }
+  
+    #myTable .selected,
+    #myTable .time-shift,
+    #myTable .unavailable {
+      border-radius: 10px;
+      height: 80px;
+      transition: background-color .3s ease-in-out;
+      cursor: pointer;
+      min-width: 100px
+    }
+  
+    #myTable .selected:before,
+    #myTable .time-shift:before,
+    #myTable .unavailable:before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      bottom: -5px;
+      left: -5px;
+      z-index: -1;
+      border-radius: inherit
+    }
+  
+    #myTable .time-shift:before {
+      background-image: linear-gradient(45deg, rgba(255, 255, 255, .8), rgba(255, 255, 255, 0)), linear-gradient(-45deg, rgba(255, 255, 255, .8), rgba(255, 255, 255, 0))
+    }
+  
+    #myTable .selected:before {
+      background-image: linear-gradient(45deg, rgba(255, 165, 0, .8), rgba(255, 165, 0, 0)), linear-gradient(-45deg, rgba(255, 165, 0, .8), rgba(255, 165, 0, 0))
+    }
+  
+    #myTable .unavailable:before {
+      background-image: linear-gradient(45deg, rgba(255, 0, 0, .8), rgba(255, 0, 0, 0)), linear-gradient(-45deg, rgba(255, 0, 0, .8), rgba(255, 0, 0, 0))
+    }
+  
+    #myTable .time-shift {
+      background-color: #b4ffcc;
+      font-weight: 500;
+      color: #1c6a35
+    }
+  
+    #myTable .selected {
+      background-color: rgb(241 200 125);
+      color: #7e5f26
+    }
+  
+    #myTable .unavailable {
+      background-color: rgb(255 178 178);
+      color: #931111
+    }
+  
+    #myTable td .overlay {
+      content: "";
+      display: none;
+      position: absolute;
+      top: 0;
+      z-index: 1;
+      border-radius: inherit;
+      background-color: rgb(147 147 147 / 15%);
+      width: 100%;
+      height: 100%
+    }
+  
+    .time.shifts {
+      overflow-x: auto !important;
+      overflow-y: auto !important;
+      max-height: 350px
+    }
+  
+    #myTable td:first-child,
+    #myTable th:first-child {
+      min-width: 100px !important
+    }
+  
+    #myTable td,
+    #myTable th {
+      width: 100px
+    }
+  
+    td.time-shift {
+      min-width: 90px;
+      position: relative
+    }
+  
+    .status {
+      text-align: center
+    }
+  
+    @media (max-width:770px) {
+      #myTable td.time-shift div:last-child {
+        display: block !important;
+        text-align: center !important
+      }
+    }
+  
+    div.datepicker {
+      width: 100%;
+      margin: 15px 0
+    }
+  
+    .datepicker--cell {
+      height: 45px !important
+    }
+  
+    .date-div {
+      display: inline-block;
+      width: 45%;
+      margin: 15px 0 15px 15px
+    }
+  
+    .date-div label.custom_label {
+      margin-right: 5px
+    }
+  
+    .shift_table,
+    .time.shifts {
+      display: none;
+      font-family: Roboto, "Segoe UI", Tahoma, Helvetica, "Open Sans", arial, serif;
+      color: #3a3e63 !important;
+      margin: 15px;
+      max-width: 98%
+    }
+  
+    .custom-row {
+      width: 100%;
+      display: block;
+      background: #f8fcff;
+      box-shadow: 0 0 2px 1px #ddd;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 3px
+    }
+  
+    .custom-date:hover {
+      border-bottom: 2px solid #d8c6ab
+    }
+  
+    .custom-date {
+      outline: 0;
+      border: none;
+      background: 0 0;
+      text-align: right;
+      font-weight: 500;
+      margin: 0;
+      margin-right: -18px;
+      border-bottom: 2px solid #f8fcff;
+      transition: all .2s ease-in
+    }
+  
+    #main-content {
+      opacity: 0;
+      transition: all .1s ease-in-out
+    }
+  
+    .week-day {
+      position: relative
+    }
+  </style>
+  <style>
+    span.select2-selection.select2-selection--single,
+    span.select2.select2-container.select2-container--default,
+    span.select2.select2-container.select2-container--default.select2-container--below.select2-container--open.select2-container--focus,
+    span.select2.select2-container.select2-container--default.select2-container--focus {
+      width: 100% !important
+    }
+  
+    .datepicker-inline {
+      display: none
+    }
+  
+    #myTable tr:first-child td {
+      font-weight: 700;
+      padding: 10px;
+      font-size: 15px;
+      background: #fff;
+      border-radius: 5px;
+      color: #555;
+      box-shadow: 0 0 2px 1px #e9e9e9
+    }
+  
+    .day-name {
+      font-weight: 700
+    }
+  
+    .disabled-day {
+      background: #fff !important;
+      color: #aaa !important;
+      pointer-events: none
+    }
+  
+    .calendars-popup {
+      display: none !important
+    }
+  </style>
+  <style>
+    .loading-overlay {
+      display: none;
+      background: #b3b3b36b;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      top: 0
+    }
+  
+    .loading-overlay-image-container {
+      width: 15%;
+      color: #fff;
+      text-align: center;
+      position: fixed;
+      z-index: 1001;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 15px;
+      height: 80px;
+      border-radius: 5px
+    }
+  
+    .loading-overlay-title {
+      font-size: 1em;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #fff
+    }
+  
+    .loading-overlay-image {
+      width: 20%
+    }
+  </style>
+  <script>let note1, note2, note3, note4, note5
+  
+    const customRow = `
+  
+    <div class="row custom-row"><div class="col-md-6 col-s-6"><div class="form-group" > <label for="new_action_list">الإجراءات</label><select id="new_actions" class=" form-control"> <option value="0"> -- اختر الإجراء </option> </select></div> </div></div> <div class="row custom-row" style="">
+  <div class="col-md-4 col-s-4">
+  <div class="form-group" id="dep_select"><label class="deb-label">أقسام الشركة</label><select class="deb-list"><option value="-1"> -- اختر القسم -- </option></select></div>
+  </div><div class="col-md-4 col-s-4"><div class="form-group" id="group_select"> <label class="groups_label">المجموعات المتاحة</label>
+  <select class="groups-list" disabled="disabled" autocomplete="off" ><option value="-1"> -- اختر المجموعة -- </option></select></div>
+  </div><div class="clearfix"></div><div class="col-md-6 col-sm-6"> <div class="form-group date-div">  <label class="custom_label">من تاريخ</label> <input class="date_from custom_input custom-date" id="fromDate" type="date" readonly="readonly">
+      </div> <div class="form-group date-div"> <label class="custom_label">إلى تاريخ</label><input class="date_to custom_input custom-date" type="date" id="toDate" " readonly="readonly">
+    </div></div> <div class="clearfix"></div> <div class="col-md-8 col-sm-8"> <div class="data_picker" > <input style="display:none" id="date_picker" class="custom_input hasDate hasDatepicker" type="text">
+      </div> </div>
+      <div class="col-md-4 col-sm-8">
+        <div class="booked-appointment-list">
+          <h3>المواعيد المحجوزة خلال الفترة: </h3>
+          </div>
+        </div>
+      <div class="clearfix"></div><h2 class="shift_table" style="display:none; color:#3a3e63" >جدول الفترات</h2><div class="time shifts col-md-12 col-sm-12"><table id="myTable"></table></div></div>
+     `
+  
+    //  General Variables And Function
+    const weekDays = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    let dateArray
+    let startAppointmentTime
+    let empAppointments
+    let arrayIsReady = false
+    let invoice_id = document.referrer.split("/").slice(-1)[0];
+  
+    function addDays(date, days) {
+      date.setDate(date.getDate() + days);
+      return date;
+    }
+  
+    function convertDateToString(date) {
+  
+      return date.toISOString().split('T')[0]
+    }
+  
+    function formatTime(timeString) {
+      var timeParts = timeString.split(':');
+      var hours = parseInt(timeParts[0], 10);
+      var minutes = parseInt(timeParts[1], 10);
+  
+      // Pad the hours and minutes with zeros if necessary
+      var paddedHours = hours < 10 ? '0' + hours : hours;
+      var paddedMinutes = minutes < 10 ? '0' + minutes : minutes;
+  
+      return paddedHours + ':' + paddedMinutes + ':00';
+    }
+  
+  
+    function getToday() {
+      let now = new Date();
+      return `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`
+    }
+  
+  
+    //===================== Set Notes Section ===============
+  
+    const setNotes = () => {
+      message =
+        `تاريخ تسجيل الموعد ${getToday()}`
+        +
+        "<br/>" +
+        note1 +
+        "<br/>" +
+        note2 +
+        "<br/>" +
+        note3 +
+        "<br/>" +
+        note4 +
+        "<br>" +
+        note5;
+      $(".note-editor").find("p").eq(0).html(message);
+      $("#ClientAppointmentBody").val(message);
+    };
+  
+    // ===================================================================
+  
+  
+    function getAppointmentSettings() {
+  
+      return new Promise((res) => {
+  
+        $.ajax({
+          url: `/v2/api/entity/le_165/1`,
+          type: "GET",
+          success: (data) => {
+  
+            res(data)
+  
+          },
+          error: (e) => { res(e) }
+        })
+  
+      })
+  
+    }
+  
+    function getBookedAppointments(idArray, startDate, endDate) {
+      return new Promise(async (res) => {
+        console.log("idArray")
+        console.log(idArray)
+        let end_date = endDate
+        let afterEndDate = convertDateToString(addDays(new Date(endDate), 1))
+  
+  
+  
+        if (idArray != null && idArray.length != 0) {
+          let allAppointmnets = []
+          for (const empId of idArray) {
+            let appointmentList = await $.get(`/v2/api/entity/item_staff/list/1?filter[item_type]=9&filter[staff_id]=${empId}&filter[follow_up_reminder.date][lte]=${afterEndDate}&filter[follow_up_reminder.date][gte]=${startDate}&filter[follow_up_reminder.status]=0&per_page=100`)
+  
+            if (appointmentList.data.length != 0) {
+              appointmentList.data.map((val) => {
+                allAppointmnets.push({
+                  appointment_id: val["follow_up_reminder"]["id"],
+                  star_date_time: val["follow_up_reminder"]["date"],
+                  end_date_time: val["follow_up_reminder"]["end_date"]
+                })
+              })
+            }
+  
+          }
+  
+          res(allAppointmnets)
+        } else {
+          res(null)
+        }
+      })
+    }
+  
+  
+    function convertDecimalToTime(decimal) {
+      var hours = Math.floor(decimal);
+      var minutes = Math.round((decimal - hours) * 60);
+      return hours + ":" + (minutes < 10 ? '0' : '') + minutes;
+    }
+  
+  
+  
+    function updateTable(settings, listOfAppointments) {
+      $('.loading-overlay').show()
+  console.log(settings);
+  console.log(listOfAppointments);
+      let startTime = settings.start_from
+      dateArray = []
+  
+      let endAt = settings.end_at
+      let totalTime = Math.round(parseFloat(endAt))
+  
+      let fromDate = new Date(document.getElementById("fromDate").value);
+      let toDate = new Date(document.getElementById("toDate").value);
+      let startDateParts = document.getElementById("fromDate").value.split('-')
+      let endDateParts = document.getElementById("toDate").value.split('-')
+      let toDatePlus = addDays(toDate, 1)
+      let table = document.getElementById("myTable");
+      let dateValue = `${startDateParts[2]}/${startDateParts[1]}/${startDateParts[0]}`
+      let timeValue = $('#ClientAppointmentDateTime').val()
+      let dateTimeValue = `${startDateParts[2]}/${startDateParts[1]}/${startDateParts[0]} ${timeValue}`
+      $('#ClientAppointmentDateDate').val(dateValue)
+      $('#final_date_time_value').val(dateTimeValue)
+  
+  
+      // Clear table
+      table.innerHTML = "";
+  
+      // Create header row
+      let headerRow = table.insertRow(0);
+  
+      // Create date cell
+      let dateCell = headerRow.insertCell(0);
+      dateCell.innerHTML = "التاريخ";
+  
+      // Create time shift cells
+      let shiftCount = 1;
+      for (let i = startTime; i < totalTime; i++) {
+        let timeCell = headerRow.insertCell(-1);
+        timeCell.innerHTML = "الفترة " + shiftCount;
+        shiftCount++;
+      }
+  
+      let dateDiffMilli = Math.abs(fromDate - toDate);
+      let dateDiffDays = Math.ceil(dateDiffMilli / (1000 * 60 * 60 * 24));
+      note1 =
+        "المدة بالأيام: " +
+        dateDiffDays +
+        "يومًا " +
+        " :من تاريخ " +
+        `${startDateParts[2]}/${startDateParts[1]}/${startDateParts[0]}` +
+        "إلى تاريخ: " +
+        `${endDateParts[2]}/${endDateParts[1]}/${endDateParts[0]}`;
+      setNotes();
+      // Create rows for each day
+      for (let d = fromDate; d <= toDatePlus; d.setDate(d.getDate() + 1)) {
+        let dateToCheck
+  
+        let TimePeriod = []
+        if (listOfAppointments.length != 0) {
+          let arrayOfDates = listOfAppointments.map((val) => {
+            return new Date(val["star_date_time"].split(' ')[0])
+          })
+          dateToCheck = arrayOfDates.some((val) => {
+  
+            return val.toISOString().slice(0, 10) === d.toISOString().slice(0, 10)
+          })
+        }
+  
+        if (dateToCheck) {
+          console.log(d.toISOString().slice(0, 10))
+          let allSimilarDate = listOfAppointments.filter((val) => {
+            let stringDate = val["star_date_time"].split(' ')[0]
+            return val["star_date_time"].split(' ')[0] === d.toISOString().slice(0, 10)
+          })
+  
+          allSimilarDate.map((val) => {
+  
+            TimePeriod.push({ start_time: val["star_date_time"].split(' ')[1], end_time: val["end_date_time"].split(' ')[1] })
+          })
+  
+          console.log('time between')
+          console.log(TimePeriod)
+  
+        }
+        let row = table.insertRow(-1);
+        let isDisabledDay = false
+        // Create date cell
+        let dateCell = row.insertCell(0);
+        $(dateCell).addClass('week-day')
+        if (d.getDay() == 5 && settings.friday_active != 1) {
+          $(dateCell).addClass('disabled-day')
+          isDisabledDay = true
+        } else {
+          dateArray.push(d.toISOString().slice(0, 10))
+        }
+        let dayName = weekDays[d.getDay()]
+        dateCell.innerHTML = `<span class="day-name">${dayName}</span><br><span>${d.toISOString().slice(0, 10)}</span> <div class='overlay'></div>`;
+  
+        // Create time shift cells
+  
+        for (let i = parseFloat(startTime); i < totalTime; i++) {
+          let timeCell = row.insertCell(-1);
+          let fromTime = convertDecimalToTime(i)
+          let toTime = convertDecimalToTime(i + 1)
+  
+          if (isDisabledDay) {
+            timeCell.className = "time-shift disabled-day";
+  
+          } else {
+            timeCell.className = "time-shift";
+          }
+  
+  
+          let isTimeBooked = false
+          if (TimePeriod.length != 0) {
+            isTimeBooked = TimePeriod.some((val) => {
+              let newToTime = formatTime(toTime)
+              let newFromTIme = formatTime(fromTime)
+              let toTimeConveted = new Date('1970-01-01T' + newToTime + 'Z')
+              let fromTimeConverted = new Date('1970-01-01T' + newFromTIme + 'Z')
+              let startTimeConverted = new Date('1970-01-01T' + val["start_time"] + 'Z')
+              let endTimeConverted = new Date('1970-01-01T' + val["end_time"] + 'Z')
+              console.log('all times')
+              console.log('on day ' + d.toISOString().slice(0, 10))
+              console.log(fromTime, toTime, val["start_time"], val["end_time"])
+              return (
+                (fromTimeConverted.getTime() >= startTimeConverted.getTime() && toTimeConveted.getTime() <= endTimeConverted.getTime()) ||
+                (startTimeConverted.getTime() >= fromTimeConverted.getTime() && startTimeConverted.getTime() < toTimeConveted.getTime()) ||
+                (endTimeConverted.getTime() > fromTimeConverted.getTime() && endTimeConverted.getTime() < toTimeConveted.getTime())
+              )
+            })
+          }
+          if (!isTimeBooked) {
+            timeCell.innerHTML = "<div class='time' data-start-time='" + fromTime + "'>" + fromTime + " - " + toTime + "</div><div class='status'>مـتــاح</div><div class='overlay'></div>";
+  
+          } else {
+            timeCell.innerHTML = "<div class='time'>" + fromTime + " - " + toTime + "</div><div class='status'> غيـر مـتــاح </div><div class='overlay'></div>";
+            $(timeCell).addClass('unavailable')
+  
+          }
+  
+  
+          timeCell.onclick = function () {
+  
+            const $hits = $(this)
+            if ($(this).hasClass('selected')) {
+              $(this).removeClass("selected");
+              let checkAllShifts = selectAllShifts(this.cellIndex, false);
+  
+              if (!checkAllShifts) {
+                deSelectAllShifts(this.cellIndex)
+              }
+              let selectedTds = $(this).closest('tr').find('td.selected')
+              if (selectedTds.length >= 1) {
+                let firstIndex = $('td').index(selectedTds.first());
+                let lastIndex = $('td').index(selectedTds.last());
+  
+                let firstPeriodName = $('#myTable tr:first-child td').eq(selectedTds.first().first().index()).text()
+                let lastPeriodName = $('#myTable tr:first-child td').eq(selectedTds.last().index()).text()
+  
+                startAppointmentTime = formatTime($('#myTable td').eq(firstIndex).find('.time').data('start-time'))
+  
+                console.log(firstIndex)
+                console.log(lastIndex)
+                let okLastIndex = true
+  
+                for (let i = (firstIndex + 1); i < lastIndex; i++) {
+                  let passedTd = $('#myTable td').eq(i)
+                  $(passedTd).attr('class')
+                  if ($(passedTd).hasClass('selected')) {
+                    console.log($(passedTd).hasClass('selected'))
+  
+                  } else if ($(passedTd).hasClass('unavailable')) {
+  
+                    alert('لا يمكن اختيار الفترة لأن الفترات في الوسط محجوزة')
+                    $hits.removeClass("selected");
+                    okLastIndex = false
+                    break;
+                  }
+  
+                  else {
+                    $(passedTd).click()
+                  }
+                }
+                if(!!okLastIndex){
+                  note2 = `من ${firstPeriodName != 'undefined' ? firstPeriodName : ''} إلى ${lastPeriodName != 'undefined' ? lastPeriodName : ''}`
+                setNotes();
+                $('#ClientAppointmentDateTime').val(startAppointmentTime).change()
+                $('#ClientAppointmentDuration').val((lastIndex - firstIndex + 1))
+                }
+              } else {
+                $('#ClientAppointmentDuration').val(0)
+              }
+  
+            } else if (!$(this).hasClass('selected') && !$(this).hasClass('unavailable') && !$(this).hasClass('disabled-day')) {
+              $(this).addClass("selected");
+              let selectedTds = $(this).closest('tr').find('td.selected')
+              let checkAllShifts = selectAllShifts(this.cellIndex, true);
+              if (!checkAllShifts) {
+                deSelectAllShifts(this.cellIndex)
+              }
+              if (selectedTds.length >= 1) {
+                let firstIndex = $('td').index(selectedTds.first());
+                let lastIndex = $('td').index(selectedTds.last());
+  
+                let firstPeriodName = $('#myTable tr:first-child td').eq(selectedTds.first().first().index()).text()
+                let lastPeriodName = $('#myTable tr:first-child td').eq(selectedTds.last().index()).text()
+  
+                startAppointmentTime = formatTime($('#myTable td').eq(firstIndex).find('.time').data('start-time'))
+  
+                console.log(firstIndex)
+                console.log(lastIndex)
+                let okLastIndex = true
+                for (let i = (firstIndex + 1); i < lastIndex; i++) {
+                  console.log(i)
+                  let passedTd = $('#myTable td').eq(i)
+                  if ($(passedTd).hasClass('selected')) {
+                    console.log($(passedTd).hasClass('selected'))
+                  }
+                  else if ($(passedTd).hasClass('unavailable')) {
+  
+                    alert('لا يمكن اختيار الفترة لأن الفترات في الوسط محجوزة')
+                    $hits.removeClass("selected");
+                    okLastIndex = false
+                    break;                }
+                  else {
+                    $(passedTd).click()
+                  }
+                }
+                if(!!okLastIndex){
+                  note2 = `من ${firstPeriodName != 'undefined' ? firstPeriodName : ''} إلى ${lastPeriodName != 'undefined' ? lastPeriodName : ''}`
+                setNotes();
+                $('#ClientAppointmentDateTime').val(startAppointmentTime).change()
+                $('#ClientAppointmentDuration').val((lastIndex - firstIndex + 1))
+                }
+              }
+            }
+          };
+        }
+  
+        // Reset date to avoid skipping days
+        d.setHours(12, 0, 0, 0);
+  
+      }
+      console.log('All Days Dates')
+      console.log(dateArray)
+      $('.loading-overlay').hide()
+  
+    }
+  
+    function selectAllShifts(index, selected) {
+      var table = document.getElementById("myTable");
+  
+      for (var i = 1; i < table.rows.length; i++) {
+        if (!$(table.rows[i].cells[index]).hasClass('unavailable')) {
+          if (!$(table.rows[i].cells[index]).hasClass('disabled-day')) {
+            if (selected) {
+              $(table.rows[i].cells[index]).addClass("selected");
+            } else {
+              $(table.rows[i].cells[index]).removeClass("selected");
+            }
+          }
+  
+        } else {
+          return false
+          break
+        }
+      }
+      return true
+    }
+  
+    function deSelectAllShifts(index) {
+      var table = document.getElementById("myTable");
+  
+      for (var i = 1; i < table.rows.length; i++) {
+        $(table.rows[i].cells[index]).removeClass("selected");
+      }
+      alert('هذه الفترة غير متاحة في جميع الأيام المحددة، لا يمكن تحديد هذه الفترة')
+    }
+  
+    function getDepsAndGroups() {
+      $('.loading-overlay').show()
+  
+      let newDepArr = [];
+      let workFlowId = [];
+      let listOfDepsIds = []
+      $.get("/v2/api/entity/le_workflow-type-entity-3/list/2?per_page=100")
+        .then((data) => {
+          let dataIdsArray = [];
+          let dataDebArray = [];
+          let dataGroupArray = [];
+          for (var i = 0; i < data["data"].length; i++) {
+            // console.log(data["data"][i])
+            dataIdsArray.push(data["data"][i]["id"]);
+  
+            let thisData = data["data"][i];
+  
+            let groupTitle = thisData["title"];
+            let groupID = thisData.id;
+  
+            let depData =
+              thisData["le_workflow-type-entity-3_custom_data"][
+              "le_custom_data_le_workflow-type-entity-3_group_dep"
+              ];
+  
+            let departmentID = depData.id;
+            let departmentName = depData.name;
+            let groupSup =
+              thisData["le_workflow-type-entity-3_custom_data"][
+              "le_custom_data_le_workflow-type-entity-3_group_sup"
+              ];
+            let superID = groupSup.id;
+            let superName = `${groupSup["name"]}_${groupSup["middle_name"]}_${groupSup["last_name"]}`;
+  
+            let groupEmps =
+              thisData["le_workflow-type-entity-3_custom_data"].emp_ids;
+            // console.log('empl ' + groupEmps)
+            let empArray;
+            if (groupEmps != null) {
+              empArray = groupEmps.split(",");
+              workFlowId.push(empArray);
+            }
+  
+            let listItemForDepartments;
+  
+  
+            if (newDepArr.indexOf(departmentName) == -1) {
+              newDepArr.push(departmentName);
+  
+              listItemForDepartments = `<option data-id="option${i}" value=${departmentID} data-sup=${superID}>${departmentName}</option>`;
+              dataDebArray.push(listItemForDepartments);
+              $(".deb-list").append(listItemForDepartments);
+            }
+  
+            if ((listOfDepsIds.map(val => val.dep_id)).indexOf(departmentID) == -1) {
+              listOfDepsIds.push({
+                dep_id: departmentID,
+                group_option: [`<option data-id="option${i}" value=${groupID} data-depid=${departmentID} data-supName=${superName} data-supID=${superID} data-emps=${empArray}>${groupTitle}</option>`]
+              })
+            } else {
+              listOfDepsIds[(listOfDepsIds.map(val => val.dep_id)).indexOf(departmentID)].group_option.push(`<option data-id="option${i}" value=${groupID} data-depid=${departmentID} data-supName=${superName} data-supID=${superID} data-emps=${empArray}>${groupTitle}</option>`)
+            }
+  
+            let listItemForGroups = `<option data-id="option${i}" value=${groupID} data-depid=${departmentID} data-supName=${superName} data-supID=${superID} data-emps=${empArray}>${groupTitle}</option>`;
+            dataGroupArray.push(listItemForGroups);
+  
+          }
+          console.log(dataIdsArray);
+  
+          return listOfDepsIds;
+        }
+        )
+        .then((listOfDepsIds) => {
+          $(".loading1").hide();
+          $(".loading2").hide();
+          $(".deb-list").removeAttr("disabled");
+          $(".deb-list").select2()
+          $(".groups-list").select2()
+          console.log(listOfDepsIds)
+          DebAndGroupSelection(listOfDepsIds)
+          $('.loading-overlay').hide()
+  
+        })
+        .then(() => {
+  
+        });
+    }
+  
+    function DebAndGroupSelection(listOfDepsIds) {
+      $(".deb-list").change(() => {
+        if ($(".deb-list").val() == -1) {
+          $(".groups-list").attr("disabled", "disabled");
+        } else {
+          $(".groups-list").attr("disabled", false);
+        }
+        $(".groups-list option:eq(0)").attr("selected", "selected");
+        let selectedDepName = $(".deb-list option:selected").text();
+        let selectedDepID = parseInt($(".deb-list option:selected").val());
+  
+        let validGroups = listOfDepsIds.filter((list => list.dep_id == $(".deb-list").val()))
+        let groupeOptionslist = validGroups[0].group_option
+        $(".groups-list").html(`<option value="-1"> -- اختر المجموعة -- </option>`)
+        groupeOptionslist.map((val) => {
+          $(".groups-list").append(val)
+        })
+  
+        $(".groups-list").val(-1).change()
+  
+        note3 = "اسم القسم: " + selectedDepName;
+      })
+  
+  
+      $(".groups-list").change(() => {
+        let empNames = []
+        let empArr = [];
+  
+        if ($(".groups-list").val() != -1) {
+          let group = $(".groups-list option:selected").text();
+          $('.datepicker-inline').show('fast')
+          let supervisor = $(".groups-list :selected").data("supname");
+          $("#ClientAppointmentChooseStaff").attr("checked", "true");
+          $.each($(".multiselect-container.dropdown-menu li"), (i) => {
+            let opt = $(".multiselect-container.dropdown-menu li").eq(i);
+            opt.find("input").attr("checked", false);
+          })
+  
+          $("#ClientAppointmentChooseStaff").on("click", function (e) {
+            var checkbox = $(this);
+            if (checkbox.is(":checked")) {
+              // do the confirmation thing here
+              e.preventDefault();
+              return false;
+            }
+          });
+          $('#choose_staff_div').show()
+          let EmpsData = $(".groups-list :selected").data("emps");
+          if (EmpsData.toString().includes(",")) {
+            empArr = EmpsData.split(",").map(Number);
+          } else {
+            empArr.push(EmpsData);
+          }
+  
+          $.each($(".multiselect-container.dropdown-menu li"), (i) => {
+            let opt = $(".multiselect-container.dropdown-menu li").eq(i);
+            let inputVal = opt.find("input");
+            let empID = parseInt(inputVal.val());
+            $("#fliter-staff").val(empArr);
+  
+            if (!empArr.includes(empID)) {
+              opt.css({
+                display: "none",
+              });
+            } else {
+              // console.log(empArr);
+              opt.css({
+                display: "block",
+              });
+              opt.find("input").attr("checked", "true");
+  
+              opt.find("input").on("click change", function (e) {
+                var checkbox = $(this);
+                // console.log(!checkbox.is(":checked"))
+                // do the confirmation thing here
+                e.preventDefault();
+                return false;
+  
+              });
+              let empName = opt.find("label").text();
+              empNames.push(empName);
+            }
+          });
+  
+          if (arrayIsReady) {
+            $('#toDate').trigger('change')
+          }
+  
+          note4 = supervisor + "<br>" + "اسم المجموعة: " + group;
+          note5 = "أسماء الموظفين المعينيين:" + "<br>" + empNames.join("<br/>");
+  
+        }
+      })
+  
+    }
+  
+  
+    // ===================== Append new Action list =================
+  
+    function getNewActionList() {
+      return new Promise((res) => {
+        $.ajax({
+          url: `/v2/api/entity/le_174/1`,
+          type: "GET",
+          success: (data) => {
+            console.log(data["le_174_le_174_add_actions"])
+            res(data["le_174_le_174_add_actions"].map((val) => {
+              return val["action_name"]
+            }))
+          }, error: (e) => {
+            console.log(e)
+            res(e)
+          }
+        })
+      })
+    }
+  
+  
+    function onActionSelect() {
+      $('#new_actions').val($('#ClientAppointmentActionId').val() != '' ? $('#ClientAppointmentActionId option:selected').text()
+        : 0)
+      $('#new_actions').on('change', function () {
+        let allOptions = $('#ClientAppointmentActionId option')
+        let selectedOption = allOptions.filter((i, val) => {
+          return $(val).text() === $(this).val()
+        })
+        $('#ClientAppointmentActionId').val($(selectedOption).val()).change()
+        $('ul.dropdown-menu.inner.selectpicker .selected').removeClass('selected')
+        $(`ul.dropdown-menu.inner.selectpicker li[data-original-index=${$(selectedOption).val()}]`).addClass('selected')
+      })
+    }
+  
+    //===================== Append red star for Actions Field =================
+  
+    function checkActionValue(actionField) {
+  
+      if ($(actionField).val() == undefined || $(actionField).val() == '' || $(actionField).val() == 0) {
+        $(actionField).after(`<div class="new-error-message">مطلوب</div>`)
+        alert('اختر')
+        return true
+      } else {
+        return false
+      }
+    }
+  
+    // ============================ POST Appintments & Save ===================================== 
+  
+    const postFunction = () => {
+      console.log("startAppointmentTime")
+      console.log(startAppointmentTime)
+      let appointmentAction = $('#ClientAppointmentActionId').val()
+  
+      let durValue = $('#ClientAppointmentDuration').val()
+      console.log("dateArray")
+  
+      console.log(dateArray)
+      if (dateArray.length > 1) {
+        for (var i = 1; i < dateArray.length; i++) {
+          console.log(' the i now is ' + i)
+  
+          let appointBody = $(".note-editor").find("p").eq(0).text();
+          let thatDate = `${dateArray[i]} ${startAppointmentTime}`;
+          let checked = $(".multiselect-container.dropdown-menu li input[checked='checked']")
+          if (checked.length == 0) {
+            alert('حدث خطا عند إنشاء الموعد.. الرجاء التواصل والإبلاغ عن الخطأ')
+          }
+          let empSelected = []
+          for (var x = 0; x < checked.length; x++) {
+            empSelected.push(checked.eq(x).val())
+  
+          }
+          console.log('select emp for api ' + empSelected)
+          if (empSelected.length == 0) {
+            alert('حدث خطا عند إنشاء الموعد.. الرجاء التواصل والإبلاغ عن الخطأ')
+          }
+          AppointmentData = {
+            InvoiceAppointments: {
+              item_id: invoice_id,
+              body: appointBody,
+              date: thatDate,
+              start_time: startAppointmentTime,
+              duration: durValue,
+              choose_staff: "1",
+              staff_id: empSelected,
+              action_id: appointmentAction,
+  
+            },
+          };
+          console.log(JSON.stringify(AppointmentData))
+          $.ajax({
+            url: "/api2/invoice_appointments",
+            method: "POST",
+            contentType: "application/json",
+            accept: "application/json",
+            data: JSON.stringify(AppointmentData),
+          })
+            .done(() => {
+              console.log("Success!");
+            })
+        }
+      }
+    };
+  
+    //=================================
+  
+    function checkValidation(){
+      if($('#new_actions').val() == 0){
+        return {status: false, message:"يجب اختيار إجراء!"}
+      } else if ($('.deb-list').val() == '-1' || $('.groups-list').val() == '-1'){
+        return {status: false, message:"الرجاء اختيار القسم / المجموعة للموعد!"}
+      } else if($('.time-shift.selected').length == 0){
+        return {status: false, message:"لم يتم تحديد الفترة!"}
+      } else{
+        return {status: true, message:null}
+  
+      }
+    }
+  
+    function updateInvoiceStatus(invoice_id) {
+      return new Promise((res) => {
+        let updatedData = {
+          "follow_up_status": 26
+        }
+  
+        $.ajax({
+          url: `/v2/api/entity/invoice/${invoice_id}/fields`,
+          type: "POST",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          },
+          data: JSON.stringify(updatedData),
+          success: (resp) => {
+            res({ status: true, alertMessage: null, message: resp })
+          }, error: (e) => {
+            res({ status: false, alertMessage: 'حدث خطأ أثناء تحديث حالة الفاتورة الرجاء التواصل مع الفريق التقني', message: e.responseJSON })
+          }
+        })
+  
+      })
+    }
+    $(document).ready(() => {
+  
+      getAppointmentSettings().then((appSettings) => {
+        const settings = appSettings
+        $('#main-content').append(overlay)
+        $('#ClientAppointmentDuration').attr('readonly', 'readonly')
+        $('#ClientAppointmentDateTime').attr('readonly', 'readonly')
+        $('#ClientAppointmentDateDate').attr('readonly', 'readonly')
+        if (settings.new_appointment == 1) {
+          $('#PostForm button.btn-success').css({ 'pointer-events': 'auto', 'background-color': '#13b272' })
+          console.log(settings)
+          $('.panel-body').eq(0).prepend(customRow)
+          const star = `<span class="red-star">*</span>`
+          const errorMessgae = `<div class="error-message">مطلوب</div>`
+          const actionField = $('#new_actions')
+          actionField.on('change', () => {
+            $(actionField).parent().find('.new-error-message').remove()
+          })
+          $('label[for="new_action_list"]').append(star)
+          $('#toDate').on('change', () => {
+  
+            let startDate = $('#fromDate').val()
+            let endDate = $('#toDate').val()
+            let empIdsArray = $('#fliter-staff').val()
+  
+            getBookedAppointments(empIdsArray, startDate, endDate).then((appointmentsList) => {
+              console.log("appointmentsList")
+              console.log(appointmentsList)
+              console.log(appointmentsList == null)
+              arrayIsReady = true
+              if (appointmentsList != null) {
+                updateTable(settings, appointmentsList)
+              } else {
+                alert('لا يوجد مستخدم في هذه المجموعة، الرجاء تعيين مستخدم أولاً')
+              }
+            })
+          })
+  
+          $('.col-md-4.col-sm-4').eq(3).find('.form-group').eq(0).addClass('hidden')
+          getNewActionList().then((actionList) => {
+            console.log('ActionList')
+            console.log(actionList)
+  
+            for (let i = 0; i < actionList.length; i++) {
+              let newOption = `<option value="${actionList[i]}">${actionList[i]}</option> `
+              $('#new_actions').append(newOption)
+            } onActionSelect()
+          })
+          getDepsAndGroups()
+          $('#date_picker').datepicker({
+            "language": "en",
+            minDate: new Date(),
+            inline: true,
+            multipleDatesSeparator: ' / ',
+            container: '#date-range12-container',
+            alwaysOpen: true,
+            dateFormat: "yyyy-mm-dd",
+            controls: ['calendar'],
+            select: 'range',
+            range: true,
+            touchUi: true,
+            onSelect: function (dateSelected, date) {
+              let dates = dateSelected.split('/')
+              console.log(dates)
+              if (dates[0] != null && dates[1] != undefined) {
+                $('.date_from').val(dates[0].replace(' ', ''))
+              }
+              console.log(dates[1])
+              if (dates[1] != null && dates[1] != undefined) {
+                $('.date_to').val(dates[1].replace(' ', '')).change()
+                $('.time.shifts').show('fast')
+                setTimeout(() => { $('.shift_table ').show('fast') }, 100)
+              }
+  
+              let selectedFirstDate = date[0]
+              let selectSecondDate = date[1]
+              if (selectedFirstDate != undefined) {
+                if (selectedFirstDate.getDay() == 5 && settings.friday_active != 1) {
+  
+                  alert('لا يمكن تحديد يوم الجمعة')
+                  $('#date_picker').datepicker().data('datepicker').clear();
+  
+                }
+  
+              }
+              if (selectSecondDate != undefined) {
+                if (selectSecondDate.getDay() == 5 && settings.friday_active != 1) {
+  
+                  alert('لا يمكن تحديد يوم الجمعة')
+                  $('#date_picker').datepicker().data('datepicker').clear();
+  
+                }
+  
+              }
+  
+            }
+  
+          })
+  
+          $(".btn-success").click((e) => {
+            console.log('start!')
+            if (location.href.split('/').slice(-2)[1] == 2) {
+              console.log("this appointment from Invoice");
+  
+              e.preventDefault();
+  
+              if (checkValidation().status) {
+                $('.loading-overlay').show()
+                updateInvoiceStatus(invoice_id).then((resp) => {
+                if (resp.status) {
+                  console.log(resp.message)
+                  console.log("Status Changed!");
+                  postFunction();
+                  setTimeout(() => {
+                    $('.loading-overlay').hide()
+                    $("#PostForm").trigger("submit");
+                    console.log('finished')
+                    console.log(dateArray)
+                  }, 500);
+                } else {
+                  alert(resp.message)
+                }
+                })
+              } else {
+                alert(checkValidation().message)
+                return false
+              }
+  
+  
+            } else {
+  
+            }
+  
+          })
+          setTimeout(() => { $('#main-content').css('opacity', 1) }, 500)
+        }
+      })
+  
+    })</script>
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.1.0/css/datepicker.min.css">
+  <style>
+    .switch-x {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 20px;
+      margin-left: 5px;
+    }
+  
+    .switch-x input {
+      opacity: 0;
+      width: 0;
+      height: 0
+    }
+  
+    .slider-x {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s
+    }
+  
+    .slider-x:before {
+      position: absolute;
+      content: "";
+      height: 12px;
+      width: 12px;
+      left: 4px;
+      bottom: 4px;
+      background-color: #fff;
+      -webkit-transition: .4s;
+      transition: .4s
+    }
+  
+    input:checked+.slider-x {
+      background-color: #2196f3
+    }
+  
+    input:focus+.slider-x {
+      box-shadow: 0 0 1px #2196f3
+    }
+  
+    input:checked+.slider-x:before {
+      -webkit-transform: translateX(20px);
+      -ms-transform: translateX(20px);
+      transform: translateX(20px)
+    }
+  
+    .slider-x.round-x {
+      border-radius: 34px
+    }
+  
+    .slider-x.round-x:before {
+      border-radius: 50%
+    }
+  </style>

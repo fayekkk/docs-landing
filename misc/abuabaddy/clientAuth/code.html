@@ -1,0 +1,181 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      async function getRowsData() {
+        // Convert jQuery object to an array
+        var rows = $("#report-table tbody tr").toArray();
+        var rowsData = [];
+        let flag = false;
+        var rowData;
+
+        // Use a for...of loop to handle async calls correctly
+        for (const row of rows) {
+          let $row = $(row); // Wrap the row in jQuery for easier manipulation
+          let clientAccount;
+
+          if ($row.hasClass("sub-head")) {
+            rowData = { htmlcontent: "", client: {} };
+            flag = true;
+            clientAccount = $row.text().trim().split(" ")[
+              $row.text().trim().split(" ").length - 1
+            ];
+            console.log({ clientAccount: clientAccount });
+
+            // Create the fetch promise
+            var fetchPromise = fetch(
+              `/v2/api/entity/journal_account/list/1?filter[code]=${clientAccount}`,
+              {
+                method: "GET",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+              })
+              .then(async (data) => {
+                console.log("Response:", data);
+                console.log(data.data[0].entity_id);
+                // Get Client
+
+                var fetchPromises = fetch(
+                  `/v2/api/entity/client/${data.data[0].entity_id}/1`,
+                  {
+                    method: "GET",
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                    },
+                  }
+                )
+                  .then((response) => {
+                    if (!response.ok) {
+                      throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                  })
+                  .then((data) => {
+                    console.log("Response:", data);
+                    rowData.client = data;
+                  })
+                  .catch((error) => {
+                    console.error("Error:", error);
+                  });
+
+                // Wait for the fetch promise to resolve
+                await fetchPromises;
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+
+            // Wait for the fetch promise to resolve
+            await fetchPromise;
+            rowData.htmlcontent += `<tr class="New">${$row.html()} </tr>`;
+          } else if (
+            $row.hasClass("indent-td") &&
+            flag == true &&
+            !$row.hasClass("subtotal")
+          ) {
+            rowData.htmlcontent += `<tr class="indent-td">${$row.html()} </tr>`;
+          } else if (!$row.hasClass("subtotal") && flag == true) {
+            rowData.htmlcontent += `<tr class="New">${$row.html()} </tr>`;
+          }
+          if ($row.hasClass("subtotal") && flag == true) {
+            flag = false;
+            rowData.htmlcontent += `<tr class="New">${$row.html()} </tr>`;
+            rowsData.push(rowData);
+          }
+        }
+
+        console.log({ rowsData: rowsData });
+        let le_authentication_le_authentication_clients = [];
+        let debtor = $(".report .subtotal").eq(0).find("td").eq(3).text();
+        let creditor = $(".report .subtotal").eq(0).find("td").eq(4).text();
+        console.log({ debtor: debtor });
+        console.log({ creditor: creditor });
+
+        let totalVal = 0;
+        let status = 0;
+        if (debtor == 0) {
+          totalVal = creditor;
+          status = "دائن";
+        } else {
+          totalVal = debtor;
+          status = "مدين";
+        }
+        for (let i = 0; i < rowsData.length; i++) {
+          le_authentication_le_authentication_clients.push({
+            formatted_text: rowsData[i].htmlcontent,
+            codes: JSON.stringify(rowsData[i].client),
+            clientdata: rowsData[i].client.id,
+            clienttotalval: totalVal,
+            client_total_status: status,
+          });
+        }
+        console.log({
+          le_authentication_le_authentication_clients:
+            le_authentication_le_authentication_clients,
+        });
+
+        const newReq = {
+          date_from: $("#DateRange").val().split("-")[0],
+          date_to: $("#DateRange").val().split("-")[1],
+
+          le_authentication_le_authentication_clients:
+            le_authentication_le_authentication_clients,
+        };
+        console.log(newReq);
+        console.log(JSON.stringify(newReq));
+        fetch("/v2/api/entity/le_authentication", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newReq),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Response:", data);
+            window.open(
+              `/v2/owner/templates/view-printable-template/3/${data.id}/authenticationPrint?template=local`,
+              "_blank"
+            );
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+      //
+      if (
+        window.location.href.indexOf("owner/reports/journal_transactions") != -1
+      ) {
+        console.log("hereee");
+        $(".Print ").before(
+          ' <button id="printBtn" class="text-main s2020 btn-s2020 btn-secondary-s2020">طباعة مخصصة</button>'
+        );
+        $("#printBtn").on("click", async function (e) {
+          e.preventDefault();
+          if ($(".report .subtotal").length > 1) {
+            alert("يوجد أكثر من عميل");
+            return false;
+          } else {
+            await getRowsData();
+          }
+        });
+      }
+    }, 500);
+  });
+</script>
+
+<style>
+  #printBtn {
+    margin-left: 5px;
+  }
+</style>

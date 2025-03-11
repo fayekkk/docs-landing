@@ -1,0 +1,119 @@
+<script>
+  if (location.href.includes("estimate_id")) {
+    $(document).ready(() => {
+      var id = location.href.split("=")[1];
+      var client, date, staff;
+      var bodyArr = [];
+      $.get(`/v2/api/entity/estimate/${id}/1`)
+        .then(function (data) {
+          console.log(data);
+          client = data.client_id;
+          date = data.date;
+          staff = data.staff_id;
+          var items = data.invoice_item;
+          for (let i = 0; i < items.length; i++) {
+            var bodyObj = {
+              item: items[i].product_id,
+              qty: items[i].quantity,
+              equipment_type: "",
+              item_equipment_condition: "",
+              remark: "",
+            };
+            bodyArr.push(bodyObj);
+          }
+          console.log(bodyArr);
+          return bodyArr;
+        })
+        .then((res) => {
+          postReq(res);
+        });
+      async function postReq(newArr) {
+        console.log(newArr);
+        console.log(id);
+        const newReq = {
+          client_id: client,
+          number: {
+            generated: "1",
+            code: "1",
+          },
+          title: "عقد تسليم معدات",
+          start_date: date,
+          description: null,
+          delivery_date: null,
+          delivery_appointment_id: null,
+          follow_up_status_id: null,
+          // "budget": 0,
+          status: 1,
+          created: date,
+          modified: date,
+          staff_id: staff,
+          client_data: null,
+          extra_details: null,
+          workflow_type_id: 1,
+          budget: {
+            currency: "SAR",
+          },
+          "le_workflow-type-entity-1_custom_data": {
+            receiver_coordinator: null,
+            company_site: null,
+            delivery_date: null,
+            equipment_type: null,
+            equipment_condition: null,
+            equipment_site: null,
+            checked_by_name: null,
+            checked_by_title: null,
+            approved_by_name: null,
+            approved_by_title: null,
+            equipment_received_by: null,
+            received_equipment_condition: null,
+            receiver_name: null,
+            receiver_title: null,
+            receive_date: null,
+            estimate_id: id,
+
+            "le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_equipment_data":
+              newArr,
+          },
+          workflow_type: {
+            id: 1,
+            entity_key: "le_workflow-type-entity-1",
+          },
+        };
+        console.log(newReq);
+        const response = await fetch(
+          "/v2/api/entity/le_workflow-type-entity-1",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              // "apikey": apikey,
+            },
+            body: JSON.stringify(newReq),
+          }
+        );
+        const rez = await response.json();
+        console.log(rez);
+        $(".loader").addClass("hide");
+        $(".container-bg-custom").addClass("hide");
+        alert(" تم اضافة عقد تسليم بنجاح ");
+      }
+    });
+  }
+
+  fetch("/v2/api/entity/le_workflow-type-entity-1_custom_data/6/fields", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ single_line_field: "50" }),
+  })
+    .then((res) => res.json())
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+</script>

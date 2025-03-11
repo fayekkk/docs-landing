@@ -1,0 +1,44 @@
+
+<script>
+  //================= jQuery ====================
+
+  $(document).on("change", "#InvoiceLayout", function () {
+    let layout_id = $("#InvoiceLayout").val();
+    if (layout_id == "6" || layout_id == "7") {
+      console.log("Hi");
+
+      //  $('body').append('<style>.col-4{display: none !important}</style>')
+      $("body").append(
+        "<style>#listing_table tr th:nth-child(8), #listing_table tr td:nth-child(8){display: none !important}</style>"
+      );
+
+      $(document).on("change", ".col-4 textarea", function () {
+        console.log("col-4");
+        if ($(this).closest("tr").find(".col-4 textarea").val().length == 0) {
+          $(this).closest("tr").find(".col-4 textarea").val(0);
+        }
+        var x =
+          parseFloat($(this).closest("tr").find(".col-4 textarea").val()) *
+          parseFloat($(this).closest("tr").find(".col-5 textarea").val());
+        $(this).closest("tr").find(".unit-price input").val(x.toFixed(2));
+        $("#InvoiceLayout").triggerHandler("change", ["def"]);
+      });
+
+      $(document).on("input", ".col-5 textarea", function () {
+        console.log("col-3");
+        if ($(this).closest("tr").find(".col-5 textarea").val().length == 0) {
+          $(this).closest("tr").find(".col-5 textarea").val(0);
+        }
+        var x =
+          parseFloat($(this).closest("tr").find(".col-4 textarea").val()) *
+          parseFloat($(this).closest("tr").find(".col-5 textarea").val());
+        $(this).closest("tr").find(".unit-price input").val(x.toFixed(2));
+        $("#InvoiceLayout").triggerHandler("change", ["def"]);
+      });
+    } else {
+      $("body").append(
+        "<style>#listing_table tr th:nth-child(8), #listing_table tr td:nth-child(8){display: revert !important}</style>"
+      );
+    }
+  });
+</script>

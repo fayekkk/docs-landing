@@ -1,0 +1,123 @@
+<style>
+    .report:nth-child(1) th,
+    .report:nth-child(1) td {
+      width: auto !important;
+    }
+  </style>
+  <script>
+    $(window).on("load", function () {
+      setTimeout(() => {
+        if (window.location.href.includes("reports/work_orders")) {
+          function getIndexesByInnerText(tableId, searchStrings) {
+            let table;
+            if (
+              document.querySelectorAll(".report")[0].querySelectorAll("table")
+                .length > 1
+            ) {
+              table = document
+                .querySelectorAll(".report")[0]
+                .querySelectorAll("table")[1];
+            } else {
+              table = document
+                .querySelectorAll(".report")[0]
+                .querySelectorAll("table")[0];
+            }
+            const indexes = [];
+            const tablecells = table.querySelectorAll("tr:nth-child(1) th");
+            console.log(tablecells);
+  
+            for (let i = 0; i < tablecells.length; i++) {
+              const cell = tablecells[i];
+              for (let j = 0; j < searchStrings.length; j++) {
+                if (searchStrings[j].trim() == cell.innerText.trim()) {
+                  indexes.push(i + 1);
+                  console.log(tablecells[i].innerText);
+                  console.log(searchStrings[j].trim());
+                }
+              }
+            }
+            return indexes;
+          }
+          const searchStrings = ["مسمى", "تاريخ البدء", "تاريخ التسليم", "موظف"];
+          const indexes = getIndexesByInnerText("PaymentTable", searchStrings);
+          console.log(indexes);
+          var styleElement = document.createElement("style");
+          var cssRules = "";
+          for (let k = 0; k < indexes.length; k++) {
+            if (k != indexes.length - 1) {
+              cssRules += ` #PaymentTable > div.report > div > table > tbody  td:nth-child(${indexes[k]}),
+                          #PaymentTable > div.report > div > table > thead > tr > th:nth-child(${indexes[k]}),`;
+            } else {
+              cssRules += ` #PaymentTable > div.report > div > table > tbody  td:nth-child(${indexes[k]}),
+                          #PaymentTable > div.report > div > table > thead > tr > th:nth-child(${indexes[k]})`;
+            }
+          }
+          // cssRules += ` #PaymentTable > div.report > div > table > tbody  td:nth-child(4),
+          //                 #PaymentTable > div.report > div > table > thead > tr > th:nth-child(4)`;
+          cssRules += `{
+                      display: none;
+                  }`;
+  
+          styleElement.appendChild(document.createTextNode(cssRules));
+          document.head.appendChild(styleElement);
+          var allsubtotal = document.querySelectorAll(".subtotal");
+          let table;
+          if (
+            document.querySelectorAll(".report")[0].querySelectorAll("table")
+              .length > 1
+          ) {
+            table = document
+              .querySelectorAll(".report")[0]
+              .querySelectorAll("table")[1];
+          } else {
+            table = document
+              .querySelectorAll(".report")[0]
+              .querySelectorAll("table")[0];
+          }
+          const tablecells = table.querySelectorAll("tr:nth-child(1) th");
+          const tablRows = table.querySelectorAll("tr");
+          const emptycells = table.querySelectorAll(".empty-row td");
+          const subheadcells = table.querySelectorAll(".sub-head td");
+          for (let l = 0; l < tablRows.length; l++) {
+            if (tablRows[l].cells.length <= 2) {
+              tablRows[l].cells[0].setAttribute(
+                "style",
+                "display:table-cell !important"
+              );
+              if (tablRows[l].cells.length > 1) {
+                tablRows[l].cells[1].setAttribute(
+                  "style",
+                  "display:table-cell !important"
+                );
+              }
+            }
+          }
+          for (let l = 0; l < subheadcells.length; l++) {
+            subheadcells[l].setAttribute(
+              "colspan",
+              tablecells.length - indexes.length - 0
+            );
+          }
+          for (let l = 0; l < emptycells.length; l++) {
+            emptycells[l].setAttribute(
+              "colspan",
+              tablecells.length - indexes.length - 0
+            );
+          }
+          for (let l = 0; l < allsubtotal.length; l++) {
+            allsubtotal[l].cells[0].setAttribute(
+              "colspan",
+              tablecells.length - indexes.length - 1
+            );
+          }
+          document
+            .querySelectorAll(".section-net")[0]
+            .cells[0].setAttribute(
+              "colspan",
+              tablecells.length - indexes.length - 1
+            );
+        }
+      }, 3000);
+    });
+  </script>
+  

@@ -1,0 +1,331 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      async function getRowsData() {
+        // Convert jQuery object to an array
+        var rows = $("#report-table tbody tr").toArray();
+        var rowsData = [];
+        let flag = false;
+        var rowData;
+
+        // Use a for...of loop to handle async calls correctly
+        for (const row of rows) {
+          let $row = $(row); // Wrap the row in jQuery for easier manipulation
+          let clientAccount;
+
+          if ($row.hasClass("sub-head")) {
+            rowData = { htmlcontent: "", client: {} };
+            flag = true;
+            clientAccount = $row.text().trim().split(" ")[
+              $row.text().trim().split(" ").length - 1
+            ];
+            console.log({ clientAccount: clientAccount });
+
+            // Create the fetch promise
+            var fetchPromise = fetch(
+              `/v2/api/entity/journal_account/list/1?filter[code]=${clientAccount}`,
+              {
+                method: "GET",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+              })
+              .then(async (data) => {
+                console.log("Response:", data);
+                console.log(data.data[0].entity_id);
+                // Get Client
+
+                var fetchPromises = fetch(
+                  `/v2/api/entity/client/${data.data[0].entity_id}/1`,
+                  {
+                    method: "GET",
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                    },
+                  }
+                )
+                  .then((response) => {
+                    if (!response.ok) {
+                      throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                  })
+                  .then((data) => {
+                    console.log("Response:", data);
+                    rowData.client = data;
+                  })
+                  .catch((error) => {
+                    console.error("Error:", error);
+                  });
+
+                // Wait for the fetch promise to resolve
+                await fetchPromises;
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+
+            // Wait for the fetch promise to resolve
+            await fetchPromise;
+            rowData.htmlcontent += `<tr class="New">${$row.html()} </tr>`;
+          } else if (
+            $row.hasClass("indent-td") &&
+            flag == true &&
+            !$row.hasClass("subtotal")
+          ) {
+            rowData.htmlcontent += `<tr class="indent-td">${$row.html()} </tr>`;
+          } else if (!$row.hasClass("subtotal") && flag == true) {
+            rowData.htmlcontent += `<tr class="New">${$row.html()} </tr>`;
+          }
+          if ($row.hasClass("subtotal") && flag == true) {
+            flag = false;
+            rowData.htmlcontent += `<tr class="New">${$row.html()} </tr>`;
+            rowsData.push(rowData);
+          }
+        }
+
+        console.log({ rowsData: rowsData });
+        let le_prints_le_prints_clients = [];
+        for (let i = 0; i < rowsData.length; i++) {
+          le_prints_le_prints_clients.push({
+            formatted_text: rowsData[i].htmlcontent,
+            codes: JSON.stringify(rowsData[i].client),
+            clientdata: rowsData[i].client.id,
+          });
+        }
+        console.log({
+          le_prints_le_prints_clients: le_prints_le_prints_clients,
+        });
+
+        const newReq = {
+          date_from: $("#DateRange").val().split("-")[0],
+          date_to: $("#DateRange").val().split("-")[1],
+          currencycode:
+            $("#currencySelect option:selected").text() != "إختر العملة "
+              ? $("#currencySelect option:selected").text()
+              : "",
+          currencyrate:
+            $("#currencySelect option:selected").text() != "إختر العملة "
+              ? $("#currencySelect").val()
+              : 1,
+          staff_name:
+            $("#journalAccountSelect option:selected").text() != "إختر الموظف"
+              ? $("#journalAccountSelect option:selected").text()
+              : "",
+          le_prints_le_prints_clients: le_prints_le_prints_clients,
+        };
+        console.log(newReq);
+        console.log(JSON.stringify(newReq));
+        fetch("/v2/api/entity/le_prints", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newReq),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Response:", data);
+            window.open(
+              `/v2/owner/templates/view-printable-template/1/${data.id}/PrintTemplate`,
+              "_blank"
+            );
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+      //
+      if (
+        window.location.href.indexOf("owner/reports/journal_transactions") != -1
+      ) {
+        console.log("hereee");
+        $(".Print ").before(
+          ' <button id="printBtn" class="text-main s2020 btn-s2020 btn-secondary-s2020">طباعة مخصصة</button>'
+        );
+        $("#printBtn").on("click", async function (e) {
+          e.preventDefault();
+          await getRowsData();
+        });
+      }
+    }, 500);
+  });
+</script>
+
+<style>
+  #printBtn {
+    margin-left: 5px;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      $(document).ready(function () {
+        async function createSelectDiv() {
+          try {
+            const response = await fetch(
+              "/v2/api/entity/staff/list/1?per_page=100"
+            );
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+
+            const $div = $('<div class="journal-account-select"></div>');
+
+            const $label = $(
+              '<label for="journalAccountSelect">إختر الموظف</label>'
+            );
+            const $select = $('<select id="journalAccountSelect"></select>');
+            $select.append($('<option value="-1"> إختر الموظف </option>'));
+            data.data.forEach((account) => {
+              const $option = $(
+                `<option value="${account.id}">${account.name}</option>`
+              );
+              $select.append($option);
+            });
+            $div.append($label, $select);
+            $(".advanced_journal_account_id").eq(1).after($div);
+            // const savedValue = localStorage.getItem("selectedJournalAccount");
+            if (savedValue) {
+              $("#journalAccountSelect").val(savedValue);
+
+              //   $("#journalAccountSelect").trigger("change");
+            }
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        }
+
+        if (
+          window.location.href.indexOf("owner/reports/journal_transactions") !=
+          -1
+        ) {
+          createSelectDiv();
+          setTimeout(() => {
+            $(document).on(
+              "change",
+              "#journalAccountSelect",
+              async function () {
+                const selectedValue = $(this).val();
+                // localStorage.setItem("selectedJournalAccount", selectedValue);
+
+                let staffId = $(this).val();
+                console.log("Selected staff ID:", staffId);
+
+                try {
+                  const response = await fetch(
+                    `/v2/api/entity/client/list/1?filter[client_custom_data.staff_name]=${staffId}&&per_page=100`
+                  );
+
+                  // Check if the response is okay
+                  if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                  }
+
+                  const data = await response.json();
+
+                  if (data.data.length > 0) {
+                    var allClientsId = data.data.map((client) => client.id);
+                    console.log("All client IDs:", allClientsId);
+                    let JournalsUrl =
+                      "/v2/api/entity/journal_account/list/1?filter[entity_type]=client&&";
+                    allClientsId.forEach((clientId) => {
+                      JournalsUrl += `filter[entity_id][in][]=${clientId}&&`;
+                    });
+                    JournalsUrl += "per_page=100";
+                    console.log(JournalsUrl);
+                    console.log(JournalsUrl.slice(0, -2));
+
+                    const journalResponse = await fetch(JournalsUrl);
+                    let journals = await journalResponse.json();
+                    console.log(journals);
+                    if (journals.data.length > 0) {
+                      $("#journal_accounts").empty();
+
+                      let $optGroup = $(
+                        '<optgroup label="Currently Selected"></optgroup>'
+                      );
+                      journals.data.forEach((journal) => {
+                        let $option = $(
+                          `<option value="${journal.id}" selected="selected">${journal.name}</option>`
+                        );
+                        $optGroup.append($option);
+                        $("#journal_accounts").append($option);
+                      });
+                      $("#journal_accounts").append($optGroup);
+                      $("#journal_accounts").trigger("change");
+                    } else {
+                      alert("حدث خطأ ");
+                      return;
+                    }
+                  } else {
+                    alert("لا يوجد عملاء لهذا الموظف");
+                  }
+                } catch (error) {
+                  console.error("Error fetching clients:", error);
+                  alert("حدث خطأ أثناء استرجاع البيانات");
+                }
+              }
+            );
+          }, 250);
+        }
+      });
+
+      async function createCurrencySelectDiv() {
+        try {
+          const response = await fetch(
+            "/v2/api/entity/le_currencies/list/1?per_page=100"
+          );
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+
+          const $div = $('<div class="journal-account-select"></div>');
+
+          const $label = $(
+            '<label for="journalAccountSelect">إختر العملة</label>'
+          );
+          const $settings = $(
+            '<a href="/v2/owner/entity/le_currencies/list" target="_blabk">'
+          );
+          $settings.html('<i class="fa fa fa-cog settingss">');
+          const $select = $('<select id="currencySelect"></select>');
+
+          $select.append($('<option value="-1"> إختر العملة </option>'));
+          data.data.forEach((account) => {
+            const $option = $(
+              `<option value="${account.currency_number}">${account.currency_currency}</option>`
+            );
+            $select.append($option);
+          });
+          $div.append($label, $select, $settings);
+          // $("#ReportStaffID").eq(0).after($div);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+      createCurrencySelectDiv();
+    }, 500);
+  });
+</script>
+<style>
+  #journalAccountSelect {
+    width: 100%;
+  }
+
+  #currencySelect {
+    width: 93%;
+  }
+</style>

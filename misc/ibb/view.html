@@ -1,0 +1,187 @@
+<!-- code_WorkOrders_owner_workflow_view -->
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      //           if (response.follow_up_status_id == 12) {
+      let projID = parseInt(window.location.href.split("/")[6]);
+      const editBtn = $(
+        "#main-content > div > div.main-area.clearfix > div > ol > div.invoice-actions.btn-group.dropdown-btn-group > a:nth-child(1)"
+      );
+
+      fetch(`/v2/api/entity/le_workflow-type-entity-1/${projID}/4`, {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          console.log(response);
+
+          if (
+            response.follow_up_status_id != null &&
+            response.follow_up_status_id != 6 &&
+            response.follow_up_status_id != 7 &&
+            USER.staff_id != 0
+          ) {
+            editBtn.hide();
+            $(".status-list ul li").eq(1).hide();
+            $(".status-list ul li").eq(2).hide();
+          }
+          if (USER.staff_id != 0) {
+            $(".status-list ul li").eq(3).hide();
+            $(".status-list ul li").eq(4).hide();
+            $(".status-list ul li").eq(5).hide();
+            $(".status-list ul li").eq(6).hide();
+            $(".status-list ul li").eq(7).hide();
+            $(".status-list ul li").eq(8).hide();
+          }
+          function appendaddinvBtn() {
+            const addINVBtn = `<a href="#" class="btn btn-default btn-sm btn-5 addinvoiceBtn">
+            <i class="fa fa-plus"></i> إضافة فاتورة        </a>`;
+            $(".invoice-actions").html(
+              $(".invoice-actions").html() + addINVBtn
+            );
+            $(".addinvoiceBtn").on("click", function () {
+              sendRequest();
+            });
+          }
+          if (response.follow_up_status_id == 12 && USER.staff_id == 0) {
+            appendaddinvBtn();
+          }
+          function sendRequest() {
+            if (response.client_id == null) {
+              alert("لم يتم إختيار عميل ");
+              return;
+            }
+            let itemslist =
+              response["le_workflow-type-entity-1_custom_data"][
+                "le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_items_list"
+              ];
+            let csutomdata = response["le_workflow-type-entity-1_custom_data"];
+            let itemsarr = [];
+            itemslist.forEach((item) => {
+              itemsarr.push({
+                item: item[
+                  "le_custom_data_le_workflow-type-entity-1_items_list_item"
+                ].name,
+                description:
+                  item[
+                    "le_custom_data_le_workflow-type-entity-1_items_list_item"
+                  ].description,
+                unit_price: item.prices,
+                quantity: item.quantity,
+                col_3: "",
+                col_4: "",
+                tax1: 0,
+                tax2: 0,
+                product_id: item.item,
+              });
+            });
+            console.log({ itemsarr: itemsarr });
+            function getCurrentDate() {
+              const today = new Date();
+              const year = today.getFullYear();
+              const month = String(today.getMonth() + 1).padStart(2, "0");
+              const day = String(today.getDate()).padStart(2, "0");
+
+              return `${year}-${month}-${day}`;
+            }
+
+            console.log(getCurrentDate());
+
+            let body = {
+              Invoice: {
+                subscription_id: "26",
+                store_id: 1,
+                po_number: 26,
+                client_id: response.client_id,
+                client_email: "",
+                client_country_code: "IQ",
+                draft: "0",
+                follow_up_status: null,
+                work_order_id: projID,
+                staff_id: 0,
+                name: "string",
+                is_offline: true,
+                currency_code: "SAR",
+                date: getCurrentDate(),
+                discount: 0,
+                discount_amount: 0,
+                deposit: 0,
+                deposit_type: 0,
+                notes: "notes",
+                html_notes: "string",
+                invoice_layout_id: 3,
+                estimate_id: 0,
+                shipping_options: "",
+                shipping_amount: null,
+                follow_up_status: null,
+                requisition_delivery_status: null,
+                pos_shift_id: null,
+              },
+              InvoiceItem: itemsarr,
+              InvoiceCustomField: [
+                {
+                  label: "الموقع",
+                  value:
+                    csutomdata["le_custom_data_le_workflow-type-entity-1_site"]
+                      .site_name,
+                },
+                {
+                  label: "جزء البناء",
+                  value:
+                    csutomdata[
+                      "le_custom_data_le_workflow-type-entity-1_building_position1"
+                    ].section,
+                },
+              ],
+            };
+            console.log({ body: body });
+            console.log(JSON.stringify(body));
+
+            fetch(`/api2/invoices`, {
+              method: "POST",
+              headers: {
+                apikey: "4936e4cb1071b90f8904b07473051f2c60381e8c",
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(body),
+            })
+              .then((res) => res.json())
+              .then((response) => {
+                console.log(response);
+                console.log(response.code);
+
+                if (response.code == 202) {
+                  fetch(
+                    `/v2/api/entity/le_workflow-type-entity-1/${projID}/fields`,
+                    {
+                      method: "POST",
+                      headers: {
+                        apikey: "4936e4cb1071b90f8904b07473051f2c60381e8c",
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({ follow_up_status_id: 13 }),
+                    }
+                  )
+                    .then((res) => res.json())
+                    .then((response) => {
+                      console.log(response);
+                      location.reload();
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                } else {
+                  alert("يوجد خطأ أثناء إنشاء الفاتورة برجاء مراجعة البنود");
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+          // end of send Request
+        });
+    }, 500);
+  });
+</script>

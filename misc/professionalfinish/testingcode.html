@@ -1,0 +1,32 @@
+<!-- owner_entity_workflow_le_workflow-type-entity-1_list -->
+
+<style>
+  /* .no_of_students {
+  } */
+  .no_of_students a {
+    background-color: #e4ebf2;
+    padding: 6px 15px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 5px;
+    border-radius: 6px;
+  }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(async function () {
+    setTimeout(async () => {
+      const newDiv = $("<div>").attr("class", "no_of_students");
+      $(newDiv).html(`
+      <a href="/v2/owner/entity/le_projectsItems/list" target="blank" >بنود المشاريع</a> 
+    
+      `);
+      if (USER.staff_id == 0) {
+        $(
+          "#main-content > div.main-area > div > div.card.mb-3 > div.pages-head > div > div > div:nth-child(2)"
+        ).after(newDiv);
+      }
+    }, 250);
+  });
+  //   <a href="/v2/owner/entity/le_Vendors/list" target="blank" >مقاولين الباطن</a>
+</script>

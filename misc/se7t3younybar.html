@@ -1,0 +1,52 @@
+<div
+  id="barcode_template"
+  class="mceEditable"
+  readonly="readonly"
+  style="padding: 0px 0px 0px 0px; margin: 0 auto; background-color: #ffffff"
+>
+  <style>
+    <!--
+      #barcode_image {
+                              width: 100%;
+                            }
+                            #mybarcode {
+          width: 100%;
+
+                              margin: 0px auto;
+                              padding: 0px;
+                            }
+                            #mybarcode td{
+                  padding: 0;
+                  margin: 0;
+                            }
+      -->
+  </style>
+  <table
+    id="mybarcode"
+    style="
+      width: 100%;
+      border-spacing: 0;
+      text-align: center;
+      direction: rtl;
+      color: #000;
+      font-size: 6px;
+      border: none;
+    "
+  >
+    <tbody>
+      <tr>
+        <td style="width: 2.15cm; border: none">
+          {%product_name%}<br />{%product_unit_price%}<br />{%product_code%}
+        </td>
+        <td style="width: 2.15cm; border: none">
+          <img
+            id="barcode_image"
+            style="width: 100%"
+            src="https://sehatoyouni.daftra.com/img/dummy_barcode.jpg"
+          />
+        </td>
+        <td style="width: 3cm; border: none"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

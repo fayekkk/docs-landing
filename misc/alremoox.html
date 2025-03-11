@@ -1,0 +1,912 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #ffffff;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: ltr;
+      text-align: left;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 5px !important;
+      padding: 5px 0 !important;
+    }
+    .listing-table th {
+      background-color: #e5e5e5;
+      font-weight: bold;
+      text-align: left;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      text-align: left;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    .total-row {
+      background-color: #e5e5e5;
+      font-weight: bold;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    strong_tag {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .notes-block {
+      margin: 50px 0 0 0;
+    }
+
+    tr,
+    td,
+    th,
+    #sec-tot {
+      page-break-inside: avoid !important;
+    }
+    .qr-code img {
+      margin-top: 10px;
+    }
+
+    /* Custom Styling */
+    #listing_table tr * {
+      width: auto;
+    }
+
+    .tot-count *,
+    .head-row * {
+      text-align: center !important;
+    }
+
+    .tot-count th:nth-child(2),
+    .tot-count td:nth-child(2),
+    .head-row th:nth-child(2),
+    .head-row td:nth-child(2),
+    td[data-title="title"] {
+      text-align: left !important;
+    }
+
+    #listing_table th:last-child,
+    #listing_table td:last-child,
+    #listing_table thead th,
+    .listing-table:nth-child(2) {
+      display: none !important;
+    }
+
+    .tot-row:first-child #listing_table th:nth-last-child(2),
+    #listing_table td:nth-last-child(2) {
+      border-left: 1px solid #555;
+    }
+
+    #listing_table {
+      border-collapse: collapse;
+    }
+
+    #listing_table td {
+      border: 1px solid #000;
+    }
+
+    .invoice-addres {
+      margin: 10px;
+    }
+
+    .sub-row td,
+    .vat-row td,
+    .tot-row td,
+    .dis-row td {
+      border: 0 !important;
+    }
+
+    /* .sub-row td:nth-child(5),
+    .sub-row td:nth-child(6),
+    .sub-row td:nth-child(7),
+    .vat-row td:nth-child(5),
+    .vat-row td:nth-child(6),
+    .vat-row td:nth-child(7),
+    .tot-row td:nth-child(5),
+    .tot-row td:nth-child(6),
+    .tot-row td:nth-child(7),
+    .dis-row td:nth-child(5),
+    .dis-row td:nth-child(6),
+    .dis-row td:nth-child(7) {
+      
+    } */
+
+    .sub-row td:last-child,
+    .sub-row td:nth-last-child(2),
+    .sub-row td:nth-last-child(3),
+    .sub-row td:nth-last-child(4),
+    .vat-row td:last-child,
+    .vat-row td:nth-last-child(2),
+    .vat-row td:nth-last-child(3),
+    .vat-row td:nth-last-child(4),
+    .tot-row td:last-child,
+    .tot-row td:nth-last-child(2),
+    .tot-row td:nth-last-child(3),
+    .tot-row td:nth-last-child(4),
+    .dis-row td:last-child,
+    .dis-row td:nth-last-child(2),
+    .dis-row td:nth-last-child(3),
+    .dis-row td:nth-last-child(4) {
+      border-left: 0 !important;
+      border-right: 0 !important;
+      border-top: 1px solid #000 !important;
+      border-bottom: 1px solid #000 !important;
+    }
+
+    .sub-row td:first-child,
+    .sub-row td:nth-child(2),
+    .sub-row td:nth-child(3),
+    .sub-row td:nth-child(4),
+    .vat-row td:first-child,
+    .vat-row td:nth-child(2),
+    .vat-row td:nth-child(3),
+    .vat-row td:nth-child(4),
+    .tot-row td:first-child,
+    .tot-row td:nth-child(2),
+    .tot-row td:nth-child(3),
+    .tot-row td:nth-child(4),
+    .dis-row td:first-child,
+    .dis-row td:nth-child(2),
+    .dis-row td:nth-child(3),
+    .dis-row td:nth-child(4) {
+      /* border: 0 !important; */
+      background-color: #fff !important;
+    }
+
+    .tot-row td:last-child,
+    .tot-row td:nth-last-child(2),
+    .tot-row td:nth-last-child(3),
+    .tot-row td:nth-last-child(4) {
+      background-color: #e5e5e5 !important;
+    }
+
+    .sub-row td:nth-last-child(2),
+    .vat-row td:nth-last-child(2),
+    .tot-row td:nth-last-child(2),
+    .dis-row td:nth-last-child(2) {
+      text-align: center !important;
+    }
+
+    #sec-tot {
+      margin-top: 25px;
+      margin-right: 0;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #sec-tot td {
+      padding: 4px;
+      border: 1px solid #000;
+    }
+
+    #sec-tot td:first-child {
+      background-color: #e5e5e5;
+      width: 60% !important;
+    }
+
+    #sec-tot td:nth-child(2) {
+      text-align: center;
+      width: 40% !important;
+    }
+
+    .empty-row {
+      height: 25px;
+    }
+
+    #listing_table td:nth-last-child(2),
+    #listing_table td:nth-last-child(3),
+    #listing_table td:nth-last-child(4) {
+      width: 10% !important;
+    }
+    .dis-row td {
+      border: 1px solid transparent !important;
+    }
+    /**********************************/
+    /* .dicounts {
+      display: none !important;
+    } */
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <!-- <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="right" valign="top">
+              <h1><p id="invoice_title" class="editable-area invoice-name">{%invoice_title%}</p></h1>
+              <div class="qr-code">
+              </div>
+            </td>
+            <td align="left" valign="top">
+              <img
+                style="vertical-align: top; margin-bottom: 10px"
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                width="{%logo-width%}"
+                height="{%logo-height%}"
+              />
+              <div id="business_info" class="editable-area">
+                <p>{%business_info%}</p>
+              </div>
+            </td>
+          </tr>
+        </table>
+        <br /> -->
+
+        <div class="invoice-addres">
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+            <tr>
+              <td align="left" valign="top">
+                <div
+                  style="vertical-align: top"
+                  align="left"
+                  id="client_info"
+                  class="editable-area"
+                >
+                  <strong id="field1" class="editable-area">{%field1%}</strong
+                  ><br />
+                  {%client_info%}
+                </div>
+              </td>
+              <td
+                id="shipping_options"
+                style="display: none"
+                align="left"
+                valign="top"
+              >
+                <div
+                  style="vertical-align: top"
+                  align="left"
+                  id="ship_info"
+                  class="editable-area"
+                >
+                  <strong id="label_ship" class="editable-area"
+                    >{%label_ship%}</strong
+                  ><br />
+                  {%ship_info%}
+                </div>
+              </td>
+              <td valign="top" align="right">
+                <table
+                  id="invoice_basics"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                >
+                  <tr>
+                    <td align="left">
+                      <strong class="editable-area" id="label_invoice_no"
+                        >{%label_invoice_no%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%invoice_number%}
+                    </td>
+                  </tr>
+                  <tr {%refund_invoice_number_condition%}>
+                    <td align="left">
+                      <strong class="editable-area" id="refund_label_invoice_no"
+                        >{%refund_invoice_no_title%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%refund_invoice_number%}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left">
+                      <strong class="editable-area" id="label_date"
+                        >{%label_date%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%invoice_date%}
+                    </td>
+                  </tr>
+                </table>
+                <custom_field
+                  id="custom_fields"
+                  class="editable-area"
+                  style="clear: both"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                >
+                  {%custom_fields%}
+                </custom_field>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div id="items-list">
+          {%items_list%}
+          <div style="text-align: -webkit-right">
+            <table id="sec-tot" width="30%"></table>
+          </div>
+        </div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function hundleDisc() {
+        var allRowsthead = document.querySelectorAll("#listing_table thead th");
+        var allRows = document.querySelectorAll("#listing_table tr ");
+        if (allRowsthead.length == 8) {
+          for (var i = 0; i < allRows.length; i++) {
+            allRows[i].cells[6].setAttribute("class", "dicounts");
+          }
+        }
+      }
+      try {
+        hundleDisc();
+      } catch (error) {
+        console.log(error);
+      }
+      // Swap Columns
+      function swapCols(from, to, table_id) {
+        var table = document.getElementById(table_id);
+        for (var i = 0, row; (row = table.rows[i]); i++) {
+          var temp = row.cells[from].innerHTML;
+          row.cells[from].innerHTML = row.cells[to].innerHTML;
+          row.cells[to].innerHTML = temp;
+        }
+      }
+
+      // Insert Section Table Headers
+      function insertHeaderRow(index) {
+        var tbl = document.getElementById("listing_table");
+        var rows = tbl.rows;
+        var tblHeads = document.querySelectorAll("#listing_table thead th");
+
+        var cellCount = tbl.rows[0].cells.length;
+        var insertRow = tbl.insertRow(index + 1);
+        insertRow.setAttribute("class", "head-row");
+        for (var i = 0; i < cellCount; i++) {
+          var newCell = insertRow.insertCell(i);
+          newCell.innerHTML = tblHeads[i].innerHTML;
+          newCell.style.backgroundColor = "#e5e5e5";
+          newCell.style.fontWeight = "bold";
+          if (cellCount == 8) {
+            if (i == 6) {
+              newCell.setAttribute("class", "dicounts");
+            }
+          }
+        }
+      }
+
+      // Insert Section Subtotal Row
+      function insertSubRow(index) {
+        var tbl = document.getElementById("listing_table");
+        var rows = tbl.rows;
+
+        var cellCount = tbl.rows[0].cells.length;
+        var insertRow = tbl.insertRow(index);
+        insertRow.setAttribute("class", "sub-row");
+        for (var i = 0; i < cellCount; i++) {
+          if (i == 7) {
+            continue;
+          }
+          var newCell = insertRow.insertCell(i);
+          if (i == 3) {
+            newCell.innerHTML = "Items Total";
+            newCell.colSpan = "2";
+          }
+
+          if (i == 4) {
+            newCell.style.display = "none";
+          }
+
+          if (i == 5) {
+            newCell.setAttribute("class", "sub-cell");
+          }
+
+          newCell.style.fontWeight = "bold";
+        }
+      }
+
+      // Insert Section Tax Row
+      function insertTaxRow(index) {
+        var tbl = document.getElementById("listing_table");
+        var rows = tbl.rows;
+
+        var cellCount = tbl.rows[0].cells.length;
+        var insertRow = tbl.insertRow(index);
+        insertRow.setAttribute("class", "vat-row");
+        for (var i = 0; i < cellCount; i++) {
+          if (i == 7) {
+            continue;
+          }
+          var newCell = insertRow.insertCell(i);
+          if (i == 3) {
+            newCell.innerHTML = "VAT";
+            newCell.colSpan = "2";
+          }
+
+          if (i == 4) {
+            newCell.style.display = "none";
+          }
+
+          if (i == 5) {
+            newCell.setAttribute("class", "vat-cell");
+          }
+
+          newCell.style.fontWeight = "bold";
+        }
+      }
+
+      // Insert Section Total Row
+      function insertTotRow(index) {
+        var tbl = document.getElementById("listing_table");
+        var rows = tbl.rows;
+
+        var cellCount = tbl.rows[0].cells.length;
+        var insertRow = tbl.insertRow(index);
+        insertRow.setAttribute("class", "tot-row");
+        for (var i = 0; i < cellCount; i++) {
+          if (i == 7) {
+            continue;
+          }
+          var newCell = insertRow.insertCell(i);
+          if (i == 3) {
+            newCell.innerHTML = "Total";
+            newCell.colSpan = "2";
+          }
+          if (i == 4) {
+            newCell.style.display = "none";
+          }
+
+          if (i == 5) {
+            newCell.setAttribute("class", "tot-cell");
+          }
+
+          newCell.style.backgroundColor = "#e5e5e5";
+          newCell.style.fontWeight = "bold";
+        }
+      }
+
+      // Insert Rows to Section Totals Table
+      function insertSecTotRow(index, sec, tot) {
+        var tbl = document.getElementById("sec-tot");
+        var rows = tbl.rows;
+
+        var insertRow = tbl.insertRow(index);
+        for (var i = 0; i < 2; i++) {
+          var newCell = insertRow.insertCell(i);
+
+          if (i == 0) {
+            newCell.innerText = sec;
+            newCell.style.fontWeight = "bold";
+          }
+
+          if (i == 1) {
+            newCell.innerText = tot;
+          }
+        }
+      }
+
+      // Split Sections
+      function splitTables() {
+        var count = 0;
+        var code = document.querySelectorAll(
+          "#listing_table tbody td:first-child"
+        );
+        var desc = document.querySelectorAll(
+          "#listing_table tbody td:nth-child(2)"
+        );
+        for (i = 0; i < code.length; i++) {
+          if (code[i].innerText == "Title") {
+            count++;
+            code[i].parentElement.style.backgroundColor = "#e5e5e5";
+            insertHeaderRow(i + count);
+            code[i].style.fontWeight = "bolder";
+            code[i].setAttribute("data-title", "title");
+            code[i].innerHTML = desc[i].innerHTML;
+            if (
+              document.querySelectorAll("#listing_table thead th").length == 8
+            ) {
+              code[i].colSpan =
+                code[i].parentElement.querySelectorAll("td").length - 1;
+            } else {
+              code[i].colSpan =
+                code[i].parentElement.querySelectorAll("td").length;
+            }
+            for (
+              j = 1;
+              j < code[i].parentElement.querySelectorAll("td").length;
+              j++
+            ) {
+              code[i].parentElement.querySelectorAll("td")[j].style.display =
+                "none";
+            }
+          }
+          code[i].parentElement.classList.add("tot-count");
+        }
+      }
+
+      // Add Section Total Row
+      function addTotRow() {
+        var code = document.querySelectorAll(
+          "#listing_table tbody td:first-child"
+        );
+        var count = 0;
+
+        for (var i = 0; i < code.length; i++) {
+          if (code[i].getAttribute("data-title") == "title") {
+            count++;
+            insertTotRow(i + count);
+          }
+        }
+      }
+
+      // Add Section Vat Row
+      function addTaxRow() {
+        var code = document.querySelectorAll(
+          "#listing_table tbody td:first-child"
+        );
+        var count = 0;
+
+        for (var i = 0; i < code.length; i++) {
+          if (code[i].getAttribute("data-title") == "title") {
+            count++;
+            insertTaxRow(i + count);
+          }
+        }
+      }
+
+      // Add Section Sub Row
+      function addSubRow() {
+        var code = document.querySelectorAll(
+          "#listing_table tbody td:first-child"
+        );
+        var count = 0;
+
+        for (var i = 0; i < code.length; i++) {
+          if (code[i].getAttribute("data-title") == "title") {
+            count++;
+            insertSubRow(i + count);
+          }
+        }
+      }
+
+      // Calculation Section Total
+      function calcTblTot() {
+        var code = document.querySelectorAll(
+          "#listing_table tbody td:first-child"
+        );
+        var totCell = document.querySelectorAll(".tot-cell");
+        var vatCell = document.querySelectorAll(".vat-cell");
+        var subCell = document.querySelectorAll(".sub-cell");
+        var discornot =
+          document.querySelectorAll("#listing_table thead th").length == 8;
+        if (discornot) {
+          var itemNet = document.querySelectorAll(
+            "#listing_table tbody td:nth-last-child(3)"
+          );
+          var itemVat = document.querySelectorAll(
+            "#listing_table tbody td:nth-last-child(5)"
+          );
+          var itemSub = document.querySelectorAll(
+            "#listing_table tbody td:last-child"
+          );
+        } else {
+          var itemNet = document.querySelectorAll(
+            "#listing_table tbody td:nth-last-child(2)"
+          );
+          var itemVat = document.querySelectorAll(
+            "#listing_table tbody td:nth-last-child(4)"
+          );
+          var itemSub = document.querySelectorAll(
+            "#listing_table tbody td:last-child"
+          );
+        }
+        var count = 0;
+        var sumNet = 0;
+        var sumVat = 0;
+        var sumSub = 0;
+
+        for (i = 0; i < itemNet.length; i++) {
+          if (
+            itemNet[i].parentElement.getAttribute("class") == "tot-count" &&
+            code[i].getAttribute("data-title") != "title"
+          ) {
+            sumNet += parseFloat(itemNet[i].innerText.replace(/,/g, "")) || 0;
+            sumVat += parseFloat(itemVat[i].innerText.replace(/,/g, "")) || 0;
+            sumSub += parseFloat(itemSub[i].innerText.replace(/,/g, "")) || 0;
+          } else if (code[i].getAttribute("data-title") == "title") {
+            totCell[count].innerText = sumNet
+              .toFixed(3)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            vatCell[count].innerText = sumVat
+              .toFixed(3)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            subCell[count].innerText = sumSub
+              .toFixed(3)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            count++;
+            sumNet = 0;
+            sumVat = 0;
+            sumSub = 0;
+          }
+        }
+        totCell[totCell.length - 1].innerText = sumNet
+          .toFixed(3)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        vatCell[vatCell.length - 1].innerText = sumVat
+          .toFixed(3)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        subCell[subCell.length - 1].innerText = sumSub
+          .toFixed(3)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      // Create Table for Section Totals
+      function createSecTotTbl() {
+        var totCell = document.querySelectorAll(".tot-cell");
+        var code = document.querySelectorAll(
+          "#listing_table tbody td:first-child[data-title = 'title']"
+        );
+
+        for (i = 1; i < totCell.length; i++) {
+          insertSecTotRow(
+            i - 1,
+            "Total " + code[i - 1].innerText,
+            totCell[i].innerText
+          );
+        }
+      }
+
+      // Add Empty Rows
+      function insertRowAfterClass() {
+        var secTotRows = document.querySelectorAll(".tot-row");
+        for (i = 0; i < secTotRows.length; i++) {
+          var empRow = document.createElement("tr");
+          empRow.classList.add("empty-row");
+
+          secTotRows[i].parentNode.insertBefore(
+            empRow,
+            secTotRows[i].nextSibling
+          );
+        }
+      }
+
+      // Recalculate VAT and Subtotal
+      function recalcItemTots() {
+        var itemSubTot = document.querySelectorAll(".tot-count td:last-child");
+        var itemVat = document.querySelectorAll(".tot-count td:nth-child(4)");
+        var itemNet = document.querySelectorAll(".tot-count td:nth-child(6)");
+        for (i = 0; i < itemSubTot.length; i++) {
+          itemVat[i].innerText = (
+            parseFloat(itemSubTot[i].innerText.replace(/,/g, "")) * 0.05
+          )
+            .toFixed(3)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          itemNet[i].innerText = (
+            parseFloat(itemSubTot[i].innerText.replace(/,/g, "")) * 1.05
+          )
+            .toFixed(3)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+
+      try {
+        swapCols(2, 4, "listing_table");
+        swapCols(3, 4, "listing_table");
+        swapCols(4, 5, "listing_table");
+
+        splitTables();
+        addSubRow();
+        addTaxRow();
+        addTotRow();
+
+        var tblRows = document.querySelectorAll("#listing_table tr");
+        insertTotRow(tblRows.length);
+        insertTaxRow(tblRows.length);
+        insertSubRow(tblRows.length);
+
+        recalcItemTots();
+        calcTblTot();
+        createSecTotTbl();
+        insertRowAfterClass();
+
+        // hide first custom rows
+        document.querySelector(".sub-row").style.display = "none";
+        document.querySelector(".vat-row").style.display = "none";
+        document.querySelector(".tot-row").style.display = "none";
+      } catch (err) {
+        console.log(err);
+      }
+      function adddiscCells() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var subDis = 0;
+        var subDiscs = [];
+        if (allRows[0].cells.length == 8) {
+          for (var i = 1; i < allRows.length; i++) {
+            if (allRows[i].classList.contains("head-row")) {
+              var j = i + 1;
+              while (!allRows[j].classList.contains("sub-row")) {
+                if (allRows[j].cells[6].innerText.trim() == "") {
+                  allRows[j].cells[6].innerText = 0;
+                }
+
+                var subt =
+                  parseFloat(allRows[j].cells[2].innerText.replace(/,/g, "")) *
+                  parseFloat(allRows[j].cells[4].innerText.replace(/,/g, ""));
+                if (allRows[j].cells[6].innerText.indexOf("%") != -1) {
+                  subDis =
+                    subDis +
+                    (subt *
+                      parseFloat(
+                        allRows[j].cells[6].innerText.replace(/,/g, "")
+                      )) /
+                      100;
+                } else {
+                  subDis =
+                    subDis +
+                    parseFloat(allRows[j].cells[6].innerText.replace(/,/g, ""));
+                }
+                j++;
+              }
+              subDiscs.push(subDis);
+
+              subDis = 0;
+              subt = 0;
+            }
+          }
+        }
+        console.log(subDiscs);
+        var allVats = document.querySelectorAll(".vat-row");
+        var subcells = document.querySelectorAll(".sub-cell");
+        var subsrow = document.querySelectorAll(".sub-row");
+        var totsrow = document.querySelectorAll(".tot-row");
+
+        for (var k = 1; k < allVats.length; k++) {
+          var newTd1 = document.createElement("td");
+          var newTd2 = document.createElement("td");
+          var newTd3 = document.createElement("td");
+          newTd1.style.border = "none";
+          newTd2.style.border = "none";
+          newTd3.style.border = "none";
+          if (allRows[0].cells.length == 8) {
+            allVats[k].insertBefore(newTd1, allVats[k].cells[0]);
+            subsrow[k].insertBefore(newTd2, subsrow[k].cells[0]);
+            totsrow[k].insertBefore(newTd3, totsrow[k].cells[0]);
+          }
+          var newTr = document.createElement("tr");
+          newTr.setAttribute("class", "dis-row");
+          var newTd = document.createElement("td");
+          newTd.style.border = "none";
+
+          if (allRows[0].cells.length == 8) {
+            newTr.appendChild(newTd);
+          }
+          for (var m = 0; m < 7; m++) {
+            var newTd = document.createElement("td");
+            newTd.style.fontWeight = "bold";
+            if (m == 3) {
+              if (subDiscs.length > 0) {
+                subcells[k].innerText = (
+                  parseFloat(subcells[k].innerText.replace(/,/g, "")) +
+                  subDiscs[k - 1]
+                ).toFixed(2);
+              } else {
+                newTd.innerText = "0";
+              }
+              newTd.innerText = "Discount";
+              newTd.style.borderBottom = "1px solid black";
+              newTd.style.borderBottom = "1px solid black";
+              newTd.style.borderLeft = "none";
+              newTd.style.borderRight = "none";
+            } else if (m == 4) {
+              // newTd.style.display = "none";
+              newTd.style.borderBottom = "none";
+              newTd.style.borderTop = "none";
+              newTd.style.borderLeft = "none";
+              newTd.style.borderRight = "none";
+            } else if (m == 5) {
+              if (subDiscs.length > 0) {
+                newTd.innerText = subDiscs[k - 1];
+              } else {
+                newTd.innerText = "0";
+              }
+              newTd.style.textAlign = "center";
+              newTd.style.borderBottom = "1px solid black";
+              newTd.style.borderTop = "1px solid black";
+              newTd.style.borderLeft = "none";
+              newTd.style.borderRight = "none";
+            } else {
+              newTd.style.borderBottom = "none";
+              newTd.style.borderTop = "none";
+              newTd.style.borderLeft = "none";
+              newTd.style.borderRight = "none";
+            }
+
+            newTr.appendChild(newTd);
+          }
+
+          allVats[k].parentElement.insertBefore(newTr, allVats[k]);
+        }
+      }
+      try {
+        adddiscCells();
+      } catch (error) {
+        console.log(error);
+      }
+      function SwapAll() {
+        var allheads = document.querySelectorAll(".head-row");
+        for (var i = 0; i < allheads.length; i++) {
+          var conttainer = allheads[i].cells[5].innerHTML;
+          allheads[i].cells[5].innerHTML = allheads[i].cells[6].innerHTML;
+          allheads[i].cells[6].innerHTML = conttainer;
+        }
+        var allRows = document.querySelectorAll(".tot-count");
+        for (var j = 0; j < allRows.length; j++) {
+          var conttainer = allRows[j].cells[5].innerHTML;
+          allRows[j].cells[5].innerHTML = allRows[j].cells[6].innerHTML;
+          allRows[j].cells[6].innerHTML = conttainer;
+        }
+      }
+      try {
+        SwapAll();
+      } catch (error) {
+        console.log(error);
+      }
+      function AddTTL() {
+        var sectottbl = document.querySelector("#sec-tot tbody");
+        var newTr = document.createElement("tr");
+        var newTd1 = document.createElement("td");
+        newTd1.innerText = "Gross Total";
+        var newTd2 = document.createElement("td");
+        newTd2.innerText = "{%invoice_total%}";
+        newTr.appendChild(newTd1);
+        newTr.appendChild(newTd2);
+        sectottbl.appendChild(newTr);
+      }
+      try {
+        AddTTL();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

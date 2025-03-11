@@ -1,0 +1,74 @@
+<style>
+  #header {
+    width: 100%;
+
+    color: #fff;
+  }
+  .left {
+    text-align: left;
+    padding-left: 20px;
+    font-size: 19px;
+    font-family: sans-serif;
+    font-weight: bold;
+  }
+  .right {
+    font-family: "Changa", sans-serif !important;
+    text-align: right;
+    padding-right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  .mob {
+    font-family: "Changa", sans-serif;
+    text-align: left;
+    padding-left: 20px;
+    font-size: 19px;
+    font-weight: bold;
+  }
+  #header tr:nth-child(1) td:nth-child(1) {
+    vertical-align: middle;
+    text-align: center;
+    width: 20%;
+  }
+  #header tr:nth-child(1) td:nth-child(2) {
+    width: 55%;
+  }
+  #header tr:nth-child(1) td:nth-child(3) {
+    width: 25%;
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Changa:wght@200..800&display=swap"
+  rel="stylesheet"
+/>
+<div
+  style="
+    margin-top: -25px;
+    background-color: #ae9371;
+    margin-left: -10px !important;
+    margin-right: -10px !important;
+  "
+>
+  <div style="height: 30px"></div>
+  <table id="header">
+    <tr>
+      <td rowspan="4">{%site_logo%}</td>
+      <td class="right">{%OName%}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="mob">mob : {%MobileA%}</td>
+    </tr>
+    <tr>
+      <td class="left">{%ONameEnglish%}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="mob">mob : {%MobileB%}</td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,188 @@
+<style>
+  #hiddenInput {
+    display: none;
+  }
+
+  #qr_reader {
+    border: 1px solid #c3bebe;
+    margin: 7px;
+    padding: 7px 4px;
+    width: 336px;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      function extractLotAndExpiry(code) {
+        let lotNumber = "";
+        let expiryDate = "";
+        let skuCode = "";
+        const lastSixDigitsRegex = /(\d{6})$/;
+        const elevenCharRegex = /([a-zA-Z][\w]{8})(\d+)/;
+        const skuRegex = /^.{2}(\d{14})/;
+        const lastSixMatches = code.match(lastSixDigitsRegex);
+        const isDataable = code.substr(-8, 2) === "17";
+        const isDataable2 = code.length > 41;
+        if (lastSixMatches && isDataable && isDataable2) {
+          expiryDate = lastSixMatches[1];
+        }
+        const elevenCharMatches = code.match(elevenCharRegex);
+        if (elevenCharMatches) {
+          lotNumber = elevenCharMatches[1];
+        }
+        let formattedExpiry = "";
+        if (expiryDate) {
+          const year = "20" + expiryDate.substr(0, 2);
+          const month = expiryDate.substr(2, 2);
+          const day = expiryDate.substr(4, 2);
+          formattedExpiry = `${year}/${month}/${day}`;
+        }
+        const skuMatches = code.match(skuRegex);
+        if (skuMatches) {
+          skuCode = skuMatches[1];
+        }
+        return {
+          lotNumber: lotNumber,
+          expiryDate: formattedExpiry,
+          skuCode: skuCode,
+        };
+      }
+      const NewInput = $("<input>");
+      NewInput.attr("id", "qr_reader");
+
+      const label = $("<label>");
+      label.attr("for", "qr_reader").text("Scan QR Code");
+
+      $(".invoice-items").before(label).before(NewInput);
+
+      let inputTimeout;
+
+      $("#qr_reader").on("input", function () {
+        clearTimeout(inputTimeout);
+
+        inputTimeout = setTimeout(() => {
+          console.log($(this).val());
+          if ($(this).val() !== "") {
+            var generalcodes = extractLotAndExpiry($(this).val());
+            addCodes(generalcodes);
+            setTimeout(() => {
+              const x2 = $(".BAR_" + generalcodes.skuCode)
+                .first()
+                .find(".item-qty");
+              console.log(x2.val());
+              x2.val(parseFloat(x2.val()) - 1).change();
+              console.log(x2.val());
+              const x3 = $(".lot_" + generalcodes.lotNumber).find(".item-qty");
+              console.log(x3.val());
+              x3.val(parseFloat(x3.val()) + 1).change();
+              console.log(x3.val());
+            }, 1000);
+            $(this).val("").change();
+
+            $(this).focus();
+          }
+        }, 1000);
+      });
+
+      function addCodes(generatedCode) {
+        console.log(generatedCode);
+        // onReceiveBarCode(generatedCode.skuCode);
+        setTimeout(() => {
+          addClasses(generatedCode);
+        }, 700);
+      }
+      function addClasses(barcodeToAdd) {
+        let flag1 = false;
+        let flag2 = false;
+        var Findingcounter = 0;
+        $(".item-id").each(function () {
+          const $itemId = $(this);
+          const $closestRow = $itemId.closest("tr");
+
+          // Check if the item ID input is not empty
+          if ($itemId.val()) {
+            const isAddedBefore = $closestRow.hasClass("addedbefore");
+            if (!isAddedBefore) {
+              // Add classes
+              $closestRow
+                .addClass("addedbefore")
+                .addClass("BAR_" + barcodeToAdd.skuCode)
+                .addClass("lot_" + barcodeToAdd.lotNumber)
+                .addClass("exp_" + barcodeToAdd.expiryDate);
+              flag2 = true;
+              // Set lot number
+              const $lotInput = $closestRow.find(".trackingInput input").eq(0);
+              $lotInput.val(barcodeToAdd.lotNumber).focus();
+
+              // Set expiry date
+              const $expiryInput = $closestRow
+                .find(".item-serial")
+                .eq(1)
+                .find("input")
+                .eq(0);
+              $expiryInput.val(barcodeToAdd.expiryDate || "");
+
+              // Simulate enter event
+              setTimeout(() => {
+                triggerEnterEvent($closestRow, 0);
+                triggerEnterEvent($closestRow, 1);
+              }, 200);
+            } else if (
+              $closestRow.hasClass("addedbefore") &&
+              $closestRow.hasClass("BAR_" + barcodeToAdd.skuCode) &&
+              $closestRow.hasClass("lot_" + barcodeToAdd.lotNumber)
+            ) {
+              flag1 = true;
+            }
+            console.log(flag1);
+            let lastonecheck = 1;
+            if (!$(".item-id").last().val()) {
+              lastonecheck = 2;
+            }
+            if (
+              !flag1 &&
+              Findingcounter == $(".item-id").length - lastonecheck &&
+              !flag2
+            ) {
+              addNewProduct(barcodeToAdd);
+            }
+          }
+          Findingcounter++;
+        });
+        setTimeout(() => {
+          //   const x2 = $(".BAR_" + barcodeToAdd.skuCode)
+          //     .first()
+          //     .find(".item-qty");
+          //   console.log(x2.val());
+          //   x2.val(parseFloat(x2.val()) - 1).change();
+          //   console.log(x2.val());
+          //   const x3 = $(".lot_" + barcodeToAdd.lotNumber).find(".item-qty");
+          //   console.log(x3.val());
+          //   x3.val(parseFloat(x3.val()) + 1).change();
+          //   console.log(x3.val());
+        }, 500);
+      }
+      function addNewProduct(barcodeToAdd) {
+        if ($(".item-id").last().val()) {
+          $("#AddItem").click();
+        }
+        setTimeout(() => {
+          $(".item_name").last().val(barcodeToAdd.skuCode);
+          const $input = $(".item_name").last();
+          $input.trigger(jQuery.Event("keydown", { which: 13, keyCode: 13 }));
+          $input.trigger(jQuery.Event("keyup", { which: 13, keyCode: 13 }));
+          setTimeout(() => {
+            addClasses(barcodeToAdd);
+          }, 2000);
+        }, 250);
+      }
+
+      // Helper function to trigger enter event
+      function triggerEnterEvent($row, index) {
+        const $input = $row.find(".item-serial").eq(index).find("input").eq(0);
+        $input.trigger(jQuery.Event("keydown", { which: 13, keyCode: 13 }));
+        $input.trigger(jQuery.Event("keyup", { which: 13, keyCode: 13 }));
+      }
+    }, 500);
+  });
+</script>

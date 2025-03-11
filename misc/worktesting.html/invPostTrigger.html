@@ -1,0 +1,61 @@
+<script>
+  document.getElementById("InvoiceForm").onsubmit = function (e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const formDataObj = {};
+    let isValid = true;
+    let errorMessage = "";
+    formData.forEach((value, key) => {
+      const keys = key.match(/[^\[\]]+/g);
+      let tempObj = formDataObj;
+      const inputElement = e.target.querySelector(`[name="${key}"]`);
+      if (inputElement && inputElement.hasAttribute("required") && !value) {
+        isValid = false;
+        errorMessage += `${inputElement.placeholder || key} is required.\n`;
+      }
+      keys.forEach((k, i) => {
+        if (i === keys.length - 1) {
+          tempObj[k] = value;
+        } else {
+          if (!tempObj[k]) {
+            tempObj[k] = {};
+          }
+          tempObj = tempObj[k];
+        }
+      });
+    });
+    if (!isValid) {
+      alert(errorMessage);
+      return;
+    }
+    console.log(formDataObj);
+    fetch(`/api2/invoices`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formDataObj.data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((errorRes) => {
+            console.error("Error:", errorRes);
+            alert(
+              `Error ${response.status}: ${
+                errorRes.message || "An error occurred."
+              }`
+            );
+          });
+        }
+        return response.json().then((res) => {
+          console.log("Success:", res);
+          window.location.href = `/owner/invoices/view/${res.id}`;
+        });
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+        alert("An unexpected error occurred. Please try again.");
+      });
+  };
+</script>

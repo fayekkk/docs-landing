@@ -1,0 +1,148 @@
+<style>
+  th,
+  td {
+    padding: 10px;
+    text-align: left;
+    width: 33.33%;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+</style>
+<script>
+  let newTable = `    <table id="my-table">
+      <thead>
+        <tr>
+          <th>Selector</th>
+          <th>Value</th>
+          <th>Percentage</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>`;
+  var optionsBox = $(".more-options-box");
+  optionsBox.after(newTable);
+
+  const options = [
+    {
+      id: -1,
+      text: "Select account",
+      name: "select-account",
+      myattr: "default",
+    },
+    { id: 1, text: "Option 1", name: "option1", myattr: "value1" },
+    { id: 2, text: "Option 2", name: "option2", myattr: "value2" },
+    { id: 3, text: "Option 3", name: "option3", myattr: "value3" },
+  ];
+
+  // Function to append a new row to the table
+  function appendRow() {
+    const $row = $("<tr>");
+
+    // Value input
+    const $valueInput = $("<input>").attr({
+      type: "number",
+      class: "value-input",
+    });
+
+    // Percentage input
+    const $percentageInput = $("<input>")
+      .attr({
+        type: "text",
+        class: "percentage-input",
+      })
+      .on("input", function () {
+        const percentage = $(this).val();
+        $(this).closest("tr").find(".selector-input").val(percentage);
+      });
+
+    // Selector
+    const $selectorInput = $("<select>")
+      .attr({
+        class: "selector-input",
+      })
+      .select2({
+        data: options,
+        templateSelection: function (item) {
+          // Disable already selected options
+          if (item.id !== "-1") {
+            const selectedOptions = $(".selector-input")
+              .not(this)
+              .map(function () {
+                return $(this).val();
+              })
+              .get();
+            if (selectedOptions.includes(item.id.toString())) {
+              return $("<span>").text(item.text).addClass("text-muted");
+            }
+          }
+          return item.text;
+        },
+      })
+      .on("change", function () {
+        const selectedOption = $(this).val();
+        const selectedOptionName = options.find(
+          (option) => option.id.toString() === selectedOption
+        ).name;
+        const selectedOptionMyattr = options.find(
+          (option) => option.id.toString() === selectedOption
+        ).myattr;
+        console.log("Selected option:", selectedOption);
+        console.log("Selected option name:", selectedOptionName);
+        console.log("Selected option myattr:", selectedOptionMyattr);
+
+        // Check if the selected option is already selected in another row
+        const selectedOptions = $(".selector-input")
+          .not(this)
+          .map(function () {
+            return $(this).val();
+          })
+          .get();
+        if (
+          selectedOptions.includes(selectedOption) &&
+          selectedOption !== "-1"
+        ) {
+          alert("لا يمكن إختيار نفس الحساب مرتين ");
+          $(this).val("-1").trigger("change");
+        }
+      });
+
+    $row.append(
+      $("<td>").append($selectorInput),
+      $("<td>").append($valueInput),
+      $("<td>").append($percentageInput)
+    );
+
+    $("#my-table tbody").append($row);
+
+    // Initialize the Select2 plugin for the new row
+    $row.find(".selector-input").select2();
+  }
+
+  // Append the first row
+  appendRow();
+
+  // Add a button to append more rows
+  $("<button>").text("Add Row").on("click", appendRow).appendTo("body");
+</script>

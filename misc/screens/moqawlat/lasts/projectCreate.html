@@ -1,0 +1,63 @@
+<style>
+  .disabled {
+    pointer-events: none;
+    background-color: #13b272 !important;
+    color: white !important;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    function addFilterToDropdown(selector, filter) {
+      const dropdown = document.querySelector(selector);
+      if (dropdown) {
+        const dropdownData = JSON.parse(
+          dropdown.getAttribute("data-izam1-forms1-dynamic-drop-down")
+        );
+        dropdownData.queryParams = {
+          ...dropdownData.queryParams,
+          ...filter,
+        };
+        dropdown.setAttribute(
+          "data-izam1-forms1-dynamic-drop-down",
+          JSON.stringify(dropdownData)
+        );
+      }
+    }
+    addFilterToDropdown("#le_workflow-type-entity-2_custom_data-vendor", {
+      "filter[supplier_custom_data.type]": "مقاول باطن",
+    });
+    $("#client_id").attr("required", true);
+    $(".form-row div:nth-child(5) div label").append(
+      `<span class="required">*</span>`
+    );
+    setTimeout(() => {
+      // Required client
+      // $('button[type="submit"]').eq(0).addClass("disabled");
+      // $("#client_id").on("change", function () {
+      //   if ($(this).val() == "") {
+      //     $('button[type="submit"]').eq(0).addClass("disabled");
+      //   } else {
+      //     $('button[type="submit"]').eq(0).removeClass("disabled");
+      //   }
+      // });
+
+      function addDisabled() {
+        $("[id$='--process_percent']").attr("disabled", true);
+        $("[id$='--ta3lya_percent']").attr("disabled", true);
+        $("[id$='--vendor_process_percent']").attr("disabled", true);
+        $("[id$='--ta3lya_vendor_process_percent']").attr("disabled", true);
+        $("[id$='--ta3lya']").attr("disabled", true);
+        $("[id$='--process_percent']").parent().parent().hide();
+        $("[id$='--ta3lya_percent']").parent().parent().hide();
+        $("[id$='--vendor_process_percent']").parent().parent().hide();
+        $("[id$='--ta3lya_vendor_process_percent']").parent().parent().hide();
+        $("[id$='--ta3lya']").parent().parent().hide();
+      }
+      addDisabled();
+
+      $(
+        "#le_workflow-type-entity-2 > div.form-row > div.col-lg-12 > div.row > div.col-lg-12.col-md-12.col-xs-12 > div > div > div > div.card-body.p-0 > div > div > div > div > div > div.btn-group.add-row.dropdown > button"
+      ).on("click", addDisabled);
+    }, 250);
+  });
+</script>

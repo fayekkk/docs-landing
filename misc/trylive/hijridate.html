@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // Constants for conversion
+      const DAYS_IN_GREGORIAN_YEAR = 365.2425;
+      const DAYS_IN_HIJRI_YEAR = 354.36707;
+      const GREGORIAN_EPOCH_JD = 1721425.5;
+      const HIJRI_EPOCH_JD = 1948439.5;
+
+      // Function to calculate days in a Hijri month
+      function daysInHijriMonth(hijriYear, hijriMonth) {
+        if (hijriMonth === 12 && isLeapYear(hijriYear)) {
+          return 30;
+        } else if (hijriMonth === 12) {
+          return 29;
+        } else if (hijriMonth % 2 === 0) {
+          return 30;
+        } else {
+          return 29;
+        }
+      }
+
+      // Function to check if a Hijri year is a leap year
+      function isLeapYear(hijriYear) {
+        return (
+          (hijriYear % 4 === 0 && hijriYear % 100 !== 0) ||
+          hijriYear % 400 === 0
+        );
+      }
+
+      // Function to convert Gregorian date to Hijri date
+      function gregorianToHijri(gregorianDate) {
+        // Get day, month, and year from Gregorian date
+        const year = gregorianDate.getFullYear();
+        const month = gregorianDate.getMonth();
+        const day = gregorianDate.getDate();
+
+        // Calculate Julian Day for Gregorian date
+        const julianDate =
+          Math.floor(367 * year) -
+          Math.floor((7 * (year + Math.floor((month + 9) / 12))) / 4) +
+          Math.floor((275 * month) / 9) +
+          day +
+          GREGORIAN_EPOCH_JD;
+
+        // Calculate number of elapsed years since Hijri epoch
+        const elapsedYears = Math.floor(
+          (julianDate - HIJRI_EPOCH_JD) / DAYS_IN_HIJRI_YEAR
+        );
+
+        // Calculate start date of current Hijri year
+        const hijriStartJd = HIJRI_EPOCH_JD + elapsedYears * DAYS_IN_HIJRI_YEAR;
+
+        // Calculate days passed since start of Hijri year
+        const daysSinceHijriStart = julianDate - hijriStartJd;
+
+        // Calculate month and day within Hijri year
+        let hijriYear = elapsedYears + 1;
+        let hijriMonth = 1;
+        let remainingDays = daysSinceHijriStart;
+
+        while (remainingDays > daysInHijriMonth(hijriYear, hijriMonth)) {
+          const daysInMonth = daysInHijriMonth(hijriYear, hijriMonth);
+          remainingDays -= daysInMonth;
+          hijriMonth++;
+        }
+
+        return {
+          year: hijriYear,
+          month: hijriMonth,
+          day: remainingDays + 1,
+        };
+      }
+
+      // Get today's date in Hijri
+      const today = new Date();
+      const hijriDate = gregorianToHijri(today);
+
+      console.log(
+        `Hijri date: ${hijriDate.year}-${hijriDate.month}-${hijriDate.day}`
+      );
+    </script>
+  </body>
+</html>

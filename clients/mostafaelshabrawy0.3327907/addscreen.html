@@ -1,0 +1,26 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      function main() {
+        if ($("#InvoiceLayout").val() == "5") {
+          $(document).on("change", ".item_col_3 ,.item_col_4 ", function () {
+            let ttlprice = $(this).closest("tr").find(".item_col_3").val() || 0;
+            let percent = $(this).closest("tr").find(".item_col_4").val() || 0;
+
+            $(this)
+              .closest("tr")
+              .find(".item-unit-price")
+              .val(ttlprice * (percent / 100))
+              .trigger("change");
+          });
+        }
+      }
+      main();
+      $("#InvoiceLayout").on("change", function () {
+        setTimeout(() => {
+          main();
+        }, 250);
+      });
+    }, 300);
+  });
+</script>

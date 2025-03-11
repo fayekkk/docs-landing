@@ -1,0 +1,480 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  /* Basic styles for the input */
+  #my_file {
+    display: none;
+  }
+
+  .custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #13b272;
+    padding: 14px 21px;
+    font-size: 15px;
+  }
+
+  .custom-file-upload:hover {
+    background-color: #119460;
+  }
+  .Edit_Product {
+    display: none;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      var purchaseInvoicesProducts = [];
+      var AddedProducts = [];
+      const ReadExcelData = async () => {
+        document
+          .getElementById("my_file")
+          .addEventListener("change", async () => {
+            const data = await document
+              .getElementById("my_file")
+              .files[0].arrayBuffer();
+            const workbook = XLSX.read(data);
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+            // // console.log(jsonData);
+
+            let isValid = true;
+            const requiredKeys = ["ITEM", "LOT-NO", "STOCK QTY", "UNIT-PRICE"];
+
+            jsonData.forEach((item, index) => {
+              requiredKeys.forEach((key) => {
+                if (
+                  !item.hasOwnProperty(key) ||
+                  item[key] === null ||
+                  item[key] === ""
+                ) {
+                  console.log(
+                    `Missing or invalid value for key "${key}" in item at index ${index}`
+                  );
+                  isValid = false;
+                }
+              });
+            });
+
+            if (isValid) {
+              console.log("All items are valid.");
+            } else {
+              console.log("Some items have missing or invalid values.");
+              alert("يوجد بعض المعلومات المفقودة برجاء مراجعة الملف ");
+              $("#my_file").val("").change();
+              return;
+            }
+
+            if (jsonData.length > 0) {
+              console.log({ jsonData: jsonData });
+
+              let productswithtypesArr = validateDates(jsonData);
+              // // console.log(productswithtypesArr);
+              getandcreateProducts(productswithtypesArr);
+            }
+          });
+      };
+      // isExsistwithsametracking
+      async function isExsistwithsametracking(itemname) {
+        // // console.log(itemname);
+        try {
+          const response = await fetch(
+            `/v2/api/entity/product/list/1?filter[name][like]=${itemname}`,
+            {
+              method: "GET",
+              headers: {
+                apikey: "bceffccefa6ab4014732bb7093d284bc37794bf4",
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const data = await response.json();
+          // // console.log("Response:", data);
+          return data;
+          if (data.data.length > 0) {
+            // // console.log(data.data);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("حدث خطأ    ");
+          window.location.reload();
+        }
+      }
+      // postNewProduct
+      async function postNewProduct(prodName, tracking_type, unitPrice) {
+        const response = await fetch("/api2/products", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            Product: {
+              name: prodName,
+              description: "",
+              unit_price: unitPrice,
+              tracking_type: tracking_type,
+              type: "1",
+              track_stock: "1",
+              brand: "new product",
+            },
+          }),
+        });
+        let data = await response.json();
+        // // console.log(data);
+        return data;
+      }
+      // validateproducttype
+      async function validateproducttype({
+        prodObj,
+        productName,
+        type,
+        lotNo,
+        expDate,
+        Price,
+      }) {
+        console.log({ unitPriceform: Price });
+
+        var finalproduct = {};
+        if (prodObj.length > 0) {
+          if (prodObj.length == 1) {
+            if (prodObj[0].tracking_type == "lot_and_expiry_date") {
+              finalproduct = {
+                productId: prodObj[0].id,
+                productName: productName,
+                type: type,
+                lotNo: lotNo,
+                expDate: expDate,
+                unitPrice: Price,
+              };
+            } else {
+              let newProductData = await postNewProduct(
+                productName,
+                "lot_and_expiry_date",
+                Price
+              );
+              finalproduct = {
+                productId: newProductData.id,
+                productName: productName,
+                type: type,
+                lotNo: lotNo,
+                expDate: expDate,
+                unitPrice: Price,
+              };
+            }
+          } else {
+            let flag = false;
+            for (let i = 1; i < prodObj.length; i++) {
+              if (prodObj[i].tracking_type == "lot_and_expiry_date") {
+                finalproduct = {
+                  productId: prodObj[0].id,
+                  productName: productName,
+                  type: type,
+                  lotNo: lotNo,
+                  expDate: expDate,
+                  unitPrice: Price,
+                };
+                flag = true;
+              }
+            }
+            if (!flag) {
+              let newProductData = await postNewProduct(
+                productName,
+                "lot_and_expiry_date",
+                Price
+              );
+              finalproduct = {
+                productId: newProductData.id,
+                productName: productName,
+                type: type,
+                lotNo: lotNo,
+                expDate: expDate,
+                unitPrice: Price,
+              };
+              AddedProducts.push(newProductData);
+            }
+          }
+        } else {
+          // // console.log("We are Here");
+
+          let newProductData = await postNewProduct(
+            productName,
+            "lot_and_expiry_date",
+            Price
+          );
+          finalproduct = {
+            productId: newProductData.id,
+            productName: productName,
+            type: type,
+            lotNo: lotNo,
+            expDate: expDate,
+            unitPrice: Price,
+          };
+          AddedProducts.push(newProductData);
+        }
+        console.log(finalproduct);
+        return finalproduct;
+      }
+
+      // validateproducttype2
+      async function validateproducttype2({
+        prodObj,
+        productName,
+        type,
+        lotNo,
+        Price,
+      }) {
+        var finalproduct = {};
+        if (prodObj.length > 0) {
+          if (prodObj.length == 1) {
+            if (prodObj[0].tracking_type == "lot") {
+              finalproduct = {
+                productId: prodObj[0].id,
+                productName: productName,
+                type: type,
+                lotNo: lotNo,
+                unitPrice: Price,
+              };
+            } else {
+              let newProductData = await postNewProduct(
+                productName,
+                "lot",
+                Price
+              );
+              finalproduct = {
+                productId: newProductData.id,
+                productName: productName,
+                type: type,
+                lotNo: lotNo,
+                unitPrice: Price,
+              };
+            }
+          } else {
+            let flag = false;
+            for (let i = 1; i < prodObj.length; i++) {
+              if (prodObj[i].tracking_type == "lot") {
+                finalproduct = {
+                  productId: prodObj[0].id,
+                  productName: productName,
+                  type: type,
+                  lotNo: lotNo,
+                  unitPrice: Price,
+                };
+                flag = true;
+              }
+            }
+            if (!flag) {
+              let newProductData = await postNewProduct(
+                productName,
+                "lot",
+                Price
+              );
+              finalproduct = {
+                productId: newProductData.id,
+                productName: productName,
+                type: type,
+                lotNo: lotNo,
+                unitPrice: Price,
+              };
+              AddedProducts.push(newProductData);
+            }
+          }
+        } else {
+          // // console.log("We are Here");
+
+          let newProductData = await postNewProduct(productName, "lot", Price);
+
+          finalproduct = {
+            productId: newProductData.id,
+            productName: productName,
+            type: type,
+            lotNo: lotNo,
+            unitPrice: Price,
+          };
+          AddedProducts.push(newProductData);
+        }
+        console.log(finalproduct);
+
+        return finalproduct;
+      }
+
+      // getandcreateProducts
+      async function getandcreateProducts(productsarrays) {
+        // // console.log({ productsarrays: productsarrays });
+        let productswithdate = productsarrays.newProductsArrWithDates;
+        let productswithoutdate = productsarrays.newProductsArrWithoutdates;
+        if (productswithdate.length > 0) {
+          for (let i = 0; i < productswithdate.length; i++) {
+            let productdata = await isExsistwithsametracking(
+              productswithdate[i].ITEM
+            );
+            console.log({ Price: productswithdate[i]["UNIT-PRICE"] });
+
+            console.log({
+              prodObj: productdata.data,
+              productName: productswithdate[i].ITEM,
+              type: "withdate",
+              lotNo: productswithdate[i]["LOT-NO"],
+              expDate: productswithdate[i]["EXPIRATION"],
+              Price: productswithdate[i]["UNIT-PRICE"],
+            });
+            let validatedproducttype = await validateproducttype({
+              prodObj: productdata.data,
+              productName: productswithdate[i].ITEM,
+              type: "withdate",
+              lotNo: productswithdate[i]["LOT-NO"],
+              expDate: productswithdate[i]["EXPIRATION"],
+              Price: productswithdate[i]["UNIT-PRICE"],
+            });
+            // console.log({ validatedproducttype: validatedproducttype });
+            purchaseInvoicesProducts.push(validatedproducttype);
+            console.log({ purchaseInvoicesProducts: purchaseInvoicesProducts });
+          }
+          // console.log({ AddedProducts: AddedProducts });
+        }
+        // Other Way
+        if (productswithoutdate.length > 0) {
+          for (let i = 0; i < productswithoutdate.length; i++) {
+            let productdata = await isExsistwithsametracking(
+              productswithoutdate[i].ITEM
+            );
+            // console.log(productswithoutdate);
+
+            let validatedproducttype = await validateproducttype2({
+              prodObj: productdata.data,
+              productName: productswithoutdate[i].ITEM,
+              type: "withoutdate",
+              lotNo: productswithoutdate[i]["LOT-NO"],
+              Price: productswithoutdate[i]["UNIT-PRICE"],
+            });
+            // // console.log({ validatedproducttype: validatedproducttype });
+            purchaseInvoicesProducts.push(validatedproducttype);
+          }
+          console.log("AddedProducts");
+          console.log(AddedProducts);
+          AddedProducts.forEach(function (product) {
+            // var link = document.createElement("a");
+            // link.setAttribute("href", `/owner/products/edit/${product.id}`);
+            // link.setAttribute("target", `_blank`);
+            // link.textContent = `Edit_Product ${product.id}`;
+            // link.className = "Edit_Product";
+            // $(".custom-file-upload").after(link);
+            window.open(`/owner/products/edit/${product.id}`, "_blank");
+          });
+          // $(".Edit_Product").each(function () {
+          //   $(this).trigger("click");
+          // });
+        }
+        console.log({ purchaseInvoicesProducts: purchaseInvoicesProducts });
+        let InvBody = createBody(purchaseInvoicesProducts);
+        console.log({ InvBody: InvBody });
+
+        PostInv(InvBody);
+      }
+      function PostInv(InvBody) {
+        // console.log(JSON.stringify(InvBody));
+        let dataaaa = {
+          PurchaseOrder: {
+            supplier_id: 1,
+            currency_code: "SAR",
+            date: "2024-10-01",
+            draft: 1,
+            is_offline: true,
+          },
+          PurchaseOrderItem: InvBody,
+        };
+        fetch(`/api2/purchase_invoices?send=draft`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataaaa),
+        })
+          .then((res) => res.json())
+          .then((Invresponse) => {
+            console.log(Invresponse);
+            window.location.href = `/owner/purchase_invoices/edit/${Invresponse.id}`;
+          })
+          .catch((err) => {
+            console.log(err);
+            alert("حدث خطأ    ");
+            window.location.reload();
+          });
+      }
+      function createBody(products) {
+        console.log({ productstoupdate: products });
+
+        const transformedProducts = products.map((product) => ({
+          org_name: "",
+          item: product.productName,
+          description: "",
+          unit_price: product.unitPrice ? product.unitPrice : 0,
+          product_id: product.productId,
+          quantity: 1,
+          lot: product.lotNo,
+          expiry_date: product.expDate
+            ? new Date(product.expDate).toISOString().split("T")[0]
+            : null,
+          tax1: 0,
+          tax2: 0,
+        }));
+
+        // // console.log(transformedProducts);
+        return transformedProducts;
+      }
+      // Get date format
+      function excelDateToJSDate(serial) {
+        const excelEpoch = new Date(1970, 0, 1);
+        const daysOffset = serial - 25569;
+        return new Date(excelEpoch.getTime() + daysOffset * 86400000);
+      }
+
+      // const serialNumber = 47961;
+      // const jsDate = excelDateToJSDate(serialNumber);
+      //// // console.log(jsDate.toLocaleDateString());
+
+      // validateData
+      function validateDates(products) {
+        let newProductsArrWithDates = [];
+        let newProductsArrWithoutdates = [];
+        for (const product of products) {
+          //// // console.log(product);
+          if (product.EXPIRATION) {
+            if (JSON.stringify(product.EXPIRATION).indexOf("/") == -1) {
+              const newProdObj = product;
+
+              // // console.log(product.EXPIRATION);
+              const serialNumber = product.EXPIRATION;
+              const jsDate = excelDateToJSDate(serialNumber);
+              newProdObj.EXPIRATION = jsDate.toLocaleDateString();
+              newProductsArrWithDates.push(newProdObj);
+            } else {
+              newProductsArrWithoutdates.push(product);
+            }
+          } else {
+            newProductsArrWithoutdates.push(product);
+          }
+        }
+
+        return {
+          newProductsArrWithDates: newProductsArrWithDates,
+          newProductsArrWithoutdates: newProductsArrWithoutdates,
+        };
+      }
+
+      let newInput = `<label class="custom-file-upload">
+   <span class="label_text" >  إضافة الملف </span>
+      <input id="my_file" type="file" accept=".xls, .xlsx" />
+    </label>`;
+      $('a[href="/owner/settings/purchase_invoices"]').eq(0).before(newInput);
+      ReadExcelData();
+    }, 500);
+  });
+</script>

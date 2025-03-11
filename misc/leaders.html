@@ -1,0 +1,237 @@
+<div dir="rtl" style="text-align: right">
+  <table
+    class="tmp-item-meta-1"
+    border="1"
+    style="width: 100.008%; height: 79px"
+  >
+    <colgroup>
+      <col style="width: 57.2091%" />
+      <col style="width: 22.1551%" />
+      <col style="width: 20.6377%" />
+    </colgroup>
+    <tbody>
+      <tr style="height: 79px">
+        <td style="height: 79px">
+          <h1 class="tmp-record-name">
+            إذن مخزني #<span
+              class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{Data.requisition.id}}</span
+            >
+          </h1>
+        </td>
+        <td>
+          <label class="tmp-single-label">نوع الإذن</label>
+          <p class="tmp-single-value tmp-text-weight-medium">
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              ><!--% echo __({{Data.requisition.type}}) %--></span
+            >
+          </p>
+        </td>
+        <td style="height: 79px">
+          <label class="tmp-single-label">التاريخ</label>
+          <p class="tmp-single-value tmp-text-weight-medium">
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{Data.requisition.date}}</span
+            >
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="tmp-item-meta-2" border="1" style="width: 100%; height: 97px">
+    <colgroup>
+      <col style="width: 33.4872%" />
+      <col style="width: 66.5259%" />
+    </colgroup>
+    <tbody>
+      <tr style="height: 97px">
+        <td style="height: 97px">
+          <label class="tmp-single-label">المخزن</label>
+          <p class="tmp-single-value">
+            <strong class="text-weight-bold"></strong
+            ><span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{Data.requisition.store.name}}</span
+            >
+          </p>
+        </td>
+        <td style="height: 97px">
+          <label class="tmp-single-label">المرجع</label>
+          <p class="tmp-single-value">
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{Data.requisition.order_type}}</span
+            >
+            #<span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{Data.requisition.order_number}}</span
+            >
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    <span style="font-size: 18px"
+      ><strong><br />لائحة المنتجات</strong></span
+    >
+  </p>
+  <table>
+    <tr>
+      <th style="width: 15%">Product Code</th>
+      <th style="width: 35.2394%">Product Name</th>
+      <th style="width: 18.3626%">Unit Price</th>
+      <th style="width: 9.10555%">Quantity</th>
+      <th style="width: 17.3001%">Subtotal</th>
+    </tr>
+    <!--% foreach({{Data.requisition.items}} as {{items_row}}) { %-->
+
+    <tr>
+      <td style="width: 15%">
+        <span class="mce-inline-non-editable-area mce-inline-placeholder">
+          {{items_row.product.product_code}}
+        </span>
+      </td>
+      <td style="width: 35.2394%">
+        <span class="mce-inline-non-editable-area mce-inline-placeholder">
+          {{items_row.product.name}}
+        </span>
+      </td>
+      <!--% $formatedUnitPrice =  round($items_row['unit_price'], 2); %-->
+      <td style="width: 18.3626%">
+        <span class="mce-inline-non-editable-area mce-inline-placeholder">
+          {{ formatedUnitPrice }}
+        </span>
+      </td>
+      <td style="width: 9.10555%">
+        <span class="mce-inline-non-editable-area mce-inline-placeholder">
+          {{items_row.quantity}}
+        </span>
+      </td>
+      <!--% $formatedSubtotal =  round($items_row['subtotal'], 2); %-->
+      <td class="tmp-text-left" style="width: 17.3001%">
+        <span class="mce-inline-non-editable-area mce-inline-placeholder">
+          {{formatedSubtotal}}
+        </span>
+      </td>
+    </tr>
+    <!--% } %-->
+  </table>
+</div>
+<style>
+  .tmp-item-meta-1,
+  .tmp-item-meta-2 {
+    border: 0;
+  }
+  .tmp-item-meta-1 td,
+  .tmp-item-meta-2 td {
+    border: 0;
+    padding-top: 22px;
+    padding-bottom: 22px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .tmp-item-meta-1 .tmp-record-name {
+    font-size: 24px;
+    font-weight: 600;
+    color: #202124;
+    margin: 0;
+  }
+  .tmp-single-label {
+    color: #6a6e82;
+    margin-bottom: 4px;
+    font-weight: 400;
+    font-size: 14px;
+    display: block;
+    line-height: 13px;
+  }
+  .tmp-single-value {
+    color: #202124;
+    margin-bottom: 0;
+    font-weight: 400;
+    font-size: 14px;
+    display: block;
+    line-height: 18px;
+    margin-top: 0;
+  }
+
+  .tmp-items {
+    border: 0;
+    width: 100%;
+    border-spacing: 0;
+    text-indent: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    color: #202124;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+  }
+  .tmp-items,
+  .tmp-items tr th,
+  .tmp-items tr td {
+    border-collapse: separate;
+  }
+  .tmp-items tr th,
+  .tmp-items tr td {
+    padding: 0;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-inline-start: 8px;
+    padding-inline-end: 8px;
+    border: 0;
+    font-size: 14px;
+    color: #202124;
+  }
+  .tmp-items tr > *:first-child,
+  .tmp-items tr > *:nth-child(2) {
+    padding-inline-start: 0;
+  }
+  .tmp-items tr > *:last-child {
+    padding-inline-end: 0;
+  }
+  .tmp-items tr th {
+    font-weight: 500;
+    border-bottom: 1px solid #202124;
+    text-align: right;
+    text-align: start;
+  }
+  .tmp-items tr td {
+    font-weight: 400;
+  }
+  .tmp-items tbody tr:not(:last-child) td {
+    border-bottom: 1px solid #edf0f3;
+  }
+  .tmp-items tfoot tr td,
+  .tmp-items tfoot tr th {
+    font-weight: 700;
+  }
+  .tmp-items tfoot tr:first-child td,
+  .tmp-items tfoot tr:first-child th {
+    border-top: 1px solid #202124;
+  }
+  .tmp-items tfoot tr:not(:last-child) td,
+  .tmp-items tfoot tr:not(:last-child) th,
+  .tmp-items tfoot tr:last-child td,
+  .tmp-items tfoot tr:last-child th {
+    border-bottom: 1px solid #202124;
+  }
+
+  .tmp-items td.tmp-empty-cell,
+  .tmp-items th.tmp-empty-cell {
+    border-bottom: 0 !important;
+  }
+
+  .tmp-items tfoot td.tmp-empty-cell,
+  .tmp-items tfoot th.tmp-empty-cell {
+    border-bottom: 0 !important;
+  }
+
+  .tmp-text-left {
+    text-align: end !important;
+    text-align: left !important;
+  }
+  .tmp-text-weight-medium {
+    font-weight: 500 !important;
+  }
+  .tmp-text-weight-bold {
+    font-weight: 600 !important;
+  }
+</style>

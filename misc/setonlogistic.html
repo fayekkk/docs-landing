@@ -1,0 +1,559 @@
+<!-- d3f8ff -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      direction: rtl;
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: transparent;
+      color: #000;
+    }
+    .invoice-inner {
+      padding: 10px 0;
+    }
+
+    /* start of header styles */
+    #header {
+      width: 100%;
+      border-spacing: 4px;
+      border: 1px solid black;
+      text-align: center;
+      direction: rtl;
+      margin-top: 5px;
+    }
+    #site_name {
+      font-size: 22px;
+      font-weight: bold;
+      vertical-align: middle;
+      padding-top: 15px;
+    }
+    #inv_title {
+      color: #000;
+      text-decoration: underline;
+      font-size: 16px;
+      font-weight: bold;
+      padding-top: 15px;
+    }
+
+    #header img {
+      width: 90%;
+    }
+    #qr-code {
+      border: 1px solid #d3f8ff;
+    }
+    #header tr:nth-child(1) td:nth-child(1) {
+      width: 20%;
+    }
+    #header tr:nth-child(1) td:nth-child(2) {
+      width: 60%;
+    }
+    #header tr:nth-child(1) td:nth-child(3) {
+      width: 20%;
+    }
+    /*  start of inv_data styles */
+    #inv_data {
+      width: 70%;
+      margin: 5px 10% 3px 10%;
+      border-spacing: 0;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      border: 1px solid black;
+    }
+    #inv_data td:nth-child(1) {
+      width: 30%;
+      background-color: #d3f8ff;
+      border-left: 1px solid black;
+      padding: 3px 4px 2px 4px;
+    }
+    #inv_data td:nth-child(2) {
+      width: 20%;
+      border-left: 1px solid black;
+
+      padding: 3px 4px 2px 4px;
+    }
+    #inv_data td:nth-child(3) {
+      width: 20%;
+      background-color: #d3f8ff;
+      border-left: 1px solid black;
+
+      padding: 3px 4px 2px 4px;
+    }
+    #inv_data td:nth-child(4) {
+      width: 30%;
+      padding: 3px 4px 2px 4px;
+    }
+    /* start of client_site_data styles */
+    #client_site_data {
+      width: 100%;
+      border-spacing: 0;
+      text-align: right;
+      font-size: 10px;
+      font-weight: bold;
+    }
+    #client_site_data th {
+      color: #000;
+      background-color: #d3f8ff;
+      text-align: center;
+      border-top: 1px solid black;
+      border-left: 1px solid black;
+      border-bottom: 1px solid black;
+      font-size: 12px;
+      padding: 4px 5px 3px 5px;
+    }
+    #client_site_data th:nth-child(1) {
+      border-right: 1px solid black;
+    }
+    #client_site_data td {
+      padding: 2px 4px 1px 4px;
+      border-left: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    #client_site_data td:nth-child(1) {
+      background-color: #d3f8ff;
+      text-align: center;
+      border-right: 1px solid black;
+    }
+    #client_site_data tr:last-child td:nth-child(1) {
+      width: 20%;
+    }
+    #client_site_data tr:last-child td:nth-child(2) {
+      width: 30%;
+    }
+    #client_site_data tr:last-child td:nth-child(3) {
+      width: 15%;
+      background-color: #d3f8ff;
+    }
+    #client_site_data tr:last-child td:nth-child(4) {
+      width: 35%;
+    }
+    .addr_one_line br {
+      display: none;
+    }
+    /* start of listing_table styles */
+    #listing_table {
+      width: 100%;
+      border-radius: 0;
+      text-align: center;
+      font-size: 11px;
+      font-weight: bold;
+      border-top: 1px solid black;
+      border-right: 1px solid black;
+      border-left: none;
+      border-bottom: none;
+      margin-top: 20px;
+    }
+    #listing_table th,
+    #listing_table td {
+      padding: 4px 3px 3px 3px;
+    }
+    #listing_table th {
+      background-color: #d3f8ff !important;
+      font-size: 12px;
+      border-left: 1px solid black;
+      border-bottom: 1px solid black;
+      border-top: none !important;
+      border-right: none !important;
+    }
+    #listing_table td {
+      border-top: none !important;
+      border-right: none !important;
+      border-left: 1px solid black;
+      border-bottom: 1px solid black;
+      text-align: right;
+    }
+    #listing_table td:nth-child(1) {
+      text-align: center !important;
+    }
+    #listing_table th:nth-child(1) {
+      /* width: 23.8%; */
+      width: auto;
+    }
+    #listing_table th:nth-child(2) {
+      /* width: 10.8%; */
+      width: auto;
+    }
+    #listing_table th:nth-child(3) {
+      /* width: 12.3%; */
+      width: auto;
+    }
+    #listing_table th:nth-child(4) {
+      /* width: 10.8%; */
+      width: auto;
+    }
+    #listing_table th:nth-child(5) {
+      /* width: 7.7%; */
+      width: auto;
+    }
+    #listing_table th:nth-child(6) {
+      /* width: 12.3%; */
+      width: auto;
+    }
+    #listing_table th:nth-child(7) {
+      /* width: 21.5%; */
+      width: auto;
+    }
+    #listing_table th:nth-child(8) {
+      /* width: 21.5%; */
+      width: auto;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    /* start of new_totals styles */
+    #new_totals {
+      width: 100%;
+      border-spacing: 0;
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+      page-break-inside: avoid;
+    }
+    #new_totals td {
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+      padding: 2px 2px 1px 2px;
+    }
+    #new_totals tr:nth-child(1) td {
+      border-top: 1px solid black;
+    }
+    #new_totals td:last-child {
+      border-left: 1px solid black;
+    }
+    #new_totals td:last-child {
+      text-align: left;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(1) {
+      width: 16.4%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(2) {
+      width: 17.8%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(3) {
+      width: 16.4%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(4) {
+      width: 31.3%;
+    }
+    #new_totals tr:nth-child(2) td:nth-child(3) {
+      width: 12%;
+    }
+    #new_totals tr:nth-child(2) td:nth-child(4) {
+      width: 8.8%;
+    }
+    /* plessed styles */
+    #plessed {
+      width: 100%;
+      font-size: 15px;
+      font-weight: bold;
+      text-align: center;
+      padding: 6px 0;
+      border-top: 1px solid black;
+      border-bottom: 1px solid black;
+      margin: 10px 0;
+    }
+    /* after_plessed styles */
+    #after_plessed {
+      width: 100%;
+      text-align: center;
+      border-spacing: 0;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    #after_plessed td:nth-child(1) {
+      width: 20%;
+      background-color: #d3f8ff;
+    }
+    #after_plessed td:nth-child(2) {
+      width: 60%;
+    }
+    #after_plessed td:nth-child(3) {
+      width: 20%;
+      background-color: #d3f8ff;
+    }
+    #after_plessed td {
+      padding: 2px 0 1px 0;
+    }
+    .bg {
+      z-index: -90000;
+      position: absolute;
+      left: 0px;
+      background-image: url("https://marwanmounir96.daftra.com/files/2648551b/logos/65829992cedeb_blobid1703057805503.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      width: 100%;
+      height: 24.1cm;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <div class="bg" style="top: 0cm"></div>
+
+        <table id="header">
+          <tbody>
+            <tr>
+              <td rowspan="2">{%site_logo%}</td>
+              <td id="site_name">
+                شركة سيتون ستار للخدمات اللوجستية شخص واحد
+                <br />
+                SETON STAR LOGISTICS COMPANY L.L.C
+              </td>
+              <td id="qr-code" rowspan="2">{%sa_qr_code_image%}</td>
+            </tr>
+            <tr>
+              <td id="inv_title">{%invoice_title%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="inv_data">
+          <tbody>
+            <tr>
+              <td>فاتورة رقم | Invoice No</td>
+              <td>{%invoice_no%}</td>
+              <td>التاريخ | Date</td>
+              <td>{%created_time%} {%invoice_date%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="client_site_data">
+          <thead>
+            <tr>
+              <th></th>
+              <th>العميل | Client</th>
+              <th colspan="2">المورد | Supplier</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>الإسم | Name</td>
+              <td rowspan="2">{%client_business_name%}</td>
+              <td rowspan="2" colspan="2">
+                شركة سيتون ستار للخدمات اللوجستية شخص واحد SETON STAR LOGISTICS
+                COMPANY L.L.C
+              </td>
+            </tr>
+            <tr>
+              <td
+                style="
+                  border-right: none !important;
+                  /* background-color: #fff !important; */
+                  height: 15px;
+                "
+              ></td>
+            </tr>
+            <tr>
+              <td>الرقم الضريبى | VAT No</td>
+              <td>{%client_bn1%}</td>
+              <td colspan="2">{%site_bn1%}</td>
+            </tr>
+            <tr>
+              <td>العنوان | Addr</td>
+              <td class="addr_one_line">{%client_full_address%}</td>
+              <td colspan="2" class="addr_one_line">{%site_address1%}</td>
+            </tr>
+            <tr>
+              <td>الجوال | Mobile</td>
+              <td>{%client_mobile%}</td>
+              <td>السجل التجارى | C.R</td>
+              <td>1010909043</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div id="items-list">{%items_list%}</div>
+        <div
+          style="
+            width: 100%;
+            margin: 3px 0;
+            height: 1px;
+            background-color: #000;
+          "
+        ></div>
+        <table id="new_totals">
+          <tbody>
+            <tr>
+              <td style="background-color: transparent; border: none"></td>
+              <td style="background-color: #d3f8ff">
+                نقدى / آجل
+                <br />
+                Cash\Delay
+              </td>
+              <td>{%Cash Delay%}</td>
+              <td style="background-color: #d3f8ff">
+                الإجمالى (غير شامل ضريبة القيمة المضافة)
+                <br />
+                Total Without VAT
+              </td>
+
+              <td colspan="2">{%invoice_subtotal%}</td>
+            </tr>
+            <tr>
+              <td colspan="3" style="border: none"></td>
+              <td style="background-color: #d3f8ff">
+                مجموع ضريبة القيمة المضافة
+                <br />
+                VAT
+              </td>
+              <td>{%tax-total%}</td>
+              <td>15%</td>
+            </tr>
+            <tr>
+              <td colspan="3" style="color: #000; border: 1px solid #c7c7c7">
+                {%invoice_total_spelled%}
+              </td>
+              <td style="background-color: #d3f8ff">
+                إجمالى المبلغ المستحق (شامل ضريبة القيمة المضافة) Total After
+                VAT
+              </td>
+              <td colspan="2" style="color: #000">{%invoice_total%}</td>
+            </tr>
+            <tr>
+              <td
+                colspan="3"
+                style="background-color: transparent; border: none"
+              ></td>
+              <td style="background-color: #d3f8ff">المسدد | paid</td>
+              <td colspan="2">{%paid%}</td>
+            </tr>
+            <tr>
+              <td
+                colspan="3"
+                style="background-color: transparent; border: none"
+              ></td>
+              <td style="background-color: #d3f8ff">الباقي Change</td>
+              <td colspan="2">{%unpaid%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="plessed">تسعدنا خدمتكم</div>
+        <table id="after_plessed">
+          <tr>
+            <td>{%ADMIN%}</td>
+            <td></td>
+            <td>{%Other Date%}</td>
+          </tr>
+        </table>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function handleDisc() {
+        var theadLength = document.querySelectorAll(
+          "#listing_table thead tr th"
+        );
+        var allrows = document.querySelectorAll("#listing_table tbody tr ");
+        if (theadLength.length == 8) {
+          var newTh = document.createElement("th");
+          newTh.innerHTML = "الخصم <br> Descount";
+          document
+            .querySelector("#listing_table thead tr ")
+            .insertBefore(
+              newTh,
+              document.querySelector("#listing_table thead tr th:nth-child(8)")
+            );
+          for (var i = 0; i < allrows.length; i++) {
+            var newTd = document.createElement("td");
+            newTd.innerHTML = "0.00";
+            allrows[i].insertBefore(
+              newTd,
+              allrows[i].querySelector("td:nth-child(8)")
+            );
+          }
+        } else if (theadLength.length == 9) {
+          for (var i = 0; i < allrows.length; i++) {
+            if (
+              allrows[i].querySelector("td:nth-child(8)").innerText.trim() == ""
+            ) {
+              allrows[i].querySelector("td:nth-child(8)").innerText = "0.00";
+            }
+          }
+        }
+      }
+      try {
+        handleDisc();
+      } catch (error) {
+        console.log(error);
+      }
+      function swapAll() {
+        var allrows = document.querySelectorAll("#listing_table tr ");
+        for (var i = 0; i < allrows.length; i++) {
+          var Desc = allrows[i].cells[1].innerText;
+          var taxpercent = allrows[i].cells[2].innerText;
+          var taxVal = allrows[i].cells[3].innerText;
+          var totWithVAT = allrows[i].cells[4].innerText;
+          var QTY = allrows[i].cells[5].innerText;
+          var price = allrows[i].cells[6].innerText;
+          var discount = allrows[i].cells[7].innerText;
+
+          allrows[i].cells[1].innerText = Desc;
+          allrows[i].cells[2].innerText = QTY;
+          allrows[i].cells[3].innerText = price;
+          allrows[i].cells[4].innerText = discount;
+          allrows[i].cells[5].innerText = taxpercent;
+          allrows[i].cells[6].innerText = taxVal;
+          allrows[i].cells[7].innerText = totWithVAT;
+          allrows[i].cells[8].style.display = "none";
+        }
+      }
+      try {
+        swapAll();
+      } catch (error) {
+        console.log(error);
+      }
+      function repeatBg() {
+        var invoiceHeight =
+          document.querySelector(".invoice-inner").offsetHeight;
+        var pageHeight = document.querySelector(".bg").offsetHeight;
+        var numPages = Math.ceil(invoiceHeight / pageHeight);
+        var bg = document.querySelector(".bg");
+        var topDis = parseFloat(bg.style.top.replace("cm", ""));
+        for (var i = 1; i < numPages; i++) {
+          var newBg = document.createElement("div");
+          newBg.setAttribute("class", "bg");
+          topDis = topDis + 24.1;
+          newBg.style.top = topDis + "cm";
+          bg.parentNode.insertBefore(newBg, bg.nextSibling);
+        }
+      }
+      try {
+        repeatBg();
+      } catch (e) {
+        console.log(e);
+      }
+    </script>
+  </body>
+</html>

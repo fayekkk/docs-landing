@@ -1,0 +1,33 @@
+{
+    "orders": [
+      {
+        "order_id": "12345",
+        "customer_name": "John Doe",
+        "total": 100.50,
+        "status": "completed",
+        "created_at": "2025-03-06T12:34:56Z"
+      },
+      {
+        "order_id": "12346",
+        "customer_name": "Jane Smith",
+        "total": 50.75,
+        "status": "pending",
+        "created_at": "2025-03-06T12:45:12Z"
+      }
+    ],
+    "errors": {
+      "404": {
+        "message": "Order not found",
+        "description": "The order with the specified ID does not exist in the system."
+      },
+      "400": {
+        "message": "Bad Request",
+        "description": "The request was invalid or malformed. Please check the parameters."
+      },
+      "500": {
+        "message": "Internal Server Error",
+        "description": "There was an unexpected error on the server. Please try again later."
+      }
+    }
+  }
+  

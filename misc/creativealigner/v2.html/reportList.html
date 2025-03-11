@@ -1,0 +1,42 @@
+<!-- code_Reports_owner_list -->
+
+<script>
+  $(document).ready(() => {
+    let newReport = `
+    <li class="border-bottom border-disabled s2020 report-list-item">
+                                                <div class="px-3 py-2 position-relative dropdown s2020">
+                                                    <a href="/owner/reports/report/1" class="report-list-item__link dropdown-toggle report-list-item__dropdown-toggle position-absolute" role="button"></a>
+                                                    <div class="row-flex">
+                                                        <div class="col-flex-md-7 d-flex align-items-center">
+                                                            <div class="mr-3 d-inline-block">
+                                                                <i class="align-items-center d-flex justify-content-center rounded s2020 w-45px h-45px fas fa-money-check-edit-alt fs-22 bg-success-50 text-white"></i>
+                                                            </div>
+                                                            <div class="d-inline-block">
+                                                                                                                            <p class="pb-0 text-inactive s2020">تقرير المبيعات حسب مندوب المبيعات - خاص</p>
+                                                                                                                                                                                        <h5 class="p-0 m-0 s2020 text-dark-blue fs-16"></h5>
+                                                                                                                        </div>
+                                                        </div>
+                                                        <div class="col-flex-md-5 d-none d-md-flex justify-content-end align-items-center mt-3 mt-lg-0">
+                                                                                                                                                                            <a href="/owner/reports/report/1" class="report-list-item__btn btn-s2020 font-weight-medium btn-link text-inactive s2020 d-flex align-items-center">
+                                                                <i class="fas fa-eye s2020 fs-18 mr-2"></i>
+                                                                <span>عرض</span>
+                                                            </a>
+                                                                                                                                                                        </div>
+                                                                                                            <div class="col-flex-12">
+                                                            <div class="dropdown-menu s2020">
+                                                                                                                    <a class="dropdown-item text-inactive w-100 p-3 s2020" href="/owner/reports/report/1">
+                                                            <i class="fas fa-eye s2020 fs-18 mr-2"></i>
+                                                                <span>عرض</span>
+                                                            </a>
+                                                                                                                    </div>
+                                                        </div>
+                                                                                                        </div>
+                                                </div>
+                                            </li>
+    `;
+    const container = $(
+      "#invoices > div > div > div:nth-child(1) > div > div.panel-body.p-0 > ul"
+    ).eq(0);
+    container.append(newReport);
+  });
+</script>

@@ -1,0 +1,257 @@
+<style>
+  .late_th,
+  .late_td {
+    display: table-cell;
+  }
+  /* .col-3 {
+          display: none !important;
+        } */
+</style>
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      if (USER.branch_id == "1") {
+        function hudleAll() {
+          if ($("#InvoiceLayout").val() == 11) {
+            const searchableSelector = () => {
+              var allrows = document.querySelectorAll("#listing_table tr");
+              console.log(allrows.length);
+            };
+
+            async function createCol(
+              prevTh,
+              prevTd,
+              colTitle,
+              classTh,
+              classTd,
+              colInput
+            ) {
+              var rowsNum = $("#listing_table tr").length;
+
+              if (
+                document.querySelectorAll(
+                  "#listing_table tr:nth-child(1) .late_th"
+                ).length == 0
+              ) {
+                // Clone TH and attach change event listener
+                $(prevTh).after(
+                  $("th.col-3")
+                    .clone()
+                    .wrap("<p>")
+                    .parent()
+                    .html()
+                    .replace("col-3", classTh)
+                    .replace("", colTitle)
+                );
+
+                $(prevTd).after(
+                  $("td.col-3")
+                    .clone()
+                    .wrap("<p>")
+                    .parent()
+                    .html()
+                    .replace("col-3", classTd)
+                    .replace("item_col_4", colInput)
+                );
+              } else if (
+                !document.querySelector("#listing_table tr:last-child .late_td")
+              ) {
+                $(`#listing_table tr:last-child ${prevTd}`).after(
+                  $("#listing_table tr:last-child td.col-3")
+                    .clone()
+                    .wrap("<p>")
+                    .parent()
+                    .html()
+                    .replace("col-3", classTd)
+                    .replace("item_col_4", colInput)
+                );
+              }
+
+              $("." + colInput).attr("placeholder", "");
+              $("." + colInput).attr("name", "");
+
+              searchableSelector();
+
+              document.querySelector(".late_th").innerText = " رقم الكتالوج   ";
+            }
+
+            // adding the columns when screen is loaded
+            createCol(
+              "th.col-3",
+              "td.col-3",
+              "إختيار العاملة ",
+              "late_th",
+              "late_td",
+              "late_input"
+            );
+
+            // adding the columns on add item click
+            $("#AddItem").on("click", () => {
+              createCol(
+                "th.col-3",
+                "td.col-3",
+                "إختيار العاملة ",
+                "late_th",
+                "late_td",
+                "late_input"
+              );
+              hudleAll();
+
+              $("td.late_td:last").find("textarea").val("");
+            });
+          }
+
+          if ($("#InvoiceLayout").val() == 11) {
+            $(".late_th").show();
+            $(".late_td").show();
+          } else {
+            $(".late_th").hide();
+            $(".late_td").hide();
+          }
+          $(document).on("change", "#InvoiceLayout", function () {
+            if ($("#InvoiceLayout").val() == 11) {
+              $(".late_th").show();
+              $(".late_td").show();
+            } else {
+              $(".late_th").hide();
+              $(".late_td").hide();
+            }
+          });
+        }
+        hudleAll();
+        function forEditScreens() {
+          var allitemcol3 = $(".item_col_3");
+          allitemcol3.each(function () {
+            var textareaValue = $(this).val();
+            try {
+              var parsedValue = JSON.parse(textareaValue);
+              console.log("yesssss");
+              console.log(parsedValue);
+              if (typeof parsedValue === "object") {
+                var $closestTr = $(this).closest("tr");
+                var $col3ClonedTextarea = $closestTr.find(".col-3 .cloned_td");
+                var $col3Textarea = $closestTr.find(".col-3 textarea");
+
+                if ($col3ClonedTextarea.length === 0) {
+                  var $clonedTextarea = $col3Textarea.clone();
+                  $col3Textarea.hide();
+                  $clonedTextarea.val(parsedValue.col3Value);
+                  $clonedTextarea.removeAttr("name").removeAttr("id");
+                  $clonedTextarea
+                    .removeClass("item_col_3")
+                    .addClass("cloned_td");
+                  $closestTr.find(".col-3").append($clonedTextarea);
+                } else {
+                  $col3ClonedTextarea.val(parsedValue.col3Value);
+                }
+              } else {
+                console.log("not an object type");
+                var $closestTr = $(this).closest("tr");
+                var $col3ClonedTextarea = $closestTr.find(".col-3 .cloned_td");
+                var $col3Textarea = $closestTr.find(".col-3 textarea");
+                var $lateTextarea = $closestTr.find(".late_td textarea");
+
+                if ($col3ClonedTextarea.length === 0) {
+                  var $clonedTextarea = $col3Textarea.clone();
+                  $col3Textarea.hide();
+                  $clonedTextarea.val(parsedValue.col3Value);
+                  $clonedTextarea.removeAttr("name").removeAttr("id");
+                  $clonedTextarea
+                    .removeClass("item_col_3")
+                    .addClass("cloned_td");
+                  $closestTr.find(".late_td textarea").val(" ");
+                  $closestTr.find(".late_td textarea").trigger("change");
+                  $closestTr.find(".col-3").append($clonedTextarea);
+                } else {
+                  $col3ClonedTextarea.val(parsedValue.col3Value);
+                }
+
+                $col3ClonedTextarea.val(
+                  $(this).closest("tr").find(".item_col_3").val()
+                );
+              }
+            } catch (error) {
+              console.log("not an object");
+            }
+          });
+        }
+        forEditScreens();
+        setTimeout(() => {
+          $(document).on("change", ".item_name", function () {
+            setTimeout(() => {
+              var $closestTr = $(this).closest("tr");
+              var $lateTextarea = $closestTr.find(".late_td textarea");
+              var $col3ClonedTextarea = $closestTr.find(".col-3 .cloned_td");
+              var $col3Textarea = $closestTr.find(".col-3 .item_col_3 ");
+
+              $lateTextarea
+                .removeAttr("name")
+                .removeAttr("id")
+                .removeClass("item_col_5");
+
+              $lateTextarea.val(product.field_4);
+
+              if ($col3ClonedTextarea.length === 0) {
+                var $clonedTextarea = $col3Textarea.clone();
+                $col3Textarea.hide();
+                $clonedTextarea.val($col3Textarea.val());
+
+                var object = {
+                  col3Value: $col3Textarea.val(),
+                  lateValue: $lateTextarea.val(),
+                };
+
+                $col3Textarea.val(JSON.stringify(object));
+                $clonedTextarea
+                  .removeAttr("name")
+                  .removeAttr("id")
+                  .removeClass("item_col_3")
+                  .addClass("cloned_td");
+
+                $clonedTextarea.on("change", function () {
+                  var updatedObject = {
+                    col3Value: $(this).val(),
+                    lateValue: $lateTextarea.val(),
+                  };
+                  $col3Textarea.val(JSON.stringify(updatedObject));
+                });
+
+                $lateTextarea.on("change", function () {
+                  var updatedObject = {
+                    col3Value: $clonedTextarea.val(),
+                    lateValue: $(this).val(),
+                  };
+                  $col3Textarea.val(JSON.stringify(updatedObject));
+                });
+
+                $closestTr.find(".col-3").append($clonedTextarea);
+              } else {
+                $col3ClonedTextarea.val($col3Textarea.val());
+                $col3ClonedTextarea.on("change", function () {
+                  var updatedObject = {
+                    col3Value: $(this).val(),
+                    lateValue: $lateTextarea.val(),
+                  };
+                  $col3Textarea.val(JSON.stringify(updatedObject));
+                });
+                $lateTextarea.on("change", function () {
+                  var updatedObject = {
+                    col3Value: $clonedTextarea.val(),
+                    lateValue: $(this).val(),
+                  };
+                  $col3Textarea.val(JSON.stringify(updatedObject));
+                });
+                var object = {
+                  col3Value: $col3Textarea.val(),
+                  lateValue: $lateTextarea.val(),
+                };
+
+                $col3Textarea.val(JSON.stringify(object));
+              }
+            }, 250);
+          });
+        }, 500);
+      }
+    }, 1500);
+  });
+</script>

@@ -1,0 +1,71 @@
+<script>
+  function createNewRejectedJournal1(res) {
+
+    const today = new Date();
+    const formattedDate = today.toISOString().split("T")[0];
+    console.log(formattedDate);
+    const newJournal = {
+      Journal: {
+        is_automatic: 0,
+        description: "قيد مصروف مخصص - مرفوض 1",
+        alter_description: "",
+        currency_code: "USD",
+        entity_type: "",
+        total_debit: 500,
+        total_credit: 500,
+        currency_credit: 10,
+        currency_debit: 10,
+        staff_id: 1,
+        entity_id: 0,
+        branch_id: 1,
+        financial_year_id: 0,
+        date: "2024-11-17",
+        draft: 0,
+      },
+      JournalTransaction: [
+        {
+          currency_credit: 0,
+          currency_debit: 10,
+          currency_code: "USD",
+          description: "10",
+          alter_description: "",
+          journal_account_id: 381,
+          subkey: null,
+          debit: 500,
+          credit: 0,
+          currency_rate: 50,
+        },
+        {
+          currency_credit: 10,
+          currency_debit: 0,
+          currency_code: "USD",
+          description: "",
+          alter_description: "",
+          journal_account_id: 379,
+          subkey: null,
+          debit: 0,
+          credit: 500,
+          currency_rate: 50,
+        },
+      ],
+    };
+    console.log(newJournal);
+    fetch(`/api2/journals/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(newJournal),
+    }).then((response) => {
+      response
+        .json()
+        .then((res) => {
+          console.log("Success:", res);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    });
+  }
+</script>

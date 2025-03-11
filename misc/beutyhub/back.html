@@ -1,0 +1,68 @@
+<!-- code_Invoices_owner_view -->
+
+<style>
+  .rowActionDropDown.dropdown-menu a {
+    padding: 8px;
+    display: block;
+  }
+  .rowActionDropDown.dropdown-menu a:hover {
+    cursor: pointer;
+    background: #e8e8e8;
+  }
+</style>
+
+<script>
+  $(document).ready(() => {
+    function addNewTab(
+      tab_id,
+      tab_dummy_id,
+      tab_title_attr,
+      tab_title,
+      api_link
+    ) {
+      let newNavTab = $(".nav-tabs.responsive li").eq(0).clone();
+      newNavTab.removeClass("active");
+      newNavTab.html(
+        `<a id="${tab_id}" aria-controls="NotesBlock" role="tab" data-toggle="tab" href="#${tab_dummy_id}" title="${tab_title_attr}" aria-expanded="true"><span class="one-line"> ${tab_title} </span></a>`
+      );
+      $(".nav-tabs.responsive").append(newNavTab);
+      $("div.tab-content").append(
+        `<div class="tab-pane" id="${tab_dummy_id}"></div>`
+      );
+      $(`#${tab_id}`).on("click", function () {
+        $("ul.nav-tabs li").removeClass("active");
+        $(".tab-pane").removeClass("active");
+        $(this).parent().addClass("active");
+        $(`#${tab_dummy_id}`).addClass("active");
+        $(`#${tab_dummy_id}`).html(
+          '<div class="notifcation-loader"><div class="inner-loader"></div></div>'
+        );
+        $(`#${tab_dummy_id}`).load(`${api_link} .list-table`);
+        const getDelLink = setInterval(() => {
+          let allLinks = $(
+            "#invoiceItems > table > tbody > tr > td.text-right.row-actions > div > div a:nth-child(3)"
+          );
+          if (allLinks.length != 0) {
+            clearInterval(getDelLink);
+            $(
+              "#invoiceItems > table > tbody > tr > td.text-right.row-actions > div > div a:nth-child(3)"
+            ).hide();
+          }
+        }, 100);
+      });
+    }
+    let invoiceID = location.href
+      .split("/")
+      .slice(-1)[0]
+      .split("#")[0]
+      .split("?")[0];
+
+    addNewTab(
+      "invoice_items",
+      "invoiceItems",
+      "سجل العمال",
+      "سجل العمال",
+      `/v2/owner/entity/le_invoice-items/list?filter[invoice_id]=${invoiceID}`
+    );
+  });
+</script>

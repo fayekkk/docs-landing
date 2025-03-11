@@ -1,0 +1,630 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap");
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font-family: "Tajawal", sans-serif;
+      font-size: 12px;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: transparent;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 5px;
+      padding: 15px 0;
+    }
+    .invoice-address {
+      /* border-top: 3px double #000000; */
+      margin: 20px 0;
+      padding-top: 5px;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    /* .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    } */
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: left;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: left;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    .total-table td {
+      border-left: 1px solid #555555;
+    }
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    /* .qr-code img {
+      margin-top: 10px;
+      width: 75%;
+    } */
+    .client-info {
+      border-collapse: collapse;
+      border: 1px solid;
+    }
+    .client-info td {
+      padding: 3px 5px;
+    }
+    .client-info td:nth-child(2),
+    .client-info td:nth-child(6) {
+      text-align: center;
+    }
+    .client-info th {
+      border-top: 1px solid #000;
+      border-bottom: 1px solid #000;
+      padding: 3px 5px;
+    }
+    #listing_table thead th:not(:first-child) {
+      border-left: 1px solid #000;
+    }
+    #listing_table thead th {
+      background-color: transparent;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    .totals {
+      border-collapse: collapse;
+    }
+    .totals td {
+      font-weight: bold;
+      padding: 2px;
+    }
+    .invoice-address {
+      white-space: normal !important;
+    }
+    .bg {
+      z-index: -90000;
+      position: absolute;
+      left: 0px;
+      background-image: url("https://aabdelaziz2023.daftra.com/files/1f012f15/documents/51aa9_backGround.png");
+      background-repeat: no-repeat;
+      background-position: 50% 20%;
+      background-size: 100% 100%;
+      width: 29cm;
+      height: 15cm;
+      opacity: 1;
+    }
+
+    #listing_table thead tr th,
+    #listing_table tbody tr td {
+      text-align: center;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="bg" style="top: 0cm"></div>
+
+      <div class="invoice-inner">
+        <div class="invoice-address">
+          <table width="100%" class="client-info" border="0">
+            <!-- First Row -->
+            <tr>
+              <td width="15.1%">{%label_invoice_no%}</td>
+              <td width="15.1%">{%invoice_number%}</td>
+              <td align="right" width="15.1%">رقم الفاتورة</td>
+              <td width="5%"></td>
+              <td width="15.1%">Ship to</td>
+              <td width="15.1%">{%Ship to%}</td>
+              <td align="right" width="15.1%">عنوان الشحن</td>
+            </tr>
+            <!-- Second Row -->
+            <tr>
+              <td>Invoice Date</td>
+              <td>{%invoice_date%}</td>
+              <td align="right">تاريخ الفاتورة</td>
+              <td></td>
+              <td>Street Name:</td>
+              <td>{%client_address%}</td>
+              <td align="right">إسم الشارع</td>
+            </tr>
+
+            <!-- Third Row -->
+            <tr>
+              <td>Due Date</td>
+              <td>{%due_date%}</td>
+              <td align="right">تاريخ الإستحقاق</td>
+              <td></td>
+              <td>City</td>
+              <td>{%client_city%}</td>
+              <td align="right">المدينة</td>
+            </tr>
+            <!-- Fourth Row -->
+            <tr>
+              <td>Delivery No</td>
+              <td>{%Delivery No%}</td>
+              <td align="right">رقم امر التوريد</td>
+              <td></td>
+              <td>Region Manager</td>
+              <td>{%Sales Person%}</td>
+              <td align="right">مدير المنطقة</td>
+            </tr>
+            <!-- Fifth Row -->
+            <tr>
+              <td>IBAN NO</td>
+              <td>SA2260100013781506637002</td>
+              <td align="right">رقم الايبان</td>
+              <td></td>
+              <td>PO No</td>
+              <td>{%PO No%}</td>
+              <td align="right">رقم امر الشراء</td>
+            </tr>
+            <!-- Sixth Row -->
+            <tr>
+              <td>Warehouse</td>
+              <td>{%ware_house%}</td>
+              <td align="right">المستودع</td>
+              <td></td>
+              <td>Customer Account</td>
+              <td>{%custom_رقم_حساب_العميل_field_3%}</td>
+              <td align="right">رقم حساب العميل</td>
+            </tr>
+
+            <tr>
+              <th colspan="" align="left">Supplier</th>
+              <th></th>
+              <th colspan="" align="right">المورد</th>
+              <th></th>
+              <th colspan="" align="left">Customer</th>
+              <th></th>
+              <th colspan="" align="right">العميل</th>
+            </tr>
+
+            <!-- First Row -->
+            <tr>
+              <td width="10%">Name</td>
+              <td width="15%">{%site_business_name%}</td>
+              <td align="right" width="10%">الاسم</td>
+              <td></td>
+              <td width="10%">Name</td>
+              <td width="15%">{%client_business_name%}</td>
+              <td align="right" width="10%">الاسم</td>
+            </tr>
+
+            <!-- Second Row -->
+            <tr>
+              <td width="10%">Building No</td>
+              <td width="15%">3385</td>
+              <td align="right" width="10%">رقم المبنى</td>
+              <td></td>
+              <td width="10%">Doctor Name</td>
+              <td width="15%">{%Doctor Name%}</td>
+              <td align="right" width="10%">اسم الطبيب</td>
+            </tr>
+
+            <!-- Third Row -->
+            <tr>
+              <td width="10%">Street Name</td>
+              <td width="15%">صاري</td>
+              <td align="right" width="10%">اسم الشارع</td>
+              <td></td>
+              <td width="10%">Street Name</td>
+              <td width="15%">
+                {%client_address%} {%custom_رقم_المبنى_field_4%}
+              </td>
+              <td align="right" width="10%">اسم الشارع/رقم المبنى</td>
+            </tr>
+
+            <!-- Fourth Row -->
+            <tr>
+              <td width="10%">City</td>
+              <td width="15%">{%site_city%}</td>
+              <td align="right" width="10%">المدينة</td>
+              <td></td>
+              <td width="10%">City</td>
+              <td width="15%">{%client_city%}</td>
+              <td align="right" width="10%">المدينة</td>
+            </tr>
+
+            <!-- Fifth Row -->
+            <tr>
+              <td width="10%">District</td>
+              <td width="15%">الخالدية</td>
+              <td align="right" width="10%">الحي</td>
+              <td></td>
+              <td width="10%">District</td>
+              <td width="15%">{%custom_الحى_field_5%}</td>
+              <td align="right" width="10%">الحي</td>
+            </tr>
+            <!-- Sixth Row -->
+            <tr>
+              <td width="10%">Country</td>
+              <td width="15%">السعودية</td>
+              <td align="right" width="10%">البلد</td>
+              <td></td>
+
+              <td width="10%">Country</td>
+              <td width="15%">{%client_country%}</td>
+              <td align="right" width="10%">البلد</td>
+            </tr>
+            <!-- Seventh Row -->
+
+            <tr>
+              <td width="10%">Postal Code</td>
+              <td width="15%">{%site_postal_code%}</td>
+              <td align="right" width="10%">رمز البريدي</td>
+              <td></td>
+              <td width="10%">Postal Code</td>
+              <td width="15%">{%client_postcode%}</td>
+              <td align="right" width="10%">رمز البريدي</td>
+            </tr>
+            <!-- Eighth Row -->
+
+            <tr>
+              <td width="10%">VAT Number</td>
+              <td width="15%">{%site_bn1%}</td>
+              <td align="right" width="10%">رقم تسجيل ضريبة</td>
+              <td></td>
+              <td width="10%">VAT Number</td>
+              <td width="15%">{%client_bn1%}</td>
+              <td align="right" width="10%">رقم تسجيل ضريبة</td>
+            </tr>
+            <!-- Ninth Row -->
+
+            <tr>
+              <td width="10%">CR NO</td>
+              <td width="15%">4030505555</td>
+              <td align="right" width="10%">رقم السجل التجاري</td>
+              <td></td>
+              <td width="10%">CR NO</td>
+              <td width="15%">{%custom_السجل_التجاري_field_2%}</td>
+              <td align="right" width="10%">رقم السجل التجاري</td>
+            </tr>
+          </table>
+
+          <!-- <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="50%" align="left" valign="top">
+                <table border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td valign="top" style="float: left">
+                      <strong id="field1" class="editable-area"
+                        >{%field1%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" valign="top">
+                      <div id="client_info" class="editable-area">
+                        {%client_info%}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr id="shipping_options" style="display: none">
+                    <td valign="top" style="float: left">
+                      <br /><strong id="label_ship" class="editable-area"
+                        >{%label_ship%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" valign="top">
+                      <br />
+                      <div id="ship_info" class="editable-area">
+                        {%ship_info%}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td width="50%" valign="top" align="right">
+                <table
+                  id="invoice_basics"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="right"
+                >
+                  <tr>
+                    <td align="right">
+                      <strong class="editable-area" id="label_invoice_no"
+                        >{%label_invoice_no%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%invoice_number%}
+                    </td>
+                  </tr>
+                  <tr {%refund_invoice_number_condition%}>
+                    <td align="right">
+                      <strong class="editable-area" id="refund_label_invoice_no"
+                        >{%refund_invoice_no_title%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%refund_invoice_number%}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="right">
+                      <strong class="editable-area" id="label_date"
+                        >{%label_date%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%invoice_date%}
+                    </td>
+                  </tr>
+                </table>
+                <custom_field
+                  id="custom_fields"
+                  style="clear: both"
+                  class="editable-area"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="right"
+                >
+                  {%custom_fields%}
+                </custom_field>
+              </td>
+            </tr>
+          </table> -->
+        </div>
+
+        <div id="items-list">
+          {%items_list%}
+          <div style="border: 1px solid #000; padding: 5px; margin-top: 15px">
+            <table
+              width="100%"
+              cellspacing="0"
+              cellpadding="0"
+              border="0"
+              style="page-break-inside: avoid !important"
+              class="totals"
+            >
+              <tr>
+                <td>Customer Receipt</td>
+                <td width="18%"></td>
+                <td width="15%" align="right">استلام العميل</td>
+                <td width="6%"></td>
+                <td>
+                  Total amount ( Excluding VAT ) - SAR<br />اجمالى المبلغ بدون
+                  ضريبة - ريال سعودى
+                </td>
+                <td>{%invoice_subtotal%}</td>
+              </tr>
+              <tr>
+                <td>Receiver Name</td>
+                <td></td>
+                <td align="right">اسم المستلم</td>
+                <td></td>
+                <td>VAT amount - SAR<br />ضريبة القيمة المضافة - ريال سعودى</td>
+                <td>{%tax-total%}</td>
+              </tr>
+              <tr>
+                <td>Date</td>
+                <td></td>
+                <td align="right">التاريخ</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Stamp</td>
+                <td></td>
+                <td align="right">الختم</td>
+                <td></td>
+                <td>
+                  Total amount ( Including VAT ) - SAR<br />اجمالى المبلغ مع
+                  ضريبة - ريال سعودى
+                </td>
+                <td>{%invoice_total%}</td>
+              </tr>
+              <tr>
+                <td style="border-top: 1px solid #000">Amount in Words</td>
+                <td
+                  style="border-top: 1px solid #000"
+                  colspan="4"
+                  align="center"
+                >
+                  {%invoice_total_spelled%}
+                </td>
+
+                <td style="border-top: 1px solid #000">المبلغ بالكلمات</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <!-- <br /> -->
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function insertCol(index, colLabel, labelId, cellClass) {
+        var tbl = document.getElementById("listing_table");
+
+        for (i = 0; i < tbl.rows.length; i++) {
+          var newCell = tbl.rows[i].insertCell(index);
+          newCell.classList.add(cellClass);
+        }
+        var firstCell = tbl.rows[0].cells[index];
+        firstCell.outerHTML = "<th id=" + labelId + ">" + colLabel + "</th>";
+        firstCell.style.cssText =
+          "border-top:1px solid #000;font-weight:bold;text-align:center;background:#e5e5e5";
+      }
+
+      function swap(in1, in2, table_id) {
+        var table = document.getElementById(table_id);
+        for (var i = 0, row; (row = table.rows[i]); i++) {
+          var temp = row.cells[in1].innerHTML;
+          row.cells[in1].innerHTML = row.cells[in2].innerHTML;
+          row.cells[in2].innerHTML = temp;
+        }
+      }
+      function getUnit() {
+        var qty = document.querySelectorAll(
+          "#listing_table tbody tr td:nth-child(9)"
+        );
+        var unit = document.querySelectorAll(".unit-value");
+
+        for (var i = 0; i < qty.length; i++) {
+          unit[i].innerText = qty[i].innerText.split(" ")[1];
+          qty[i].innerText = qty[i].innerText.split(" ")[0];
+        }
+      }
+
+      function addSerCol() {
+        var tbl = document.getElementById("listing_table"); // table reference
+        for (i = 0; i < tbl.rows.length; i++) {
+          var newCell = tbl.rows[i].insertCell(0);
+          newCell.id = "serial";
+          newCell.innerText = i;
+        }
+        var firstCell = tbl.rows[0].cells[0];
+        firstCell.id = "th";
+        tbl.rows[0].cells[0].innerHTML = "No<br>البند";
+        // Styling Serial Col Head:
+        var snCell = document.querySelectorAll(
+          "#listing_table tr:first-child td:first-child"
+        )[0];
+        snCell.style.cssText =
+          "font-weight:bold;text-align:center;background:transparent;vertical-align:middle;border-top:1px solid #000";
+      }
+
+      // Repeating Background
+      function repeatBg() {
+        var invoiceHeight =
+          document.querySelector(".invoice-inner").offsetHeight;
+        console.log(invoiceHeight);
+        var pageHeight = document.querySelector(".bg").offsetHeight;
+        console.log(pageHeight);
+        var numPages = Math.ceil(invoiceHeight / pageHeight) - 1;
+        console.log(numPages);
+        var bg = document.querySelector(".bg");
+        var topDis = parseFloat(bg.style.top.replace("cm", ""));
+        for (var i = 1; i < numPages; i++) {
+          var newBg = document.createElement("div");
+          newBg.setAttribute("class", "bg");
+          topDis += 15;
+          newBg.style.top = topDis + "cm";
+          bg.parentNode.insertBefore(newBg, bg.nextSibling);
+        }
+      }
+      function total() {
+        var subtotal = document.querySelectorAll(
+          "#listing_table tbody tr td:nth-last-child(4)"
+        );
+        console.log(subtotal);
+
+        var taxValue = document.querySelectorAll(
+          "#listing_table tbody tr td:nth-last-child(2)"
+        );
+
+        console.log(taxValue);
+        var total = document.querySelectorAll(".total-value");
+
+        for (var i = 0; i < subtotal.length; i++) {
+          total[i].innerText =
+            parseFloat(subtotal[i].innerText.replace(",", "")) +
+            parseFloat(taxValue[i].innerText.replace(",", ""));
+
+          total[i].innerText = parseFloat(total[i].innerText).toFixed(2);
+        }
+      }
+      try {
+        addSerCol();
+        var rows = document.querySelectorAll("#listing_table thead th");
+        console.log(rows.length);
+
+        insertCol("4", "Unit<br>الوحدة", "item-unit", "unit-value");
+        getUnit();
+
+        swap(5, 7, "listing_table");
+        swap(6, 8, "listing_table");
+
+        if (rows.length == 9) {
+          swap(9, 7, "listing_table");
+          swap(10, 8, "listing_table");
+
+          insertCol(
+            "11",
+            "Total Amount SAR<br>صافي القيمة ريال سعودي",
+            "item-unit",
+            "total-value"
+          );
+        } else {
+          swap(9, 7, "listing_table");
+          swap(9, 8, "listing_table");
+          insertCol(
+            "10",
+            "Total Amount SAR<br>صافي القيمة ريال سعودي",
+            "item-unit",
+            "total-value"
+          );
+        }
+        total();
+        // if (rows.length === 10) {
+        //   console.log("in");
+        //   insertCol("4", "Unit<br>الوحدة", "item-unit", "unit-value");
+        //   getUnit();
+        // } else {
+        //   insertCol("3", "Unit<br>الوحدة", "item-unit", "unit-value");
+
+        //   getUnit();
+        // }
+        repeatBg();
+      } catch (e) {
+        console.log(e);
+      }
+    </script>
+  </body>
+</html>

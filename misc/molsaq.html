@@ -1,0 +1,57 @@
+
+<!-- 
+<script>
+  $(document).ready(() => {
+    setTimeout(function () {
+      if (document.getElementById("unit_template").value.trim() != "") {
+        let factor = document.getElementById("retail_factor").value;
+        if (factor == "0") {
+          document.getElementById("CustomModelField11").value =
+            document.querySelector(
+              "#retail_factor option:nth-child(1)"
+            ).innerText;
+        } else {
+          document.getElementById("CustomModelField11").value =
+            document.querySelector(
+              "#retail_factor option:nth-child(2)"
+            ).innerText;
+        }
+      }
+      document
+        .getElementById("unit_template")
+        .addEventListener("change", () => {
+          let factor = document.getElementById("retail_factor").value;
+          console.log(factor);
+          if (factor == "0") {
+            document.getElementById("CustomModelField11").value =
+              document.querySelector(
+                "#retail_factor option:nth-child(1)"
+              ).innerText;
+          } else {
+            document.getElementById("CustomModelField11").value =
+              document.querySelector(
+                "#retail_factor option:nth-child(2)"
+              ).innerText;
+          }
+        });
+      document
+        .getElementById("retail_factor")
+        .addEventListener("change", () => {
+          let factor = document.getElementById("retail_factor").value;
+          console.log(factor);
+
+          if (factor == "0") {
+            document.getElementById("CustomModelField11").value =
+              document.querySelector(
+                "#retail_factor option:nth-child(1)"
+              ).innerText;
+          } else {
+            document.getElementById("CustomModelField11").value =
+              document.querySelector(
+                "#retail_factor option:nth-child(2)"
+              ).innerText;
+          }
+        });
+    }, 2000);
+  });
+</script> -->

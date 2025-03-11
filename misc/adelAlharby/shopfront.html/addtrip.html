@@ -1,0 +1,870 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<style></style>
+<div
+  style="
+    display: none;
+    padding: 20px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+  "
+  class="pleaseLogIn"
+>
+  يرجى تسجيل الدخول
+</div>
+<form class="mainform">
+  <!-- Section 2 -->
+  <section>
+    <h2>بيانات الرحلة Trip Info</h2>
+    <div class="trip-details-section">
+      <div>
+        <label for="generalName"
+          >مسمى التشغيلة Trip Title *
+          <span id="generalNameerror" style="display: none">
+            يرجى إضافة إسم الرحلة</span
+          ></label
+        >
+        <input
+          type="text"
+          id="generalName"
+          name="generalName"
+          class="general-info-input"
+        />
+      </div>
+      <div>
+        <label for="generalNotes"> ملاحظات عامة General Notes</label>
+        <input
+          type="text"
+          id="generalNotes"
+          name="generalNotes"
+          class="general-info-input"
+        />
+      </div>
+
+      <div>
+        <label for="GroupleaderNo">رقم المشرف Group leader No </label>
+        <input
+          type="text"
+          id="GroupleaderNo"
+          name="GroupleaderNo"
+          class="GroupleaderNo"
+        />
+      </div>
+      <div>
+        <label for="Groupleader">المشرف Group leader </label>
+        <input
+          type="text"
+          id="Groupleader"
+          name="Groupleader"
+          class="Groupleader"
+        />
+      </div>
+      <div>
+        <label for="passengerstypesno">نوع المركبة Type of vehicles </label>
+        <select name="" id="Typeofvehicles">
+          <option value="">الرجاء الإجتيار Please Select</option>
+          <option value="BUS (49) حافلة ">BUS (49) حافلة</option>
+          <option value="BUS (9) ستاريا ">Staria (9) ستاريا</option>
+          <option value="GMC (6) جمس ">GMC (6) جمس</option>
+          <option value="Sedan (3) سيدان ">Sedan (3) سيدان</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="nationality">الجنسية Nationality</label>
+        <input
+          type="text"
+          id="nationality"
+          name="nationality"
+          class="nationality"
+        />
+      </div>
+    </div>
+  </section>
+  <!-- sction -->
+  <h2>بيانات نسك Nusuk Info</h2>
+  <div class="Nusuk-section">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      class="bi bi-trash3-fill deleteThis"
+      viewBox="0 0 16 16"
+    >
+      <path
+        d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"
+      />
+    </svg>
+
+    <div>
+      <label for="passengersno"> المسافرين عدد No Of Pax</label>
+      <input
+        type="number"
+        id="passengersno"
+        name="passengersno"
+        class="passengersno"
+      />
+    </div>
+
+    <div>
+      <label for="TripNumber"> رقم المجموعة Group No</label>
+      <input
+        type="number"
+        id="TripNumber"
+        name="TripNumber"
+        class="TripNumber"
+      />
+    </div>
+  </div>
+  <button type="button" class="add-Nusuk-section">إضافة مجموعة</button>
+
+  <!-- Section 3 -->
+  <section>
+    <h2>الطيران Flights</h2>
+    <div class="flight-section">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-trash3-fill deleteThis"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"
+        />
+      </svg>
+      <div>
+        <label for="AirlineCo">شركة الطيران Airline Co </label>
+        <input type="text" id="AirlineCo" name="AirlineCo" class="AirlineCo" />
+      </div>
+
+      <div>
+        <label for="fluFROM1">من FROM </label>
+        <input type="text" id="fluFROM1" name="fluFROM1" class="fluFROM1" />
+      </div>
+      <div>
+        <label for="flyTO1">إلى TO</label>
+        <input type="text" id="flyTO1" name="flyTO1" class="flyTO1" />
+      </div>
+      <div>
+        <label for="FlightNo">رقم الرحلة Flight No </label>
+        <input type="text" id="FlightNo" name="FlightNo" class="FlightNo" />
+      </div>
+      <div>
+        <label for="flyCARRER1">الصالة Terminal</label>
+        <input
+          type="text"
+          id="flyCARRER1"
+          name="flyCARRER1"
+          class="flyCARRER1"
+        />
+      </div>
+
+      <div>
+        <label for="flyDATE1">التاريخ DATE</label>
+        <input type="date" id="flyDATE1" name="flyDATE1" class="flyDATE1" />
+      </div>
+
+      <div>
+        <label for="flyETA1">الوقت Time</label>
+
+        <input type="text" id="flyETA1" name="flyETA1" class="flyETA1" />
+      </div>
+    </div>
+    <button type="button" class="add-flight-section">إضافة رحلة أخرى</button>
+
+    <h2>الفنادق HOTELS</h2>
+    <div class="hotel-section">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-trash3-fill deleteThis"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"
+        />
+      </svg>
+      <div>
+        <label for="HotelsCITY1"> المدينة CITY </label>
+        <select name="" id="HotelsCITY1" class="HotelsCITY1">
+          <option value="">الرجاء الإجتيار Please Select</option>
+
+          <option value="مكة المكرمة Makkah">مكة المكرمة Makkah</option>
+          <option value="المدينة المنورة Medina">المدينة المنورة Medina</option>
+          <option value="الرياضRiyadh">الرياضRiyadh</option>
+          <option value="جدة Jeddah ">جدة Jeddah</option>
+          <option value="الطائف Taif">الطائف Taif</option>
+          <option value="العلا Alul">العلا Alula</option>
+          <option value="الباحة Bahah">الباحة Bahah</option>
+        </select>
+      </div>
+      <div>
+        <label for="HotelsHOTEL1"> الفندق HOTEL</label>
+        <input
+          type="text"
+          id="HotelsHOTEL1"
+          name="HotelsHOTEL1"
+          class="HotelsHOTEL1"
+        />
+      </div>
+    </div>
+    <button type="button" class="add-hotel-section">إضافة فندق</button>
+
+    <h2>النقل TRANSPORTATIONS</h2>
+    <div class="transportation-section">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-trash3-fill deleteThis"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"
+        />
+      </svg>
+
+      <div>
+        <label for="trFROM1">من FROM </label>
+        <select name="trFROM1" id="trFROM1" name="trFROM1" class="trFROM1">
+          <option value="">الرجاء الإجتيار Please Select</option>
+
+          <option value="مطار جدة  Jeddah Airport">
+            مطار جدة Jeddah Airport
+          </option>
+          <option value="مطار المدينة  Medina Airport">
+            مطار المدينة Medina Airport
+          </option>
+          <option value="مطار الطائف  Taif Airport">
+            مطار الطائف Taif Airport
+          </option>
+          <option value="مطار ينبع  Yanbu Airport">
+            مطار ينبع Yanbu Airport
+          </option>
+          <option value="مطار الرياض Riyadh Airport">
+            مطار الرياض Riyadh Airport
+          </option>
+          <option value="مكة المكرمة Makkah">مكة المكرمة Makkah</option>
+          <option value="المدينة المنورة Medina">المدينة المنورة Medina</option>
+          <option value="الرياضRiyadh">الرياضRiyadh</option>
+          <option value="جدة Jeddah">جدة Jeddah</option>
+          <option value="الطائف Taif">الطائف Taif</option>
+          <option value="العلا Alula">العلا Alula</option>
+          <option value="الباحة Bahah">الباحة Bahah</option>
+          <option value="مزارات مكة Makkah Ziyarh">
+            مزارات مكة Makkah Ziyarh
+          </option>
+          <option value="مزارات المدينة Medina Ziyarh">
+            مزارات المدينة Medina Ziyarh
+          </option>
+        </select>
+      </div>
+      <div>
+        <label for="trTO1">إلى TO</label>
+        <select name="trTO1" id="trFROM1" name="trTO1" class="trTO1">
+          <option value="">الرجاء الإجتيار Please Select</option>
+
+          <option value="مطار جدة  Jeddah Airport ">
+            مطار جدة Jeddah Airport
+          </option>
+          <option value="مطار المدينة  Medina Airport">
+            مطار المدينة Medina Airport
+          </option>
+          <option value="مطار الطائف  Taif Airport">
+            مطار الطائف Taif Airport
+          </option>
+          <option value="مطار ينبع  Yanbu Airport">
+            مطار ينبع Yanbu Airport
+          </option>
+          <option value="مطار الرياض Riyadh Airport ">
+            مطار الرياض Riyadh Airport
+          </option>
+          <option value="مكة المكرمة Makkah">مكة المكرمة Makkah</option>
+          <option value="المدينة المنورة Medina">المدينة المنورة Medina</option>
+          <option value="الرياضRiyadh">الرياضRiyadh</option>
+          <option value="جدة Jeddah">جدة Jeddah</option>
+          <option value="الطائف Taif">الطائف Taif</option>
+          <option value="العلا Alula">العلا Alula</option>
+          <option value="الباحة Bahah">الباحة Bahah</option>
+          <option value="مزارات مكة Makkah Ziyarh">
+            مزارات مكة Makkah Ziyarh
+          </option>
+          <option value="مزارات المدينة Medina Ziyarh">
+            مزارات المدينة Medina Ziyarh
+          </option>
+        </select>
+      </div>
+      <div>
+        <label for="trDATE1">التاريخ DATE</label>
+        <input type="date" id="trDATE1" name="trDATE1" class="trDATE1" />
+      </div>
+      <div>
+        <label for="trTIME1">الوقت TIME</label>
+        <input
+          type="text"
+          id="trTIME1"
+          name="trTIME1"
+          class="trTIME1"
+          step="3600"
+        />
+      </div>
+    </div>
+    <button type="button" class="add-transportation-section">
+      إضافة التنقلات
+    </button>
+  </section>
+
+  <script>
+    $(document).ready(function () {
+      if (USER.client_id == 0) {
+        $(".mainform").hide();
+        $(".pleaseLogIn").show();
+      }
+      $("#mainNav ul:nth-child(1) li:nth-child(3) ").remove();
+
+      // 24 time format
+
+      $(document).on("click", ".add-flight-section ", function (e) {
+        flatpickr(".flyETA1", {
+          enableTime: true,
+          noCalendar: true,
+          dateFormat: "H:i",
+          defaultHour: 0,
+          defaultMinute: 0,
+          minuteIncrement: 1,
+          time_24hr: true,
+        });
+      });
+      flatpickr(".flyETA1", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        defaultHour: 0,
+        defaultMinute: 0,
+        minuteIncrement: 1,
+        time_24hr: true,
+      });
+
+      $(document).on("focus", ".flyETA1 ", function (e) {
+        setTimeout(() => {
+          document
+            .querySelector(".flatpickr-calendar.open")
+            .style.setProperty(
+              "top",
+              document.querySelector(".flatpickr-calendar.open").style.top,
+              "important"
+            );
+        }, 150);
+      });
+
+      flatpickr(".trTIME1", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        defaultHour: 0,
+        defaultMinute: 0,
+        minuteIncrement: 1,
+        time_24hr: true,
+      });
+      $(document).on("click", ".add-transportation-section ", function (e) {
+        flatpickr(".trTIME1", {
+          enableTime: true,
+          noCalendar: true,
+          dateFormat: "H:i",
+          defaultHour: 0,
+          defaultMinute: 0,
+          minuteIncrement: 1,
+          time_24hr: true,
+        });
+      });
+      $(document).on("focus", ".trTIME1 ", function (e) {
+        setTimeout(() => {
+          document
+            .querySelector(".flatpickr-calendar.open")
+            .style.setProperty(
+              "top",
+              document.querySelector(".flatpickr-calendar.open").style.top,
+              "important"
+            );
+        }, 150);
+      });
+      const newLi = document.createElement("li");
+      const newLink = document.createElement("a");
+      newLink.textContent = "الرحلات الخاصة بى";
+      newLink.href = "/contents/process_content/view_trips";
+      newLi.classList.add("nav-item");
+      newLi.classList.add("dropdown");
+      newLink.classList.add("nav-link");
+      newLink.classList.add("fs-xl-16");
+      newLi.appendChild(newLink);
+      const mainNavList = document.querySelector("#mainNav > ul:first-child");
+      mainNavList.appendChild(newLi);
+
+      var flightSectionCount = 1;
+      var hotelSectionCount = 1;
+      var transportationSectionCount = 1;
+
+      $(".add-Nusuk-section").click(function () {
+        flightSectionCount++;
+        var newFlightSection = $(".Nusuk-section").first().clone();
+        newFlightSection.find("input").each(function () {
+          $(this).val("");
+          $(this).attr(
+            "id",
+            $(this).attr("id").replace(/\d+$/, "") + flightSectionCount
+          );
+          $(this).attr(
+            "name",
+            $(this).attr("name").replace(/\d+$/, "") + flightSectionCount
+          );
+        });
+        $(".Nusuk-section").last().after(newFlightSection);
+      });
+      $(".add-flight-section").click(function () {
+        // createTimeInput();
+        flightSectionCount++;
+        var newFlightSection = $(".flight-section").first().clone();
+        newFlightSection.find("input").each(function () {
+          $(this).val("");
+          $(this).attr(
+            "id",
+            $(this).attr("id").replace(/\d+$/, "") + flightSectionCount
+          );
+          $(this).attr(
+            "name",
+            $(this).attr("name").replace(/\d+$/, "") + flightSectionCount
+          );
+        });
+        $(".flight-section").last().after(newFlightSection);
+      });
+
+      $(".add-hotel-section").click(function () {
+        hotelSectionCount++;
+        var newHotelSection = $(".hotel-section").first().clone();
+        newHotelSection.find("input").each(function () {
+          $(this).val("");
+
+          $(this).attr(
+            "id",
+            $(this).attr("id").replace(/\d+$/, "") + hotelSectionCount
+          );
+          $(this).attr(
+            "name",
+            $(this).attr("name").replace(/\d+$/, "") + hotelSectionCount
+          );
+        });
+        $(".hotel-section").last().after(newHotelSection);
+      });
+
+      $(".add-transportation-section").click(function () {
+        transportationSectionCount++;
+        var newTransportationSection = $(".transportation-section")
+          .first()
+          .clone();
+        newTransportationSection.find("input").each(function () {
+          $(this).val("");
+
+          $(this).attr(
+            "id",
+            $(this).attr("id").replace(/\d+$/, "") + transportationSectionCount
+          );
+          $(this).attr(
+            "name",
+            $(this).attr("name").replace(/\d+$/, "") +
+              transportationSectionCount
+          );
+        });
+        $(".transportation-section").last().after(newTransportationSection);
+      });
+
+      $(document).on("click", ".deleteThis", function () {
+        let classes = $(this).parent().attr("class");
+        console.log($(`.${classes}`).length);
+        if ($(`.${classes}`).length > 1) {
+          $(this).parent().remove();
+        }
+      });
+    });
+  </script>
+  <button id="sendtrip">إضافة</button>
+  <div id="sendtripError" style="display: none">يرجى مراجعة الأخطاء</div>
+  <script>
+    $(document).ready(function () {
+      function validateInputs() {
+        const $inputs = $(".mainform input");
+        $(".err-msg").remove();
+        let hasError = false;
+        // Check each input for a value
+        $inputs.each(function () {
+          if (!$(this).val()) {
+            hasError = true;
+            const $errorMsg = $(
+              '<div class="err-msg" style="color:red;">.This field is required</div>'
+            );
+            $(this).after($errorMsg);
+          }
+        });
+        return !hasError;
+      }
+
+      $("#sendtrip").on("click", function (e) {
+        e.preventDefault();
+        console.log(validateInputs());
+
+        if (validateInputs()) {
+          let flag1 = 0;
+          if (!$("#generalName").val()) {
+            flag1 = 1;
+            $("#generalNameerror").attr(
+              "style",
+              "display:inline-block; color:red;padding:0 25px"
+            );
+            $("#sendtripError").attr(
+              "style",
+              "display:inline-block; color:red;padding:0 25px"
+            );
+          } else {
+            flag1 = 0;
+            $("#generalNameerror").attr("style", "display:none;");
+          }
+
+          if (flag1 == 0) {
+            $("#sendtrip").attr("disabled", true);
+            sendtrip();
+          }
+
+          function sendRoutesFn(tripId) {
+            console.log(tripId);
+
+            // let tripId = parseInt(window.location.pathname.split("/")[4]);
+            async function PostRoutes() {
+              try {
+                const response = await fetch(
+                  `/v2/api/entity/le_workflow-type-entity-4/${tripId}/4`,
+                  {
+                    method: "GET",
+                    headers: {
+                      apikey: "bceffccefa6ab4014732bb7093d284bc37794bf4",
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                    },
+                  }
+                );
+
+                const data = await response.json();
+                console.log("Response:", data);
+                await AddRoutes(data);
+                console.log("completed");
+              } catch (error) {
+                console.error("Error:", error);
+              }
+            }
+
+            async function AddRoutes(workflowData) {
+              let routes =
+                workflowData["le_workflow-type-entity-4_custom_data"][
+                  "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_transportations"
+                ];
+              console.log({ routes: routes });
+
+              if (routes.length > 0) {
+                function creeatenusoks() {
+                  let nusoksData =
+                    workflowData["le_workflow-type-entity-4_custom_data"][
+                      "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_nusuks"
+                    ];
+                  console.log(nusoksData);
+                  if (nusoksData.length > 0) {
+                    let nusoksObject = {
+                      nusuk_no: "",
+                      passengers_no: 0,
+                    };
+
+                    nusoksData.map((nusok) => {
+                      nusoksObject.nusuk_no =
+                        nusoksObject.nusuk_no + "-" + nusok.nusuk_no;
+                      nusoksObject.passengers_no += parseFloat(
+                        nusok.passengers_no
+                      );
+                    });
+                    nusoksObject.nusuk_no = nusoksObject.nusuk_no.replace(
+                      "-",
+                      ""
+                    );
+                    console.log(nusoksObject);
+
+                    return nusoksObject;
+                  }
+                }
+                let nusuksdata = creeatenusoks();
+                console.log({ nusuksdata: nusuksdata });
+
+                const promises = routes.map(async (route, index) => {
+                  let newBody = {
+                    client_name_masar1:
+                      workflowData.work_order_client.business_name,
+                    nationality_masar1:
+                      workflowData["le_workflow-type-entity-4_custom_data"]
+                        .nationality,
+                    trip_number_masar1: `${workflowData.number}-${index + 1}`,
+                    trip_number_masar1: nusuksdata.nusuk_no,
+                    passengers_number_masar1: nusuksdata.passengers_no,
+                    controller_name_masar1: "",
+                    masar_date1: route.date,
+                    time_masar1: route.time,
+                    from_masar1: route.from,
+                    from_hotel_masar1:
+                      workflowData["le_workflow-type-entity-4_custom_data"][
+                        "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_hotels"
+                      ][index]?.hotel || "",
+                    masar_to11: route.to,
+                    to_hotel_masar1:
+                      workflowData["le_workflow-type-entity-4_custom_data"][
+                        "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_hotels"
+                      ][index]?.hotel || "",
+                    flight_date_masar1:
+                      getflight(
+                        route.date,
+                        workflowData["le_workflow-type-entity-4_custom_data"][
+                          "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_flys"
+                        ]
+                      )?.date || "",
+                    flight_time_masar1:
+                      getflight(
+                        route.date,
+                        workflowData["le_workflow-type-entity-4_custom_data"][
+                          "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_flys"
+                        ]
+                      )?.etd || "",
+                    flight_com_masar1:
+                      getflight(
+                        route.date,
+                        workflowData["le_workflow-type-entity-4_custom_data"][
+                          "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_flys"
+                        ]
+                      )?.flight_com || "",
+                    flight_no_masar1:
+                      getflight(
+                        route.date,
+                        workflowData["le_workflow-type-entity-4_custom_data"][
+                          "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_flys"
+                        ]
+                      )?.flight_no || "",
+                    flight_hall_masar1:
+                      getflight(
+                        route.date,
+                        workflowData["le_workflow-type-entity-4_custom_data"][
+                          "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_flys"
+                        ]
+                      )?.carrier || "",
+                    reference_id: tripId,
+                  };
+                  console.log({ newBody: newBody });
+                  return await sendRoute(newBody);
+                });
+
+                await Promise.all(promises);
+              } else {
+                console.log("No routes found");
+              }
+            }
+
+            async function sendRoute(newBody) {
+              try {
+                const response = await fetch("/v2/api/entity/le_routes", {
+                  method: "POST",
+                  headers: {
+                    apikey: "bceffccefa6ab4014732bb7093d284bc37794bf4",
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(newBody),
+                });
+
+                const data = await response.json();
+                console.log("New Route Created:", data);
+              } catch (error) {
+                console.error("Error creating new route:", error);
+              }
+            }
+
+            function getflight(date, flights) {
+              return flights.find((f) => f.date === date) || false;
+            }
+
+            // let newBtn = `<a href="#" class="btn btn-default btn-sm btn-5" id="Post_routes">إضافة المسارات</a>`;
+            // $("#print_button").after(newBtn);
+            // $("#Post_routes").on("click", function () {
+            //   PostRoutes();
+            PostRoutes();
+            // });
+          }
+
+          function sendtrip() {
+            let generalName = $("#generalName").val()
+              ? $("#generalName").val()
+              : "بدون إسم";
+            let generalNotes = $("#generalNotes").val()
+              ? $("#generalNotes").val()
+              : "";
+            let TripNumber = $("#TripNumber").val()
+              ? $("#TripNumber").val()
+              : "";
+            let GroupleaderNo = $("#GroupleaderNo").val()
+              ? $("#GroupleaderNo").val()
+              : "";
+            let Groupleader = $("#Groupleader").val()
+              ? $("#Groupleader").val()
+              : "";
+            let Typeofvehicles = $("#Typeofvehicles").val()
+              ? $("#Typeofvehicles").val()
+              : "";
+            let nationality = $("#nationality").val()
+              ? $("#nationality").val()
+              : "";
+
+            // Nusuk-section sections
+            let Nusuksection = $(".Nusuk-section");
+            let Nusuks = [];
+            Nusuksection.each(function () {
+              console.log($(this));
+              let passengersno = $(this).find(".passengersno").val();
+              let TripNumber = $(this).find(".TripNumber").val();
+              Nusuks.push({
+                passengers_no: passengersno,
+                nusuk_no: TripNumber,
+              });
+            });
+            console.log(Nusuks);
+
+            // add first sections
+            let flightsections = $(".flight-section");
+            let flights = [];
+            flightsections.each(function () {
+              console.log($(this));
+              let hall = $(this).find(".flyCARRER1").val();
+              let fluFROM1 = $(this).find(".fluFROM1").val();
+              let flyTO1 = $(this).find(".flyTO1").val();
+              let flyDATE1 = $(this).find(".flyDATE1").val();
+              let flyETA1 = $(this).find(".flyETA1").val();
+              let AirlineCo = $(this).find(".AirlineCo").val();
+              let FlightNo = $(this).find(".FlightNo").val();
+
+              flights.push({
+                carrer: hall,
+                from: fluFROM1,
+                to: flyTO1,
+                date2: flyDATE1,
+                etd2: flyETA1,
+                flight_com: AirlineCo,
+                flight_no: FlightNo,
+              });
+              console.log({ flights: flights });
+            });
+
+            // add hotels sections
+            let hotelsections = $(".hotel-section");
+            let hotels = [];
+            hotelsections.each(function () {
+              console.log($(this));
+              let HotelsCITY1 = $(this).find(".HotelsCITY1").val();
+              let HotelsHOTEL1 = $(this).find(".HotelsHOTEL1").val();
+              hotels.push({
+                city2: HotelsCITY1,
+                hotel: HotelsHOTEL1,
+              });
+            });
+            console.log(hotels);
+
+            // add TRANSPORTATIONS sections
+            let transSections = $(".transportation-section");
+            let TRANSPORTATIONS = [];
+            transSections.each(function () {
+              let trFROM1 = $(this).find(".trFROM1").val();
+              let trTO1 = $(this).find(".trTO1").val();
+              let trDATE1 = $(this).find(".trDATE1").val();
+              let trTIME1 = $(this).find(".trTIME1").val();
+              TRANSPORTATIONS.push({
+                from2: trFROM1,
+                to2: trTO1,
+                date2: trDATE1,
+                time2: trTIME1,
+              });
+            });
+
+            // build body
+            let clientID = USER.client_id;
+            var currentDate = new Date().toISOString().slice(0, 10);
+            console.log({ flightsInLast: flights });
+
+            const newReq = {
+              client_id: clientID,
+              title: generalName,
+              start_date: currentDate,
+              description: generalNotes,
+              status: 1,
+              created: currentDate,
+              modified: currentDate,
+              workflow_type_id: 4,
+              number: {
+                code: "1",
+                generated: "1",
+              },
+              budget: {
+                currency: "sar",
+              },
+              "le_workflow-type-entity-4_custom_data": {
+                nationality: nationality,
+                leader_no: GroupleaderNo,
+                leader_name: Groupleader,
+                vehicle_type2: Typeofvehicles,
+                "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_hotels":
+                  hotels,
+                "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_flys":
+                  flights,
+                "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_transportations":
+                  TRANSPORTATIONS,
+                "le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_nusuks":
+                  Nusuks,
+              },
+              workflow_type: {
+                id: 4,
+                entity_key: "le_workflow-type-entity-4",
+              },
+            };
+            console.log(newReq);
+            console.log(JSON.stringify(newReq));
+            fetch("/v2/api/entity/le_workflow-type-entity-4", {
+              method: "POST",
+              headers: {
+                apikey: "bceffccefa6ab4014732bb7093d284bc37794bf4",
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(newReq),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log("Response:", data);
+                sendRoutesFn(data.id);
+                window.location.href = "/contents/process_content/view_trips";
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          }
+        }
+      });
+    });
+  </script>
+</form>

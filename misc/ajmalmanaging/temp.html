@@ -1,0 +1,775 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    #head {
+      width: 100%;
+      border-bottom: 1px solid #00ffff;
+      padding-bottom: 25px;
+    }
+    #head td:nth-child(1) {
+      width: 25%;
+    }
+    #head td:nth-child(2) {
+      width: 50%;
+    }
+    #head td:nth-child(3) {
+      width: 25%;
+    }
+    .qr-code img {
+      width: 70%;
+      margin: 0 15%;
+    }
+    #invTitle {
+      text-align: center;
+      font-weight: bold;
+      font-size: 17px;
+      margin: 20px 0;
+    }
+    #invNo {
+      width: 100%;
+      color: #8b4b69;
+      font-size: 15px;
+      margin-top: 20px;
+    }
+    #invNo td:nth-child(1) {
+      width: 50%;
+      text-align: right;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    #invNo td:nth-child(2) {
+      width: 50%;
+      text-align: left;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    #siteInfo {
+      width: 100%;
+      border-spacing: 0;
+      border: 1px solid #929595;
+    }
+    #siteInfo td:nth-child(1) {
+      padding: 3px;
+      text-align: right;
+      background-color: #d7dcde;
+      width: 20%;
+    }
+    #siteInfo td:nth-child(2) {
+      padding: 3px;
+      text-align: right;
+      width: 30%;
+      border-left: 1px solid #929595;
+    }
+    #siteInfo td:nth-child(3) {
+      padding: 3px;
+      text-align: left;
+      width: 30%;
+    }
+    #siteInfo td:nth-child(4) {
+      padding: 3px;
+      text-align: left;
+      background-color: #d7dcde;
+      width: 20%;
+      direction: ltr;
+    }
+    #siteInfo tr:nth-child(1) td {
+      border-bottom: 1px solid #808080;
+      background-color: transparent !important;
+    }
+    #siteInfo tr:nth-child(1) td:nth-child(2) {
+      text-align: left !important;
+    }
+    #siteInfo tr:nth-child(1) td:nth-child(3) {
+      text-align: right !important;
+    }
+    #ClientInfo {
+      width: 100%;
+      border-spacing: 0;
+      border: 1px solid #929595;
+      font-size: 15px;
+    }
+    #ClientInfo td:nth-child(1) {
+      padding: 3px;
+      text-align: right;
+      background-color: #d7dcde;
+      width: 20%;
+    }
+    #ClientInfo td:nth-child(2) {
+      padding: 3px;
+      text-align: right;
+      width: 30%;
+      border-left: 1px solid #929595;
+    }
+    #ClientInfo td:nth-child(3) {
+      padding: 3px;
+      text-align: left;
+      width: 30%;
+    }
+    #ClientInfo td:nth-child(4) {
+      padding: 3px;
+      text-align: left;
+      background-color: #d7dcde;
+      width: 20%;
+      direction: ltr;
+    }
+    #ClientInfo tr:nth-child(1) td {
+      border-bottom: 1px solid #808080;
+      background-color: transparent !important;
+    }
+    .square {
+      background-color: #5e8fa3;
+      display: inline-block;
+      width: 8px;
+      height: 15px;
+      margin: 0 5px;
+    }
+    .addresss br {
+      display: none;
+    }
+    #customs {
+      width: 100%;
+      border-spacing: 0;
+      text-align: center;
+      border-right: 1px solid #808080;
+      border-top: 1px solid #808080;
+    }
+    #customs th {
+      background-color: #cdd8d9;
+      font-weight: bold;
+    }
+    #customs th:nth-child(1) {
+      width: 20%;
+    }
+    #customs th:nth-child(2) {
+      width: 25%;
+    }
+    #customs th:nth-child(3) {
+      width: 30%;
+    }
+    #customs th:nth-child(4) {
+      width: 25%;
+    }
+    #customs th,
+    #customs td {
+      border-left: 1px solid #808080;
+      border-bottom: 1px solid #808080;
+      padding: 3px;
+    }
+    #listing_table {
+      border-right: 1px solid #808080 !important;
+      direction: ltr;
+    }
+
+    #listing_table th {
+      text-align: center;
+      border-right: none !important;
+      border-left: 1px solid #808080 !important;
+      border-bottom: 1px solid #808080 !important;
+      border-top: 1px solid #808080 !important;
+      background-color: #d7dcde;
+      padding: 3px;
+    }
+    #listing_table td {
+      text-align: center;
+      border-right: none !important;
+      border-left: 1px solid #808080 !important;
+      border-bottom: 1px solid #808080 !important;
+      border-top: none !important;
+      padding: 3px;
+    }
+    #listing_table th:nth-child(4) {
+      width: 27%;
+    }
+    #listing_table th:nth-child(6) {
+      width: 5%;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #new_totals {
+      width: 100%;
+      border-left: 1px solid #808080 !important;
+      border-bottom: 1px solid #808080 !important;
+      text-align: left;
+      font-weight: bold;
+      border-spacing: 0;
+    }
+    #new_totals td {
+      border-right: 1px solid #808080 !important;
+      border-top: 1px solid #808080 !important;
+      padding: 3px;
+    }
+    #new_totals td:nth-child(1) {
+      /* direction: ltr; */
+      width: 40%;
+    }
+
+    #new_totals td:nth-child(2) {
+      width: 20%;
+    }
+    #new_totals td:nth-child(3) {
+      width: 40%;
+      direction: ltr;
+    }
+    #bankDetails {
+      width: 100%;
+      border-spacing: 0;
+      text-align: left;
+      border-left: 1px solid #808080 !important;
+      border-bottom: 1px solid #808080 !important;
+    }
+    #bankDetails tr:nth-child(1) td {
+      background-color: #d7dcde;
+      text-align: center !important;
+    }
+    #bankDetails td {
+      padding: 3px;
+      border-right: 1px solid #808080 !important;
+      border-top: 1px solid #808080 !important;
+    }
+    .topAlign {
+      background-color: #d7dcde;
+      text-align: center;
+      padding: 3px;
+      border: 1px solid #808080 !important;
+    }
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table id="head">
+          <tbody>
+            <tr>
+              <td class="qr-code">{%sa_qr_code_image%}</td>
+              <td>
+                <img
+                  src="https://ajmalmanaging.daftra.com/files/36459e64/logos/67691d17d9008_blobid1734941973108.png"
+                  alt=""
+                  title="logo.png"
+                  style="width: 100%"
+                />
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="invTitle">{%invoice_title%}</div>
+        <table id="invNo">
+          <tbody>
+            <tr>
+              <td>الفاتورة رقم : {%invoice_no%}</td>
+              <td>Invoice No : {%invoice_no%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="siteInfo">
+          <tbody>
+            <tr>
+              <td><span class="square"></span>التفاصيل لدينا :</td>
+              <td>: Our Details <span class="square"></span></td>
+              <td><span class="square"></span> تفاصيل شركة العميل :</td>
+              <td><span class="square"></span> Client Details :</td>
+            </tr>
+            <tr>
+              <td>
+                Name :
+                <br />
+                الإسم :
+              </td>
+              <td>
+                Fast Star Transportation Company
+                <br />
+                شركة النجمة السريعة للنقليات شركة شخص واحد
+              </td>
+              <td>{%client_business_name%}</td>
+              <td>
+                Name :
+                <br />
+                الإسم :
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Address :
+                <br />
+                عنوان :
+              </td>
+              <td>
+                Dammam Jubail Highway
+                <br />
+                شركة الدمام الجبيل السريع القطيف
+              </td>
+              <td class="addresss">{%client_full_address%}</td>
+
+              <td>
+                Address :
+                <br />
+                عنوان :
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Building No:
+                <br />
+                رقم :
+              </td>
+              <td></td>
+              <td>{%le_custom_data_client_building_no%}</td>
+
+              <td>
+                Building No:
+                <br />
+                رقم :
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Addl No :
+                <br />
+                الرقم الإضافى :
+              </td>
+              <td></td>
+              <td>{%le_custom_data_client_add_no%}</td>
+
+              <td>
+                Addl No :
+                <br />
+                الرقم الإضافى :
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Postal Code :
+                <br />
+                الرمز البريدى :
+              </td>
+              <td>{%site_postal_code%}</td>
+              <td>{%client_postcode%}</td>
+              <td>
+                Postal Code :
+                <br />
+                الرمز البريدى :
+              </td>
+            </tr>
+            <tr>
+              <td>
+                CR Number :
+                <br />
+                رقم السجل التجارى :
+              </td>
+              <td>{%site_bn2%}</td>
+              <td>{%client_bn2%}</td>
+              <td>
+                CR Number :
+                <br />
+                رقم السجل التجارى :
+              </td>
+           
+            </tr>
+            <tr>
+              <td>
+                VAT Number :
+                <br />
+                الرقم الضريبى
+              </td>
+              <td>{%site_bn1%}</td>
+              <td>{%client_bn1%}</td>
+              <td>
+                VAT Number :
+                <br />
+                الرقم الضريبى
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table id="customs">
+          <thead>
+            <tr>
+              <th>
+                طريقة الدفع <br />
+                Mode Of Payment
+              </th>
+              <th>تاريخ الإستحقاق <br />Due Date</th>
+              <th>
+                رقم أمر الشراء <br />
+                Contract PO No
+              </th>
+              <th>
+                تاريخ الفاتورة <br />
+                Invoice Date
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{%Mode Of Payment%}</td>
+              <td>{%Due Date%}</td>
+              <td>{%Contract PO No%}</td>
+              <td>{%invoice_date%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="items-list">{%items_list%}</div>
+        <table id="new_totals">
+          <tbody>
+            <tr>
+              <td>الإجمالى غير شامل ضريبة القيمة المضافة</td>
+              <td class="removeCurr" id="subttlbefDisc"></td>
+              <td>Total Exclusive VAT (SAR):</td>
+            </tr>
+            <tr>
+              <td>إجمالى الخصومات (ريال سعودى)</td>
+              <td class="removeCurr" id="ttlDisc"></td>
+              <td>Total Discount (SAR):</td>
+            </tr>
+            <tr>
+              <td>الإجمالى غير شامل ضريبة القيمة المضافة</td>
+              <td class="removeCurr" id="subttlafterDisc">
+                {%invoice_subtotal%}
+              </td>
+              <td>Total Taxable Amount (SAR):</td>
+            </tr>
+            <tr>
+              <td style="">مبلغ ضريبة القيمة المضافة (ريال سعودى) 15%</td>
+              <td class="removeCurr">{%tax-total%}</td>
+              <td>VAT Amount (SAR) 15%:</td>
+            </tr>
+            <tr>
+              <td>الإجمالى شامل ضريبة القيمة المضافة(ريال سعودى)</td>
+              <td class="removeCurr">{%invoice_total%}</td>
+              <td>Total Inclusive VAT (SAR):</td>
+            </tr>
+
+            <tr>
+              <td colspan="100%" id="en_invoice_total_spelled"></td>
+            </tr>
+          </tbody>
+        </table>
+        <table
+          id="lastTbl"
+          style="
+            border-left: 1px solid black;
+            border-bottom: 1px solid black;
+            border-spacing: 0;
+            width: 100%;
+            direction: ltr;
+          "
+        >
+          <tbody>
+            <tr>
+              <td
+                style="
+                  padding: 5px;
+                  border-right: 1px solid black;
+                  border-top: 1px solid black;
+                "
+              >
+                <table id="bankDetails">
+                  <tbody>
+                    <tr>
+                      <td>Bank Details</td>
+                    </tr>
+                    <tr>
+                      <td>Bank Name: Saudi National Bank</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        Beneficiary Name: Fast Star Transportation Company
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>IBAN: SA5110000065914989000102</td>
+                    </tr>
+                    <tr>
+                      <td>Account No: 65914989000102</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+              <td
+                style="
+                  padding: 5px;
+                  border-right: 1px solid black;
+                  border-top: 1px solid black;
+                  vertical-align: baseline;
+                "
+              >
+                <div class="topAlign">Prepared By</div>
+              </td>
+              <td
+                style="
+                  padding: 5px;
+                  border-right: 1px solid black;
+                  border-top: 1px solid black;
+                  vertical-align: baseline;
+                "
+              >
+                <div class="topAlign">Approved By</div>
+              </td>
+              <td
+                style="
+                  padding: 5px;
+                  border-right: 1px solid black;
+                  border-top: 1px solid black;
+                  vertical-align: baseline;
+                "
+              >
+                <div class="topAlign">Received By</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table> -->
+        <!-- </div> -->
+        <div style="display: none">
+          <div id="itemDisc">{%item-discount-total%}</div>
+          <div id="ttlDiscounts">{%discount%}</div>
+          <div id="invoice_total">{%invoice_total%}</div>
+        </div>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function addserials() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var newTh = document.createElement("th");
+        newTh.innerHTML = "شبكة <br> Sr No.";
+        allRows[0].insertBefore(newTh, allRows[0].cells[0]);
+        for (var i = 1; i < allRows.length; i++) {
+          var newTd = document.createElement("td");
+          newTd.innerText = i;
+          allRows[i].insertBefore(newTd, allRows[i].cells[0]);
+        }
+      }
+      try {
+        addserials();
+      } catch (error) {
+        console.log(error);
+      }
+      function hundleTtls() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var subttl = 0;
+        for (var i = 1; i < allRows.length; i++) {
+          subttl =
+            subttl +
+            parseFloat(allRows[i].cells[5].innerText.replace(/,/g, "")) *
+              parseFloat(allRows[i].cells[6].innerText.replace(/,/g, ""));
+        }
+        document.getElementById("subttlbefDisc").innerText = subttl;
+        document.getElementById("ttlDisc").innerText =
+          parseFloat(
+            document.getElementById("ttlDiscounts").innerText.replace(/,/g, "")
+          ) +
+          parseFloat(
+            document.getElementById("itemDisc").innerText.replace(/,/g, "")
+          );
+        //   .toFixed(3)
+        //   .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+      try {
+        hundleTtls();
+      } catch (error) {
+        console.log(error);
+      }
+      function removeCurr() {
+        var allRows = document.querySelectorAll(".removeCurr");
+        for (var i = 0; i < allRows.length; i++) {
+          allRows[i].innerText =
+            " ر.س " +
+            parseFloat(allRows[i].innerText.replace(/,/g, ""))
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      try {
+        removeCurr();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+    <script>
+      var ones = [
+        "",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+      ];
+      var tens = [
+        "",
+        "",
+        "twenty",
+        "thirty",
+        "forty",
+        "fifty",
+        "sixty",
+        "seventy",
+        "eighty",
+        "ninety",
+      ];
+      var teens = [
+        "ten",
+        "eleven",
+        "twelve",
+        "thirteen",
+        "fourteen",
+        "fifteen",
+        "sixteen",
+        "seventeen",
+        "eighteen",
+        "nineteen",
+      ];
+
+      function convert_billions(num) {
+        if (num >= 1000000000) {
+          return (
+            convert_billions(Math.floor(num / 1000000000)) +
+            " billion " +
+            convert_millions(num % 1000000000)
+          );
+        } else {
+          return convert_millions(num);
+        }
+      }
+      function convert_millions(num) {
+        if (num >= 1000000) {
+          return (
+            convert_millions(Math.floor(num / 1000000)) +
+            " million " +
+            convert_thousands(num % 1000000)
+          );
+        } else {
+          return convert_thousands(num);
+        }
+      }
+
+      function convert_thousands(num) {
+        if (num >= 1000) {
+          return (
+            convert_hundreds(Math.floor(num / 1000)) +
+            " thousand " +
+            convert_hundreds(num % 1000)
+          );
+        } else {
+          return convert_hundreds(num);
+        }
+      }
+
+      function convert_hundreds(num) {
+        if (num > 99) {
+          return (
+            ones[Math.floor(num / 100)] + " hundred " + convert_tens(num % 100)
+          );
+        } else {
+          return convert_tens(num);
+        }
+      }
+
+      function convert_tens(num) {
+        if (num < 10) return ones[num];
+        else if (num >= 10 && num < 20) return teens[num - 10];
+        else {
+          return tens[Math.floor(num / 10)] + " " + ones[num % 10];
+        }
+      }
+
+      function convert(num) {
+        console.log(convert_billions(num));
+        if (num == 0) return "zero";
+        else return convert_billions(num);
+      }
+      function convertFN(num, maincurrency, floatCurr) {
+        var myIntNum = parseInt(num.split(".")[0]);
+        var myFloatNum = parseInt(num.split(".")[1]);
+        return (
+          convert(myIntNum) +
+          " " +
+          maincurrency +
+          " and " +
+          convert(myFloatNum) +
+          " " +
+          floatCurr
+        );
+      }
+
+      try {
+        var myNum = String(
+          parseFloat(
+            document
+              .getElementById("invoice_total")
+              .innerText.replace(/[\$,]/g, "")
+          ).toFixed(2)
+        );
+
+        document.getElementById("en_invoice_total_spelled").innerText =
+          "Amount in Words : " + convertFN(myNum, "SAR", "Hallah");
+      } catch (error) {
+        console.log(error);
+      }
+      function reSwapAll() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          var desc = allRows[i].cells[1].innerHTML;
+          var AWB = allRows[i].cells[2].innerHTML;
+          var Date = allRows[i].cells[3].innerHTML;
+          allRows[i].cells[1].innerHTML = Date;
+          allRows[i].cells[2].innerHTML = AWB;
+          allRows[i].cells[3].innerHTML = desc;
+        }
+      }
+      try {
+        reSwapAll();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+<script>
+  $(document).ready(() => {
+    let readyPoLi = `<li data-app-sidebar-list-item-sublist-item-group-id="3"> <a href="/v2/owner/entity/le_services/list" class="" onclick="subSideMenuClick(event)">
+               Services  </a> </li>`;
+    setTimeout(() => {
+      $("li.mn_4> div > ul").append(readyPoLi);
+    }, 500);
+  });
+</script>

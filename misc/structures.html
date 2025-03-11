@@ -1,0 +1,191 @@
+<script>
+  // تحويل العملة
+  $(document).ready(function () {
+    $(function () {
+      try {
+        // get current url to check if this is estimate to invoice or add invoice
+        var currentURL = window.location.href;
+        var hasEstimateID = currentURL.indexOf("estimate_id") !== -1;
+      } catch (error) {
+        console.log(error);
+      }
+      // update prices colomn
+      function updatePrices() {
+        // if to invoice
+        if (hasEstimateID) {
+          //  get our custom feils which contains the currancy transfer factor
+          var InvoiceCustomFields = document.querySelectorAll(
+            "#InvoiceCustomFields .field-row"
+          );
+          for (let i = 0; i < InvoiceCustomFields.length; i++) {
+            if (
+              InvoiceCustomFields[i].querySelector("td:nth-child(1) input")
+                .value == "معامل التحويل"
+            ) {
+              if (
+                parseFloat(
+                  InvoiceCustomFields[i].querySelector(
+                    "td:nth-child(2) input"
+                  ).value
+                ) > 0
+              ) {
+                var oldValue = InvoiceCustomFields[i].querySelector(
+                  "td:nth-child(2) input"
+                ).value;
+              } else {
+                var oldValue = 1;
+              }
+            } else {
+              var oldValue = 1;
+            }
+          }
+
+          var newValue = 0;
+          // price colomn
+          var pricesTd = $(".item-unit-price");
+          for (var i = 0; i < pricesTd.length; i++) {
+            if ($(pricesTd[i]).val() == "") {
+              $(pricesTd[i]).val("0");
+            } else {
+              $(pricesTd[i]).val(
+                parseFloat(
+                  parseFloat($(pricesTd[i]).val()) * oldValue
+                ).toFixed(2)
+              );
+            }
+          }
+          $("#CustomField0").on("change", function (e) {
+            if (e.target.value <= 0) {
+              newValue = 1;
+            } else {
+              newValue = e.target.value;
+            }
+            for (var i = 0; i < pricesTd.length; i++) {
+              if ($(pricesTd[i]).val() == "") {
+                $(pricesTd[i]).val("0");
+              } else {
+                $(pricesTd[i]).val(
+                  parseFloat(
+                    (parseFloat($(pricesTd[i]).val()) / oldValue) * newValue
+                  ).toFixed(2)
+                );
+                $(pricesTd[i]).trigger("change");
+              }
+            }
+            oldValue = newValue;
+          });
+        }
+      }
+      try {
+        setTimeout(updatePrices, 2000);
+      } catch (error) {
+        console.log(error);
+      }
+      try {
+        if (!hasEstimateID) {
+          var InvoiceCustomFields = document.querySelectorAll(
+            "#InvoiceCustomFields .field-row"
+          );
+          for (let i = 0; i < InvoiceCustomFields.length; i++) {
+            if (
+              InvoiceCustomFields[i].querySelector("td:nth-child(1) input")
+                .value == "معامل التحويل"
+            ) {
+              InvoiceCustomFields[i].parentElement.removeChild(
+                InvoiceCustomFields[i]
+              );
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      try {
+        setTimeout(() => {
+          if (hasEstimateID) {
+            document.getElementById("InvoiceCurrencyCode").value = "SAR";
+            document.getElementById("SaveCurrency").click();
+          }
+        }, 2000);
+      } catch (error) {
+        console.log(error);
+      }
+      try {
+        setTimeout(() => {
+          if (hasEstimateID) {
+            var InvoiceCustomFields = document.querySelectorAll(
+              "#InvoiceCustomFields .field-row"
+            );
+            for (let i = 0; i < InvoiceCustomFields.length; i++) {
+              if (
+                InvoiceCustomFields[i].querySelector(
+                  "td:nth-child(1) input"
+                ).value == "معامل التحويل"
+              ) {
+                if (
+                  parseFloat(
+                    InvoiceCustomFields[i].querySelector(
+                      "td:nth-child(2) input"
+                    ).value
+                  ) > 0
+                ) {
+                  var oldValue = InvoiceCustomFields[i].querySelector(
+                    "td:nth-child(2) input"
+                  ).value;
+                } else {
+                  var oldValue = 1;
+                }
+              } else {
+                var oldValue = 1;
+              }
+            }
+            var newValue = 0;
+            var pricesTd = $(".item-unit-price");
+
+            // add event on Inv layout to track changes
+            document
+              .querySelector("#InvoiceLayout")
+              .addEventListener("change", () => {
+                for (var i = 0; i < pricesTd.length; i++) {
+                  if ($(pricesTd[i]).val() == "") {
+                    $(pricesTd[i]).val("0");
+                  } else {
+                    $(pricesTd[i]).val(
+                      parseFloat(
+                        parseFloat($(pricesTd[i]).val()) * oldValue
+                      ).toFixed(2)
+                    );
+                  }
+                }
+                $("#CustomField0").on("change", function (e) {
+                  if (e.target.value <= 0) {
+                    newValue = 1;
+                  } else {
+                    newValue = e.target.value;
+                  }
+                  for (var i = 0; i < pricesTd.length; i++) {
+                    if ($(pricesTd[i]).val() == "") {
+                      $(pricesTd[i]).val("0");
+                    } else {
+                      $(pricesTd[i]).val(
+                        parseFloat(
+                          (parseFloat($(pricesTd[i]).val()) / oldValue) *
+                            newValue
+                        ).toFixed(2)
+                      );
+                      $(pricesTd[i]).trigger("change");
+                    }
+                  }
+
+                  oldValue = newValue;
+                });
+              });
+          }
+          //end of  add event on Inv layout to track changes
+        }, 2000);
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  });
+</script>

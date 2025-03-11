@@ -1,0 +1,79 @@
+<div style="padding-top: 10px">
+  <table
+    style="
+      width: 100%;
+      font-weight: bold;
+      border: 0;
+      margin: 0;
+      font-size: 11px;
+    "
+  >
+    <tr>
+      <td style="text-align: right; width: 70%">
+        <!-- Page <span class="page"></span> of <span class="topage"></span> -->
+        الصفحة <span class="page"></span>
+      </td>
+      <td style="width: 30%; text-align: center">
+        <div style="border: 1px solid; font-size: 11px">
+          عدد الصفحات Number Of Pages
+
+          <span
+            id="ttlQty"
+            class="topage"
+            style="
+              display: inline-block;
+              border-right: 1px solid;
+              float: left;
+              width: 45px;
+              height: 15px;
+              position: relative;
+              top: 0px;
+              left: -4px;
+              text-align: center;
+              font-size: 11px;
+            "
+          >
+          </span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td
+        colspan="100%"
+        style="border-top: 1px solid black; text-align: center; font-size: 11px"
+      >
+        شقراء 11961 - ص ب 136 - هاتف 0116220404 فاكس 0116220440
+      </td>
+    </tr>
+  </table>
+</div>
+<script>
+  function subst() {
+    // Decoding the invoice page url to detect page number
+    var vars = {};
+    var x = document.location.search.substring(1).split("&");
+    for (var i in x) {
+      var z = x[i].split("=", 2);
+      vars[z[0]] = unescape(z[1]);
+    }
+    // Adding Pagination Text
+    var x = [
+      "frompage",
+      "topage",
+      "page",
+      "webpage",
+      "section",
+      "subsection",
+      "subsubsection",
+    ];
+    for (var i in x) {
+      var y = document.getElementsByClassName(x[i]);
+      for (var j = 0; j < y.length; ++j) y[j].textContent = vars[x[i]];
+    }
+  }
+  try {
+    subst()
+  } catch (error) {
+    console.log(error);
+  }
+</script>

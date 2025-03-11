@@ -1,0 +1,459 @@
+<!-- code_Invoices_owner_view -->
+
+<style>
+  .rowActionDropDown.dropdown-menu a {
+    padding: 8px;
+    display: block;
+  }
+  .rowActionDropDown.dropdown-menu a:hover {
+    cursor: pointer;
+    background: #e8e8e8;
+  }
+</style>
+
+<script>
+  $(document).ready(() => {
+    function addNewTab(
+      tab_id,
+      tab_dummy_id,
+      tab_title_attr,
+      tab_title,
+      api_link
+    ) {
+      let newNavTab = $(".nav-tabs.responsive li").eq(0).clone();
+      newNavTab.removeClass("active");
+      newNavTab.html(
+        `<a id="${tab_id}" aria-controls="NotesBlock" role="tab" data-toggle="tab" href="#${tab_dummy_id}" title="${tab_title_attr}" aria-expanded="true"><span class="one-line"> ${tab_title} </span></a>`
+      );
+      $(".nav-tabs.responsive").append(newNavTab);
+      $("div.tab-content").append(
+        `<div class="tab-pane" id="${tab_dummy_id}"></div>`
+      );
+      $(`#${tab_id}`).on("click", function () {
+        $("ul.nav-tabs li").removeClass("active");
+        $(".tab-pane").removeClass("active");
+        $(this).parent().addClass("active");
+        $(`#${tab_dummy_id}`).addClass("active");
+        $(`#${tab_dummy_id}`).html(
+          '<div class="notifcation-loader"><div class="inner-loader"></div></div>'
+        );
+        $(`#${tab_dummy_id}`).load(`${api_link} .list-table`);
+        const getDelLink = setInterval(() => {
+          let allLinks = $(
+            "#invoiceItems > table > tbody > tr > td.text-right.row-actions > div > div a:nth-child(3)"
+          );
+          if (allLinks.length != 0) {
+            clearInterval(getDelLink);
+            $(
+              "#invoiceItems > table > tbody > tr > td.text-right.row-actions > div > div a:nth-child(3)"
+            ).hide();
+          }
+        }, 100);
+      });
+    }
+    let invoiceID = location.href
+      .split("/")
+      .slice(-1)[0]
+      .split("#")[0]
+      .split("?")[0];
+
+    addNewTab(
+      "invoice_items",
+      "invoiceItems",
+      "سجل العمال",
+      "سجل العمال",
+      `/v2/owner/entity/le_invoice-items/list?filter[invoice_id]=${invoiceID}`
+    );
+  });
+</script>
+<!-- This code is for multible payment By Ahmed Fayek -->
+<style>
+  .popup {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+  }
+
+  .popup-content {
+    background-color: #fff;
+    width: 90%;
+    height: 550px;
+    margin: 20px auto;
+    padding: 20px;
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+
+  table {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  th,
+  td {
+    padding: 10px;
+    text-align: left;
+  }
+
+  .add-row-btn {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    float: left;
+  }
+
+  .close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+  }
+
+  .confirm-btn {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+    float: right;
+    position: absolute;
+    bottom: 50px;
+  }
+  .popup h2 {
+    text-align: center;
+  }
+  @media (max-width: 768px) {
+    .popup-content {
+      width: 90%;
+    }
+  }
+  input {
+    text-align: center;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    let addPaymentsDiv = `
+
+      <div id="popup" class="popup">
+        <div class="popup-content">
+          <span class="close-icon">&times;</span>
+          <h2>Payments</h2>
+          <table id="table">
+            <tr>
+              <th>نوع الدفع</th>
+
+              <th> الخزينة</th>
+              <th>المبلغ</th>
+            </tr>
+            <tr>
+              <td class="payment-method"></td>
+
+              <td class="payment-treasury"></td>
+              <td><input type="text" class="payment-amount" value="0" prev_val="0"></td>
+            </tr>
+          </table>
+          <button class="confirm-btn">Confirm</button>
+        </div>
+      </div>
+      `;
+    // <-- <button " class="add-row-btn">Add Row</button> --!>
+
+    const mulpaysbtn = document.createElement("button");
+    mulpaysbtn.setAttribute("class", "btn btn-default btn-sm quick-action-btn");
+    mulpaysbtn.setAttribute("id", "showpayments");
+    mulpaysbtn.innerText = "أضف عمليات دفع";
+    document.querySelector(".invoice-actions").innerHTML += addPaymentsDiv;
+    document
+      .querySelector(".invoice-actions")
+      .insertBefore(
+        mulpaysbtn,
+        document.querySelectorAll(".invoice-actions a")[3]
+      );
+    document.getElementById("showpayments").addEventListener("click", (e) => {
+      showPopup();
+    });
+
+    function showPopup() {
+      const popup = document.getElementById("popup");
+      popup.style.display = "block";
+    }
+
+    document
+      .querySelector(".close-icon")
+      .addEventListener("click", function closePopup() {
+        const popup = document.getElementById("popup");
+        popup.style.display = "none";
+      });
+
+    function confirmForm() {
+      const inputs = document.querySelectorAll("#table input");
+      const values = Array.from(inputs).map((input) => input.value);
+      console.log(values); // Perform further actions with the form values
+
+      closePopup();
+    }
+    // const creatingStaffSelector = async () => {
+    //   // https://beautycenterv2.daftra.com/v2/api/entity/staff/list/1?per_page=300
+    //   const selector = document.createElement("select");
+    //   await $.ajax({
+    //     url: `/v2/api/entity/staff/list/1?per_page=300`,
+    //     method: "get",
+    //     contentType: "application/json",
+    //     accept: "application/json",
+    //   }).then((allstaff) => {
+    //     console.log(allstaff);
+    //     if (allstaff.data.length > 0) {
+    //       for (let i = 0; i < allstaff.data.length; i++) {
+    //         let option = document.createElement("option");
+    //         option.innerText = allstaff.data[i].name;
+    //         option.setAttribute("value", allstaff.data[i].id);
+    //         selector.appendChild(option);
+    //       }
+    //     }
+    //     setTimeout(() => {
+    //       var allstaffs = document.querySelectorAll(".payment-staff");
+    //       for (let i = 0; i < allstaffs.length; i++) {
+    //         if (!allstaffs[i].querySelector("select")) {
+    //           allstaffs[i].appendChild(selector);
+    //           setTimeout(() => {}, 150);
+    //         }
+    //       }
+    //     }, 300);
+    //   });
+    // };
+    // creatingStaffSelector();
+    const creatingtreasurySelector = async () => {
+      // https://beautycenterv2.daftra.com/v2/api/entity/treasury/list/1?per_page=300
+      const selector = document.createElement("select");
+      await $.ajax({
+        url: `/v2/api/entity/treasury/list/1?per_page=300`,
+        method: "get",
+        contentType: "application/json",
+        accept: "application/json",
+      }).then((treasury) => {
+        console.log(treasury);
+        if (treasury.data.length > 0) {
+          for (let i = 0; i < treasury.data.length; i++) {
+            console.log(i);
+            let option = document.createElement("option");
+            option.innerText = treasury.data[i].name;
+            option.setAttribute("value", treasury.data[i].id);
+            selector.appendChild(option);
+          }
+        }
+        setTimeout(() => {
+          var alltreasury = document.querySelectorAll(".payment-treasury");
+          for (let i = 0; i < alltreasury.length; i++) {
+            if (!alltreasury[i].querySelector("select")) {
+              alltreasury[i].appendChild(selector);
+              setTimeout(() => {}, 150);
+            }
+          }
+        }, 300);
+      });
+    };
+    creatingtreasurySelector();
+    var numberofgateways = -1;
+    const creatingpaymentmethodSelector = async () => {
+      const selector = document.createElement("select");
+      await $.ajax({
+        url: `/v2/api/entity/site_payment_gateway/list/1?per_page=100&&filter[active]=1`,
+        method: "get",
+        contentType: "application/json",
+        accept: "application/json",
+      }).then((treasury) => {
+        console.log(treasury);
+        if (treasury.data.length > 0) {
+          numberofgateways = treasury.data;
+          for (let i = 0; i < treasury.data.length; i++) {
+            console.log(i);
+            let option = document.createElement("option");
+            if (treasury.data[i].label) {
+              option.innerText = treasury.data[i].label;
+            } else {
+              option.innerText = treasury.data[i].payment_gateway;
+            }
+            option.setAttribute("value", treasury.data[i].payment_gateway);
+            selector.appendChild(option);
+          }
+        }
+        setTimeout(() => {
+          var allmethod = document.querySelectorAll(".payment-method");
+          for (let i = 0; i < allmethod.length; i++) {
+            if (!allmethod[i].querySelector("select")) {
+              allmethod[i].appendChild(selector);
+              setTimeout(() => {}, 150);
+            }
+          }
+        }, 300);
+      });
+    };
+    creatingpaymentmethodSelector();
+
+    function getinvpayments() {
+      setTimeout(() => {
+        var intervalId = setInterval(() => {
+          if (numberofgateways != -1) {
+            for (let i = 0; i < numberofgateways.length; i++) {
+              if (i < numberofgateways.length - 1) {
+                $("#table tr:last-child").clone().appendTo("#table");
+              }
+            }
+            var allrows = document.querySelectorAll("#popup #table tr");
+            setTimeout(() => {
+              for (let k = 1; k < allrows.length; k++) {
+                console.log(
+                  allrows[k].querySelector(".payment-method select").value
+                );
+                allrows[k].querySelector(".payment-method select").value =
+                  numberofgateways[k - 1].payment_gateway;
+                allrows[k]
+                  .querySelector(".payment-amount")
+                  .setAttribute(
+                    "payment_method",
+                    numberofgateways[k - 1].payment_gateway
+                  );
+                console.log(
+                  allrows[k].querySelector(".payment-method select").value
+                );
+                allrows[k]
+                  .querySelector(".payment-method select")
+                  .setAttribute("disabled", "disabled");
+              }
+            }, 1500);
+            clearInterval(intervalId);
+          }
+        }, 200);
+      }, 5000);
+    }
+    getinvpayments();
+    // document
+    //   .querySelector(".add-row-btn")
+    //   .addEventListener("click", function addRow() {
+    //     const table = document.getElementById("table");
+    //     $("#table tr:last-child").clone().appendTo("#table");
+
+    //   });
+
+    var invoiceId = parseInt(window.location.href.split("/")[6]);
+
+    //  `v2/api/entity/invoice_payment/list/1?per_page=100&&filter[invoice_id]=${invoiceId}`
+    async function getInvoicePayments() {
+      var numberofgatewaysarrayofways = numberofgateways.map(function (obj) {
+        return obj.payment_gateway;
+      });
+      await $.ajax({
+        url: `/v2/api/entity/invoice_payment/list/1?per_page=100&&filter[invoice_id]=${invoiceId}`,
+        method: "get",
+        contentType: "application/json",
+        accept: "application/json",
+      }).then((payment) => {
+        console.log(payment);
+        if (payment.data.length > 0) {
+          for (let i = 0; i < payment.data.length; i++) {
+            let index = numberofgatewaysarrayofways.indexOf(
+              payment.data[i].payment_method
+            );
+            console.log({ index: index });
+            var allrows = document.querySelectorAll("#popup #table tr");
+            allrows[index + 1].querySelector(".payment-amount").value =
+              payment.data[i].amount;
+            allrows[index + 1]
+              .querySelector(".payment-amount")
+              .classList.add("prev_payment");
+            allrows[index + 1]
+              .querySelector(".payment-amount")
+              .setAttribute("prev_val", payment.data[i].amount);
+            allrows[index + 1]
+              .querySelector(".payment-amount")
+              .setAttribute("prev_pay_id", payment.data[i].id);
+          }
+        }
+      });
+    }
+    //  parseFloat(
+    // allrows[index + 1].querySelector(".payment-amount").value
+    //         ) +
+    setTimeout(() => {
+      getInvoicePayments();
+    }, 6000);
+    const sendPayments = () => {
+      document
+        .querySelector(".confirm-btn")
+        .addEventListener("click", async () => {
+          var allrows = document.querySelectorAll("#popup #table tr");
+          var allreqs = [];
+          for (let i = 1; i < allrows.length; i++) {
+            const paymentInput = allrows[i].querySelector(".payment-amount");
+            const paymenttreasury = parseFloat(
+              allrows[i].querySelector(".payment-treasury select").value
+            );
+            const paymentInputCurrentValue = parseFloat(paymentInput.value);
+            const paymentInputPreciosValue =
+              paymentInput.getAttribute("prev_val");
+            const paymentInputpayment_method =
+              paymentInput.getAttribute("payment_method");
+            var invoiceId = parseInt(window.location.href.split("/")[6]);
+            var staff_id = USER.staff_id;
+            var formattedDate = new Date().toISOString().split("T")[0];
+
+            if (paymentInputPreciosValue != paymentInputCurrentValue) {
+              if (allrows[i].classList.contains("prev_payment")) {
+              } else {
+                let theBody = JSON.stringify({
+                  InvoicePayment: {
+                    invoice_id: invoiceId,
+                    payment_method: paymentInputpayment_method,
+                    amount: paymentInputCurrentValue,
+                    treasury_id: paymenttreasury,
+                    date: formattedDate,
+                    email: "",
+                    status: 1,
+                    notes: "",
+                    currency_code: "SAR",
+                    transaction_type: "",
+                    processed: true,
+                    attachment: "",
+                    staff_id: staff_id,
+                    receipt_notes: "",
+                  },
+                });
+                console.log(theBody);
+                allreqs.push(
+                  $.ajax({
+                    url: "/api2/invoice_payments",
+                    method: "POST",
+                    contentType: "application/json",
+                    accept: "application/json",
+                    data: theBody,
+                  }).then((res) => {
+                    console.log(res);
+                  })
+                );
+                await Promise.all(allreqs);
+              }
+            }
+          }
+        });
+    };
+    setTimeout(() => {
+      sendPayments();
+    }, 2000);
+  });
+</script>

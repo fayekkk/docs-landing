@@ -1,0 +1,424 @@
+<style>
+  #projectTemp * {
+    color: blue !important;
+  }
+  #temphead {
+    border: none !important;
+  }
+  #temphead * {
+    border: none !important;
+  }
+  #client_data {
+    width: 100% !important;
+    /* margin-left: 25%; */
+    border: none !important;
+  }
+  #client_data * {
+    border: none !important;
+    font-size: 12px !important;
+  }
+  /* #client_data tr:nth-child(1) td:nth-child(1){
+
+  } */
+  #client_data tr:nth-child(1) td:nth-child(1) {
+    width: 12% !important;
+  }
+  #client_data tr:nth-child(1) td:nth-child(2) {
+    width: 26% !important;
+  }
+  #client_data tr:nth-child(1) td:nth-child(3) {
+    width: 12% !important;
+  }
+  #client_data tr:nth-child(1) td:nth-child(4) {
+    width: 12% !important;
+  }
+  #client_data tr:nth-child(1) td:nth-child(5) {
+    width: 26% !important;
+  }
+  #client_data tr:nth-child(1) td:nth-child(6) {
+    width: 12% !important;
+  }
+  .rightAlign {
+    text-align: right;
+  }
+  .centerAlign {
+    text-align: center;
+  }
+  .leftAlign {
+    text-align: left;
+  }
+  .items_table {
+    width: 100%;
+    margin-top: 10px;
+  }
+  #signs {
+    width: 100%;
+    margin-left: 30%;
+    border: none !important;
+    margin-top: 10px;
+  }
+  #signs * {
+    border: none !important;
+  }
+  #ttlsTable {
+    width: 100%;
+    border-right: 1px solid #000 !important;
+    border-top: 1px solid #000 !important;
+    text-align: center !important;
+  }
+  #ttlsTable td {
+    width: 50%;
+    border-left: 1px solid #000 !important;
+    border-bottom: 1px solid #000 !important;
+  }
+</style>
+<div id="projectTemp">
+  <table id="temphead">
+    <tbody>
+      <tr>
+        <td><!-- f img --></td>
+        <td><!-- simg --></td>
+      </tr>
+    </tbody>
+  </table>
+  <table id="client_data" style="height: 232.889px">
+    <tbody>
+      <tr style="height: 48px">
+        <td class="rightAlign" style="height: 48px">رقم عرض السعر</td>
+        <td class="centerAlign" style="height: 48px"></td>
+        <td class="leftAlign" style="height: 48px">Quotation No</td>
+        <td class="rightAlign" style="height: 48px">رقم أمر العمل</td>
+        <td class="centerAlign" style="height: 48px">
+          {{Data.le_workflow-type-entity-2.number}}
+        </td>
+        <td class="leftAlign" style="height: 48px">Jop Order</td>
+      </tr>
+      <tr style="height: 44.4444px">
+        <td class="rightAlign" style="height: 44.4444px">التاريخ</td>
+        <td class="centerAlign" style="height: 44.4444px">
+          {{Data.le_workflow-type-entity-2.start_date}}
+        </td>
+        <td class="leftAlign" style="height: 44.4444px">Date</td>
+        <td style="height: 44.4444px"></td>
+        <td style="height: 44.4444px"></td>
+        <td style="height: 44.4444px"></td>
+      </tr>
+      <tr style="height: 48px">
+        <td class="rightAlign" style="height: 48px">إسم العميل</td>
+        <td colspan="4" class="centerAlign" style="height: 48px">
+          {{Data.le_workflow-type-entity-2.work_order_client.business_name}}
+        </td>
+        <td class="leftAlign" style="height: 48px">Customer Name</td>
+      </tr>
+      <tr style="height: 48px">
+        <td class="rightAlign" style="height: 48px">رقم العميل</td>
+        <td class="centerAlign" style="height: 48px">
+          {{Data.le_workflow-type-entity-2.work_order_client.client_number}}
+        </td>
+        <td class="leftAlign" style="height: 48px">Customer Id</td>
+        <td class="rightAlign" style="height: 48px">مندوب المبيعات</td>
+        <td class="centerAlign" style="height: 48px">
+          {{Data.le_workflow-type-entity-2.staff.name}}
+          {{Data.le_workflow-type-entity-2.staff.last_name}}
+        </td>
+        <td class="leftAlign" style="height: 48px">Sales Man</td>
+      </tr>
+      <tr style="height: 44.4444px">
+        <td class="rightAlign" style="height: 44.4444px">الوصف</td>
+        <td class="centerAlign" colspan="4" style="height: 44.4444px">
+          {{Data.le_workflow-type-entity-2.description}}
+        </td>
+        <td class="leftAlign" style="height: 44.4444px">Jop Description</td>
+      </tr>
+    </tbody>
+  </table>
+  <table
+    class="mce-inline-non-editable-area mce-hide-table-options items_table"
+    border="1"
+    cellpadding="0"
+    cellspacing="0"
+    style="width: 100%"
+  >
+    <thead>
+      <tr>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >الكمية</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >المقاس</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >الخدمة</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >اللون الداخلى</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >لون الغلاف</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >ورق داخلى</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >ورق الغلاف</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >نوع التجليد</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >عدد الصور</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >الترقيم</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >اللغة</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >الطيات</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >الإجمالى</span
+          >
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <!--% foreach({{Data.le_workflow-type-entity-2.le_workflow-type-entity-2_custom_data.le_custom_data_le_workflow-type-entity-2_le_custom_data_le_workflow-type-entity-2_project_items}} as {{le_workflow_type_entity_2_custom_data_row}}) { %-->
+      <tr>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_2_custom_data_row.quantity}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_2_custom_data_row.sizeinput}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_2_custom_data_row.project_item_name}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_2_custom_data_row.innercolorinput}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_2_custom_data_row.covercolorinput}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_2_custom_data_row.innerpaperinput}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_2_custom_data_row.coverpaperinput}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_2_custom_data_row.covertypeinput}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_2_custom_data_row.no_of_copies}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_2_custom_data_row.numpering}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_2_custom_data_row.language_type}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_2_custom_data_row.ordersinput}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_2_custom_data_row.item_ttl}}</span
+          >
+        </td>
+      </tr>
+      <!--% } %-->
+      <!-- <tr>
+        <td style="text-align: left;padding-left: 5px;" colspan="100%" class="subttlTd"></td>
+      </tr> -->
+    </tbody>
+  </table>
+  <table id="signs" style="width: 100.017%; height: 174.222px">
+    <tbody>
+      <tr style="height: 35.5556px">
+        <td style="width: 30.5185%; height: 35.5556px">ملاحظات:</td>
+        <td style="width: 5.24947%; height: 35.5556px"></td>
+        <td style="width: 33.9685%; height: 35.5556px"></td>
+        <td style="width: 5.25201%; height: 35.5556px"></td>
+        <td
+          style="width: 25%; vertical-align: baseline; height: 174.222px"
+          rowspan="100%"
+        >
+          <table id="ttlsTable">
+            <tbody>
+              <tr>
+                <td>إجمالى أمر العمل</td>
+                <td class="subttlTd"></td>
+              </tr>
+              <tr>
+                <td>إجمالى الضريبة</td>
+                <td class="taxTd"></td>
+              </tr>
+              <tr>
+                <td>الصافى</td>
+                <td class="ttlTd"></td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr style="height: 34.6667px">
+        <td style="width: 30.5185%; height: 34.6667px">المسئول:</td>
+        <td style="width: 5.24947%; height: 34.6667px"></td>
+        <td style="width: 33.9685%; height: 34.6667px">توقيع المسئول:</td>
+        <td style="width: 5.25201%; height: 34.6667px"></td>
+      </tr>
+      <tr style="height: 34.6667px">
+        <td style="width: 30.5185%; height: 34.6667px">تاريخ البروفة:</td>
+        <td style="width: 5.24947%; height: 34.6667px"></td>
+        <td style="width: 33.9685%; height: 34.6667px"></td>
+        <td style="width: 5.25201%; height: 34.6667px"></td>
+      </tr>
+      <tr style="height: 34.6667px">
+        <td style="width: 30.5185%; height: 34.6667px">مكان التسليم:</td>
+        <td style="width: 5.24947%; height: 34.6667px"></td>
+        <td style="width: 33.9685%; height: 34.6667px">إعتماد الأمر:</td>
+        <td style="width: 5.25201%; height: 34.6667px"></td>
+      </tr>
+      <tr style="height: 34.6667px">
+        <td style="width: 30.5185%; height: 34.6667px">تاريخ التسليم:</td>
+        <td style="width: 5.24947%; height: 34.6667px"></td>
+        <td style="width: 33.9685%; height: 34.6667px"></td>
+        <td style="width: 5.25201%; height: 34.6667px"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<p>
+  <script>
+    function getttl() {
+      var allRows = document.querySelectorAll(".items_table tbody tr");
+      var subttl = 0;
+
+      for (var i = 0; i < allRows.length; i++) {
+        if (allRows[i].querySelector("td:last-child").innerText == "") {
+          allRows[i].querySelector("td:last-child").innerText == "0";
+        }
+        subttl =
+          subttl +
+          parseFloat(allRows[i].querySelector("td:last-child").innerText);
+      }
+      document.querySelector(".subttlTd").innerText = subttl.toFixed(2);
+      document.querySelector(".taxTd").innerText = (subttl * 0.15).toFixed(2);
+      document.querySelector(".ttlTd").innerText = (
+        subttl +
+        subttl * 0.15
+      ).toFixed(2);
+    }
+    try {
+      getttl();
+    } catch (error) {
+      console.log(error);
+    }
+
+    function addserials() {
+      var allRows = document.querySelectorAll(".items_table tr");
+      var newTh = document.createElement("th");
+      newTh.innerText = " No";
+      allRows[0].insertBefore(newTh, allRows[0].cells[0]);
+
+      for (var i = 1; i < allRows.length; i++) {
+        var newTd = document.createElement("td");
+        newTd.innerText = i;
+        allRows[i].insertBefore(newTd, allRows[i].cells[0]);
+      }
+    }
+    try {
+      addserials();
+    } catch (error) {
+      console.log(error);
+    }
+    function addNewRows() {
+      var selectedDiv = document.querySelector(".items_table");
+      while (selectedDiv.offsetHeight < 800) {
+        var i = document.querySelectorAll(".items_table tbody tr").length;
+        const newTr = document.createElement("tr");
+        for (var j = 0; j < 5; j++) {
+          if (j == 0) {
+            var newTd = document.createElement("td");
+            newTd.innerText = i + 1;
+            newTr.appendChild(newTd);
+          } else {
+            var newTd = document.createElement("td");
+            newTr.appendChild(newTd);
+          }
+        }
+        document.querySelector(".items_table tbody").appendChild(newTr);
+        i++;
+      }
+    }
+    try {
+      // addNewRows();
+    } catch (error) {
+      console.log(error);
+    }
+  </script>
+</p>

@@ -1,0 +1,404 @@
+<style>
+  #trip_data {
+    background-color: transparent;
+    background-image: url("https://durobalhijrah.daftra.com/files/d5e2718e/logos/66c5c9712c158_blobid1724238189593.jpg ");
+    background-size: cover;
+    background-blend-mode: color-burn;
+  }
+  #trip_data table,
+  #trip_data th,
+  #trip_data td {
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    text-align: center !important;
+    font-size: 13px !important;
+    font-weight: bold;
+  }
+  #trip_data table {
+    border-spacing: 10px 5px !important;
+    border-collapse: separate !important;
+  }
+  #trip_data th {
+    background-color: #054ba6;
+    color: #fff !important;
+  }
+  #trip_data td {
+    background-color: #f1f1f1;
+  }
+  #trip_data th,
+  #trip_data td {
+    padding: 5px 5px !important;
+  }
+  #trip_header {
+    width: 100%;
+  }
+  .table_title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 7px;
+    background-color: transparent !important;
+  }
+  #trip_header td {
+    background-color: transparent !important;
+  }
+  #trip_header td:nth-child(1) {
+    color: red;
+    vertical-align: sub;
+    width: 25%;
+    font-size: 15px !important;
+  }
+  #trip_header td:nth-child(2) {
+    text-align: center;
+    width: 50%;
+  }
+  #trip_header td:nth-child(3) {
+    width: 25%;
+  }
+  .NusuK,
+  .Hotels {
+    width: 70% !important;
+    margin: 0 15% !important;
+  }
+  .clientTh {
+    width: 25%;
+  }
+  .vehicletype,
+  .airfrom {
+    direction: ltr;
+  }
+  /* */
+</style>
+<div id="trip_data">
+  <table id="trip_header">
+    <tbody>
+      <tr>
+        <td>No:{{Data.le_workflow-type-entity-4.number}}</td>
+        <td>
+          <img
+            src="{{__system.business.site_logo}}"
+            alt=""
+            style="width: 150px"
+          />
+        </td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="table_title">بيانات الرحلة Trip Info</div>
+  <table id="TripInfo">
+    <thead>
+      <tr>
+        <th>نوع المركبة <br />Type of vehicles</th>
+        <th>مسمى التشغيلة <br />Trip Title</th>
+        <th>رقم المشرف <br />Group leader No</th>
+        <th>المشرف <br />Group leader</th>
+        <th>الجنسية <br />Nationality</th>
+        <th class="clientTh">الوكيل <br />Agent</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="vehicletype">
+          {{Data.le_workflow-type-entity-4.le_workflow-type-entity-4_custom_data.vehicle_type2}}
+        </td>
+        <td>{{Data.le_workflow-type-entity-4.title}}</td>
+        <td>
+          {{Data.le_workflow-type-entity-4.le_workflow-type-entity-4_custom_data.leader_no}}
+        </td>
+        <td>
+          {{Data.le_workflow-type-entity-4.le_workflow-type-entity-4_custom_data.leader_name}}
+        </td>
+        <td>
+          {{Data.le_workflow-type-entity-4.le_workflow-type-entity-4_custom_data.nationality}}
+        </td>
+        <td>
+          <!-- {{Data.le_workflow-type-entity-4.work_order_client.first_name}}
+        {{Data.le_workflow-type-entity-4.work_order_client.last_name}} -->
+          {{Data.le_workflow-type-entity-4.work_order_client.business_name}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- <p><span class="mce-inline-non-editable-area mce-inline-placeholder"></span> <span class="mce-inline-non-editable-area mce-inline-placeholder"></span> <span class="mce-inline-non-editable-area mce-inline-placeholder">{{Data.le_workflow-type-entity-4.work_order_client.business_name}}</span></p> -->
+  <div class="table_title">بيانات نسك Nusuk Info</div>
+  <table
+    class="mce-inline-non-editable-area mce-hide-table-options NusuK"
+    border="1"
+    cellpadding="0"
+    cellspacing="0"
+    style="width: 100%"
+  >
+    <thead>
+      <tr>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >عدد المسافرين Passengers No</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >رقم المجموعة Group No</span
+          >
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <!--% foreach({{Data.le_workflow-type-entity-4.le_workflow-type-entity-4_custom_data.le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_nusuks}} as {{le_workflow_type_entity_4_custom_data_row}}) { %-->
+      <tr>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.passengers_no}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.nusuk_no}}</span
+          >
+        </td>
+      </tr>
+      <!--% } %-->
+    </tbody>
+  </table>
+  <div class="table_title">الطيران Flights</div>
+  <table
+    class="mce-inline-non-editable-area mce-hide-table-options flights"
+    border="1"
+    cellpadding="0"
+    cellspacing="0"
+    style="width: 100%"
+  >
+    <thead>
+      <tr>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >
+            الوقت <br />Time</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >
+            التاريخ <br />Date</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >
+            الصالة <br />Terminal</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >
+            إلى <br />To</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >
+            من <br />From</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >
+            رقم الرحلة <br />Flight No</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >
+            شركة الطيران <br />Airline Co</span
+          >
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <!--% foreach({{Data.le_workflow-type-entity-4.le_workflow-type-entity-4_custom_data.le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_flys}} as {{le_workflow_type_entity_4_custom_data_row}}) { %-->
+      <tr>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.etd2}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.date2}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.carrer}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.to}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.from}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.flight_no}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.flight_com}}</span
+          >
+        </td>
+      </tr>
+      <!--% } %-->
+    </tbody>
+  </table>
+  <div class="table_title">الفنادق Hotels</div>
+  <table
+    class="mce-inline-non-editable-area mce-hide-table-options Hotels"
+    border="1"
+    cellpadding="0"
+    cellspacing="0"
+    style="width: 100%"
+  >
+    <thead>
+      <tr>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >
+            الفندق HOTEL</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >
+            المدينة CITY</span
+          >
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <!--% foreach({{Data.le_workflow-type-entity-4.le_workflow-type-entity-4_custom_data.le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_hotels}} as {{le_workflow_type_entity_4_custom_data_row}}) { %-->
+      <tr>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.hotel}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.city2}}</span
+          >
+        </td>
+      </tr>
+      <!--% } %-->
+    </tbody>
+  </table>
+  <div class="table_title">النقل Transportation</div>
+  <table
+    class="mce-inline-non-editable-area mce-hide-table-options Transportation"
+    border="1"
+    cellpadding="0"
+    cellspacing="0"
+    style="width: 100%"
+  >
+    <thead>
+      <tr>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >
+            الوقت TIME
+          </span>
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >
+            التاريخ DATE</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >
+            إلى TO</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >
+            من FROM</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+          >
+            مسار route
+          </span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <!--% foreach({{Data.le_workflow-type-entity-4.le_workflow-type-entity-4_custom_data.le_custom_data_le_workflow-type-entity-4_le_custom_data_le_workflow-type-entity-4_transportations}} as {{le_workflow_type_entity_4_custom_data_row}}) { %-->
+      <tr>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.time2}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.date2}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.to2}}</span
+          >
+        </td>
+        <td class="airfrom">
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_4_custom_data_row.from2}}</span
+          >
+        </td>
+      </tr>
+      <!--% } %-->
+    </tbody>
+  </table>
+</div>
+<p>
+  <script>
+    function hundleThat() {
+      var AllRows = document.querySelectorAll(".Transportation tbody tr");
+      for (var i = 0; i < AllRows.length; i++) {
+        var newTd = document.createElement("td");
+        newTd.innerText = i + 1;
+        AllRows[i].appendChild(newTd);
+      }
+    }
+    try {
+      hundleThat();
+    } catch (error) {
+      console.log(error);
+    }
+  </script>
+</p>

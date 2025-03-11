@@ -1,0 +1,60 @@
+<style>
+  #newhead {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+  }
+  #newhead td:nth-child(1) {
+    width: 38%;
+  }
+  #newhead td:nth-child(2) {
+    width: 24%;
+  }
+  #newhead td:nth-child(2) img {
+    width: 100%;
+  }
+  #newhead td:nth-child(3) {
+    width: 38%;
+  }
+  #newhead tr:nth-child(1) td {
+    font-size: 17px;
+    direction: ltr;
+  }
+</style>
+<div style="margin-top: -25px">
+  <div style="padding-top: 30px"></div>
+  <table id="newhead">
+    <tbody>
+      <tr>
+        <td>شركة الماسة الوردية للتجارة</td>
+        <td rowspan="100%">{%site_logo%}</td>
+        <td>AL-MASAH AL-WARDIYYAH CO.</td>
+      </tr>
+      <tr>
+        <td>س.ت {%site_bn2%}</td>
+        <td>C.R. {%site_bn2%}</td>
+      </tr>
+      <tr>
+        <td>الرقم الضريبى {%site_bn1%}</td>
+        <td>VAT No. {%site_bn1%}</td>
+      </tr>
+      <tr>
+        <td>
+          الرياض 14511 - حى العزيزية - شارع مدين
+          <br />
+          هاتف / 0112130798
+        </td>
+        <td>
+          Riyadh 14511 - Al Aziziyah District - Madian Street <br />
+          TEL/ 0112130798
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="text-align: right; font-weight: bold">
+    البائع : {%sales_person%}
+  </div>
+  <div style="text-align: center; font-size: 18px; font-weight: bold">
+    {%invoice_title%}
+  </div>
+</div>

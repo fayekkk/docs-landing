@@ -1,0 +1,248 @@
+<style>
+  .late_td,
+  .late_th {
+    display: table-cell !important;
+  }
+</style>
+<script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      var $exportButton = $('<button id="export_btn">تصدير الملف</button>');
+
+      $(".actions-btns").append($exportButton);
+      async function createCol(
+        prevTh,
+        prevTd,
+        colTitle,
+        classTh,
+        classTd,
+        colInput
+      ) {
+        if (
+          document.querySelectorAll("#listing_table tr:nth-child(1) .late_th")
+            .length == 0
+        ) {
+          // Clone TH and attach change event listener
+          $(prevTh).after(
+            $("th.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTh)
+              .replace("", colTitle)
+          );
+
+          $(prevTd).after(
+            $("td.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTd)
+              .replace("item_col_4", colInput)
+          );
+        } else if (
+          !document.querySelector("#listing_table tr:last-child .late_td")
+        ) {
+          $(`#listing_table tr:last-child ${prevTd}`).after(
+            $("#listing_table tr:last-child td.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTd)
+              .replace("item_col_4", colInput)
+          );
+        }
+
+        $("." + colInput).attr("placeholder", "");
+        $("." + colInput).attr("name", "");
+
+        document.querySelector(".late_th").innerText = "  الكمية المتبقية   ";
+      }
+
+      // adding the columns when screen is loaded
+      createCol(
+        "th.col-3",
+        "td.col-3",
+        "إختيار العاملة ",
+        "late_th",
+        "late_td",
+        "late_input"
+      );
+
+      $(document).on("click", "#AddItem", function () {
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "إختيار العاملة ",
+          "late_th",
+          "late_td",
+          "late_input"
+        );
+      });
+      var usedProducts = [];
+      $(document).on("change", ".item-id", function () {
+        console.log("changed");
+        setTimeout(() => {
+          let currentElement = parseInt($(this).val());
+          let currentElementQty = product.store_balance[1];
+          var newproductObject = {
+            id: currentElement,
+            ttlQty: currentElementQty,
+            usedQty: 0,
+          };
+          let obj = usedProducts.find((item) => item.id == $(this).val());
+          console.log({ firobj: obj });
+
+          if (!obj) {
+            usedProducts.push(newproductObject);
+          }
+          usedProducts.forEach((usedProduct) => {
+            usedProduct.usedQty = 0;
+          });
+          let currentElementQtyafteradd = 0;
+          $(".item-id").each(function () {
+            if ($(this).val() != "") {
+              let obj = usedProducts.find((item) => item.id == $(this).val());
+
+              if (obj) {
+                console.log(obj.id);
+                console.log(obj.usedQty);
+                console.log(usedProducts);
+
+                obj.usedQty =
+                  obj.usedQty +
+                  parseFloat($(this).closest("tr").find(".item-qty").val());
+                $(this)
+                  .closest("tr")
+                  .find(".late_td textarea")
+                  .val(parseFloat(obj.ttlQty) - parseFloat(obj.usedQty));
+              }
+            }
+          });
+        }, 150);
+      });
+      $(document).on("change", ".item-qty", function () {
+        console.log("changed");
+        setTimeout(() => {
+          let currentElement = parseInt(
+            $(this).closest("tr").find(".item-id").val()
+          );
+          let currentElementQty = product.store_balance[1];
+          var newproductObject = {
+            id: currentElement,
+            ttlQty: currentElementQty,
+            usedQty: 0,
+          };
+          let obj = usedProducts.find(
+            (item) => item.id == $(this).closest("tr").find(".item-id").val()
+          );
+          console.log({ firobj: obj });
+
+          if (!obj) {
+            usedProducts.push(newproductObject);
+          }
+          usedProducts.forEach((usedProduct) => {
+            usedProduct.usedQty = 0;
+          });
+          let currentElementQtyafteradd = 0;
+          $(".item-id").each(function () {
+            if ($(this).val() != "") {
+              let obj = usedProducts.find((item) => item.id == $(this).val());
+
+              if (obj) {
+                console.log(obj.id);
+                console.log(obj.usedQty);
+                console.log(usedProducts);
+
+                obj.usedQty =
+                  obj.usedQty +
+                  parseFloat($(this).closest("tr").find(".item-qty").val());
+                $(this)
+                  .closest("tr")
+                  .find(".late_td textarea")
+                  .val(parseFloat(obj.ttlQty) - parseFloat(obj.usedQty));
+              }
+            }
+          });
+        }, 150);
+      });
+    }, 400);
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      // Get the data from the existing table
+      function getdata() {
+        var tableData = [];
+        $("#listing_table tbody tr").each(function () {
+          var rowData = {};
+          rowData.item = $(this).find(".item-name textarea").val();
+          rowData.description = $(this).find(".item-description").val();
+          rowData.unitPrice = $(this).find(".item-unit-price").val();
+          rowData.quantity = $(this).find(".item-qty").val();
+          rowData.discount = $(this).find(".late_td textarea").val();
+          rowData.subtotal = $(this).find(".item-subtotal span").text().trim();
+          tableData.push(rowData);
+        });
+
+        // Create a new table
+        var $newTable = $("<table></table>").addClass(
+          "table table-bordered myTable"
+        );
+        var $thead = $("<thead></thead>");
+        var $tbody = $("<tbody></tbody>");
+
+        // Add header row
+        var $headerRow = $("<tr></tr>");
+        $headerRow.append("<th>البند</th>");
+        $headerRow.append("<th>الوصف</th>");
+        $headerRow.append("<th>السعر</th>");
+        $headerRow.append("<th>الكمية</th>");
+        $headerRow.append("<th>الكمية المتبقية	</th>");
+        $headerRow.append("<th>المجموع</th>");
+        $thead.append($headerRow);
+        console.log(tableData);
+        const NewData = tableData.slice(1, tableData.length);
+        // Add data rows
+        NewData.forEach(function (row) {
+          var $newRow = $("<tr></tr>");
+          $newRow.append("<td>" + row.item + "</td>");
+          $newRow.append("<td>" + row.description + "</td>");
+          $newRow.append("<td>" + row.unitPrice + "</td>");
+          $newRow.append("<td>" + row.quantity + "</td>");
+          $newRow.append("<td>" + row.discount + "</td>");
+          $newRow.append("<td>" + row.subtotal + "</td>");
+          $tbody.append($newRow);
+        });
+
+        $newTable.append($thead).append($tbody);
+
+        $("body").append($newTable);
+      }
+      $("#export_btn").click(function (e) {
+        e.preventDefault();
+        getdata();
+        $(".myTable").table2excel({
+          filename: "filename.xls",
+        });
+      });
+      $(".myTable").remove();
+    }, 500);
+  });
+</script>
+<style>
+  .myTable {
+    display: none !important;
+  }
+  #export_btn {
+    width: 142px;
+    height: 40px;
+    border: none;
+  }
+</style>

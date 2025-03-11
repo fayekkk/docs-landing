@@ -1,0 +1,48 @@
+<style>
+  #header {
+    width: 100%;
+    margin-bottom: -25px;
+    padding: 20px 0;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  #header td:nth-child(2) {
+    width: 15%;
+    vertical-align: middle;
+  }
+  #header td:nth-child(1) {
+    width: 85%;
+    vertical-align: middle;
+    text-align: left;
+  }
+  #header tr:nth-child(1) td:nth-child(2) {
+    text-align: right;
+  }
+  #header td:nth-child(2) img {
+    width: 130px;
+    /* margin: 0 auto; */
+    vertical-align: middle;
+  }
+</style>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" id="header">
+  <tr>
+    <td align="left" valign="top" style="width: 45%; font-size: 14px">
+      <div id="business_info" class="editable-area">{%business_info%}</div>
+    </td>
+    <td align="left" valign="top">
+      <!-- <img
+        id="logo"
+        class="editable-area"
+        src="{%logo%}"
+        width="{%logo-width%}"
+        height="{%logo-height%}"
+      /> -->
+      {%site_logo%}
+    </td>
+    <!-- <td valign="top" align="right">
+    <p id="invoice_title" class="editable-area invoice-name">
+      {%invoice_title%}
+    </p>
+    <div class="qr-code">{%sa_qr_code_image%}<br /></div>
+  </td> -->
+  </tr>
+</table>

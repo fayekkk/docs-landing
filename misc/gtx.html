@@ -1,0 +1,453 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Tajawal:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    body {
+      direction: rtl;
+      background: #ffffff;
+      font-size: 12px;
+      font-family: "Roboto", sans-serif;
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    #listing_table {
+      direction: ltr !important;
+      border: none !important;
+    }
+    .total-table th:first-child,
+    .total-table tbody tr td:first-child {
+      display: none;
+    }
+    .listing-table td {
+      text-align: left !important;
+      padding: 6px 4px;
+      background-color: #fff;
+      color: #000;
+    }
+    .listing-table th {
+      text-align: left !important;
+      padding: 6px 4px;
+      background-color: #fff;
+      color: #b3aaa6;
+    }
+
+    .listing-table tr {
+      border-bottom: none !important;
+    }
+
+    .listing-table td {
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+      color: #202020;
+    }
+
+    .total-table th,
+    .total-table td {
+      height: 20px;
+      border-right: none !important;
+      border-left: none !important;
+      border-top: none !important;
+      border-bottom: 3px solid black !important;
+    }
+
+    .total-table tbody tr:last-child td {
+      border-right: none !important;
+      border-left: none !important;
+      border-top: none !important;
+      border-bottom: none !important;
+    }
+
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+
+    #invoice_title {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    strong_tag {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .total-row {
+      font-weight: bold;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    .invoice-date {
+      font-size: 15px;
+    }
+    .inv__info {
+      margin: 20px 0;
+    }
+
+    #custom_fields td {
+      text-align: right;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+
+      <div class="invoice-inner">
+        <div
+          class="client_info"
+          style="height: 120px; width: 100%; direction: ltr; padding-top: 40px"
+        >
+          <div
+            class="client_data"
+            style="
+              display: inline-block;
+              height: 100%;
+              width: 49%;
+              text-align: left;
+            "
+          >
+            <span style="color: #b3aaa6"> Client Name</span>
+            <br />
+            <span
+              style="
+                color: #000;
+                padding-left: 20px;
+                font-weight: 700;
+                font-size: 16px;
+              "
+            >
+              {%client_first_name%}</span
+            >
+            <br />
+            <span style="color: #b3aaa6">
+              Invoice ID
+              <span style="color: #000; padding-left: 10px"
+                >: {%invoice_no%}</span
+              ></span
+            >
+            <br />
+
+            <span style="color: #b3aaa6">
+              Emp. Name
+              <span style="color: #000; padding-left: 10px"
+                >: {%staff_member_name%}</span
+              >
+            </span>
+          </div>
+          <div
+            class="bussniss_data"
+            style="
+              display: inline-block;
+              height: 100%;
+              width: 49%;
+              text-align: right;
+            "
+          >
+            <span style="color: #000">{%client_business_name%} </span>
+            <br />
+
+            <span style="color: #b3aaa6">{%client_address%}</span>
+            <br />
+
+            <span style="color: #b3aaa6"
+              >{%client_state%} {%client_country%}</span
+            >
+          </div>
+        </div>
+
+        <div id="items-list">{%items_list%}</div>
+        <div class="notes-block">
+          <table width="100%" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div
+          class="totals"
+          style="
+            width: 100%;
+            height: 115px;
+            direction: ltr !important;
+            border-bottom: 4px solid black;
+          "
+        >
+          <div style="width: 100%; border-bottom: 4px solid black">
+            <span
+              style="
+                width: 40%;
+                font-weight: 700;
+                display: inline-block;
+                text-align: left !important;
+              "
+              >BANK INFO</span
+            >
+            <span
+              style="
+                width: 40%;
+                font-weight: 700;
+                display: inline-block;
+                text-align: left !important;
+              "
+              >DUE BY</span
+            >
+            <span
+              style="
+                width: 18%;
+                font-weight: 700;
+                display: inline-block;
+                text-align: right !important;
+              "
+              >TOTAL DUE</span
+            >
+          </div>
+          <div
+            class="bank_info"
+            style="display: inline-block; width: 40%; height: 100%"
+          >
+            <span
+              style="
+                display: inline-block;
+                width: 100%;
+                height: 25px;
+                padding-top: 6px;
+                text-align: left !important;
+              "
+              >Account No.: {%client_number%}</span
+            >
+            <br />
+            <span
+              style="
+                display: inline-block;
+                width: 100%;
+                height: 25px;
+                padding-top: 6px;
+                text-align: left !important;
+              "
+              >{%custom_bank_branch_field_3%}</span
+            >
+            <br />
+            <span
+              style="
+                display: inline-block;
+                width: 100%;
+                height: 15px;
+                padding-top: 6px;
+                text-align: left !important;
+              "
+              >{%custom_الفرع_field_2%}</span
+            >
+          </div>
+          <div
+            class="due_by"
+            style="display: inline-block; width: 40%; height: 100%"
+          >
+            <span
+              style="
+                display: inline-block;
+                width: 100%;
+                height: 100%;
+                padding-top: 25px;
+                font-weight: 700;
+                font-size: 15px;
+                text-align: left;
+                position: relative;
+                top: -31px;
+              "
+              >{%due_date%}</span
+            >
+          </div>
+          <div
+            class="total_due"
+            style="display: inline-block; width: 18%; height: 100%"
+          >
+            <span
+              style="
+                display: inline-block;
+                width: 100%;
+                height: 25px;
+                padding-top: 6px;
+                text-align: right;
+                color: red;
+              "
+              >{%invoice_total%}</span
+            >
+            <br />
+
+            <span
+              style="
+                display: inline-block;
+                width: 100%;
+                height: 25px;
+                padding-top: 6px;
+                text-align: right;
+              "
+              >in SDG</span
+            >
+            <br />
+
+            <span
+              style="
+                display: inline-block;
+                width: 100%;
+                height: 25px;
+                padding-top: 6px;
+                text-align: right;
+                color: red;
+              "
+              >SDG 0</span
+            >
+          </div>
+        </div>
+        <div class="google_play">
+          <img
+            src="https://ahmedfayek.daftra.com/files/48b8e1d3/logos/652669cf6be3a_blobid1697016268715.png"
+            alt=""
+            title="gtxgplay.png"
+            style="width: 100%; height: auto; margin: 10px 0"
+          />
+        </div>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+
+    <script>
+
+
+        //////////////////////////////////////edit invoice ////////////////////
+        function addQTY(){
+          var allrows = document.querySelectorAll("#listing_table tbody tr");
+      document.querySelectorAll("#listing_table tbody tr")[1].cells[4].querySelector('.editable-input').value /////////
+          for(var i=1; i<allrows.length;i++){
+             var selectedRowCells=allrows[i].cells;
+          var qty = selectedRowCells[8].querySelector(".editable-input").value;
+           var totqty = parseInt(selectedRowCells[3].querySelector('input').value)
+           * parseInt(selectedRowCells[5].querySelector('input').value)
+            + parseInt(selectedRowCells[4].querySelector('input').value)
+            selectedRowCells[8].innerHTML=totqty;
+          }
+        }
+      function onchangeAction() {
+        var allrows = document.querySelectorAll("#listing_table tbody tr");
+        for (var i = 1; i < allrows.length; i++) {
+          var selectedRowCells = allrows[i].cells;
+
+
+          var selectedRowCell = selectedRowCells[3];
+          var editableInput = selectedRowCell.querySelector(".editable-input");
+          editableInput.addEventListener("change", function () {
+            changeTOTQTY();
+          });
+
+          var selectedRowCell = selectedRowCells[4];
+          var editableInput = selectedRowCell.querySelector(".editable-input");
+          editableInput.addEventListener("change", function () {
+            changeTOTQTY();
+          });
+
+          var selectedRowCell = selectedRowCells[5];
+          var editableInput = selectedRowCell.querySelector(".editable-input");
+          editableInput.addEventListener("change", function () {
+            changeTOTQTY();
+          });
+
+
+        }
+      }
+      function changeTOTQTY() {
+        var allrows = document.querySelectorAll("#listing_table tbody tr");
+
+        for (var i = 1; i < allrows.length; i++) {
+          var selectedRowCells = allrows[i].cells;
+          var packagesNum = selectedRowCells[3];
+          var packagesNumVAlue =  packagesNum.querySelector(".editable-input").value;
+
+
+          var peicesNum = selectedRowCells[4];
+          var peicesNumVal =  peicesNum.querySelector(".editable-input").value;
+
+
+          var pacgageContain = selectedRowCells[5];
+          var pacgageContainVAlue = pacgageContain.querySelector(".editable-input").value;
+ if(packagesNumVAlue == '' ){
+  packagesNumVAlue = 0 
+ }
+ if(peicesNumVal == '' ){
+  peicesNumVal = 0 
+ }
+ if(pacgageContainVAlue == '' ){
+  pacgageContainVAlue = 0 
+ }
+ if(allrows[i].querySelector('.Quantity div') != null){
+  document
+            .querySelectorAll("#listing_table tr")
+            [i].cells[8].querySelector(".editable-input").value =( parseInt( packagesNumVAlue ) * parseInt( pacgageContainVAlue)) +parseInt( peicesNumVal) ;
+        }else{
+      
+        }
+          // document
+          //   .querySelectorAll("#listing_table tr")
+          //   [i].cells[8].querySelector(".editable-input").value =( parseInt( packagesNumVAlue ) * parseInt( pacgageContainVAlue)) +parseInt( peicesNumVal) ;
+        }
+        
+      }
+      try {
+        onchangeAction();
+        document.querySelector('.btn-group-flex').addEventListener("click", function() {
+
+     onchangeAction();
+});
+      } catch (e) {
+        console.log(e);
+      }
+
+
+    </script>
+  </body>
+</html>

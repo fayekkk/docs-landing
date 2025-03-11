@@ -1,0 +1,1323 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Invoice Template</title>
+</head>
+<style type="text/css">
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: transparent;
+  font: 12px Arial, Helvetica, sans-serif;
+}
+
+.invoice-wrap {
+  width: 660px;
+  margin: 0 auto;
+  background: #fff;
+  color: #000;
+}
+
+.invoice-inner {
+  margin: 0 30px;
+  padding: 20px 0;
+}
+
+tr,
+td,
+th {
+  page-break-inside: avoid !important;
+}
+
+/* Start of header styles  */
+#header {
+  width: 100%;
+  border-spacing: 0;
+  direction: ltr;
+  color: rgb(105, 105, 105);
+}
+
+#header tr:nth-child(2) td:nth-child(1) {
+  width: 50%;
+  padding-left: 55px;
+}
+
+#header tr:nth-child(2) td:nth-child(2) {
+  width: 50%;
+  padding-right: 55px;
+
+}
+
+#header td:nth-child(1) {
+  width: 50%;
+  text-align: left;
+}
+
+#header td:nth-child(2) {
+  width: 50%;
+  text-align: right;
+}
+
+/* End of header styles  */
+#inv_title {
+  font-size: 15px;
+  font-weight: bold;
+  color: rgb(105, 105, 105);
+  text-align: center;
+  margin: 6px 0;
+}
+
+/* Start of Contractor table styles */
+#Contractor {
+  width: 100%;
+  direction: ltr;
+  border-spacing: 0;
+  font-size: 10px;
+  font-weight: bold;
+
+}
+
+#Contractor tr:nth-child(1) td:nth-child(1) {
+  width: 32%;
+  background-color: #e5e5e5;
+  border-bottom: 1px solid black;
+}
+
+#Contractor tr:nth-child(1) td:nth-child(2) {
+  width: 45%;
+  background-color: #e5e5e5;
+  border-bottom: 1px solid black;
+}
+
+#Contractor tr:nth-child(1) td:nth-child(3) {
+  width: 23%;
+  background-color: #e5e5e5;
+  border-bottom: 1px solid black;
+}
+
+#Contractor td:nth-child(1) {
+  text-align: left;
+  padding: 1px 2px;
+}
+
+#Contractor td:nth-child(2) {
+  border-bottom: 1px solid black;
+  text-align: center;
+  padding: 1px 2px;
+}
+
+#Contractor td:nth-child(3) {
+  text-align: right;
+  padding: 1px 2px;
+}
+
+#Contractor tr:last-child td {
+  border-bottom: none;
+}
+
+/* End of Contractor table styles */
+/* Start of inv_details table styles */
+#inv_details {
+  width: 100%;
+  direction: ltr;
+
+  font-size: 10px;
+  font-weight: bold;
+  border-spacing: 0;
+}
+
+#inv_details td:nth-child(1) {
+  text-align: left;
+  padding: 1px 2px;
+}
+
+#inv_details td:nth-child(2) {
+  border-bottom: 1px solid black;
+  text-align: center;
+  padding: 1px 2px;
+}
+
+#inv_details td:nth-child(3) {
+  text-align: right;
+  padding: 1px 2px;
+}
+
+#inv_details tr:nth-child(1) td:nth-child(1) {
+  width: 20%;
+  background-color: #e5e5e5;
+  border-bottom: 1px solid black;
+}
+
+#inv_details tr:nth-child(1) td:nth-child(2) {
+  width: 40%;
+  background-color: #e5e5e5;
+  border-bottom: 1px solid black;
+}
+
+#inv_details tr:nth-child(1) td:nth-child(3) {
+  width: 15%;
+  background-color: #e5e5e5;
+  border-bottom: 1px solid black;
+}
+
+#inv_details tr td:nth-child(4) {
+border-left: 1px solid #000
+}
+
+#inv_details tr:nth-child(1) td:nth-child(4) {
+  width: 25%;
+  border-bottom: 1px solid black;
+
+}
+
+#inv_details tr:last-child td {
+  border-bottom: none;
+}
+
+/* End of inv_details table styles */
+/* Start of Client_data table styles */
+#Client_data {
+  width: 100%;
+  direction: ltr;
+  border-top: 1px solid black;
+  font-size: 10px;
+  font-weight: bold;
+  border-spacing: 0;
+}
+
+#Client_data td:nth-child(1) {
+  text-align: left;
+  padding: 1px 2px;
+}
+
+#Client_data td:nth-child(2) {
+  border-bottom: 1px solid black;
+  text-align: center;
+  padding: 1px 2px;
+}
+
+#Client_data td:nth-child(3) {
+  text-align: right;
+  padding: 1px 2px;
+}
+
+#Client_data tr:nth-child(1) td:nth-child(1) {
+  width: 22%;
+  background-color: #e5e5e5;
+  border-bottom: 1px solid black;
+}
+
+#Client_data tr:nth-child(1) td:nth-child(2) {
+  width: 45%;
+  background-color: #e5e5e5;
+  border-bottom: 1px solid black;
+}
+
+#Client_data tr:nth-child(1) td:nth-child(3) {
+  width: 33%;
+  background-color: #e5e5e5;
+  border-bottom: 1px solid black;
+}
+
+#Client_data tr:last-child td {
+  border-bottom: none;
+}
+
+#qr-code img {
+
+    margin: 5px auto;
+    margin-top:15px;
+    display: block;
+
+    width: 90%;
+  
+}
+
+/* End of Client_data table styles */
+/* start of new_totals table styles */
+#new_totals {
+  width: 100%;
+  border-spacing: 0;
+  text-align: center;
+}
+
+#new_totals th,
+#new_totals td {
+  padding: 4px;
+}
+
+#new_totals th {
+  background-color: #4b4b4b;
+  color: #fff;
+}
+
+#new_totals th:nth-child(1) {
+  width: 3%;
+}
+
+#new_totals th:nth-child(2) {
+  width: 67%;
+  border-right: 3px solid #fff;
+}
+
+#new_totals th:nth-child(3) {
+  width: 30%;
+}
+
+#new_totals tr:nth-child(even) {
+  background-color: #e7e7e7;
+}
+
+.listing-table {
+  display: none;
+}
+
+/* End of new_totals table styles */
+/*Start of  spell_totals styles*/
+#spell_totals {
+  width: 100%;
+  border-spacing: 0;
+  direction: rtl;
+  border: 1px solid black;
+  text-align: center;
+  font-weight: bold;
+  font-size: 12px;
+  margin-top: 20px;
+}
+
+#spell_totals tr:nth-child(1) td:nth-child(1) {
+  width: 20%;
+}
+
+#spell_totals tr:nth-child(1) td:nth-child(2) {
+  width: 50%;
+  border-bottom: 1px solid black;
+}
+
+#spell_totals tr:nth-child(1) td:nth-child(3) {
+  width: 30%;
+}
+
+#spell_totals tr:nth-child(3) td {
+  padding-bottom: 6px;
+  border-bottom: 1px solid black;
+}
+
+#spell_totals tr:nth-child(4) td {
+  padding-bottom: 6px;
+  border-bottom: 1px solid black;
+}
+
+#spell_totals td {
+  padding: 3px 2px;
+}
+
+#spell_totals tr:nth-child(5) td {
+  text-decoration: underline;
+}
+
+#inv_notes p {
+  display: inline-block;
+}
+
+.hidden_tr {
+  display: none;
+}
+
+/*End of  spell_totals styles*/
+</style>
+
+<body>
+
+
+<div class="invoice-wrap">
+  {%html_sticky_header%}
+  <div class="invoice-inner">
+    <table id="header">
+      <tr>
+        <td colspan="100%">
+          <img src="https://enppi-ksa.daftra.com/files/ba642079/logos/6575ae24c18ce_blobid1702211104714.png" alt="Logo"
+            title="EnnpiHeaderLogo.png" style="width: 100%" />
+        </td>
+      </tr>
+      <!-- <tr>
+        <td>Branch of foreign joint stock campany</td>
+        <td>فرع شركة مساهمة أجنبية</td>
+      </tr>
+      <tr>
+        <td>Capital 500,000 S.R - C.R. 2051032123  - CC 90999</td>
+        <td>رأس المال ٥٠٠,٠٠٠ ريال سعودى - س.ت ٢٠٥١٠٣٢١٢٣ - غ.ت ٩٠٩٩٩</td>
+      </tr>
+      <tr>
+        <td>VAT REG No.: {%site_bn1%}</td>
+        <td>رقم تسجيل ضريبة القيمة المضافة :{%client_bn1%}</td>
+      </tr> -->
+      <tr> 
+        <td> C.R. 2051032123  </td>
+      <td>س.ت ٢٠٥١٠٣٢١٢٣</td>
+      </tr> 
+    </table>
+    <div style="width: 95%; margin:3px 1.7% 3px 3.3%; height: 1px; background-color: #be4b48;"></div>
+    <div id="inv_title">{%invoice_title%}</div>
+    <table style="width: 100%; border-spacing: 0;  border: 1px solid black; margin-bottom: 10px;">
+      <tr>
+        <td      style="
+          width: 42%;
+          display: inline-block;
+          vertical-align: top;
+          border-right: 1px solid black;
+          height: 100%;
+        ">
+      <table id="Contractor">
+        <tbody>
+          <tr>
+            <td>Contractor Details</td>
+            <td></td>
+            <td>بيانات المقاول</td>
+          </tr>
+          <tr>
+            <td>SAP P.O. No.</td>
+            <td>{%SAP NO%}</td>
+            <td>رقم الساب</td>
+          </tr>
+          <tr>
+            <td>Contract No.</td>
+            <td>{%Contract No%}</td>
+            <td>رقم العقد</td>
+          </tr>
+          <tr>
+            <td>Contractor No.</td>
+            <td>{%Contractor No%}</td>
+            <td>رقم المقاول</td>
+          </tr>
+          <tr>
+            <td>Contractor Vat Reg.</td>
+            <td>{%site_bn1%}</td>
+            <td>رقم السجل الضريبي</td>
+          </tr>
+          <tr>
+            <td>Bank Name</td>
+            <td>{%Bank Name%}</td>
+            <td>اسم البنك</td>
+          </tr>
+          <tr>
+            <td>Bank Address</td>
+            <td>{%Bank Address%}</td>
+            <td>عنوان البنك</td>
+          </tr>
+          <tr>
+            <td>Bank Account No.</td>
+            <td>{%Account No%}</td>
+            <td>رقم الحساب</td>
+          </tr>
+          <tr>
+            <td>IBAN Account No.</td>
+            <td>{%IBAN%}</td>
+            <td>الايبان</td>
+          </tr>
+          <tr>
+            <td>Building No.</td>
+            <td id="buliding_num">5316</td>
+            <td>رقم المبنى</td>
+          </tr>
+          <tr>
+            <td>Street Name</td>
+            <td>
+الأمير فيصل بن فهد              
+            </td>
+            <td>اسم الشارع</td>
+          </tr>
+          <tr>
+            <td>District</td>
+            <td>الحزام الأخضر</td>
+            <td>الحى</td>
+          </tr>
+          <tr>
+            <td>City</td>
+            <td>الخبر</td>
+            <td>المدينة</td>
+          </tr>
+          <tr>
+            <td>Postal Code</td>
+            <td>31952</td>
+            <td>الرمز البريدى</td>
+          </tr>
+          <tr>
+            <td>Additional No.</td>
+            <td>6079</td>
+            <td>الرقم الاضافى</td>
+          </tr>
+  
+          <tr>
+            <td>CR Number</td>
+            <td>{%site_bn2%}</td>
+            <td>السجل التجارى</td>
+          </tr>
+          <tr>
+            <td>SP Number</td>
+            <td>3004509766</td>
+            <td>الرقم المميز</td>
+          </tr>
+        </tbody>
+      </table>
+  </td>
+        <td style="
+          width: 58%;
+          display: inline-block;
+        ">
+      <table id="inv_details">
+        <tbody>
+          <tr>
+            <td>Invoice Details</td>
+            <td></td>
+            <td>تفاصيل الفاتورة</td>
+            <td style="    border-bottom: none;" rowspan="100%" id="qr-code">{%sa_qr_code_image%}</td>
+          </tr>
+          <tr>
+            <td>Invoice No.</td>
+            <td>{%invoice_no%}</td>
+            <td>رقم الفاتورة</td>
+          </tr>
+          <tr>
+            <td>Reference #</td>
+            <td>{%Reference%}</td>
+            <td>الرقم المرجعى</td>
+          </tr>
+          <tr>
+            <td>Invoice Date</td>
+            <td>{%invoice_date%}</td>
+            <td>تاريخ الفاتورة</td>
+          </tr>
+          <tr>
+            <td>Invoice Period</td>
+            <td>{%Invoice Period%}</td>
+            <td>مدة الفاتورة</td>
+          </tr>
+          <tr>
+            <td>Invoice Type</td>
+            <td id="payment_selected">{%custom_invoice_type_field_24%}<span id="custom_invoice_type">{%Invoice type%}</span></td>
+            <td>نوع الفاتورة</td>
+          </tr>
+        </tbody>
+      </table>
+      <table id="Client_data">
+        <tbody>
+          <tr>
+            <td>Client Data</td>
+            <td></td>
+            <td>بيانات العميل</td>
+          </tr>
+          <tr>
+            <td>Company Name</td>
+            <td style="text-align:center">
+              <div style="text-align:center">{%client_business_name%}</div>
+    <div style="text-align:center; direction: rtl;">{%custom_اسم_الشركة_باللغة_العربية_field_30%}
+  </div>
+  </td>
+  <td>اسم الشركة</td>
+  </tr>
+  <tr>
+    <td>VAT ID</td>
+    <td>{%client_bn1%}</td>
+    <td>رقم شهادة ضريبية القيمة المضافة</td>
+  </tr>
+  <tr>
+    <td>Building No.</td>
+    <td>{%custom_رقم_المبنى_field_27%}</td>
+    <td>رقم المبنى</td>
+  </tr>
+  <tr>
+    <td>Street Name</td>
+    <td id="client_address">{%client_address%}</td>
+    <td>اسم الشارع</td>
+  </tr>
+  <tr>
+    <td>District</td>
+    <td>{%client_state%}</td>
+    <td>الحى</td>
+  </tr>
+  <tr>
+    <td>City</td>
+    <td>{%client_city%}</td>
+    <td>المدينة</td>
+  </tr>
+  <tr>
+    <td>Country</td>
+    <td>{%client_country%}</td>
+    <td>البلد</td>
+  </tr>
+  <tr>
+    <td>Postal Code</td>
+    <td>{%client_postcode%}</td>
+    <td>الرمز البريدى</td>
+  </tr>
+  <tr>
+    <td>Additional No.</td>
+    <td>{%custom_الرقم_الإضافي_field_28%}</td>
+    <td>الرقم الاضافى</td>
+  </tr>
+  <tr>
+    <td>CR Number</td>
+    <td>{%custom_السجل_التجاري_field_29%}</td>
+    <td>السجل التجارى</td>
+  </tr>
+  </tbody>
+  </table>
+</td>
+      </tr>
+
+
+</table>
+
+<table id="new_totals">
+  <thead>
+    <tr>
+      <th class="serial-th"></th>
+      <th>
+        DECSRIPTION <br />
+        الوصف
+      </th>
+      <th>
+        Amount <span id="curr_code1"> </span> 
+          <br />
+        القيمة  
+        <span id="total_in_curr"></span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="col-1 serial"></td>
+      <td class="col-2">
+        Total Invoice Amount in <span id="curr_code"></span> <br />
+        اجمالي الفاتورة  
+        <span id="total_in_curr1"></span>
+      </td>
+      <td class="col-3" id="inovice_subtotal"></td>
+    </tr>
+    <tr>
+      <td class="col-1 serial"></td>
+      <td class="col-2">
+        PLUS : VAT %15 <br />
+        ضريبة القيمة المضافة 15%
+      </td>
+      <td class="col-3" id="taxTotal">{%tax-total%}</td>
+    </tr>
+    <tr class="retention_tr">
+      <td class="col-1 serial"></td>
+      <td class="col-2">
+        Less : <span class="reten_percent"><span id="main_reten_percent">{%custom_نسبة_ضمان_الأعمال_field_36%}{%Retention Percent%}</span></span>%</span> Retention <br />
+        خصم : <span class="reten_percent">{%custom_نسبة_ضمان_الأعمال_field_36%}{%Retention Percent%}%</span> ضمان حسن تنفيذ اعمال
+      </td>
+      <td class="col-3" id="current_preformance"></td>
+    </tr>
+    <tr class="saudization_tr">
+      <td class="col-1 serial"></td>
+      <td class="col-2">
+        SAUDIZATION DEDUCTION<br />
+        استقطاع سعوده
+      </td>
+      <td class="col-3" id="saudization_deduction"></td>
+    </tr>
+    <tr class="saudization_tax_tr">
+      <td class="col-1 serial"></td>
+      <td class="col-2">
+        SAUDIZATION TAX <br />
+        ضريبة سعودة
+      </td>
+      <td class="col-3" id="saudization_tax_deduction">{%custom_ضريبة_سعودة_field_35%}</td>
+    </tr>
+
+    <tr class="recovery_tr">
+      <td class="col-1 serial"></td>
+      <td class="col-2">
+        Recovery of Advance Payment @ <span class="recovery_precent">10%</span><br />
+        خصم : <span class="recovery_precent">10%</span> دفعة مقدمة
+      </td>
+      <td class="col-3" id="recovery_payement"></td>
+    </tr>
+    
+    <tr class="recovery_tax_tr">
+      <td class="col-1 serial"></td>
+      <td class="col-2">
+       RECOVERY OF <span class="recovery_precent"> </span> VAT <span class="recovery-tax-percent">15%</span> ON ADVANCED PAYMENT<br />
+       <span style="display: inline-block;direction: rtl;width:200px">
+       خصم: <span class="recovery-tax-percent">15%</span> ضريبة مضافة على دفعة مقدمة <span class="recovery_precent"></span>
+    </span>
+      </td>
+      <td class="col-3" id="recovery_payement_tax">{%custom_ضريبة_دفعة_مقدمة_field_34%}</td>
+    </tr>
+
+    <tr>
+      <td class="col-1"></td>
+      <td class="col-2">
+        Total Net Amount Due This Invoice <br />
+        اجمالى صافى المبلغ
+      </td>
+      <td class="col-3" id="main_total_field">{%invoice_total%}</td>
+    </tr>
+  </tbody>
+</table>
+<table id="spell_totals">
+  <tbody>
+    <tr>
+      <td>اجمالي صافي الفاتورة</td>
+      <td id="invoice_total">{%invoice_total%}</td>
+      <td>Net Amount</td>
+    </tr>
+    <tr>
+      <td colspan="100%" id="ar_invoice_total_spelled"></td>
+    </tr>
+    <tr>
+      <td colspan="100%" id="en_invoice_total_spelled"></td>
+    </tr>
+
+  </tbody>
+</table>
+<div id="items-list">{%items_list%}</div>
+<custom_field id="custom_fields" class="editable-area" style="clear: both; display: none" border="0" cellspacing="0"
+  cellpadding="0">
+  {%custom_fields%}
+</custom_field>
+<div style="display: none;" id="add_items">{%custom_عرض_بيانات_الفاتورة_field_32%}</div>
+
+<table style="width: 100%; direction: ltr;font-size: 15px; font-weight: bold;">
+  <tbody>
+    <tr>
+      <td style="width: 20%; padding: 10px;">Project Manager</td>
+      <td style="width: 40%;"></td>
+      <td style="width: 30%; text-align: right; padding-right: 10px;"> Enppi KSA Authorized Signatory</td>
+    </tr>
+    <tr>
+      <td style="width: 20%; padding: 10px;"></td>
+      <td style="width: 40%;"></td>
+      <td style="width: 30%; text-align: right; padding-right: 10px;"> <span
+          style="display:inline-block; width:235px; text-align:left">Signature:</span> </td>
+    </tr>
+  </tbody>
+</table>
+<div style="display: none;" id="invoice_currency_code"> {%invoice_currency_code%}</div>
+<div class="notes-block">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td>
+        <div style="font-style: italic" class="editable-area" id="footer">
+          {%footer%}
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+<br />
+</div>
+{%html_sticky_footer%}
+</div>
+<div id="Payment_Method" style="display: none">{%Payment Method%}</div>
+<div id="conversion_factor" style="display: none"></div>
+<div id="first_title" style="display: none">{%custom_وصف_خصم_ضمان_الإعمال_field_37%}</div>
+<div id="recovery_tax_percent" style="display: none">{%Recovery Tax%}</div>
+  <script>
+    // Payment_Method Fn *****************************************
+    function setInvoiceType() {
+          var customInvoiceType = document.getElementById('custom_invoice_type')
+          var invoiceType = document.getElementById('payment_selected')
+          if(customInvoiceType.innerText.length != 0){
+              invoiceType.innerText = customInvoiceType .innerText
+         }
+    }
+    try {
+      setInvoiceType();
+    } catch (error) {
+      console.log(error);
+    }
+    // ***************************************************************
+
+    function retentionDescription(){
+      var retendDesc = document.getElementById('first_title')
+      if(retendDesc.innerText.length != 0){
+        var line1 = retendDesc.innerHTML.split('\n')[0]
+        var line2 = retendDesc.innerHTML.split('\n')[1]
+        if(line2 == undefined){
+        line2 = ''
+        }
+        var retenLabelCell  =document.querySelector('.retention_tr .col-2')
+        retenLabelCell.innerHTML = line1 + '<br>' + line2
+      }
+    }
+
+    function getValuesFromTotalsTable() {
+      var TotalsTblRows = document.querySelectorAll(
+        ".total-table:nth-child(2) tr"
+      );
+      for (var i = 0; i < TotalsTblRows.length; i++) {
+        console.log(TotalsTblRows[i].cells[1].innerText.trim(""));
+        if (
+          TotalsTblRows[i].cells[1].innerText.slice(0, 15).trim("") ==
+          "خصم ضمان أعمال"
+        ) {
+          document.getElementById("current_preformance").innerText =
+            parseFloat(TotalsTblRows[i].cells[2].innerText.replace(/[\$,]/g, '')).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        } else
+          if (
+            TotalsTblRows[i].cells[1].innerText.slice(0, 14).trim("") ==
+            "القيمة المضافة"
+          ) {
+            document.getElementById("taxTotal").innerText =
+              parseFloat(TotalsTblRows[i].cells[2].innerText.replace(/[\$,]/g, '')).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          } else if (TotalsTblRows[i].cells[1].innerText.slice(0, 14).trim("") ==
+            "استقطاع سعودة") {
+            document.getElementById("saudization_deduction").innerText = parseFloat(TotalsTblRows[i].cells[2].innerText.replace(/[\$,]/g, '')).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          } else if (TotalsTblRows[i].cells[1].innerText.slice(0).trim("") =="ضريبة دفعة مقدمة") {
+            document.getElementById("recovery_payement_tax").innerText = parseFloat(TotalsTblRows[i].cells[2].innerText.replace(/[\$,]/g, '')).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          } else if (TotalsTblRows[i].cells[1].innerText.slice(0, 14).trim("") ==
+            "ضريبة سعودة") {
+            document.getElementById("saudization_tax_deduction").innerText = parseFloat(TotalsTblRows[i].cells[2].innerText.replace(/[\$,]/g, '')).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          else if (TotalsTblRows[i].cells[1].innerText.slice(0, 14).trim("") ==
+            "دفعات مقدمة") {
+            document.getElementById("recovery_payement").innerText = parseFloat(TotalsTblRows[i].cells[2].innerText.replace(/[\$,]/g, '')).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          else {
+            TotalsTblRows[i].classList.add('hidden-tr')
+          }
+
+      }
+    }
+
+    function conversionCurrencyAndAddValues() {
+      var conversionfactor = parseFloat(
+        document
+          .getElementById("conversion_factor")
+          .innerText.replace(/,/g, "")
+      );
+      var thisMonthVals = document.querySelectorAll(".col-3");
+      for (var i = 0; i < thisMonthVals.length; i++) {
+        // remove Currency
+        if (thisMonthVals[i].innerText == "") {
+          thisMonthVals[i].innerText = "0.00";
+        } else {
+          thisMonthVals[i].innerText = parseFloat(
+            thisMonthVals[i].innerText.replace(/,/g, "")
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+      }
+    }
+    try {
+      //conversionCurrencyAndAddValues();
+    } catch (error) {
+      console.log(error);
+    }
+    // spell in english
+    // english spelling
+    var ones = [
+      "",
+      "one",
+      "two",
+      "three",
+      "four",
+      "five",
+      "six",
+      "seven",
+      "eight",
+      "nine",
+    ];
+    var tens = [
+      "",
+      "",
+      "twenty",
+      "thirty",
+      "forty",
+      "fifty",
+      "sixty",
+      "seventy",
+      "eighty",
+      "ninety",
+    ];
+    var teens = [
+      "ten",
+      "eleven",
+      "twelve",
+      "thirteen",
+      "fourteen",
+      "fifteen",
+      "sixteen",
+      "seventeen",
+      "eighteen",
+      "nineteen",
+    ];
+
+    function convert_millions(num) {
+      if (num >= 1000000) {
+        return (
+          convert_millions(Math.floor(num / 1000000)) +
+          " million " +
+          convert_thousands(num % 1000000)
+        );
+      } else {
+        return convert_thousands(num);
+      }
+    }
+
+    function convert_thousands(num) {
+      if (num >= 1000) {
+        return (
+          convert_hundreds(Math.floor(num / 1000)) +
+          " thousand " +
+          convert_hundreds(num % 1000)
+        );
+      } else {
+        return convert_hundreds(num);
+      }
+    }
+
+    function convert_hundreds(num) {
+      if (num > 99) {
+        return (
+          ones[Math.floor(num / 100)] + " hundred " + convert_tens(num % 100)
+        );
+      } else {
+        return convert_tens(num);
+      }
+    }
+
+    function convert_tens(num) {
+      if (num < 10) return ones[num];
+      else if (num >= 10 && num < 20) return teens[num - 10];
+      else {
+        return tens[Math.floor(num / 10)] + " " + ones[num % 10];
+      }
+    }
+
+
+    function convert(num) {
+      if (num == 0) return "zero";
+      else return convert_millions(num);
+    }
+
+    function calcSubTotal() {
+      var itemSubtotal = document.querySelectorAll('#listing_table tr td:nth-child(5)')
+      var newSubTotal = 0
+      for (var i = 0; i < itemSubtotal.length; i++) {
+        var currentSub = Number(itemSubtotal[i].innerText.replace(/[^0-9.-]+/g, ""));
+        newSubTotal += currentSub
+      }
+
+      document.getElementById('inovice_subtotal').innerText = parseFloat(newSubTotal).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function setRetenPercent() {
+      var totalTableTrs = document.querySelectorAll('#items-list table:nth-child(2) tr')
+      for (var i = 0; i < totalTableTrs.length; i++) {
+        var targetTd = totalTableTrs[i].querySelector('td:nth-child(2)')
+        if (targetTd.innerText.indexOf('ضمان أعمال') !== -1 || targetTd.innerText.indexOf('Retention') !== -1) {
+            var retenPercentField = document.getElementById('main_reten_percent')
+            if(retenPercentField.innerText.length == 0){
+                var retenPrecent = targetTd.innerText.match(/\d+/g);
+                 var elements = document.getElementsByClassName('reten_percent')
+              for (var i = 0; i < elements.length; i++) {
+                 elements[i].textContent = retenPrecent + '%';
+                   }
+            }
+
+        }
+      }
+    }
+
+    function setRecoveryPercent() {
+      var totalTableTrs = document.querySelectorAll('#items-list table:nth-child(2) tr')
+      for (var i = 0; i < totalTableTrs.length; i++) {
+        var targetTd = totalTableTrs[i].querySelector('td:nth-child(2)')
+        if (targetTd.innerText.indexOf('دفعات مقدمة') !== -1 || targetTd.innerText.indexOf('Recovery') !== -1) {
+          console.log(totalTableTrs[i])
+          var invoiceSubtota = document.getElementById('inovice_subtotal').innerText
+          var subTotalInNumdd = Number(invoiceSubtota.replace(/[^0-9.-]+/g, ""));
+          var recoveryAmount = totalTableTrs[i].querySelector('td:nth-child(3)').innerText
+          console.log('rec')
+          console.log(recoveryAmount)
+          var recoveryAmountNumxx = Math.abs(parseFloat(recoveryAmount.replace(/[^0-9.-]/g, '')));
+          console.log('rec after')
+          console.log(recoveryAmountNumxx)
+          // var elements = document.getElementsByClassName('recovery_precent')
+          // for (var x = 0; x < elements.length; x++) {
+          //   console.log('test num')
+          //   console.log(recoveryAmountNumxx)
+          //   console.log(subTotalInNumdd)
+          //   console.log(parseFloat((recoveryAmountNumxx / subTotalInNumdd)*100))
+          //   elements[x].innerText = parseFloat((recoveryAmountNumxx / subTotalInNumdd)*100).toFixed(0) + '%';
+          // }
+
+        }
+      }
+    }
+
+    function checkForExtraDeductions(name) {
+      // Get all the rows in the table
+      var totalTableTrs = document.querySelectorAll('#items-list table:nth-child(2) tr')
+
+      // Loop through each row
+      for (var i = 0; i < totalTableTrs.length; i++) {
+        // Get the first td in the row
+        var secTd = totalTableTrs[i].getElementsByTagName('td')[1];
+
+
+        if (secTd && secTd.textContent.indexOf(name) !== -1) {
+
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function checkCustomeFieldValue(element_id){
+        var element = document.getElementById(element_id)
+        if(element.innerText.length !=0){
+            return true
+        } else {
+            return false
+        }
+    }
+
+    function hideZeroTrs() {
+      console.log('strt hide zero')
+      var hasRetention = checkForExtraDeductions('ضمان أعمال')
+      var hasSaudization = checkForExtraDeductions('سعودة')
+      var hasRecoverPayment = checkForExtraDeductions('دفعات مقدمة')
+      var hasTaxRecoverPayment = checkCustomeFieldValue('recovery_payement_tax')
+      var hasTaxSaudization = checkCustomeFieldValue('saudization_tax_deduction')
+
+      if (!hasRetention) {
+        // document.querySelector('.retention_tr').classList.add('hidden_tr')
+        document.querySelector('.retention_tr .col-3').innerText = '0.00'
+
+      }
+      if (!hasSaudization) {
+        document.querySelector('.saudization_tr').classList.add('hidden_tr')
+      }
+      if (!hasRecoverPayment) {
+        document.querySelector('.recovery_tr .col-3').innerText = '0.00'
+      }
+      if (!hasTaxRecoverPayment) {
+        document.querySelector('.recovery_tax_tr .col-3').innerText = '0.00'
+        // var elements = document.querySelectorAll('.recovery_tax_tr .recovery_precent')
+        //   for (var x = 0; x < elements.length; x++) {
+        //     elements[x].innerText = ''
+        //   }
+
+      } else {
+        var taxRecoveryAmount = document.getElementById('recovery_payement_tax')
+        taxRecoveryAmount.innerText = parseFloat(taxRecoveryAmount.innerText.replace(/[^0-9.-]/g, '')).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      }
+      
+      if (!hasTaxSaudization) {
+        document.querySelector('.saudization_tax_tr').classList.add('hidden_tr')
+      } else {
+       var taxSaudiAmount = document.getElementById('saudization_tax_deduction')
+       taxSaudiAmount.innerText = parseFloat(taxSaudiAmount.innerText.replace(/[^0-9.-]/g, '')).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      }
+      
+
+      console.log('finish hide zero')
+    }
+
+    function restyleAndSerial() {
+      console.log('start style')
+      // Get all the rows in the table
+      var rows = document.querySelectorAll('#new_totals tbody tr')
+      // Initialize a counter for visible rows
+      var visibleRowCount = 0;
+
+      // Loop through each row
+      for (var i = 0; i < rows.length; i++) {
+        // If the row is not hidden
+        if (!rows[i].classList.contains('hidden_tr')) {
+          // Increment the visible row counter
+          visibleRowCount++;
+
+          console.log(visibleRowCount)
+          // If the visible row counter is even
+          if (visibleRowCount % 2 === 0) {
+            // Set the background color to #ddd
+            rows[i].style.backgroundColor = '#e7e7e7';
+          } else {
+            // Otherwise, clear the background color
+            rows[i].style.backgroundColor = '#fff';
+          }
+          // rows[i+1].getElementsByTagName('td')[0].textContent = (visibleRowCount)
+        }
+      }
+      console.log('fibish style')
+    }
+
+
+
+    function addInvoiceItems() {
+      console.log('start add');
+      var itemsTr = document.querySelectorAll('#listing_table tbody tr');
+      for (var i = 0; i < itemsTr.length; i++) {
+        var itemDesc = itemsTr[i].getElementsByTagName('td')[1].textContent;
+        var itemSubTotal = itemsTr[i].getElementsByTagName('td')[4].textContent;
+
+        var newTotals = document.querySelector('#new_totals tbody');
+        var newRow = newTotals.insertRow(i);
+        newRow.className += ' item-row hidden_tr';
+        var cellOne = newRow.insertCell(0);
+        var cellTwo = newRow.insertCell(1);
+        var celllThree = newRow.insertCell(2);
+
+        cellTwo.innerText = itemDesc;
+        // celllThree.innerText = parseFloat(itemSubTotal.replace(/,/g, "")).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        celllThree.innerText = ''
+        cellOne.className += ' col-1 serial';
+        cellTwo.className += ' col-2';
+        celllThree.className += ' col-3';
+      }
+      console.log('finsh add');
+    }
+
+    function viewItemRows() {
+      console.log('start view itmes')
+      var checkBoxValue = document.getElementById('add_items')
+      if (checkBoxValue.innerText == '1') {
+        var itemRows = document.querySelectorAll('.item-row')
+        for (var i = 0; i < itemRows.length; i++) {
+          itemRows[i].classList.remove('hidden_tr')
+        }
+      }
+      console.log('finish view itmes')
+    }
+
+    try {
+      getValuesFromTotalsTable();
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
+      calcSubTotal()
+      setRetenPercent()
+      setRecoveryPercent()
+      var myNum =String( parseFloat(document
+        .getElementById("invoice_total")
+        .innerText.replace(/[\$,]/g, '')).toFixed(2));
+      document
+        .getElementById("invoice_total")
+        .innerText = parseFloat(document
+          .getElementById("invoice_total")
+          .innerText.replace(/[\$,]/g, '')).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      var myIntNum = parseInt(myNum.split(".")[0]);
+      var myFloatNum = parseInt(myNum.split(".")[1]);
+
+      var mainTotal = document.getElementById('main_total_field')
+      mainTotal.innerText = mainTotal.innerText.replace('ر.س', '').replace('SAR', '').replace('ر⁠.س', '')
+      var invoiceCurr = document.getElementById('invoice_currency_code').innerText;
+      console.log(invoiceCurr);
+      if(invoiceCurr.trim() == "SAR"){
+        document.getElementById('curr_code1').innerText='SAR';
+        document.getElementById('total_in_curr').innerText='ريال سعودي';
+        document.getElementById('total_in_curr1').innerText='ريال سعودي';
+        document.getElementById('curr_code').innerText='SR';
+
+      document.getElementById("en_invoice_total_spelled").innerText =   
+      convert(myIntNum) +
+        " SAR and " +
+        convert(myFloatNum) +
+        " hallah only";
+    }else if(invoiceCurr.trim() == "USD"){
+      document.getElementById('curr_code1').innerText='USD';
+      document.getElementById('total_in_curr').innerText='دولار أمريكي ';
+      document.getElementById('total_in_curr1').innerText='دولار أمريكي ';
+      document.getElementById('curr_code').innerText='USD';
+      document.getElementById("en_invoice_total_spelled").innerText =   convert(myIntNum) +
+        " dollar and " +
+        convert(myFloatNum) +
+        " cent only";
+      }
+  
+      addInvoiceItems()
+      hideZeroTrs()
+      viewItemRows()
+      restyleAndSerial()
+
+    } catch (error) {
+      console.log(error);
+    }
+
+function changeRecoveryTax(){
+    var customRecoveryTax = document.getElementById('recovery_tax_percent')
+    if(customRecoveryTax.innerText.length !=0){
+        var allRecoveryTaxPercent = document.querySelectorAll('.recovery-tax-percent')
+        for(var i=0; i<allRecoveryTaxPercent.length; i++){
+            allRecoveryTaxPercent[i].innerText = customRecoveryTax.innerText + '%'
+        }
+    }
+}
+
+  //   Spell In Arabic
+  function numberToWordsArabic(number) {
+      var units = [
+        "",
+        "واحد",
+        "اثنان",
+        "ثلاثة",
+        "أربعة",
+        "خمسة",
+        "ستة",
+        "سبعة",
+        "ثمانية",
+        "تسعة",
+        "عشرة",
+        "أحد عشر",
+        "اثنا عشر",
+        "ثلاثة عشر",
+        "أربعة عشر",
+        "خمسة عشر",
+        "ستة عشر",
+        "سبعة عشر",
+        "ثمانية عشر",
+        "تسعة عشر",
+      ];
+      var tens = [
+        "",
+        "",
+        "عشرون",
+        "ثلاثون",
+        "أربعون",
+        "خمسون",
+        "ستون",
+        "سبعون",
+        "ثمانون",
+        "تسعون",
+      ];
+      var scales = [
+        "",
+        "ألف",
+        "مليون",
+        "مليار",
+        "تريليون",
+        "كوادريليون",
+        "كوينتليون",
+        "سكستليون",
+        "سبتليون",
+        "أوكتليون",
+        "نونليون",
+        "ديسليون",
+      ];
+      if (number === 0) {
+        return "صفر";
+      }
+      var words = "";
+      if (number < 0) {
+        words += "سالب ";
+        number = Math.abs(number);
+      }
+      var scaleIndex = 0;
+      while (number > 0) {
+        var triplet = number % 1000;
+        number = Math.floor(number / 1000);
+        if (triplet > 0) {
+          var tripletWords = "";
+          var hundreds = Math.floor(triplet / 100);
+          var tensAndUnits = triplet % 100;
+          if (hundreds > 0) {
+            if (hundreds == 1) {
+              tripletWords += " مئة";
+            } else if (hundreds == 2) {
+              tripletWords += " مائتان";
+            } else if (hundreds == 3) {
+              tripletWords += " ثلاثمائة  ";
+            } else if (hundreds == 4) {
+              tripletWords += " اربعمائة ";
+            } else if (hundreds == 5) {
+              tripletWords += " خمسمائة ";
+            } else if (hundreds == 6) {
+              tripletWords += " ستمائة ";
+            } else if (hundreds == 7) {
+              tripletWords += " سبعمائة ";
+            } else if (hundreds == 8) {
+              tripletWords += " ثمانمائة ";
+            } else if (hundreds == 9) {
+              tripletWords += " تسعمائة ";
+            }
+          }
+          if (tensAndUnits > 0) {
+            if (tripletWords !== "") {
+              tripletWords += " و";
+            }
+            if (tensAndUnits < 20) {
+              tripletWords += units[tensAndUnits];
+            } else {
+              var tensDigit = Math.floor(tensAndUnits / 10);
+              var unitsDigit = tensAndUnits % 10;
+              if (tensDigit > 0) {
+                if (unitsDigit === 1) {
+                  tripletWords += units[unitsDigit] + " و";
+                } else if (unitsDigit > 1) {
+                  tripletWords += units[unitsDigit] + " و";
+                }
+                tripletWords += tens[tensDigit];
+              }
+            }
+          }
+          if (scaleIndex > 0) {
+            if (triplet === 1) {
+              tripletWords += " " + scales[scaleIndex];
+            } else if (triplet >= 2 && triplet <= 10) {
+              tripletWords += " " + scales[scaleIndex] + "";
+            } else if (triplet > 10) {
+              tripletWords += " " + scales[scaleIndex];
+            }
+          }
+          if (words !== "") {
+            words = tripletWords + " و" + words;
+          } else {
+            words = tripletWords;
+          }
+        }
+        scaleIndex++;
+      }
+      return words;
+    }
+    function convertFN(num, maincurrency, floatCurr) {
+      var myIntNum = parseInt(num.split(".")[0]);
+      var myFloatNum = parseInt(num.split(".")[1]);
+      return (
+        numberToWordsArabic(myIntNum) +
+        " " +
+        maincurrency +
+        " و " +
+        numberToWordsArabic(myFloatNum) +
+        " " +
+        floatCurr +
+        " فقط"
+      );
+    }
+    try {
+      var myNum =String( parseFloat(document
+        .getElementById("invoice_total")
+        .innerText.replace(/[\$,]/g, '')).toFixed(2));
+      var invoiceCurr = document.getElementById('invoice_currency_code').innerText;
+      if(invoiceCurr.trim() == "SAR"){
+      document.getElementById("ar_invoice_total_spelled").innerText =convertFN(myNum, "ريال", "هلله");
+    }else if(invoiceCurr.trim() == "USD"){
+        document.getElementById("ar_invoice_total_spelled").innerText =convertFN(myNum, "دولار", "سنت");
+      }
+      retentionDescription()
+      changeRecoveryTax()
+    } catch (error) {
+      console.log(error);
+    }
+
+
+  </script>
+</body>
+
+</html>

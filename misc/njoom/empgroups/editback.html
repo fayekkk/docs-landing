@@ -1,0 +1,157 @@
+<style>
+  .hidden {
+    display: none;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    let sections = $(".form-row div:not(:last-child)");
+    $.each(sections, (idx, newDiv) => {
+      if (idx <= 10) {
+        sections.eq(idx + 1).addClass("hidden");
+      }
+    });
+
+    setTimeout((e) => {
+      $("#le_workflow-type-entity-3_custom_data-emp_ids").val(
+        $("#le_workflow-type-entity-3_custom_data-employees").val()
+      );
+    }, 500);
+
+    $("#le_workflow-type-entity-3_custom_data-employees").on("change", (e) => {
+      $("#le_workflow-type-entity-3_custom_data-emp_ids").val(
+        $("#le_workflow-type-entity-3_custom_data-employees").val()
+      );
+    });
+  });
+</script>
+
+<!-- DONE BY TAREK -->
+
+<script>
+  // TO BE ADDED IN THE EMPLOYEES GROUPS WORK FLOW
+
+  $(document).ready(() => {
+    let employeeArr = [];
+    const idArr = [];
+    async function getData() {
+      document.querySelector(
+        "#le_workflow-type-entity-3_custom_data-employees"
+      ).disabled = "true";
+      const instanceId = location.pathname.split("/")[5];
+      const url =
+        "/v2/api/entity/le_workflow-type-entity-3/list/1?filter[status]=status-1&per_page=200";
+      const response = await fetch(url);
+      const data = await response.json();
+      const myData = data.data;
+      console.log(data);
+      for (i = 0; i < myData.length; i++) {
+        if (myData[i].id != instanceId) {
+          const getInstanceData = await fetch(
+            `/v2/api/entity/le_workflow-type-entity-3/${myData[i].id}/2`
+          );
+          const instanceData = await getInstanceData.json();
+          console.log(instanceData);
+          const employeeCustomData =
+            instanceData["le_workflow-type-entity-3_custom_data"].employees;
+          // for (j = 0; j < employeeCustomData.length; j++) {
+          //   $.get(`/v2/api/entity/staff/${employeeCustomData[j]}`).then(
+          //     function (empdata) {
+          //       const empName = empdata.name;
+          //       console.log(empName);
+          //       employeeArr.push(empName);
+          //       idArr.push(empdata.id);
+          //     }
+          //   );
+          // }
+          const batchSize = 20;
+          for (let i = 0; i < employeeCustomData.length; i += batchSize) {
+            const batch = employeeCustomData.slice(i, i + batchSize);
+            const promises = batch.map((id) =>
+              $.get(`/v2/api/entity/staff/${id}`)
+            );
+
+            Promise.all(promises)
+              .then((responses) => {
+                responses.forEach((empdata) => {
+                  const empName = empdata.name;
+                  console.log(empName);
+                  employeeArr.push(empName);
+                  idArr.push(empdata.id);
+                });
+              })
+              .catch((error) => {
+                console.error("Error fetching employee data:", error);
+              });
+          }
+          console.log(employeeArr);
+        } else {
+          console.log("same id");
+        }
+      }
+    }
+    getData().then(() => {
+      document
+        .querySelector("#le_workflow-type-entity-3_custom_data-employees")
+        .removeAttribute("disabled");
+    });
+
+    // REMOVE THE ASSIGNED USERS FROM THE UL MENU
+    $(document).on("click", ".select2-search__field:eq(2)", function () {
+      console.log(employeeArr);
+      let options = document.querySelectorAll(
+        "#select2-le_workflow-type-entity-3_custom_data-employees-results li"
+      );
+      console.log(options);
+      for (i = 0; i < options.length; i++) {
+        console.log(options[i].innerText.replace("#", ""));
+        if (employeeArr.includes(options[i].innerText.replace("#", ""))) {
+          options[i].style.display = "none";
+          options[i].setAttribute("class", "none");
+          console.log(options[i].innerText.replace("#", ""), "is Assigned");
+        } else {
+          console.log("User not Assigned");
+        }
+      }
+    });
+
+    // IF THE USER SEARCHED FOR ONE OF THE ASSIGNED USER AN ALERT WILL POP-UP
+    let oldemps = [];
+    oldemps.push($("#le_workflow-type-entity-3_custom_data-emp_ids").val());
+    console.log(oldemps);
+    $(document).on("change", "[id$=custom_data-employees]", function () {
+      console.log("changed");
+      var x = $("#le_workflow-type-entity-3_custom_data-employees").val();
+      console.log(x);
+      var nums = x.map(function (str) {
+        return parseInt(str);
+      });
+      var oldempsnums = oldemps.map(function (str) {
+        return parseInt(str);
+      });
+
+      console.log(idArr);
+      // console.log(employeeArr);
+
+      for (j = 0; j < nums.length; j++) {
+        console.log(nums[j]);
+        if (oldempsnums.indexOf(nums[j]) > -1) {
+          let employee = 0;
+        }
+        if (idArr.indexOf(nums[j]) > -1 && oldempsnums.indexOf(nums[j]) == -1) {
+          console.log(idArr.indexOf(nums[j]));
+          console.log(idArr);
+          alert(
+            "هذا المستخدم تم تعيينه بالفعل في مجموعة أخري، برجاء تحديد مستخدم أخر"
+          );
+          $("#le_workflow-type-entity-3_custom_data-employees option")
+            .get(-1)
+            .remove();
+          console.log("Included");
+        } else {
+          console.log("Not Included");
+        }
+      }
+    });
+  });
+</script>

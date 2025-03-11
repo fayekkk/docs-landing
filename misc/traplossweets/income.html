@@ -1,0 +1,114 @@
+<div
+  id="barcode_template"
+  class="mceEditable"
+  readonly="readonly"
+  style="
+    padding: 140px 0px 0px 0px;
+    margin: 0 auto;
+    background-color: transparent;
+    margin-bottom: 0;
+    background-image: url('https://traplossweets.daftra.com/files/6d02e235/income/66b3663975e32_blobid1723033143127.jpg');
+    background-size: cover;
+    height: 28.3cm;
+  "
+>
+  <div style="font-family: tahoma; direction: rtl">
+    <div
+      style="
+        background: transparent;
+        width: 700px;
+        margin: auto;
+        padding: 1px;
+        border: 1px solid #bbb;
+      "
+    >
+      <div style="padding: 20px; border: 2px solid #bbb; position: relative">
+        <table style="width: 100%; margin-bottom: 10px">
+          <tbody>
+            <tr>
+              <td style="width: 50%">
+                <h3 style="margin-top: 0px; margin-bottom: 0px">
+                  <span class="mceNonEditable">{%business_name%}</span
+                  ><br /><span style="font-size: 10pt"
+                    >&nbsp;{{#site_bn1}} {{site_bn1_label}}: {{site_bn1}}
+                    {{/site_bn1}}</span
+                  >
+                </h3>
+              </td>
+              <td style="width: 50%; text-align: left">
+                <h3
+                  style="
+                    text-decoration: underline;
+                    margin-top: 0px;
+                    margin-bottom: 0px;
+                  "
+                >
+                  سند قبض
+                </h3>
+                <p style="direction: rtl; margin-top: 5px">
+                  <strong>رقم:</strong>&nbsp;<span class="mceNonEditable"
+                    >{%expense_id%}</span
+                  >&nbsp;
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="overflow: hidden">
+          <p style="margin: 0px">
+            <strong>استلمنا من السيد:&nbsp;</strong>{{#client_business_name}}
+            {{client_business_name}} {{/client_business_name}}
+            {{^client_business_name}} {{journal_account_name}}
+            {{/client_business_name}}
+          </p>
+          <p style="margin: 0px">
+            <strong>مبلغ وقدره:</strong>&nbsp;<span class="mceNonEditable"
+              >{%amount%}</span
+            >
+            &nbsp; &nbsp; &nbsp; &nbsp;<strong>فقط:</strong>&nbsp;<span
+              class="mceNonEditable"
+              >{%spelled_amount%}</span
+            >
+          </p>
+          <p style="margin: 0px">
+            <strong>بتاريخ:</strong>&nbsp;<span class="mceNonEditable"
+              >{%date%}</span
+            >&nbsp;
+          </p>
+          <p style="margin: 0px">
+            <strong>وذلك مقابل:</strong>&nbsp;<span class="mceNonEditable"
+              >{%note%}</span
+            >&nbsp;
+          </p>
+          <table
+            style="
+              width: 100%;
+              text-align: center;
+              margin: 0px;
+              margin-top: 20px;
+            "
+          >
+            <tbody>
+              <tr>
+                <td style="width: 50%">
+                  <span style="text-decoration: underline">توقيع المستلم</span>
+                </td>
+                <td style="width: 50%">
+                  <span style="text-decoration: underline">أمين الصندوق</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 50%">
+                  <span style="color: #bbb">.....................</span>
+                </td>
+                <td style="width: 50%">
+                  <span style="color: #bbb">.....................</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

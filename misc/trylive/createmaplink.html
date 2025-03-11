@@ -1,0 +1,24 @@
+<script>
+  // JSON data
+  const jsonData =
+    '{"lat": "30.075465678600366", "long": "31.02375297818756", "zoom": "18", "address": "Unnamed Road, Kerdasa, Giza Governorate 3650107, Egypt"}';
+
+  // Parse the JSON data
+  const data = JSON.parse(jsonData);
+
+  // Extract latitude, longitude, and address
+  const latitude = data.lat;
+  const longitude = data.long;
+  const zoom = data.zoom;
+  const address = encodeURIComponent(data.address);
+
+  // Build the Google Maps link
+  const mapsLink = `https://www.google.com/maps/@${latitude},${longitude},${zoom}z`;
+
+  // Alternatively, build a search link with the address
+  const searchLink = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}&query_place_id=${address}`;
+
+  // Output the links
+  console.log("Maps Link:", mapsLink);
+  console.log("Search Link:", searchLink);
+</script>

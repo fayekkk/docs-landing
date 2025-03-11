@@ -1,0 +1,569 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    body {
+      background: #ffffff;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    .listing-table th {
+      text-align: right;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      border-right: none !important;
+      border-left: none !important;
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+      border-bottom: 0 !important;
+    }
+    #listing_table th {
+      font-weight: bold !important;
+      background: #fff !important;
+    }
+
+    #listing_table {
+      border-right: 2px solid black !important;
+      border-top: 2px solid black !important;
+      border-left: none !important;
+      border-bottom: none !important;
+    }
+    #listing_table th,
+    #listing_table td {
+      text-align: center !important;
+      border-left: 2px solid black !important;
+      border-bottom: 2px solid black !important;
+      border-right: none !important;
+      border-top: none !important;
+      font-size: 12px !important;
+      padding: 1px 2px !important;
+    }
+    .listing-table:nth-child(2) {
+      margin: 20px 0;
+    }
+
+    .listing-table:nth-child(2) td:nth-child(2) {
+      width: 35%;
+    }
+    .listing-table:nth-child(2) tr:nth-child(2) td:last-child,
+    .listing-table:nth-child(2) tr:nth-child(2) td:nth-child(2) {
+      border-top: 1px solid #c0c0c0;
+    }
+    #invoice_title {
+      font-size: 20px;
+      font-weight: normal;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    strong_tag {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .notes-block {
+      margin: 30px 0 0 0;
+    }
+
+    #client_info {
+      max-width: 75%;
+    }
+    .invoice-info td {
+      font-size: 13px;
+    }
+    .invoice-num {
+      margin-bottom: 20px;
+    }
+    .invoice-summary-lable {
+      font-weight: bold;
+      color: #555555;
+    }
+    #field1 {
+      margin-bottom: 5px;
+    }
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+    .qr-code img {
+      margin-top: 10px;
+    }
+    .listing-table:nth-child(2) strong {
+      font-weight: normal;
+    }
+    .total-row,
+    .total-row td h4 strong {
+      font-weight: bold !important;
+    }
+    .total-row {
+      color: #555555;
+      border-bottom: 0;
+    }
+    #custom_fields td {
+      text-align: right;
+    }
+    #new_totals {
+      width: 58%;
+      float: left;
+      border-spacing: 0;
+      margin-top: 30px;
+      /* border-left: 1px solid black;
+      border-top: 1px solid black; */
+    }
+    #new_totals td {
+      text-align: center;
+      line-height: 1.1 !important;
+      /* border-right: 1px solid black;
+      border-bottom: 1px solid black; */
+      /* padding: 2px;
+      font-weight: bold; */
+    }
+    /* #new_totals td:nth-child(2),
+    #new_totals td:nth-child(3) {
+      background-color: #e5e5e5;
+    } */
+    #new_totals td:nth-child(1) {
+      width: 50%;
+      font-weight: bold;
+      text-align: right !important;
+    }
+    #new_totals td:nth-child(2) {
+      width: 10%;
+    }
+    #new_totals td:nth-child(3) {
+      width: 40%;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    .boldat {
+      font-weight: bold;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+
+      <div class="invoice-inner">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="right" valign="top">
+              <img
+                style="vertical-align: top; margin-bottom: 10px"
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                width="{%logo-width%}"
+                height="{%logo-height%}"
+              />
+            </td>
+
+            <td align="left" valign="top">
+              <h1>
+                <p id="invoice_title" class="editable-area invoice-name">
+                  {%invoice_title%}
+                </p>
+              </h1>
+              <div class="qr-code">{%sa_qr_code_image%}</div>
+            </td>
+          </tr>
+        </table>
+
+        <div
+          class="invoice-num"
+          style="font-size: 20px"
+          align="right"
+          height="30px"
+        >
+          <strong
+            class="editable-area"
+            id="label_invoice_no"
+            style="line-height: 50px"
+            >{%label_invoice_no%}</strong
+          >
+          #{%invoice_number%}
+        </div>
+
+        <table
+          style="margin: 20px 0"
+          width="100%"
+          border="0"
+          cellspacing="0"
+          cellpadding="0"
+        >
+          <tr class="invoice-info">
+            <td align="right" width="60%" style="line-height: 20px">
+              <div class="editable-area" id="label_date">{%label_date%}</div>
+              <div align="right">{%invoice_date%}</div>
+              <br />
+              <div class="editable-area" id="label_due_date">
+                {%label_due_date%}
+              </div>
+              <div align="right">{%due_date%}</div>
+            </td>
+
+            <td align="right" valign="top" style="line-height: 20px">
+              <custom_field
+                id="custom_fields"
+                style="clear: both"
+                class="editable-area"
+                border="0"
+                cellspacing="0"
+                cellpadding="0"
+                align="right"
+              >
+                {%custom_fields%}
+              </custom_field>
+            </td>
+          </tr>
+        </table>
+
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="right" valign="top" width="60%">
+              <div id="field1" class="editable-area">{%field1%}</div>
+              <div id="client_info" class="editable-area">
+                <p>{%client_info%}</p>
+              </div>
+            </td>
+
+            <td align="right" valign="top">
+              <div id="field1" class="editable-area">من:</div>
+              <div id="business_info" class="editable-area">
+                <div>{%business_info%}</div>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <br />
+
+        <div id="items-list">{%items_list%}</div>
+        <table id="new_totals">
+          <tbody>
+            <tr>
+              <td>اجمالي قيمة الأعمال المنــــــــــفذه</td>
+              <td></td>
+
+              <td class="removeCurr">{%Total%}</td>
+            </tr>
+            <tr>
+              <td>اجمالى قيمة الاعمال المنفذة السابقة</td>
+              <td></td>
+
+              <td class="removeCurr">{%previous%}</td>
+            </tr>
+            <tr>
+              <td>قيمة الاعمال المنفذة بالمستخلص الحالي</td>
+              <td></td>
+
+              <td class="removeCurr boldat" id="invoice_subtotalVal"></td>
+            </tr>
+            <tr id="paidamrow">
+              <td>خصم الدفع المقدمة</td>
+              <td id="paidper"></td>
+              <td class="removeCurr" id="paidam"></td>
+            </tr>
+
+            <tr>
+              <td>خصومات</td>
+              <td></td>
+
+              <td class="removeCurr" id="discountttl">{%discount%}</td>
+            </tr>
+
+            <tr>
+              <td>صافى قيمة الأعمال</td>
+              <td></td>
+
+              <td class="removeCurr" id="safy"></td>
+            </tr>
+            <tr>
+              <td>المبلغ الخاضع للضريبة</td>
+              <td></td>
+
+              <td class="removeCurr" id="ttlforVAT"></td>
+            </tr>
+            <tr>
+              <td>قيمة الضريبة</td>
+              <td>15%</td>
+              <td class="removeCurr" id="taxtotal"></td>
+            </tr>
+            <tr>
+              <td>إجمالي الفاتورة قبل خصم الضمان</td>
+              <td></td>
+
+              <td class="removeCurr boldat" id="ttlafterVat"></td>
+            </tr>
+            <tr>
+              <td>خصم ضمان حسن تنفيذ</td>
+              <td>{%custom_guarantee_of_proper_implementation_field_25%}%</td>
+              <td class="removeCurr" id="proper_implementation_VAL"></td>
+            </tr>
+            <tr>
+              <td style="width: 30%">خصم ضمان اعمال</td>
+              <td style="width: 30%">
+                {%custom_business_guarantee_field_24%}%
+              </td>
+              <td
+                class="removeCurr"
+                style="width: 40%"
+                id="guarantee_field_VAL"
+              ></td>
+            </tr>
+            <tr>
+              <td>المدفوعات</td>
+              <td></td>
+              <td class="removeCurr">0</td>
+            </tr>
+            <tr>
+              <td>المتبقي</td>
+              <td></td>
+              <td class="removeCurr boldat">{%invoice_total%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="display: none">
+          <div id="guarantee_field">{%custom_business_guarantee_field_24%}</div>
+          <div id="invoice_total">{%invoice_total%}</div>
+          <div id="proper_implementation">
+            {%custom_guarantee_of_proper_implementation_field_25%}
+          </div>
+          <div id="subtotal">{%invoice_subtotal%}</div>
+        </div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+
+    <script>
+      function select(selectors) {
+        var elements = document.querySelectorAll(selectors);
+        return elements;
+      }
+      function addStyles(elements, addedClass) {
+        for (var i = 0; i < elements.length; i++) {
+          elements[i].classList.add(addedClass);
+        }
+      }
+      try {
+        var totTable = document.querySelector(".listing-table:nth-child(2)");
+        var fstRow = totTable.insertRow(0);
+        var cell0 = fstRow.insertCell(0);
+        var cell1 = fstRow.insertCell(1);
+        var cell2 = fstRow.insertCell(2);
+        cell1.classList.add("invoice-summary-lable");
+        cell1.innerHTML = "ملخص الفاتورة";
+        cell1.style.cssText = "font-size:13px;";
+
+        var selectedForBack = select(
+          "#listing_table th,  .listing-table:nth-child(2) tr:nth-child(1) td:nth-child(n+2)"
+        );
+        var AllBorders = select("#listing_table th, #listing_table td");
+        var evenRows = select("#listing_table tr:nth-child(even) td");
+        var oddRows = select("#listing_table tr:nth-child(odd) td");
+        var text = select("strong#label_invoice_no");
+
+        addStyles(selectedForBack, "dynamic_background");
+        addStyles(selectedForBack, "dynamic_header_color");
+        addStyles(text, "dynamic_header_color");
+        addStyles(evenRows, "dynamic_even");
+        addStyles(oddRows, "dynamic_odd");
+        addStyles(AllBorders, "dynamic_border_color");
+      } catch (err) {}
+      function getfromttl() {
+        var allrows = document.querySelectorAll(
+          ".listing-table:nth-child(2) tr"
+        );
+        var gurantee = 0;
+        var pre = 0;
+        var preVat = 0;
+        var discountttl = parseFloat(
+          document.getElementById("discountttl").innerText.replace(/,/g, "")
+        );
+        document.getElementById("discountttl").innerText = discountttl;
+        document.getElementById("invoice_total").innerText = parseFloat(
+          document.getElementById("invoice_total").innerText.replace(/,/g, "")
+        );
+        var taxtotal = parseFloat(
+          document.getElementById("taxtotal").innerText.replace(/,/g, "")
+        );
+        var subtotal = parseFloat(
+          document.getElementById("subtotal").innerText.replace(/,/g, "")
+        );
+        if (document.getElementById("guarantee_field").innerText.trim() != "") {
+          var guaranteefield = parseFloat(
+            document
+              .getElementById("guarantee_field")
+              .innerText.replace(/,/g, "")
+          );
+        } else {
+          var guaranteefield = 0;
+        }
+        if (
+          document.getElementById("proper_implementation").innerText.trim() !=
+          ""
+        ) {
+          var properimplementation = parseFloat(
+            document
+              .getElementById("proper_implementation")
+              .innerText.replace(/,/g, "")
+          );
+        } else {
+          var properimplementation = 0;
+        }
+
+        for (var i = 0; i < allrows.length; i++) {
+          if (allrows[i].cells[1].innerText.trim() == "خصم ضمان أعمال") {
+            gurantee = parseFloat(
+              allrows[i].cells[2].innerText.replace(/,/g, "")
+            );
+          } else if (allrows[i].cells[1].innerText.trim() == "دفعة مقدمة") {
+            pre = parseFloat(allrows[i].cells[2].innerText.replace(/,/g, ""));
+          } else if (
+            allrows[i].cells[1].innerText.trim() == "ضريبة دفعة مقدمة"
+          ) {
+            preVat = parseFloat(
+              allrows[i].cells[2].innerText.replace(/,/g, "")
+            );
+          }
+        }
+        subtotal = subtotal + gurantee * -1;
+        document.getElementById("invoice_subtotalVal").innerText = subtotal;
+        var guranteeper = parseInt((gurantee / subtotal) * 100 * -1);
+        console.log("subtotal");
+        console.log(subtotal);
+        console.log("gurantee");
+        console.log(gurantee);
+        console.log("guranteeper");
+        console.log(guranteeper);
+        console.log("guaranteefield");
+        console.log(guaranteefield);
+        document.getElementById("guarantee_field_VAL").innerText = (
+          subtotal *
+          (guaranteefield / 100)
+        ).toFixed(2);
+        console.log("properimplementation");
+        console.log(properimplementation);
+        document.getElementById("proper_implementation_VAL").innerText = (
+          subtotal *
+          (properimplementation / 100)
+        ).toFixed(2);
+
+        console.log("pre");
+        console.log(pre);
+        if (pre == 0) {
+          document.getElementById("paidamrow").style.display = "none";
+        }
+        document.getElementById("paidam").innerText = pre * -1;
+        var preper = parseInt((pre / subtotal) * 100 * -1);
+        document.getElementById("paidper").innerText = preper + "%";
+        document.getElementById("safy").innerText = subtotal - discountttl;
+        document.getElementById("ttlforVAT").innerText =
+          subtotal - discountttl - pre * -1;
+        document.getElementById("taxtotal").innerText =
+          parseFloat(document.getElementById("ttlforVAT").innerText) * 0.15;
+        document.getElementById("ttlafterVat").innerText =
+          parseFloat(document.getElementById("taxtotal").innerText) +
+          parseFloat(document.getElementById("ttlforVAT").innerText);
+
+        console.log("preVat");
+        console.log(preVat);
+      }
+      try {
+        getfromttl();
+      } catch (error) {
+        console.log(error);
+      }
+
+      function removeCurr() {
+        var allremoveCurr = document.querySelectorAll(".removeCurr");
+        for (var i = 0; i < allremoveCurr.length; i++) {
+          if (allremoveCurr[i].innerText.trim() == "") {
+            allremoveCurr[i].innerText = "0";
+          }
+          allremoveCurr[i].innerText = parseFloat(
+            allremoveCurr[i].innerText.replace(/,/g, "")
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      try {
+        removeCurr();
+      } catch (error) {
+        console.log(error);
+      }
+      function SwapAll() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          var band = allRows[i].cells[0].innerHTML;
+          var wasf = allRows[i].cells[1].innerHTML;
+          var taxper = allRows[i].cells[2].innerHTML;
+          var taxam = allRows[i].cells[3].innerHTML;
+          var ttl = allRows[i].cells[4].innerHTML;
+          var Price = allRows[i].cells[5].innerHTML;
+          var qty = allRows[i].cells[6].innerHTML;
+          var subttl = allRows[i].cells[7].innerHTML;
+          allRows[i].cells[0].innerHTML = band;
+          allRows[i].cells[1].innerHTML = wasf;
+          allRows[i].cells[2].innerHTML = Price;
+          allRows[i].cells[3].innerHTML = qty;
+          allRows[i].cells[4].innerHTML = subttl;
+          allRows[i].cells[5].innerHTML = taxper;
+          allRows[i].cells[6].innerHTML = taxam;
+          allRows[i].cells[7].innerHTML = ttl;
+        }
+      }
+      try {
+        SwapAll();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,200 @@
+<style>
+  #footer_con {
+    height: 340px;
+  }
+  #footer1 {
+    width: 100%;
+    direction: ltr;
+    color: #394d70;
+    text-align: right;
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 12px;
+    border-top: 1px solid #e5e5e5;
+  }
+  #footer1 tr:nth-child(1) td:nth-child(1) {
+    width: 72%;
+    text-align: center;
+    font-size: 17px;
+    word-spacing: 1px;
+  }
+  #footer1 #ar-footer {
+    word-spacing: 5px;
+    font-size: 18px;
+  }
+  #footer1 td {
+    word-spacing: 2px;
+  }
+  #footer1 tr:nth-child(1) td:nth-child(2) {
+    width: 28%;
+  }
+  /* Start of new_totals styles */
+  #new_totals {
+    width: 100%;
+    border-spacing: 0;
+    text-align: right;
+    direction: ltr;
+    border-top: 2px solid #394d70;
+    border-right: 2px solid #394d70;
+    margin-top: 2px;
+    color: #394d70;
+    font-size: 10px;
+    font-weight: bold;
+  }
+  #new_totals td {
+    padding: 2px 5px;
+    border-left: 2px solid #394d70;
+    border-bottom: 2px solid #394d70;
+  }
+  #new_totals tr:nth-child(1) td:nth-child(1) {
+    width: 15%;
+  }
+  #new_totals tr:nth-child(1) td:nth-child(2) {
+    width: 60%;
+  }
+  #new_totals tr:nth-child(1) td:nth-child(3) {
+    width: 15%;
+  }
+  #new_totals tr:nth-child(1) td:nth-child(4) {
+    width: 10%;
+  }
+  /* start of signature styles */
+  #signature {
+    direction: rtl;
+    width: 100%;
+    border-spacing: 0;
+    font-weight: bold;
+    font-size: 19px;
+    text-align: right;
+    color: #394d70;
+  }
+  #signature td {
+    width: 50%;
+    padding: 0 4px;
+  }
+  #signature td:nth-child(2) {
+    padding-right: 20px;
+  }
+  #inv_title span {
+    zoom: 1 !important;
+  }
+  #notes span {
+    color: #394d70 !important;
+  }
+  #qr-code img {
+    width: 100%;
+  }
+</style>
+<div id="footer_con">
+  <table id="new_totals">
+    <tbody>
+      <tr>
+        <td id="qr-code" rowspan="3">{%sa_qr_code_image%}</td>
+        <td rowspan="3" style="vertical-align: text-bottom" id="notes">
+          <div
+            class="editable-area"
+            id="footer"
+            style="text-align: right; font-size: 11px"
+          >
+            {%footer%}
+          </div>
+        </td>
+        <td>
+          :الاجمالى
+          <br />
+          Total
+        </td>
+        <td>{%invoice_subtotal%}</td>
+      </tr>
+      <tr>
+        <td>
+          الخصم
+          <br />
+          Discount
+        </td>
+        <td id="total_discount">{%discount%}...{%item-discount-total%}</td>
+      </tr>
+      <tr>
+        <td>
+          :ضريبة القيمة المضافة
+          <br />
+          VAT 15%
+        </td>
+        <td>{%tax-total%}</td>
+      </tr>
+      <tr>
+        <td colspan="2">{%invoice_total_spelled%}</td>
+        <td>
+          :الصافى
+          <br />
+          Total
+        </td>
+        <td>{%invoice_total%}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div>
+    <img
+      src="https://s7ss7sss7.daftra.com/files/e9d0b2af/logos/656837941315d_blobid1701328782703.png"
+      alt=""
+      title="safeer3.png"
+      style="width: 100%"
+    />
+  </div>
+  <table id="signature">
+    <tbody>
+      <tr>
+        <td>توقيع البائع :........................................</td>
+        <td>توقيع العميل :........................................</td>
+      </tr>
+    </tbody>
+  </table>
+  <table id="footer1">
+    <tbody>
+      <tr>
+        <td rowspan="100%">
+          <span id="ar-footer">
+            المملكة العربية السعودية - جازان - بيش - طريق البحر - مقابل هايبر
+            أماسى
+          </span>
+          <br />
+          Saudi Arabia - jizan - Baish - Sea Road - Oppisite Hyper Amasi
+        </td>
+        <td>المندوب: {%custom_مندوب_المبيعات_field_7%}</td>
+      </tr>
+      <tr>
+        <td>
+          جوال الإدارة :
+          <span style="letter-spacing: 3px; font-size: 14px">
+            {%site_mobile%}</span
+          >
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span style="letter-spacing: 2px; font-size: 13px">0530408322</span>
+          :للإقتراحات والملاحظات
+        </td>
+      </tr>
+      <tr>
+        <td style="font-size: 12px">Email: alsafeer44555@gmail.com</td>
+      </tr>
+      <tr>
+        <td colspan="100%"></td>
+      </tr>
+    </tbody>
+  </table>
+  <script>
+    try {
+      var towDis = document
+        .querySelector("#total_discount")
+        .innerText.split("...");
+      document.querySelector("#total_discount").innerText =
+        parseFloat(towDis[0].replace(/,/g, "")) +
+        parseFloat(towDis[1].replace(/,/g, ""));
+    } catch (error) {
+      console.log(error);
+    }
+  </script>
+</div>

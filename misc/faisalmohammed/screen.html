@@ -1,0 +1,40 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      function main() {
+        $("#InvoiceAdjustmentLabel").val("FAS");
+        $("#InvoiceAdjustmentLabel").attr("readonly", true);
+        $(document).on("input", ".item_col_5", function () {
+          let inputValue = $(this).val();
+          console.log(isNaN(inputValue));
+          if (isNaN(inputValue) || inputValue < 0) {
+            $(this).val("0");
+          }
+        });
+        $(document).on("change", ".item_col_5", function () {
+          let allvals = $(".item_col_5");
+          var FASVAL = 0;
+          allvals.each(function () {
+            let val = $(this).val();
+            if (isNaN(parseFloat(val))) {
+              $(this).val("0");
+            } else {
+              FASVAL += parseFloat($(this).val());
+            }
+          });
+          $('#InvoiceAdjustmentValue').val(FASVAL).trigger("change");
+        });
+      }
+      let invLayout = $("#InvoiceLayout").val();
+      if (invLayout == 3) {
+        main();
+      }
+      $("#InvoiceLayout").on("change", function () {
+        let invLayout = $(this).val();
+        if (invLayout == 3) {
+          main();
+        }
+      });
+    }, 200);
+  });
+</script>

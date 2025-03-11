@@ -1,0 +1,11 @@
+<script>
+  $(document).ready(() => {
+    let readyPoLi = `<li data-app-sidebar-list-item-sublist-item-group-id="3"> <a href="/v2/owner/entity/le_purcase_price_control/list" class="" onclick="subSideMenuClick(event)">
+                 صلاحيات إظهار سعر الشراء  </a> </li>`;
+    setTimeout(() => {
+      if (USER.staff_id == 0) {
+        $("li.mn_10> div > ul").append(readyPoLi);
+      }
+    }, 500);
+  });
+</script>

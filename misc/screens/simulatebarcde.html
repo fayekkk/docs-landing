@@ -1,0 +1,33 @@
+<script>
+  function simulateBarcodeScan(barcode) {
+    var inputElement = document.getElementById("barcode-input");
+
+    // Trigger keydown and keyup events for each character in the barcode
+    for (var i = 0; i < barcode.length; i++) {
+      var charCode = barcode.charCodeAt(i);
+
+      // Create and dispatch keydown event
+      var keydownEvent = new KeyboardEvent("keydown", {
+        key: barcode[i],
+        code: "Key" + barcode[i],
+        keyCode: charCode,
+        which: charCode,
+        charCode: charCode,
+      });
+      document.dispatchEvent(keydownEvent);
+
+      // Create and dispatch keyup event
+      var keyupEvent = new KeyboardEvent("keyup", {
+        key: barcode[i],
+        code: "Key" + barcode[i],
+        keyCode: charCode,
+        which: charCode,
+        charCode: charCode,
+      });
+      document.dispatchEvent(keyupEvent);
+    }
+  }
+
+  // Example usage
+  simulateBarcodeScan("3333");
+</script>

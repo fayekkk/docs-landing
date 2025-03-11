@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <script>
+      function subst() {
+        // Decoding the invoice page url to detect page number
+        var vars = {};
+        var x = document.location.search.substring(1).split("&");
+        for (var i in x) {
+          var z = x[i].split("=", 2);
+          vars[z[0]] = unescape(z[1]);
+        }
+        // Adding Pagination Text
+        var x = [
+          "frompage",
+          "topage",
+          "page",
+          "webpage",
+          "section",
+          "subsection",
+          "subsubsection",
+        ];
+        for (var i in x) {
+          var y = document.getElementsByClassName(x[i]);
+          for (var j = 0; j < y.length; ++j) y[j].textContent = vars[x[i]];
+        }
+      }
+    </script>
+  </head>
+  <body style="border: 0; margin: 0" onload="subst()">
+    <table style="width: 100%">
+      <tr>
+        <td style="text-align: center; width: 35%">
+          Page <span class="page"></span> of <span class="topage"></span> -
+          INV-{%invoice_no%}
+        </td>
+        <td style="text-align: center; width: 40%; color: #354058">
+            Safiq Construction Company for Contracting <br />
+          ﺷرﻛﺔ ﺳﻔﯾك اﻻﻧﺷﺎءات ﻟﻠﻣﻘﺎوﻻت
+        </td>
+        <td style="width: 25%"></td>
+      </tr>
+    </table>
+  </body>
+</html>

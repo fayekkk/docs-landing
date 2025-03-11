@@ -1,0 +1,447 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100;300;500;600&display=swap");
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: "Noto Sans Arabic", sans-serif !important;
+    }
+    body {
+      background: #ffffff;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    /* start of header styles */
+    #header {
+      width: 100%;
+      direction: rtl;
+      border-spacing: 0;
+      font-size: 13px;
+      text-align: center;
+      line-height: 17px;
+      margin: 12px 0;
+    }
+    #header tr:nth-child(1) td:nth-child(1) {
+      width: 100%;
+    }
+    #header td {
+      padding: 4px 0;
+    }
+    /* #header tr:nth-child(1) td:nth-child(2) {
+      width: 27%;
+    }
+    #header tr:nth-child(1) td:nth-child(3) {
+      width: 27%;
+    }
+    #header tr:nth-child(1) td:nth-child(4) {
+      width: 19%;
+    }
+    #header tr:nth-child(1) td:nth-child(4) {
+      width: 40%;
+      margin-right: 30%;
+    } */
+    /* start of deal_data styles */
+    #deal_data {
+      width: 100%;
+      direction: rtl;
+      border-spacing: 0;
+      font-size: 14px;
+      text-align: center;
+      border-top: 1px solid black;
+      border-right: 1px solid black;
+      margin-bottom: 5px;
+    }
+    #deal_data tr:nth-child(3) td:nth-child(1) {
+      width: 5%;
+    }
+    #deal_data tr:nth-child(3) td:nth-child(2) {
+      width: 32.5%;
+    }
+    #deal_data tr:nth-child(3) td:nth-child(3) {
+      width: 15%;
+    }
+    #deal_data tr:nth-child(3) td:nth-child(4) {
+      width: 15%;
+    }
+    #deal_data tr:nth-child(3) td:nth-child(5) {
+      width: 32.5%;
+    }
+    #deal_data td {
+      font-size: 12px;
+      padding: 1px;
+      line-height: 16px;
+      border-bottom: 1px solid black;
+      border-left: 1px solid black;
+    }
+    /* Start of footer styles */
+    #footer {
+      font-style: normal !important;
+      line-height: 21px;
+      font-size: 8px;
+      text-decoration: none !important;
+    }
+    #footer u {
+      text-decoration: none !important;
+    }
+    #footer br {
+      display: none;
+    }
+    #footer strong {
+      color: #000 !important;
+      background-color: transparent !important;
+    }
+    #footer span {
+      color: #000 !important;
+      background-color: transparent !important;
+    }
+    /* start of listing table */
+    /* .listing-table:nth-child(2) {
+      display: none;
+    } */
+    #listing_table {
+      width: 100%;
+      text-align: right;
+      border-spacing: 0;
+      border-bottom: 1px solid black !important;
+      border-right: 1px solid black !important;
+    }
+    #listing_table th:nth-child(3),
+    #listing_table th:nth-child(4),
+    #listing_table td:nth-child(3),
+    #listing_table td:nth-child(4) {
+      display: none;
+    }
+    #listing_table th,
+    #listing_table td {
+      background-color: #fff;
+      border-left: 1px solid black !important;
+      border-top: 1px solid black !important;
+      border-bottom: none !important;
+      border-right: none !important;
+      padding: 1px 3px;
+    }
+    #listing_table th:nth-child(1) {
+      width: 18%;
+    }
+    #listing_table th:last-child {
+      width: 22%;
+    }
+    /* start of signs styles */
+    #signs {
+      width: 100%;
+      border-spacing: 0;
+      text-align: right;
+      margin: 15px 0;
+    }
+    /* top_header */
+    #top_header {
+      width: 100%;
+      text-align: right;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    #top_header td:nth-child(1) {
+      width: 40%;
+    }
+    #top_header td:nth-child(2) {
+      width: 50%;
+    }
+    #top_header td:nth-child(2) img {
+      width: 75px;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table id="top_header">
+          <tr>
+            <td>رقم العقد({%invoice_no%})</td>
+            <td>{%site_logo%}</td>
+          </tr>
+        </table>
+        <table id="header">
+          <tbody>
+            <tr>
+              <td style="font-weight: bold; font-size: 14px">
+                بسم الله الرحمن الرحيم
+              </td>
+            </tr>
+            <tr>
+              <td>
+                تم بعون الله فى يوم (<span id="date"></span>) الموافق (<span
+                  id="inv_date"
+                  >{%invoice_date%}</span
+                >) م
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                الاتفاق بين كل من مؤسسة بعثتي للسفر والسياحة ويشار إليها لاحقاً
+                بالطرف الأول وبين الطرف الثاني :
+                <!-- ({%client_business_name%}) -->
+              </td>
+            </tr>
+            <!-- <tr>
+              <td colspan="3">
+                رقم الجوال ({%client_mobile%}) بريد إلكترونى ({%client_email%})
+                وذلك حسب التفاصيل الآتية :
+              </td>
+            </tr> -->
+          </tbody>
+        </table>
+        <div style="display: none">
+          {%custom_مسمى_نوع_العقد_field_62%}
+          <span id="contract_type"> ({%custom_نوع_العقد_field_52%})</span>
+        </div>
+        <table id="deal_data">
+          <tbody>
+            <tr>
+              <td>1.</td>
+              <td>
+                الطرف الثاني
+                <br />
+                {%client_business_name%}
+              </td>
+              <td colspan="2">
+                رقم الجوال
+
+                <br />
+                {%client_mobile%}
+              </td>
+              <td>
+                البريد الإلكتروني
+                <br />
+                {%client_email%}
+              </td>
+            </tr>
+            <tr>
+              <td>2.</td>
+              <td>
+                {%custom_مسمى_الدولة_field_63%}
+                <br />
+                {%custom_الدولة_country_field_27%}
+              </td>
+              <td colspan="2">
+                {%custom_مسمى_الكافل_field_64%}
+                <br />
+                {%custom_الكافل_field_99%}
+              </td>
+
+              <td>
+                {%custom_مسمى_عنوان_السكن_field_65%}
+                <br />
+                {%custom_عنوان_السكن_address_field_40%}
+              </td>
+            </tr>
+            <tr id="university">
+              <td>3.</td>
+              <td>
+                {%custom_مسمى_الجامعة_field_66%}
+                <br />
+                {%custom_الجامعة_university_field_101%}
+              </td>
+              <td>
+                {%custom_مسمى_الدرجة_العلمية_field_67%}
+                <br />
+                {%custom_الدرجة_العلمية_degree_field_42%}
+              </td>
+              <td>
+                {%custom_مسمى_التخصص_field_68%}
+                <br />
+                {%custom_التخصص_major_field_100%}
+              </td>
+              <td>
+                {%custom_مسمى_بداية_دراسة_الجامعة_field_69%}
+                <br />
+                {%custom_بداية_دراسة_الجامعة_start_date_field_44%}
+              </td>
+            </tr>
+            <tr id="language">
+              <td>4.</td>
+              <td>
+                {%custom_مسمى_معهد_اللغة_field_89%}
+                <br />
+                {%custom_معهد_اللغة_language_school_field_45%}
+              </td>
+              <td>
+                {%custom_مسمى_عدد_الأسابيع_field_90%}
+                <br />
+                {%custom_عدد_الأسابيع_period_week_field_46%}
+              </td>
+              <td>
+                {%custom_مسمى_عدد_الدروس_field_91%}
+                <br />
+                {%custom_عدد_الدروس_lesson_week_field_102%}
+              </td>
+              <td>
+                {%custom_مسمى_بداية_دراسة_اللغة_field_92%}
+                <br />
+                {%custom_بداية_دراسة_اللغة_start_date_field_47%}
+              </td>
+            </tr>
+            <tr>
+              <td>5.</td>
+              <td>
+                {%custom_مسمى_نوع_السكن_field_93%}
+                <br />
+                {%custom_نوع_السكن_accommodation_field_48%}
+              </td>
+              <td colspan="2">
+                {%custom_مسمى_إستقبال_المطار_field_94%}
+                <br />
+                {%custom_استقبال_المطار_airport_transfer_field_49%}
+              </td>
+              <td>
+                {%custom_مسمى_التأمين_الطبي_field_95%} <br />
+                {%custom_التأمين_الطبي_health_insurance_field_50%}
+              </td>
+            </tr>
+            <tr>
+              <td>6.</td>
+              <td>
+                {%custom_مسمى_مدة_إحضار_الرد_field_96%} <br />
+                {%custom_مدة_إحضار_الرد_field_53%}
+              </td>
+              <td colspan="2">
+                {%custom_مسمى_أحقية_الإسترداد_field_97%}
+                <br />
+                {%custom_أحقية_الإسترداد_field_54%}
+              </td>
+              <td>
+                اسم الموظف
+                <br />
+                ({%staff_member_name%})
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div id="new_notes">
+          <img
+            src="https://bethety.daftra.com/files/539dc1e/logos/65881d5047df1_blobid1703419208168.jpg"
+            alt=""
+            title="صورة الشروط والاحكام.jpg"
+            style="width: 100%"
+          />
+        </div>
+
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div id="items-list">{%items_list%}</div>
+        <table id="signs">
+          <tbody>
+            <tr>
+              <td style="width: 60%"></td>
+              <td style="width: 40%">
+                ({%client_business_name%})
+                <br />
+                التوقيع:
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      try {
+        var listingtbody = document.querySelector("#listing_table tbody");
+        var totalsTR = document.createElement("tr");
+        var totalsLabelTD = document.createElement("td");
+        var emptytd = document.createElement("td");
+        emptytd.setAttribute(
+          "colspan",
+          listingtbody.querySelectorAll("tr:nth-child(1) td").length - 4
+        );
+        totalsTR.appendChild(emptytd);
+        totalsLabelTD.innerText = "";
+        totalsLabelTD.style.textAlign = "left";
+        totalsLabelTD.style.paddingLeft = "30px";
+        totalsTR.appendChild(totalsLabelTD);
+        var totalsTD = document.createElement("td");
+        totalsTD.innerText = "";
+        totalsTD.style.display = "block";
+        totalsTR.appendChild(totalsTD);
+        // listingtbody.appendChild(totalsTR);
+
+        var contractType = document.getElementById("contract_type").innerText;
+        if (contractType.trim() == "(لغة)") {
+          document.getElementById("university").style.display = "none";
+          var allserials = document.querySelectorAll(
+            "#deal_data tr td:nth-child(1)"
+          );
+          allserials[2].innerText = "2.";
+          allserials[3].innerText = "3.";
+          allserials[4].innerText = "4.";
+          allserials[5].innerText = "5.";
+        } else if (contractType.trim() == "(جامعة)") {
+          document.getElementById("language").style.display = "none";
+          var allserials = document.querySelectorAll(
+            "#deal_data tr td:nth-child(1)"
+          );
+          allserials[1].innerText = "2.";
+          allserials[3].innerText = "3.";
+          allserials[4].innerText = "4.";
+          allserials[5].innerText = "5.";
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
+      try {
+        var olddateString = document.getElementById("inv_date").innerText;
+        var dateString =
+          olddateString.split("/")[1] +
+          "/" +
+          olddateString.split("/")[0] +
+          "/" +
+          olddateString.split("/")[2];
+        var date = new Date(Date.parse(dateString));
+        var days = [
+          "الأحد",
+          "الإثنين",
+          "الثلاثاء",
+          "الأربعاء",
+          "الخميس",
+          "الجمعة",
+          "السبت",
+        ];
+
+        document.getElementById("date").innerText = days[date.getDay()];
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

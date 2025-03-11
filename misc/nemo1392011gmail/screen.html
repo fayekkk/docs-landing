@@ -1,0 +1,413 @@
+<!-- Last Object V -->
+
+<style>
+  .late_th,
+  .late_td {
+    display: table-cell;
+  }
+
+  .late_th,
+  .late1_th,
+  .late2_th,
+  .late3_th,
+  .late4_th {
+    width: 9% !important;
+  }
+  .late_td textarea,
+  .late1_td textarea,
+  .late2_td textarea,
+  .late3_td textarea {
+    /* width: 9% !important; */
+    overflow-y: clip;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      async function createCol(
+        prevTh,
+        prevTd,
+        colTitle,
+        classTh,
+        classTd,
+        colInput
+      ) {
+        var rowsNum = $("#listing_table tr").length;
+
+        if (
+          document.querySelectorAll("#listing_table tr:nth-child(1) .late_th")
+            .length == 0 ||
+          document.querySelectorAll("#listing_table tr:nth-child(1) .late1_th")
+            .length == 0 ||
+          document.querySelectorAll("#listing_table tr:nth-child(1) .late2_th")
+            .length == 0 ||
+          document.querySelectorAll("#listing_table tr:nth-child(1) .late3_th")
+            .length == 0
+        ) {
+          // Clone TH and attach change event listener
+          $(prevTh).after(
+            $("th.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTh)
+              .replace("", colTitle)
+          );
+
+          $(prevTd).after(
+            $("td.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTd)
+              .replace("item_col_4", colInput)
+          );
+        } else if (
+          !document.querySelector("#listing_table tr:last-child .late_td") ||
+          !document.querySelector("#listing_table tr:last-child .late1_td") ||
+          !document.querySelector("#listing_table tr:last-child .late2_td") ||
+          !document.querySelector("#listing_table tr:last-child .late3_td")
+        ) {
+          $(`#listing_table tr:last-child ${prevTd}`).after(
+            $("#listing_table tr:last-child td.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTd)
+              .replace("item_col_4", colInput)
+          );
+        }
+        $(
+          ".late_td textarea, .late1_td textarea, .late2_td textarea, .late3_td textarea"
+        ).each(function () {
+          $(this).removeAttr("name class id");
+        });
+        $("." + colInput).attr("placeholder", "");
+        $("." + colInput).attr("name", "");
+      }
+      function hudleAll() {
+        if ($("#InvoiceLayout").val() == 8) {
+          // adding the columns when screen is loaded
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "إختيار العاملة ",
+            "late_th",
+            "late_td",
+            "late_input"
+          );
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "إختيار العاملة ",
+            "late1_th",
+            "late1_td",
+            "late1_input"
+          );
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "إختيار العاملة ",
+            "late2_th",
+            "late2_td",
+            "late2_input"
+          );
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "إختيار العاملة ",
+            "late3_th",
+            "late3_td",
+            "late3_input"
+          );
+
+          document.querySelector(".late3_th").innerText = "   Issue date  ";
+          document.querySelector(".late2_th").innerText = "  Pax name - ID ";
+          document.querySelector(".late1_th").innerText =
+            "TKT No, flight date ";
+          document.querySelector(".late_th").innerText = " Route   ";
+          $(".late3_td textarea").addClass(
+            "resizable item_col_3 editable-input editable-area FormInput required"
+          );
+          $(".late2_td textarea").addClass(
+            "resizable item_col_3 editable-input editable-area FormInput required"
+          );
+          $(".late1_td textarea").addClass(
+            "resizable item_col_3 editable-input editable-area FormInput required"
+          );
+          $(".late_td textarea").addClass(
+            "resizable item_col_3 editable-input editable-area FormInput required"
+          );
+
+          // adding the columns on add item click
+        }
+
+        if ($("#InvoiceLayout").val() == 8) {
+          $(".late_th").show();
+          $(".late_td").show();
+          $(".late1_th").show();
+          $(".late1_td").show();
+          $(".late2_th").show();
+          $(".late2_td").show();
+          $(".late3_th").show();
+          $(".late3_td").show();
+        } else {
+          $(".late_th").hide();
+          $(".late_td").hide();
+          $(".late1_th").hide();
+          $(".late1_td").hide();
+          $(".late2_th").hide();
+          $(".late2_td").hide();
+          $(".late3_th").hide();
+          $(".late3_td").hide();
+        }
+        $(document).on("change", "#InvoiceLayout", function () {
+          if ($("#InvoiceLayout").val() == 8) {
+            $(".late_th").show();
+            $(".late_td").show();
+            $(".late1_th").show();
+            $(".late1_td").show();
+            $(".late2_th").show();
+            $(".late2_td").show();
+            $(".late3_th").show();
+            $(".late3_td").show();
+          } else {
+            $(".late_th").hide();
+            $(".late_td").hide();
+            $(".late1_th").hide();
+            $(".late1_td").hide();
+            $(".late2_th").hide();
+            $(".late2_td").hide();
+            $(".late3_th").hide();
+            $(".late3_td").hide();
+          }
+          hudleAll();
+        });
+      }
+      $("#AddItem").on("click", () => {
+        console.log("iteraple");
+
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "إختيار العاملة ",
+          "late_th",
+          "late_td",
+          "late_input"
+        );
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "إختيار العاملة ",
+          "late1_th",
+          "late1_td",
+          "late1_input"
+        );
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "إختيار العاملة ",
+          "late2_th",
+          "late2_td",
+          "late2_input"
+        );
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "إختيار العاملة ",
+          "late3_th",
+          "late3_td",
+          "late3_input"
+        );
+
+        hudleAll();
+
+        $("td.late_td:last").find("textarea").val("");
+        $(".late3_td textarea").addClass(
+          "resizable item_col_3 editable-input editable-area FormInput required"
+        );
+        $(".late2_td textarea").addClass(
+          "resizable item_col_3 editable-input editable-area FormInput required"
+        );
+        $(".late1_td textarea").addClass(
+          "resizable item_col_3 editable-input editable-area FormInput required"
+        );
+        $(".late_td textarea").addClass(
+          "resizable item_col_3 editable-input editable-area FormInput required"
+        );
+        if ($("#InvoiceLayout").val() == 8) {
+          $(".col-2").hide();
+        } else {
+          $(".col-2").show();
+        }
+      });
+      hudleAll();
+
+      // function forEditScreens() {
+      //   var allitemcol3 = $(".item_col_3");
+      //   allitemcol3.each(function () {
+      //     var textareaValue = $(this).val();
+      //     try {
+      //       var parsedValue = JSON.parse(textareaValue);
+      //       console.log("yesssss");
+      //       console.log(parsedValue);
+      //       if (typeof parsedValue === "object") {
+      //         var $closestTr = $(this).closest("tr");
+      //         var $col3ClonedTextarea = $closestTr.find(".col-3 .cloned_td");
+      //         var $col3Textarea = $closestTr.find(".col-3 textarea");
+
+      //         if ($col3ClonedTextarea.length === 0) {
+      //           var $clonedTextarea = $col3Textarea.clone();
+      //           $col3Textarea.hide();
+      //           $clonedTextarea.val(parsedValue.col3Value);
+      //           $clonedTextarea.removeAttr("name").removeAttr("id");
+      //           $clonedTextarea
+      //             .removeClass("item_col_3")
+      //             .addClass("cloned_td");
+      //           $closestTr.find(".col-3").append($clonedTextarea);
+      //         } else {
+      //           $col3ClonedTextarea.val(parsedValue.col3Value);
+      //         }
+      //       } else {
+      //         console.log("not an object type");
+      //         var $closestTr = $(this).closest("tr");
+      //         var $col3ClonedTextarea = $closestTr.find(".col-3 .cloned_td");
+      //         var $col3Textarea = $closestTr.find(".col-3 textarea");
+      //         var $lateTextarea = $closestTr.find(".late_td textarea");
+
+      //         if ($col3ClonedTextarea.length === 0) {
+      //           var $clonedTextarea = $col3Textarea.clone();
+      //           $col3Textarea.hide();
+      //           $clonedTextarea.val(parsedValue.col3Value);
+      //           $clonedTextarea.removeAttr("name").removeAttr("id");
+      //           $clonedTextarea
+      //             .removeClass("item_col_3")
+      //             .addClass("cloned_td");
+      //           $closestTr.find(".late_td textarea").val(" ");
+      //           $closestTr.find(".late_td textarea").trigger("change");
+      //           $closestTr.find(".col-3").append($clonedTextarea);
+      //         } else {
+      //           $col3ClonedTextarea.val(parsedValue.col3Value);
+      //         }
+
+      //         $col3ClonedTextarea.val(
+      //           $(this).closest("tr").find(".item_col_3").val()
+      //         );
+      //       }
+      //     } catch (error) {
+      //       console.log("not an object");
+      //     }
+      //   });
+      // }
+      // // forEditScreens();
+      function changeActions() {
+        function throttle(func, limit) {
+          let lastFunc;
+          let lastRan;
+          return function (...args) {
+            const context = this;
+            if (!lastRan) {
+              func.apply(context, args);
+              lastRan = Date.now();
+            } else {
+              clearTimeout(lastFunc);
+              lastFunc = setTimeout(() => {
+                if (Date.now() - lastRan >= limit) {
+                  func.apply(context, args);
+                  lastRan = Date.now();
+                }
+              }, limit - (Date.now() - lastRan));
+            }
+          };
+        }
+
+        const handleChange = function () {
+          var $closestTr = $(this).closest("tr");
+          // Select all relevant textareas in the specified classes
+        //   var $lateTextareas = $closestTr.find(
+        //     ".late_td textarea, .late1_td textarea, .late2_td textarea, .late3_td textarea"
+        //   );
+        //   var $col3Textarea = $closestTr.find(".item-description");
+
+          // Create the object with values from the product fields
+          var object = {};
+        //   let updateNeeded = false;
+
+          //   $lateTextareas.each(function (index) {
+          //     const value = $(this).val();
+          //     if (object[`lateValue${index + 1}`] !== value) {
+          //       object[`lateValue${index + 1}`] = value;
+          //
+          //     }
+          //   });
+          setTimeout(() => {
+            var $closestTr = $(this).closest("tr");
+            // Select all relevant textareas in the specified classes
+            var $lateTextarea = $closestTr.find(".late_td textarea");
+            var $late1Textarea = $closestTr.find(".late1_td textarea");
+            var $late2Textarea = $closestTr.find(".late2_td textarea");
+            var $late3Textarea = $closestTr.find(".late3_td textarea");
+            var $col3Textarea = $closestTr.find(".item-description ");
+            // Create the object with values from the product fields
+            var object = {
+              lateValue1: $lateTextarea.val(),
+              lateValue2: $late1Textarea.val(),
+              lateValue3: $late2Textarea.val(),
+              lateValue4: $late3Textarea.val(),
+            };
+            console.log(object);
+
+            // Update the col3Textarea with the JSON string
+            $col3Textarea.val(JSON.stringify(object));
+
+            // Update the col3Textarea when any late textarea changes
+            $lateTextarea
+              .add($late1Textarea)
+              .add($late2Textarea)
+              .add($late3Textarea)
+              .on("change", function () {
+                object.lateValue1 = $lateTextarea.val();
+                object.lateValue2 = $late1Textarea.val();
+                object.lateValue3 = $late2Textarea.val();
+                object.lateValue4 = $late3Textarea.val();
+
+                $col3Textarea.val(JSON.stringify(object));
+                
+              });
+          }, 250);
+
+        //   if (updateNeeded) {
+        //     console.log(object);
+        //     $col3Textarea.val(JSON.stringify(object));
+        //   }
+        };
+
+        $(document).on("change", ".item_name", throttle(handleChange, 250));
+
+        $(document).on(
+          "change",
+          ".late_td textarea, .late1_td textarea, .late2_td textarea, .late3_td textarea",
+          throttle(handleChange, 250)
+        );
+      }
+
+      if ($("#InvoiceLayout").val() == 8) {
+        $(".col-2").hide();
+        changeActions();
+      } else {
+        $(".col-2").show();
+      }
+      $(document).on("change", "#InvoiceLayout", function () {
+        if ($("#InvoiceLayout").val() == 8) {
+          $(".col-2").hide();
+          changeActions();
+        } else {
+          $(".col-2").show();
+        }
+      });
+    }, 1500);
+  });
+</script>

@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    .invoice-address {
+      border-top: 3px double #000000;
+      margin: 35px 0;
+      padding-top: 25px;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: right;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    .total-table td {
+      border-right: 1px solid #555555;
+    }
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    .notes-block {
+      margin: 50px 0 0 0;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    #business_info {
+      line-height: 1.4;
+    }
+    #listing_table th:last-child,
+    #listing_table td:last-child {
+      border-left: 1px solid #555555;
+    }
+    #label_subtotal {
+      width: 65px;
+    }
+    #label_field3,
+    #label_field4 {
+      width: 55px;
+    }
+    #items-list > table:nth-child(2) tr td:nth-child(1) {
+      width: 60%;
+    }
+    #listing_table th,
+    #listing_table td {
+      text-align: center;
+    }
+    #listing_table th:nth-child(2),
+    #listing_table td:nth-child(2) {
+      text-align: right;
+    }
+    .invoice-inner {
+      margin: 0 25px;
+    }
+    th#label_field5,
+    #listing_table td:nth-child(5) {
+      display: none;
+    }
+    .qr-code img {
+      margin-top: 10px;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="right" valign="top">
+              <img
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                width="{%logo-width%}"
+                height="{%logo-height%}"
+              />
+            </td>
+            <td align="right" valign="top">
+              <div id="business_info" class="editable-area">
+                {%business_info%}
+              </div>
+            </td>
+            <td valign="top" align="left">
+              <p id="invoice_title" class="editable-area invoice-name">
+                {%invoice_title%}
+              </p>
+              <div class="qr-code">{%sa_qr_code_image%}<br /></div>
+              باركود العميل : {%client_barcode%}<br />
+              باركود الفاتورة : {%invoice_barcode%}
+            </td>
+          </tr>
+        </table>
+
+        <div class="invoice-address">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="50%" align="right" valign="top">
+                <table border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td valign="top" style="float: right">
+                      <strong id="field1" class="editable-area"
+                        >{%field1%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" valign="top">
+                      <div id="client_info" class="editable-area">
+                        {%client_info%}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr id="shipping_options" style="display: none">
+                    <td valign="top" style="float: right">
+                      <br /><strong id="label_ship" class="editable-area"
+                        >{%label_ship%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" valign="top">
+                      <br />
+                      <div id="ship_info" class="editable-area">
+                        {%ship_info%}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td width="50%" valign="top" align="left">
+                <table
+                  id="invoice_basics"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="left"
+                >
+                  <tr>
+                    <td align="left">
+                      <strong class="editable-area" id="label_invoice_no"
+                        >{%label_invoice_no%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" align="right">
+                      {%invoice_number%}
+                    </td>
+                  </tr>
+                  <tr {%refund_invoice_number_condition%}>
+                    <td align="right">
+                      <strong class="editable-area" id="refund_label_invoice_no"
+                        >{%refund_invoice_no_title%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%refund_invoice_number%}
+                    </td>
+                  </tr>
+                  <!-- InvoiceDate -->
+                  <tr>
+                    <td align="left">
+                      <strong class="editable-area" id="label_date"
+                        >{%label_date%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" align="right">
+                      {%invoice_date%}
+                    </td>
+                  </tr>
+                  <!-- /InvoiceDate -->
+                </table>
+                <custom_field
+                  id="custom_fields"
+                  style="clear: both"
+                  class="editable-area"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="left"
+                >
+                  {%custom_fields%}
+                </custom_field>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div id="items-list">{%items_list%}</div>
+
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      var currency = "";
+      function detectCurrency() {
+        var unitPrice = document.querySelector(
+          "#listing_table tr td:nth-child(6)"
+        );
+        var price = unitPrice.innerText;
+        if (price.indexOf("ر.س") > -1) {
+          currency = " ر.س";
+        } else if (price.indexOf("SR") > -1) {
+          currency = " SR";
+        }
+      }
+      function roundingTaxes() {
+        var taxValue = document.querySelectorAll(
+          "#listing_table tr td:nth-child(4)"
+        );
+        var totalWithTax = document.querySelectorAll(
+          "#listing_table tr td:nth-child(5)"
+        );
+        for (var i = 0; i < taxValue.length; i++) {
+          taxValue[i].innerText =
+            parseFloat(taxValue[i].innerText.replace(/\,/g, ""), 10)
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + currency;
+          totalWithTax[i].innerText =
+            parseFloat(totalWithTax[i].innerText.replace(/\,/g, ""), 10)
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + currency;
+        }
+      }
+
+      function addNewColClass() {
+        var allRows = document.getElementById("listing_table").rows;
+        for (var i = 0; i < allRows.length; i++) {
+          for (var x = 0; x < allRows[i].cells.length; x++) {
+            allRows[i].cells[x].className = "";
+            allRows[i].cells[x].classList.add("col-" + (x + 1));
+          }
+        }
+      }
+
+      function swap(in1, in2, table_id) {
+        var table = document.getElementById(table_id);
+        for (var i = 0, row; (row = table.rows[i]); i++) {
+          var temp = row.cells[in1].innerHTML;
+          row.cells[in1].innerHTML = row.cells[in2].innerHTML;
+          row.cells[in2].innerHTML = temp;
+        }
+      }
+      try {
+        detectCurrency();
+        roundingTaxes();
+
+        swap(5, 3, "listing_table");
+        swap(2, 6, "listing_table");
+        swap(4, 7, "listing_table");
+        var mainTable = document.getElementById("listing_table");
+        var colCount = mainTable.rows[0].cells;
+
+        if (colCount.length == 9) {
+          swap(5, 8, "listing_table");
+          swap(7, 8, "listing_table");
+          swap(5, 4, "listing_table");
+        } else {
+          swap(5, 6, "listing_table");
+        }
+        addNewColClass();
+      } catch (err) {}
+    </script>
+  </body>
+</html>

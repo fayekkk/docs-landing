@@ -1,0 +1,98 @@
+<style>
+  .late_input {
+    overflow: hidden;
+    width: 113px;
+  }
+  .late1_input {
+    overflow: hidden;
+    width: 113px;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    if (
+      window.location.href.indexOf("/requisitions/add") != -1 ||
+      window.location.href.indexOf("/requisitions/edit") != -1
+    ) {
+      $("#RequisitionNotes").parent().parent().parent().hide();
+
+      function createCol(prevTh, prevTd, colTitle, classTh, classTd, colInput) {
+        console.log("run");
+        console.log($(`#listing_table th.${classTh}`).length);
+
+        if ($(`#listing_table th.${classTh}`).length == 0) {
+          $(prevTh).after(`<th class='${classTh}'>${colTitle}</th>`);
+        }
+
+        // Append new TD with textarea to each row
+        $(`#listing_table tr`).each(function () {
+          if (!$(this).find(`td.${classTd}`).length) {
+            $(this)
+              .find(prevTd)
+              .after(
+                `<td class='${classTd}'><textarea class='${colInput} editable-input'></textarea></td>`
+              );
+          }
+        });
+      }
+
+      // Adding the columns when screen is loaded
+      createCol(
+        "#label_unit_price",
+        ".unit-price",
+        "تاريخ لإنتاج ",
+        "late_th",
+        "late_td",
+        "late_input"
+      );
+      createCol(
+        "#label_unit_price",
+        ".unit-price",
+        "الوحدة  ",
+        "late1_th",
+        "late1_td",
+        "late1_input"
+      );
+      function collectTableData() {
+        let tableData = [];
+        $(".itemRow ").each(function () {
+          let rowData = {
+            late_input: $(this).find("td.late_td textarea").val() || "",
+            late1_input: $(this).find("td.late1_td textarea").val() || "",
+          };
+          tableData.push(rowData);
+        });
+        console.log(JSON.stringify(tableData));
+        $("#RequisitionNotes").val(JSON.stringify(tableData));
+      }
+
+      // Attach onchange event to textareas
+      $(document).on("change", ".late_input , .late1_input ", function () {
+        collectTableData();
+      });
+      let requisitionNotes = $("#RequisitionNotes").val();
+      if (requisitionNotes) {
+        let parsedData = JSON.parse(requisitionNotes);
+        $(".itemRow").each(function (index) {
+          if (parsedData[index]) {
+            $(this)
+              .find("td.late_td textarea")
+              .val(parsedData[index].late_input || "");
+            $(this)
+              .find("td.late1_td textarea")
+              .val(parsedData[index].late1_input || "");
+          }
+        });
+      }
+      // items-totals
+      $(".items-totals").find("td").eq(0).attr("colspan", "7");
+      // Handle adding new row
+      $(document).on("click", "#AddItem", function (e) {
+        e.preventDefault();
+        let newRow = $("#listing_table tr:last").clone();
+        newRow.find("td.late_td textarea").val("");
+        $("#listing_table").append(newRow);
+      });
+    }
+  });
+</script>

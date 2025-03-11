@@ -1,0 +1,253 @@
+<style>
+  #container {
+    border: none !important;
+    direction: rtl !important;
+  }
+  #container * {
+    border: none !important;
+    direction: rtl !important;
+  }
+  #client_info {
+    width: 100%;
+  }
+  #client_info td {
+    padding: 0;
+    margin: 0;
+  }
+</style>
+<div id="container">
+  <table id="client_info">
+    <tbody>
+      <tr>
+        <td>التاريخ</td>
+        <td>رقم العميل</td>
+      </tr>
+      <tr>
+        <td>{{Data.le_authentication.date_to}}</td>
+        <td>
+          <!--% foreach({{Data.le_authentication.le_authentication_le_authentication_clients}} as {{le_authentication_le_authentication_clients_row}}) { %-->
+          {{le_authentication_le_authentication_clients_row.le_authentication_clients_clientdata.client_number}}
+          <!--% } %-->
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="texts">
+    السادة /
+    <!--% foreach({{Data.le_authentication.le_authentication_le_authentication_clients}} as {{le_authentication_le_authentication_clients_row}}) { %-->
+    {{le_authentication_le_authentication_clients_row.le_authentication_clients_clientdata.business_name}}
+    <!--% } %-->
+    المحترمين
+    <br />
+    <h3>السلام عليكم ورحمة الله و بركاته</h3>
+    اشارة الى قيام السادة / مكتب حسن ال باحص محاسبون قانونيون بمراجعة حساباتنا
+    للعام المالي المنتهي في {{Data.le_authentication.date_to}} الذي اظهر رصيدكم
+    (
+    <!--% foreach({{Data.le_authentication.le_authentication_le_authentication_clients}} as {{le_authentication_le_authentication_clients_row}}) { %-->
+    {{le_authentication_le_authentication_clients_row.client_total_status}}
+
+    <!--% } %-->) بمبلغ (<!--% foreach({{Data.le_authentication.le_authentication_le_authentication_clients}} as {{le_authentication_le_authentication_clients_row}}) { %-->
+
+    {{le_authentication_le_authentication_clients_row.clienttotalval}}
+
+    <!--% } %-->) ريال سعودي ) <span id="ar_invoice_total_spelled"></span>) نأمل
+    استكمال المعلومات المبينة أدناه وإعادته الينا او اعادة هذا الخطاب على
+    العنوان السادة / حمد العوفي محاسبيون قانونيون ص ب 7158 الرياض 11462 فاكس
+    2171179 وذلك في اقرب وقت ممكن
+
+    <br />
+
+    <strong> وتفضلوا بقبول فائق الاحترام. ....... رئيس الحسابات </strong>
+
+    <table style="width: 100%">
+      <tbody>
+        <tr>
+          <td style="width: 80%"></td>
+          <td style="font-weight: bold; text-decoration: underline">
+            رئيس الحسابات
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="display: none" id="invoice_total">
+    <!--% foreach({{Data.le_authentication.le_authentication_le_authentication_clients}} as {{le_authentication_le_authentication_clients_row}}) { %-->
+
+    {{le_authentication_le_authentication_clients_row.clienttotalval}}
+
+    <!--% } %-->
+  </div>
+  <script>
+    function numberToWordsArabic(number) {
+      var units = [
+        "",
+        "واحد",
+        "اثنان",
+        "ثلاثة",
+        "أربعة",
+        "خمسة",
+        "ستة",
+        "سبعة",
+        "ثمانية",
+        "تسعة",
+        "عشرة",
+        "أحد عشر",
+        "اثنا عشر",
+        "ثلاثة عشر",
+        "أربعة عشر",
+        "خمسة عشر",
+        "ستة عشر",
+        "سبعة عشر",
+        "ثمانية عشر",
+        "تسعة عشر",
+      ];
+
+      var tens = [
+        "",
+        "",
+        "عشرون",
+        "ثلاثون",
+        "أربعون",
+        "خمسون",
+        "ستون",
+        "سبعون",
+        "ثمانون",
+        "تسعون",
+      ];
+
+      var scales = [
+        "",
+        "ألف",
+        "مليون",
+        "مليار",
+        "تريليون",
+        "كوادريليون",
+        "كوينتليون",
+        "سكستليون",
+        "سبتليون",
+        "أوكتليون",
+        "نونليون",
+        "ديسليون",
+      ];
+
+      if (number === 0) {
+        return "صفر";
+      }
+
+      var words = "";
+
+      if (number < 0) {
+        words += "سالب ";
+        number = Math.abs(number);
+      }
+
+      var scaleIndex = 0;
+
+      while (number > 0) {
+        var triplet = number % 1000;
+        number = Math.floor(number / 1000);
+
+        if (triplet > 0) {
+          var tripletWords = "";
+
+          var hundreds = Math.floor(triplet / 100);
+          var tensAndUnits = triplet % 100;
+
+          if (hundreds > 0) {
+            if (hundreds == 1) {
+              tripletWords += " مئة";
+            } else if (hundreds == 2) {
+              tripletWords += " مائتان";
+            } else if (hundreds == 3) {
+              tripletWords += " ثلاثمائة  ";
+            } else if (hundreds == 4) {
+              tripletWords += " اربعمائة ";
+            } else if (hundreds == 5) {
+              tripletWords += " خمسمائة ";
+            } else if (hundreds == 6) {
+              tripletWords += " ستمائة ";
+            } else if (hundreds == 7) {
+              tripletWords += " سبعمائة ";
+            } else if (hundreds == 8) {
+              tripletWords += " ثمانمائة ";
+            } else if (hundreds == 9) {
+              tripletWords += " تسعمائة ";
+            }
+          }
+          if (tensAndUnits > 0) {
+            if (tripletWords !== "") {
+              tripletWords += " و";
+            }
+
+            if (tensAndUnits < 20) {
+              tripletWords += units[tensAndUnits];
+            } else {
+              var tensDigit = Math.floor(tensAndUnits / 10);
+              var unitsDigit = tensAndUnits % 10;
+
+              if (tensDigit > 0) {
+                if (unitsDigit === 1) {
+                  tripletWords += units[unitsDigit] + " و";
+                } else if (unitsDigit > 1) {
+                  tripletWords += units[unitsDigit] + " و";
+                }
+
+                tripletWords += tens[tensDigit];
+              }
+            }
+          }
+          if (scaleIndex > 0) {
+            if (triplet === 1) {
+              tripletWords += " " + scales[scaleIndex];
+            } else if (triplet >= 2 && triplet <= 10) {
+              tripletWords += " " + scales[scaleIndex] + "";
+            } else if (triplet > 10) {
+              tripletWords += " " + scales[scaleIndex];
+            }
+          }
+
+          if (words !== "") {
+            words = tripletWords + " و" + words;
+          } else {
+            words = tripletWords;
+          }
+        }
+
+        scaleIndex++;
+      }
+      return words;
+    }
+    function convertFN(num, maincurrency, floatCurr) {
+      var myIntNum = parseInt(num.split(".")[0]);
+      var myFloatNum = parseInt(num.split(".")[1]);
+      return (
+        numberToWordsArabic(myIntNum) +
+        " " +
+        maincurrency +
+        " و " +
+        numberToWordsArabic(myFloatNum) +
+        " " +
+        floatCurr +
+        " فقط"
+      );
+    }
+    try {
+      if (document.getElementById("invoice_total").innerText.trim() == "") {
+        document.getElementById("invoice_total").innerText = "0";
+      }
+      var myNum = String(
+        parseFloat(
+          document
+            .getElementById("invoice_total")
+            .innerText.replace(/[\$,]/g, "")
+        ).toFixed(2)
+      );
+      document.querySelectorAll(".ar_invoice_total_spelled")[0].innerText =
+        convertFN(myNum, "ريال", "هلله");
+      document.querySelectorAll(".ar_invoice_total_spelled")[1].innerText =
+        convertFN(myNum, "ريال", "هلله");
+    } catch (error) {
+      console.log(error);
+    }
+  </script>
+</div>

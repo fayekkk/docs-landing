@@ -1,0 +1,97 @@
+<script>
+  $(document).ready(() => {
+    if (window.location.href.indexOf("invoices/settings") != -1) {
+      let accountsSettings = `
+                    <div class="clip-check check-info">
+                    <input
+                        type="checkbox"
+                        class="form-x1"
+                        value="1"hre
+                        id="accounts_settings_checkbox"
+                        /><label for="accounts_settings_checkbox"
+                        >تفعيل  إستقطاعات للفاتورة  </label
+                        ><span id="accounts_settings_icon" style="display: inline"
+                        ><i class="fa fa fa-cog"></i>
+                        <a
+                            href="/v2/owner/entity/le_invoice-accounts-settings/1/edit"
+                            target="_blank"
+                            >إدارة</a
+                        >
+                        </span>
+                       <span id="activatedornot"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                    `;
+      let MyDiv = $("<div>")
+        .attr("class", "form-group")
+        .attr("id", "accounts_settings")
+        .html(accountsSettings);
+      $("#custom_journal_description_input").before(MyDiv);
+      var checkbox = $("#accounts_settings_checkbox");
+      $.ajax({
+        url: `/v2/api/entity/le_invoice-accounts-settings/1/1`,
+        method: "Get",
+        contentType: "application/json",
+        accept: "application/json",
+      }).then((res) => {
+        if (res.active == 1) {
+          checkbox.prop("checked", true);
+        } else {
+          checkbox.prop("checked", false);
+          $("#accounts_settings_icon").attr("style", "display: none");
+        }
+      });
+      function UpdateEntity(ischecked) {
+        let theBody = JSON.stringify({
+          active: ischecked,
+        });
+        $.ajax({
+          url: `/v2/api/entity/le_invoice-accounts-settings/1/fields`,
+          method: "POST",
+          contentType: "application/json",
+          accept: "application/json",
+          data: theBody,
+        }).then((res) => {
+          console.log(res);
+          if (ischecked == 0) {
+            $("#activatedornot")
+              .text("تم تعطيل إستقطاعات الفاتورة  ")
+              .fadeIn(500)
+              .delay(2500)
+              .fadeOut(500);
+          } else {
+            $("#activatedornot")
+              .text("تم تفعيل إستقطاعات الفاتورة  ")
+
+              .fadeIn(500)
+              .delay(2500)
+              .fadeOut(500);
+          }
+        });
+      }
+      checkbox.on("click", function () {
+        if ($(this).is(":checked")) {
+          $("#accounts_settings_icon").attr("style", "display: inline");
+          UpdateEntity(1);
+        } else {
+          $("#accounts_settings_icon").attr("style", "display: none");
+          UpdateEntity(0);
+        }
+      });
+    }
+  });
+</script>
+<style>
+  #activatedornot {
+    color: rgb(255 255 255);
+    position: fixed;
+    bottom: 7%;
+    left: 13%;
+    background: #4b93f0;
+    display: none;
+    padding: 13px;
+    border-radius: 9px;
+    font-weight: bold;
+    font-size: 15px;
+  }
+</style>

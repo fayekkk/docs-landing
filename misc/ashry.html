@@ -1,0 +1,71 @@
+<script>
+  $(document).ready(function () {
+    // Function to rearrange order inputs
+    function rearrangeOrderInputs() {
+      $(".Multiple Sub-Forms tr").each(function (index) {
+        // Increment index by 1 to start from 1 instead of 0
+        $(this)
+          .find("[id$='--client_order']")
+          .val(index + 1);
+      });
+    }
+
+    // Remove Button Click Event (using event delegation)
+    $(document).on("click", ".removeRowBtn", function () {
+      $(this).closest("tr").remove();
+      rearrangeOrderInputs();
+    });
+
+    // Optional: Drag and Drop Reordering
+    $(".Multiple Sub-Forms").sortable({
+      update: function (event, ui) {
+        rearrangeOrderInputs();
+      },
+    });
+  });
+</script>
+
+<script>
+  function rearrangeOrderInputs(newRowOrder) {
+    newRowOrder = parseInt(newRowOrder);
+    const rows = $(".Multiple Sub-Forms tr")
+      .get()
+      .sort((a, b) => {
+        const orderA = parseInt($(a).find("[id$='--client_order']").val());
+        const orderB = parseInt($(b).find("[id$='--client_order']").val());
+        return orderA - orderB;
+      });
+    rows.forEach((row) => {
+      const currentOrder = parseInt(
+        $(row).find("[id$='--client_order']").val()
+      );
+      if (currentOrder >= newRowOrder) {
+        $(row)
+          .find("[id$='--client_order']")
+          .val(currentOrder + 1);
+      }
+    });
+  }
+  function insertRowAtOrder(newRowOrder) {
+    rearrangeOrderInputs(newRowOrder);
+    newRow.find("[id$='--client_order']").val(newRowOrder);
+    // Insert the new row in the correct position
+    const rows = $(".Multiple Sub-Forms tr").get();
+    const insertIndex = rows.findIndex(
+      (row) =>
+        parseInt($(row).find("[id$='--client_order']").val()) > newRowOrder
+    );
+
+    if (insertIndex !== -1) {
+      $(rows[insertIndex]).before(newRow);
+    } else {
+      $(".Multiple Sub-Forms").append(newRow);
+    }
+  }
+
+  // Example usage
+  $(".add-row button").on("click", function () {
+    const orderToInsert = 11;
+    insertRowAtOrder(orderToInsert);
+  });
+</script>

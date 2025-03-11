@@ -1,0 +1,483 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      direction: ltr;
+    }
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    .invoice-address {
+      border-top: 3px double #000000;
+      margin: 15px 0;
+      padding-top: 25px;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: left;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: left;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    .total-table td {
+      border-left: 1px solid #555555;
+    }
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    .notes-block {
+      margin: 50px 0 0 0;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+    #business_info {
+      line-height: 1.4;
+    }
+    #label_subtotal {
+      width: 65px;
+    }
+    #label_field3,
+    #label_field4 {
+      width: 55px;
+    }
+    #items-list > table:nth-child(2) tr td:nth-child(1) {
+      width: 60%;
+    }
+    #listing_table th,
+    #listing_table td {
+      text-align: center;
+    }
+    .invoice-inner {
+      margin: 0 25px;
+    }
+    table#listing_table th:nth-last-child(3),
+    table#listing_table td:nth-last-child(3) {
+      display: none;
+    }
+    .qr-code img {
+      margin-top: 10px;
+    }
+    td#th {
+      font-weight: bold;
+      background: #e5e5e5;
+      border-top: 1px solid #555555;
+    }
+    .red {
+      color: red;
+    }
+    #listing_table td:last-child,
+    #listing_table th:last-child {
+      border-left: 0 !important;
+      border-right: 1px solid #555555 !important;
+    }
+    .vat-td {
+      border-right: 1px solid #555555;
+    }
+    .hidden {
+      display: none;
+    }
+    #client_info {
+      line-height: 0.8;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="left" valign="top">
+              <img
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                width="{%logo-width%}"
+                height="{%logo-height%}"
+              />
+            </td>
+            <td align="left" valign="top" style="width: 45%; font-size: 14px">
+              <div id="business_info" class="editable-area">
+                {%business_info%}
+              </div>
+            </td>
+            <td valign="top" align="right">
+              <p id="invoice_title" class="editable-area invoice-name">
+                {%invoice_title%}
+              </p>
+            </td>
+          </tr>
+        </table>
+
+        <div class="invoice-address">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="50%" align="left" valign="top">
+                <table border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td valign="top" style="float: left">
+                      <strong id="field1" class="editable-area"
+                        >{%field1%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" valign="top">
+                      <div id="client_info" class="editable-area">
+                        {%client_info%}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td width="50%" valign="top" align="right">
+                <table
+                  id="invoice_basics"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="right"
+                >
+                  <tr>
+                    <td align="right">
+                      <strong class="editable-area" id="label_invoice_no"
+                        >{%label_invoice_no%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%purchaseorders_no%}
+                    </td>
+                  </tr>
+                  <!-- Issued By-->
+                  <tr>
+                    <td align="right"><strong>Issued By</strong></td>
+                    <td style="padding-left: 20px" align="left">
+                      {%staff_member_name%}
+                    </td>
+                  </tr>
+                  <!-- /Issued By -->
+
+                  <!-- InvoiceDate -->
+                  <tr>
+                    <td align="right">
+                      <strong class="editable-area" id="label_date"
+                        >{%label_date%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%purchaseorders_date%}
+                    </td>
+                  </tr>
+                  <!-- /InvoiceDate -->
+
+                  <!-- InvoiceTime -->
+                  <tr>
+                    <td align="right"><strong>Created Time</strong></td>
+                    <td style="padding-left: 20px" align="left">
+                      {%created_time%}
+                    </td>
+                  </tr>
+                  <!-- /InvoiceTime -->
+                </table>
+                <custom_field
+                  id="custom_fields"
+                  style="clear: both"
+                  class="editable-area"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="right"
+                >
+                  {%custom_fields%}
+                </custom_field>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div id="items-list">{%items_list%}</div>
+
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div id="current_date" style="display: none">
+          {%purchaseorders_date%}
+        </div>
+        <div id="due_date" style="display: none">{%due_date%}</div>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function appendNewCol() {
+        var newTR = document
+          .getElementById("listing_table")
+          .getElementsByTagName("tr");
+        var newThOne = document.createElement("th");
+        var newThTwo = document.createElement("th");
+
+        newThOne.setAttribute("id", "vat_amount");
+        newThTwo.setAttribute("id", "total_amount");
+        newThOne.innerHTML = "قيمة الضريبة<br>TAX VALUE";
+        newThTwo.innerHTML = "المجموع مع الضريبة<br>TOTAL With VAT";
+        newTR[0].appendChild(newThOne);
+        newTR[0].appendChild(newThTwo);
+
+        for (var i = 1; i < newTR.length; i++) {
+          var newTdOne = document.createElement("td");
+          var newTdTwo = document.createElement("td");
+          newTdOne.setAttribute("class", "vat-td");
+          newTdTwo.setAttribute("class", "total-td");
+          newTR[i].appendChild(newTdOne);
+          newTR[i].appendChild(newTdTwo);
+        }
+      }
+
+      function calcVatAmount() {
+        if (
+          document.querySelectorAll("#listing_table tbody tr:nth-child(1) td")
+            .length == 11
+        ) {
+          var subtotal = document.querySelectorAll(
+            "#listing_table td:nth-last-child(3)"
+          );
+          var vatAmount = document.querySelectorAll("#listing_table .vat-td");
+          var unitPrice = document.querySelectorAll(
+            "#listing_table td:nth-last-child(5)"
+          );
+          var qty = document.querySelectorAll(
+            "#listing_table td:nth-last-child(6)"
+          );
+          var Discount = document.querySelectorAll(
+            "#listing_table td:nth-last-child(4)"
+          );
+
+          function arrayIncludes(array, element) {
+            for (var i = 0; i < array.length; i++) {
+              if (array[i] === element) {
+                return true;
+              }
+            }
+            return false;
+          }
+          for (var i = 0; i < vatAmount.length; i++) {
+            if (Discount[i].innerText == "") {
+              Discount[i].innerText = "0";
+              vat = (
+                parseFloat(qty[i].innerText.replace(/,/g, "")) *
+                parseFloat(unitPrice[i].innerText.replace(/,/g, "")) *
+                ((1 / 1.15) * 0.15)
+              ).toFixed(2);
+            } else if (arrayIncludes(Discount[i].innerText.split(""), "%")) {
+              vat = (
+                (parseFloat(qty[i].innerText.replace(/,/g, "")) *
+                  parseFloat(unitPrice[i].innerText.replace(/,/g, "")) -
+                  (parseFloat(Discount[i].innerText.replace(/%/g, "")) / 100) *
+                    parseFloat(unitPrice[i].innerText.replace(/,/g, "")) *
+                    parseFloat(qty[i].innerText.replace(/,/g, ""))) *
+                ((1 / 1.15) * 0.15)
+              ).toFixed(2);
+            } else {
+              vat = (
+                (parseFloat(qty[i].innerText.replace(/,/g, "")) *
+                  parseFloat(unitPrice[i].innerText.replace(/,/g, "")) -
+                  parseFloat(Discount[i].innerText.replace(/%/g, ""))) *
+                ((1 / 1.15) * 0.15)
+              ).toFixed(2);
+            }
+
+            if (vat) {
+              vatAmount[i].innerText = parseFloat(vat).toFixed(2);
+            } else {
+              vatAmount[i].innerText = "0.00";
+            }
+          }
+        } else {
+          var vatAmount = document.querySelectorAll("#listing_table .vat-td");
+          var unitPrice = document.querySelectorAll(
+            "#listing_table td:nth-last-child(4)"
+          );
+          var qty = document.querySelectorAll(
+            "#listing_table td:nth-last-child(5)"
+          );
+          for (var i = 0; i < vatAmount.length; i++) {
+            vat = (
+              parseFloat(qty[i].innerText.replace(/,/g, "")) *
+              parseFloat(unitPrice[i].innerText.replace(/,/g, "")) *
+              ((1 / 1.15) * 0.15)
+            ).toFixed(2);
+            if (vat) {
+              vatAmount[i].innerText = parseFloat(vat).toFixed(2);
+            } else {
+              vatAmount[i].innerText = "0.00";
+            }
+          }
+        }
+      }
+
+      function calcTotalAfVat() {
+        var totalAmount = document.querySelectorAll("#listing_table .total-td");
+        var vatAmount = document.querySelectorAll("#listing_table .vat-td");
+        var subtotal = document.querySelectorAll(
+          "#listing_table td:nth-last-child(3)"
+        );
+        var Discount = document.querySelectorAll(
+          "#listing_table td:nth-last-child(4)"
+        );
+        function arrayIncludes(array, element) {
+          for (var i = 0; i < array.length; i++) {
+            if (array[i] === element) {
+              return true;
+            }
+          }
+          return false;
+        }
+        for (var i = 0; i < totalAmount.length; i++) {
+          if (
+            document.querySelectorAll("#listing_table tbody tr:nth-child(1) td")
+              .length == 11
+          ) {
+            if (Discount[i].innerText == "") {
+              Discount[i].innerText = "0";
+            }
+            if (arrayIncludes(Discount[i].innerText.split(""), "%")) {
+              totalAmount[i].innerText = parseFloat(
+                subtotal[i].innerText.replace(/,/g, "")
+              ).toFixed(2);
+            } else {
+              totalAmount[i].innerText = (
+                parseFloat(subtotal[i].innerText.replace(/,/g, "")) -
+                parseFloat(Discount[i].innerText.replace(/,/g, ""))
+              ).toFixed(2);
+            }
+          } else {
+            totalAmount[i].innerText = parseFloat(
+              subtotal[i].innerText.replace(/,/g, "")
+            ).toFixed(2);
+          }
+        }
+      }
+
+      // function roundingTaxes() {
+      //   var taxValue = document.querySelectorAll(
+      //     "#listing_table tr td:nth-child(4)"
+      //   );
+      //   for (var i = 0; i < taxValue.length; i++) {
+      //     taxValue[i].innerText = parseFloat(
+      //       taxValue[i].innerText.replace(/\,/g, ""),
+      //       10
+      //     ).toFixed(2);
+      //   }
+      // }
+
+      function swap(in1, in2, table_id) {
+        var table = document.getElementById(table_id);
+        for (var i = 0, row; (row = table.rows[i]); i++) {
+          var temp = row.cells[in1].innerHTML;
+          row.cells[in1].innerHTML = row.cells[in2].innerHTML;
+          row.cells[in2].innerHTML = temp;
+        }
+      }
+      function appendSnColumn() {
+        var tbl = document.getElementById("listing_table"); // table reference
+
+        for (i = 0; i < tbl.rows.length; i++) {
+          var newCell = tbl.rows[i].insertCell(0);
+          newCell.id = "serial";
+          newCell.innerText = i;
+        }
+        var firstCell = tbl.rows[0].cells[0];
+        firstCell.id = "th";
+        tbl.rows[0].cells[0].innerHTML = "م<br>N";
+      }
+
+      function setInvoiceType() {
+        var currentDate = document.getElementById("current_date");
+        var dueDate = document.getElementById("due_date");
+        var invoiceType = document.getElementById("invoice_type");
+        if (currentDate.innerText == dueDate.innerText) {
+          invoiceType.innerText = "Cash / نقدي";
+        } else {
+          invoiceType.innerText = "CREDIT / آجل";
+          invoiceType.classList.add("red");
+        }
+      }
+      function hideEmptyValue() {
+        var allValues = document.querySelectorAll(".text-val");
+        for (var x = 0; x < allValues.length; x++) {
+          if (allValues[x].innerText.length == 0) {
+            allValues[x].parentElement.classList.add("hidden");
+          }
+        }
+      }
+      try {
+        appendNewCol();
+        calcVatAmount();
+        calcTotalAfVat();
+        appendSnColumn();
+        // setInvoiceType();
+        hideEmptyValue();
+      } catch (err) {
+        console.log(err);
+      }
+    </script>
+  </body>
+</html>

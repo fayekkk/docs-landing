@@ -1,0 +1,97 @@
+<style>
+  #event_btn2 {
+    width: 180px;
+    height: 35px;
+    margin-left: 14px;
+    background-color: #dbe7f3;
+    border: none;
+    border-radius: 4px;
+  }
+  /* .loading-overlay {
+    display: none;
+    background: #fff;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    text-align: center;
+    padding-top: 10%;
+  }
+  .loading-overlay img{
+    height: 100px;
+  } */
+</style>
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      // let overlay = `<div class="loading-overlay"><div class="loading-overlay-image-container"><img class="loading-overlay-image" src="https://www.ostar.com.sa/files/7aae9582/logos/643a775f617c7_blobid1681553243337.gif"> </div>  <div class="loading-overlay-title"></div></div>`;
+
+      document.querySelector(
+        ".top-actions"
+      ).innerHTML += `<div id="online-btn" style='float:left'>
+    <button id="event_btn2"> تحديث المنتجات فى المتجر </button>
+</div>`;
+      document.querySelector("#event_btn2").addEventListener("click", () => {
+        document.querySelector("#event_btn2").innerText = "Loading ...";
+        // req to get all stock_balance > 0 and availabe_online is null
+
+        $.get(
+          `https://www.elshoroukshop.online/v2/api/entity/product/list/-1?filter[stock_balance]=0&filter[availabe_online]=1&per_page=1000000`
+        ).then((prods2) => {
+          // merge tow arr to to update all prods
+          let prods = prods1.data.concat(prods2.data);
+          // console.log(prods);
+          if (prods.length == 0) {
+            alert("لا يوجد منتجات لتحديثها");
+            document.querySelector("#event_btn2").innerText = "Done";
+            setTimeout(() => {
+              document.querySelector("#event_btn2").innerText =
+                "تحديث المنتجات فى المتجر";
+            }, 3000);
+          } else {
+            async function updateProductsInBatches(prods) {
+              for (let i = 0; i < prods.length; i += 20) {
+                const requests = [];
+                for (let j = 0; j < 20; j++) {
+                  let k = i + j;
+                  // console.log(prods[k].id);
+                  requests.push(
+                    fetch(
+                      `https://www.elshoroukshop.online/v2/api/entity/product/${prods[k].id}/fields`,
+                      {
+                        method: "POST",
+                        headers: {
+                          apikey: "21162c3e7c1cfcbb59c8b066e3986ac8631edd62",
+                          Accept: "application/json",
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ availabe_online: 1 }),
+                      }
+                    )
+                      .then((response) => response.json())
+                      .then((data) => {
+                        // console.log(data);
+                      })
+                      .catch((error) => {
+                        // console.error(error);
+                      })
+                  );
+                }
+                await Promise.all(requests);
+              }
+            }
+
+            updateProductsInBatches(prods);
+            document.querySelector("#event_btn2").innerText = "Done";
+            setTimeout(() => {
+              document.querySelector("#event_btn2").innerText =
+                "تحديث المنتجات فى المتجر";
+            }, 3000);
+          }
+        });
+      });
+    }, 500);
+  });
+</script>

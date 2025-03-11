@@ -1,0 +1,274 @@
+<style>
+  .headtbl {
+    width: 100%;
+    margin-bottom: 15px;
+    text-align: right;
+    border-top: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: none;
+    border-left: none;
+  }
+  .headtbl td {
+    padding: 4px;
+    border-top: none;
+    border-right: none;
+    border-bottom: 1px solid #e5e5e5;
+    border-left: 1px solid #e5e5e5;
+  }
+  .headtbl td:nth-child(1) {
+    width: 30%;
+  }
+  .headtbl td:nth-child(2) {
+    width: 50%;
+  }
+  .headtbl td:nth-child(3) {
+    width: 20%;
+  }
+  .adresss {
+    font-size: 11px;
+  }
+  .colo-1 {
+    width: 12%;
+  }
+  .colo-2 {
+    width: 16%;
+  }
+  .colo-3 {
+    width: 12%;
+    font-weight: bold;
+    word-wrap: break-word;
+  }
+  .colo-4 {
+    width: 15%;
+  }
+  .colo-5 {
+    width: 15%;
+  }
+  .colo-6 {
+    width: 15%;
+  }
+  .colo-7 {
+    width: 15%;
+  }
+
+  #datatbl {
+    width: 100%;
+    margin-bottom: 15px;
+    text-align: center;
+    border-top: 1px solid #000;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+    border-left: 1px solid #000;
+  }
+  #datatbl td,
+  #datatbl th {
+    padding: 4px;
+    border-top: 1px solid #000;
+    border-right: 1px solid #000;
+    border-bottom: none;
+  }
+  #datatbl td:last-child,
+  #datatbl th:last-child {
+    border-left: 1px solid #000;
+  }
+  #datatbl th {
+    font-size: 13px;
+    background-color: #e5e5e5;
+  }
+  #datatbl td {
+    font-size: 11px;
+  }
+</style>
+<div>
+  <span id="number" style="display: none"
+    >{{Data.le_workflow-type-entity-3.number}}</span
+  >
+  <span id="my_data" style="display: none"
+    >{{Data.le_workflow-type-entity-3.le_workflow-type-entity-3_custom_data.datatobass}}</span
+  >
+  <div>
+    <div id="containerr"></div>
+  </div>
+</div>
+<script>
+  function addtickets(ticket, countt) {
+    var count = countt + 1;
+    var headtbl = document.createElement("table");
+    headtbl.setAttribute("class", "headtbl");
+    var headtblrow = document.createElement("tr");
+    var headtblcell = document.createElement("td");
+    headtblcell.innerText = "تاريخ الحجز :" + ticket["تاريخ الحجز"];
+    headtblrow.appendChild(headtblcell);
+    var headtblcell1 = document.createElement("td");
+    headtblcell1.setAttribute("rowspan", "2");
+    var logoImg = document.createElement("img");
+    logoImg.setAttribute(
+      "src",
+      "https://durobalhijrah.daftara.com/files/d5e2718e/logos/65b3dddc475e4_blobid1706286551829.png"
+    );
+    logoImg.setAttribute("style", "width: 100%");
+    headtblcell1.appendChild(logoImg);
+    headtblrow.appendChild(headtblcell1);
+    var headtblcell2 = document.createElement("td");
+    headtblcell2.setAttribute("rowspan", "2");
+
+    headtblcell2.innerText =
+      "رقم التذكرة :  " +
+      "\n" +
+      document.getElementById("number").innerText +
+      "/" +
+      count;
+    headtblcell2.style.textAlign = "center";
+    headtblrow.appendChild(headtblcell2);
+    var headtblrow1 = document.createElement("tr");
+    var headtblcel4 = document.createElement("td");
+    headtblcel4.innerText = "تاريخ السفر :" + ticket["تاريخ السفر"];
+    headtblrow1.appendChild(headtblcel4);
+    var headtbltbody = document.createElement("tbody");
+    headtbltbody.appendChild(headtblrow);
+    headtbl.appendChild(headtbltbody);
+    headtbltbody.appendChild(headtblrow1);
+    document.getElementById("containerr").appendChild(headtbl);
+
+    // ******************************************************//
+    var datatbl = document.createElement("table");
+    datatbl.setAttribute("id", "datatbl");
+
+    var datatblthead = document.createElement("thead");
+    for (var i = 0; i < 5; i++) {
+      var datatblth = document.createElement("th");
+      switch (i) {
+        case 0: {
+          datatblth.setAttribute("colspan", "3");
+          datatblth.innerText = "اسم المسافر";
+          break;
+        }
+        case 1: {
+          datatblth.innerText = " الجنسية";
+          break;
+        }
+        case 2: {
+          datatblth.innerText = "رقم الجواز ";
+          break;
+        }
+        case 3: {
+          datatblth.innerText = " رقم الجوال";
+          break;
+        }
+        case 4: {
+          datatblth.innerText = "القيمة ";
+          break;
+        }
+        default:
+          break;
+      }
+      datatblthead.appendChild(datatblth);
+    }
+    datatbl.appendChild(datatblthead);
+    var datatbltbody = document.createElement("tbody");
+    var row1 = document.createElement("tr");
+    var row1td1 = document.createElement("td");
+    row1td1.setAttribute("colspan", "3");
+    row1td1.innerText = ticket["اسم المعتمر"];
+    var row1td2 = document.createElement("td");
+    row1td2.setAttribute("class", "colo-4");
+    row1td2.innerText = ticket["الجنسية"];
+    var row1td3 = document.createElement("td");
+    row1td3.setAttribute("class", "colo-5");
+
+    row1td3.innerText = ticket["رقم الجواز"];
+    var row1td4 = document.createElement("td");
+    row1td4.setAttribute("class", "colo-6");
+
+    row1td4.innerText = ticket["رقم الجوال"];
+    var row1td5 = document.createElement("td");
+    row1td5.setAttribute("class", "colo-7");
+
+    row1td5.innerText = ticket["مجموع القيمة"];
+    row1.appendChild(row1td1);
+    row1.appendChild(row1td2);
+    row1.appendChild(row1td3);
+    row1.appendChild(row1td4);
+    row1.appendChild(row1td5);
+    var row2 = document.createElement("tr");
+    var row2td1 = document.createElement("td");
+    row2td1.setAttribute("class", "colo-1");
+    row2td1.innerText = "رقم المقعد";
+
+    var row2td2 = document.createElement("td");
+    row2td2.setAttribute("class", "colo-2");
+    row2td2.innerText = ticket["رقم المقعد"];
+    var row2td3 = document.createElement("td");
+    row2td3.setAttribute("class", "colo-3");
+    row2td3.setAttribute("rowspan", "3");
+    row2td3.innerText = "الختم \n والتوقيع";
+    var row2td4 = document.createElement("td");
+    row2td4.setAttribute("rowspan", "3");
+    row2td4.setAttribute("colspan", "2");
+    row2td4.innerText = "";
+    var row2td5 = document.createElement("td");
+    row2td5.innerText = "مجموع القيمة";
+    var row2td6 = document.createElement("td");
+    row2td6.innerText = ticket["القيمة "];
+    row2.appendChild(row2td1);
+    row2.appendChild(row2td2);
+    row2.appendChild(row2td3);
+    row2.appendChild(row2td4);
+    row2.appendChild(row2td5);
+    row2.appendChild(row2td6);
+    var row3 = document.createElement("tr");
+    var row3td1 = document.createElement("td");
+    row3td1.innerText = "من";
+    var row3td2 = document.createElement("td");
+    row3td2.innerText = ticket["من فندق"];
+    var row3td3 = document.createElement("td");
+    row3td3.innerText = "المدفوع";
+    var row3td4 = document.createElement("td");
+    row3td4.innerText = ticket["المدفوع"];
+    row3.appendChild(row3td1);
+    row3.appendChild(row3td2);
+    row3.appendChild(row3td3);
+    row3.appendChild(row3td4);
+    var row4 = document.createElement("tr");
+    var row4td1 = document.createElement("td");
+    row4td1.innerText = "إلى";
+    var row4td2 = document.createElement("td");
+    row4td2.innerText = ticket["الى فندق"];
+    var row4td3 = document.createElement("td");
+    row4td3.innerText = "الباقي";
+    var row4td4 = document.createElement("td");
+    row4td4.innerText = ticket["الباقى"];
+    row4.appendChild(row3td1);
+    row4.appendChild(row3td2);
+    row4.appendChild(row3td3);
+    row4.appendChild(row3td4);
+    var row5 = document.createElement("tr");
+    var row5td1 = document.createElement("td");
+    row5td1.setAttribute("colspan", "100%");
+    row5td1.setAttribute("class", "adresss");
+    row5td1.innerText =
+      "المدينة المنورة - قربان النازل -شارع السالمية- مقابل مطبعة النجاح- بجوار بلدية الحرم- جوال 0555302742 - 0543372002 - الإدارة:جوال0500044995 ";
+    row5.appendChild(row5td1);
+
+    datatbltbody.appendChild(row1);
+    datatbltbody.appendChild(row2);
+    datatbltbody.appendChild(row3);
+    datatbltbody.appendChild(row4);
+    datatbltbody.appendChild(row5);
+    datatbl.appendChild(datatbltbody);
+    document.getElementById("containerr").appendChild(datatbl);
+  }
+
+  function repeat() {
+    var alldata = JSON.parse(document.getElementById("my_data").innerText);
+    for (var i = 0; i < alldata.length; i++) {
+      var object = alldata[i];
+      addtickets(object, i);
+    }
+  }
+  try {
+    repeat();
+  } catch (error) {
+    console.log(error);
+  }
+</script>

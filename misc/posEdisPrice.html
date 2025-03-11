@@ -1,0 +1,105 @@
+
+
+
+$(document).ready(function () {
+    /*********************************** STYLING *********************************/
+    $("body").append(`<style>
+      .no_show,
+      .input-button-drop,
+      #pay-wrapper .dropdown-toggle,
+      #full-pay {
+        display: none !important;
+      }
+    </style>`);
+    
+    /****************************************************************************************/
+    setTimeout(() => {
+        var allbtn = document.querySelectorAll(".act-btn");
+        for (let i = 0; i < allbtn.length; i++) {
+          if (
+            allbtn[i].innerText.trim() == "السعر" ||
+            allbtn[i].innerText.trim() == "Price"
+          ) {
+            allbtn[i].style.display = "none";
+            allbtn[i].setAttribute('onclick','')
+          }
+        }
+      }, 200);
+    
+    /****************************************************************************************/
+
+
+    $(
+      "#pos-wrapper > div.pos-content > app-invoice > div > div.calc-wrapper > div > div.subwindow-container-fix.pads > section.content-numpad > div.pos-rel.dropup.w-100.d-flex.align-items-center"
+    ).attr("id", "pay-wrapper");
+  
+    $("#pay-wrapper > button.btn.btn-lg.btn-success.dropup.pay.m-0.flex-grow-1").attr("id", "full-pay");
+    let fullPayBtn = $("#full-pay");
+  
+    $("#pay-wrapper > ul > li > button").attr("id", "part-pay").addClass("m-0");
+    let partPayBtn = $("#part-pay");
+  
+    fullPayBtn.before(partPayBtn);
+    partPayBtn.removeClass("btn-warning").addClass("btn-success");
+    $("#part-pay span.flex-grow-1").text("Payment");
+  
+    $("#part-pay").click(function (e) {
+      console.log("clicked");
+      setTimeout(() => {
+        $("#payamount_cash").closest(".payment-item-input-group").find(".payment-item-input-group-btn").attr("disabled", "disabled");
+        $("#payamount_cash").val(0).attr("disabled", "disabled");
+        $(".payment-calc .number-char").attr("disabled", "disabled");
+      }, 100);
+    });
+    /****************************************************************************************/
+  
+    localStorage.setItem("isChangedClient", false);
+  
+    $(".customer-name").on("DOMSubtreeModified", function () {
+      localStorage.setItem("isChangedClient", true);
+      if (localStorage.getItem("isChangedClient") == "true") {
+        console.log(localStorage.getItem("isChangedClient"));
+        let clCode = $(".customer-name")
+          .attr("title")
+          .split(" ")
+          [$(".customer-name").attr("title").split(" ").length - 1].replace(/[{()}]/g, "");
+        console.log(clCode);
+  
+        $.get(`/v2/api/entity/client/list/1?filter[client_number]=${clCode}`)
+          .then((cl) => {
+            let clientId = cl.data[0].id;
+            return clientId;
+          })
+          .then((clientId) => {
+            if (localStorage.getItem("isChangedClient") == "true") {
+              $(".dropdown-item[data-target='#invoice-details-popup']").click();
+              $("#invoice-details-popup").addClass("no_show");
+              $.get(`/v2/api/entity/client/${clientId}/4`)
+                .then((clData) => {
+                  if (clData.custom_data.field_21 == "ACH Collection") {
+                    console.log("Changed Yes");
+                    $("#invoice-details-iframe").one("load", function () {
+                      $("#invoice-details-iframe").contents().find("#CustomModelField19").val("Yes").trigger("change");
+                      $("#invoice-details-iframe").contents().find("#InvoiceForm > div.submit-wrap > button").click();
+                    });
+                  } else {
+                    console.log("Changed NO");
+                    $("#invoice-details-iframe").one("load", function () {
+                      $("#invoice-details-iframe").contents().find("#CustomModelField19").val("NO").trigger("change");
+                      $("#invoice-details-iframe").contents().find("#InvoiceForm > div.submit-wrap > button").click();
+                    });
+                  }
+                })
+                .then(() => {
+                  setTimeout(() => {
+                    $("#invoice-details-popup").removeClass("no_show");
+                    localStorage.setItem("isChangedClient", false);
+                    console.log("Now", localStorage.getItem("isChangedClient"));
+                  }, 3000);
+                });
+            }
+          });
+      }
+    });
+  });
+  

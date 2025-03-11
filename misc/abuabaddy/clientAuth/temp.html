@@ -1,0 +1,351 @@
+<style>
+  #container {
+    border: none !important;
+    direction: rtl !important;
+  }
+  #container * {
+    border: none !important;
+    direction: rtl !important;
+  }
+  #client_info {
+    width: 100%;
+  }
+  #client_info td {
+    padding: 0;
+    margin: 0;
+  }
+  #client_info td:nth-child(1) {
+    width: 65%;
+  }
+  #texts {
+    padding-bottom: 20px;
+  }
+</style>
+<div id="container">
+  <table id="client_info">
+    <tbody>
+      <tr>
+        <td></td>
+        <td>
+          <span style="font-family: arial, helvetica, sans-serif"
+            >رقم العميل</span
+          >
+        </td>
+        <td>
+          <span style="font-family: arial, helvetica, sans-serif"
+            ><!--% foreach({{Data.le_authentication.le_authentication_le_authentication_clients}} as {{le_authentication_le_authentication_clients_row}}) { %-->
+            {{le_authentication_le_authentication_clients_row.le_authentication_clients_clientdata.client_number}}
+            <!--% } %--></span
+          >
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <span style="font-family: arial, helvetica, sans-serif">التاريخ</span>
+        </td>
+        <td>
+          <span style="font-family: arial, helvetica, sans-serif"
+            >{{Data.le_authentication.date_to}}</span
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="texts" style="border-bottom: 1px solid #000 !important">
+    <span style="font-family: arial, helvetica, sans-serif"
+      >السادة /
+      <!--% foreach({{Data.le_authentication.le_authentication_le_authentication_clients}} as {{le_authentication_le_authentication_clients_row}}) { %-->
+      {{le_authentication_le_authentication_clients_row.le_authentication_clients_clientdata.business_name}}
+      <!--% } %-->
+      المحترمين </span
+    ><br />
+    <h3>
+      <span style="font-family: arial, helvetica, sans-serif"
+        >السلام عليكم ورحمة الله و بركاته</span
+      >
+    </h3>
+    <span style="font-family: arial, helvetica, sans-serif"
+      >اشارة الى قيام السادة / مكتب حسن ال باحص محاسبون قانونيون بمراجعة
+      حساباتنا للعام المالي المنتهي في {{Data.le_authentication.date_to}}
+      <br />
+      الذي اظهر رصيدكم (
+      <!--% foreach({{Data.le_authentication.le_authentication_le_authentication_clients}} as {{le_authentication_le_authentication_clients_row}}) { %-->
+      {{le_authentication_le_authentication_clients_row.client_total_status}}
+      <!--% } %-->) بمبلغ (<!--% foreach({{Data.le_authentication.le_authentication_le_authentication_clients}} as {{le_authentication_le_authentication_clients_row}}) { %-->
+      {{le_authentication_le_authentication_clients_row.clienttotalval}}
+      <!--% } %-->) ريال سعودي
+
+      <br />
+      (<span class="ar_invoice_total_spelled">مئة الف</span>)
+      <br />
+      <br />
+      نأمل استكمال المعلومات المبينة أدناه وإعادته الينا او اعادة هذا الخطاب على
+      العنوان السادة / حمد العوفي محاسبيون قانونيون
+      <br />
+      ص ب 7158 الرياض 11462 فاكس 2171179 وذلك في اقرب وقت ممكن </span
+    ><br /><span style="font-family: arial, helvetica, sans-serif"
+      ><strong> وتفضلوا بقبول فائق الاحترام. ....... </strong></span
+    >
+    <table style="width: 100%">
+      <tbody>
+        <tr>
+          <td style="width: 80%"></td>
+          <td style="font-weight: bold; text-decoration: underline">
+            <span style="font-family: arial, helvetica, sans-serif"
+              >رئيس الحسابات</span
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="texts2">
+    <h3 style="text-decoration: underline">المصادقة :</h3>
+
+    السادة / مكتب حسن ال باحص محاسبون قانونيون .. المحترمين
+    <br />
+    نصادق على صحة رصيد حسابنا (
+    <!--% foreach({{Data.le_authentication.le_authentication_le_authentication_clients}} as {{le_authentication_le_authentication_clients_row}}) { %-->
+    {{le_authentication_le_authentication_clients_row.client_total_status}}
+    <!--% } %-->
+    ) مع شركة ألوان للطباعة و الصناعة المحدودة
+    <br />
+    و البالغ (<!--% foreach({{Data.le_authentication.le_authentication_le_authentication_clients}} as {{le_authentication_le_authentication_clients_row}}) { %-->
+    {{le_authentication_le_authentication_clients_row.clienttotalval}}
+    <!--% } %-->) ریال سعودی
+    <br />
+    (<span class="ar_invoice_total_spelled">مئة الف</span>)
+
+    <br />
+
+    <h4>و في حالة اختلاف الارصدة إن وجد :-</h4>
+    ــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
+    <br />
+    <br />
+    ــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
+    <br />
+    <br />
+    ــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
+
+    <br />
+
+    <table>
+      <tbody>
+        <tr>
+          <td
+            style="
+              font-weight: bold;
+              text-decoration: underline;
+              padding-bottom: 5px;
+              width: 60%;
+            "
+          >
+            اسم المسئول:
+          </td>
+          <td
+            style="
+              font-weight: bold;
+              text-decoration: underline;
+              padding-bottom: 5px;
+            "
+          >
+            الختم
+          </td>
+        </tr>
+        <tr>
+          <td
+            style="
+              font-weight: bold;
+              text-decoration: underline;
+              padding-bottom: 5px;
+            "
+          >
+            التوقيع:
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="display: none" id="invoice_total">
+    <!--% foreach({{Data.le_authentication.le_authentication_le_authentication_clients}} as {{le_authentication_le_authentication_clients_row}}) { %-->
+
+    {{le_authentication_le_authentication_clients_row.clienttotalval}}
+
+    <!--% } %-->
+  </div>
+  <script>
+    function numberToWordsArabic(number) {
+      var units = [
+        "",
+        "واحد",
+        "اثنان",
+        "ثلاثة",
+        "أربعة",
+        "خمسة",
+        "ستة",
+        "سبعة",
+        "ثمانية",
+        "تسعة",
+        "عشرة",
+        "أحد عشر",
+        "اثنا عشر",
+        "ثلاثة عشر",
+        "أربعة عشر",
+        "خمسة عشر",
+        "ستة عشر",
+        "سبعة عشر",
+        "ثمانية عشر",
+        "تسعة عشر",
+      ];
+
+      var tens = [
+        "",
+        "",
+        "عشرون",
+        "ثلاثون",
+        "أربعون",
+        "خمسون",
+        "ستون",
+        "سبعون",
+        "ثمانون",
+        "تسعون",
+      ];
+
+      var scales = [
+        "",
+        "ألف",
+        "مليون",
+        "مليار",
+        "تريليون",
+        "كوادريليون",
+        "كوينتليون",
+        "سكستليون",
+        "سبتليون",
+        "أوكتليون",
+        "نونليون",
+        "ديسليون",
+      ];
+
+      if (number === 0) {
+        return "صفر";
+      }
+
+      var words = "";
+
+      if (number < 0) {
+        words += "سالب ";
+        number = Math.abs(number);
+      }
+
+      var scaleIndex = 0;
+
+      while (number > 0) {
+        var triplet = number % 1000;
+        number = Math.floor(number / 1000);
+
+        if (triplet > 0) {
+          var tripletWords = "";
+
+          var hundreds = Math.floor(triplet / 100);
+          var tensAndUnits = triplet % 100;
+
+          if (hundreds > 0) {
+            if (hundreds == 1) {
+              tripletWords += " مئة";
+            } else if (hundreds == 2) {
+              tripletWords += " مائتان";
+            } else if (hundreds == 3) {
+              tripletWords += " ثلاثمائة  ";
+            } else if (hundreds == 4) {
+              tripletWords += " اربعمائة ";
+            } else if (hundreds == 5) {
+              tripletWords += " خمسمائة ";
+            } else if (hundreds == 6) {
+              tripletWords += " ستمائة ";
+            } else if (hundreds == 7) {
+              tripletWords += " سبعمائة ";
+            } else if (hundreds == 8) {
+              tripletWords += " ثمانمائة ";
+            } else if (hundreds == 9) {
+              tripletWords += " تسعمائة ";
+            }
+          }
+          if (tensAndUnits > 0) {
+            if (tripletWords !== "") {
+              tripletWords += " و";
+            }
+
+            if (tensAndUnits < 20) {
+              tripletWords += units[tensAndUnits];
+            } else {
+              var tensDigit = Math.floor(tensAndUnits / 10);
+              var unitsDigit = tensAndUnits % 10;
+
+              if (tensDigit > 0) {
+                if (unitsDigit === 1) {
+                  tripletWords += units[unitsDigit] + " و";
+                } else if (unitsDigit > 1) {
+                  tripletWords += units[unitsDigit] + " و";
+                }
+
+                tripletWords += tens[tensDigit];
+              }
+            }
+          }
+          if (scaleIndex > 0) {
+            if (triplet === 1) {
+              tripletWords += " " + scales[scaleIndex];
+            } else if (triplet >= 2 && triplet <= 10) {
+              tripletWords += " " + scales[scaleIndex] + "";
+            } else if (triplet > 10) {
+              tripletWords += " " + scales[scaleIndex];
+            }
+          }
+
+          if (words !== "") {
+            words = tripletWords + " و" + words;
+          } else {
+            words = tripletWords;
+          }
+        }
+
+        scaleIndex++;
+      }
+      return words;
+    }
+    function convertFN(num, maincurrency, floatCurr) {
+      var myIntNum = parseInt(num.split(".")[0]);
+      var myFloatNum = parseInt(num.split(".")[1]);
+      return (
+        numberToWordsArabic(myIntNum) +
+        " " +
+        maincurrency +
+        " و " +
+        numberToWordsArabic(myFloatNum) +
+        " " +
+        floatCurr +
+        " فقط"
+      );
+    }
+    try {
+      if (document.getElementById("invoice_total").innerText.trim() == "") {
+        document.getElementById("invoice_total").innerText = "0";
+      }
+      var myNum = String(
+        parseFloat(
+          document
+            .getElementById("invoice_total")
+            .innerText.replace(/[\$,]/g, "")
+        ).toFixed(2)
+      );
+      document.querySelectorAll(".ar_invoice_total_spelled")[0].innerText =
+        convertFN(myNum, "ريال", "هلله");
+      document.querySelectorAll(".ar_invoice_total_spelled")[1].innerText =
+        convertFN(myNum, "ريال", "هلله");
+    } catch (error) {
+      console.log(error);
+    }
+  </script>
+</div>

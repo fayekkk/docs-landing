@@ -1,0 +1,191 @@
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;600&display=swap");
+
+  /* header Styles */
+  #header {
+    font-family: "Rubik", sans-serif !important;
+
+    font-weight: bold;
+    font-size: 11px;
+
+    padding-top: 0;
+  }
+  #header_site {
+    width: 100%;
+    direction: rtl;
+    border-spacing: 5px 0;
+    font-weight: 100;
+  }
+  #ar_site_title {
+    font-size: 13px !important;
+    word-spacing: 1px;
+  }
+  #ar_site_title span {
+    font-size: 12px !important;
+    word-spacing: 0px !important;
+  }
+  #header_site tbody tr:nth-child(1) td:nth-child(1) {
+    font-size: 18px;
+    font-weight: bold;
+    width: 68%;
+  }
+  #header_site tbody tr:nth-child(1) td:nth-child(2) {
+    width: 32%;
+  }
+  #header_site tbody tr:nth-child(1) td:nth-child(2) img {
+    width: 100%;
+  }
+
+  #header_site td:first-child {
+    text-align: right;
+  }
+
+  /* ********************************************************************************** */
+  #header_Inv {
+    width: 100%;
+    direction: rtl;
+    border-spacing: 0px 3px;
+    font-size: 13px;
+    font-weight: 100;
+  }
+  #header_Inv td {
+    padding: 0 3px;
+  }
+  #header_Inv tbody tr:nth-child(1) td:nth-child(1) {
+    width: 39%;
+    text-align: right !important;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #fff;
+  }
+  #header_Inv tbody tr:nth-child(1) td:nth-child(2) {
+    width: 20%;
+    background-color: #fff;
+  }
+  #header_Inv tbody tr:nth-child(1) td:nth-child(2) img {
+    width: 64%;
+    margin-right: 17.5%;
+    margin-top: 36px;
+  }
+  #header_Inv tbody tr:nth-child(1) td:nth-child(3) {
+    width: 39%;
+    text-align: left !important;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #fff;
+  }
+  #header_Inv tbody tr:nth-child(2) td:nth-child(1) {
+    width: 13%;
+  }
+  #header_Inv tbody tr:nth-child(2) td:nth-child(2) {
+    width: 27%;
+  }
+  #header_Inv tbody tr:nth-child(2) td:nth-child(3) {
+    width: 25%;
+  }
+  #header_Inv tbody tr:nth-child(2) td:nth-child(4) {
+    width: 15%;
+  }
+
+  #header_Inv td:nth-child(1) {
+    text-align: right;
+  }
+  #header_Inv td:nth-child(2) {
+    text-align: right;
+    background-color: #e5e5e5;
+  }
+  #header_Inv td:nth-child(3) {
+    text-align: left;
+    background-color: #e5e5e5;
+  }
+  #header_Inv td:nth-child(4) {
+    text-align: left;
+  }
+
+  /* End of header Styles */
+</style>
+<div id="header" style="margin-bottom: -30px">
+  <table id="header_site">
+    <tbody>
+      <tr>
+        <td id="ar_site_title">
+          <span>شركة أساسات التربة الصخرية المحدودة</span> <br />.Rock Soil
+          Foundations Co., Ltd
+        </td>
+        <td rowspan="100%" id="site_logo">{%site_logo%}</td>
+      </tr>
+      <tr>
+        <td>
+          رأس المال المصرح به 30 مليون ريال سعودي<br />Share Capital 30 Million
+          Saudi Riyal
+        </td>
+      </tr>
+      <tr>
+        <td>سجل تجارى : 4030505387</td>
+      </tr>
+      <tr>
+        <td>الرقم الضريبي : 311609254900003</td>
+      </tr>
+    </tbody>
+  </table>
+  <table id="header_Inv">
+    <tbody>
+      <tr>
+        <td id="ar_inv_title" colspan="2">{%invoice_title%}</td>
+        <td rowspan="7">{%qr_code_image%}</td>
+        <td id="en_inv_title" colspan="2"></td>
+      </tr>
+      <tr>
+        <td>رقم الفاتورة:</td>
+        <td>{%invoice_no%}</td>
+        <td>{%invoice_no%}</td>
+        <td>:Invoice No</td>
+      </tr>
+      <tr>
+        <td>تاريخ الفاتورة:</td>
+        <td>{%invoice_date%}</td>
+        <td>{%invoice_date%}</td>
+        <td>:Invoice Date</td>
+      </tr>
+      <tr>
+        <td>اسم العميل:</td>
+        <td>{%client_business_name%}</td>
+        <td>{%custom_client_name_en_field_1%}</td>
+        <td>:customer name</td>
+      </tr>
+      <tr>
+        <td>الرقم الضريبي:</td>
+        <td>{%client_bn1%}</td>
+        <td>{%client_bn1%}</td>
+        <td>:VAT No</td>
+      </tr>
+      <tr>
+        <td>عنوان العميل:</td>
+        <td>{%client_full_address%}</td>
+        <td>{%custom_client_address_en_field_2%}</td>
+        <td>:Adress</td>
+      </tr>
+      <tr>
+        <td>اسم المشروع:</td>
+        <td>{%Arabic Project Name%}</td>
+        <td>{%English Project Name%}</td>
+        <td>:Project Name</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<script>
+  function InvTitle() {
+    var arabicTitle = document.getElementById("ar_inv_title").innerText;
+    if (arabicTitle.trim("") == "فاتورة ضريبية") {
+      document.getElementById("en_inv_title").innerText = "TAX INVOICE";
+    } else {
+      document.getElementById("en_inv_title").innerText = "QUATATIONS";
+    }
+  }
+  try {
+    InvTitle();
+  } catch (error) {
+    console.log(error);
+  }
+</script>

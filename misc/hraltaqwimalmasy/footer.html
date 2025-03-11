@@ -1,0 +1,62 @@
+<table
+  class="footer"
+  style="width: 100%; margin-bottom: 5px; font-size: 12px; font-weight: bold"
+>
+  <tbody>
+    <tr>
+      <td style="width: 33%; text-align: left">STOREKEEPER</td>
+      <td style="width: 33%; text-align: left">SALES MAN</td>
+      <td style="width: 33%; text-align: right">RECIVED BY</td>
+    </tr>
+    <tr>
+      <td colspan="3" style="text-align: center">
+        <span class="topage" id="currpage" style="display: none"></span>
+        <span class="page" id="ttlpages"></span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<script>
+  function subst() {
+    var vars = {};
+    var x = document.location.search.substring(1).split("&");
+    for (var i in x) {
+      var z = x[i].split("=", 2);
+      vars[z[0]] = unescape(z[1]);
+    }
+    var x = [
+      "frompage",
+      "topage",
+      "page",
+      "webpage",
+      "section",
+      "subsection",
+      "subsubsection",
+    ];
+    for (var i in x) {
+      var y = document.getElementsByClassName(x[i]);
+      for (var j = 0; j < y.length; ++j) y[j].textContent = vars[x[i]];
+    }
+  }
+  try {
+    subst();
+  } catch (error) {
+    console.log(error);
+  }
+  function hideFooter() {
+    var currpage = parseInt(
+      document.getElementById("currpage").innerText.trim()
+    );
+    var ttlpages = parseInt(
+      document.getElementById("ttlpages").innerText.trim()
+    );
+    if (currpage != ttlpages) {
+      document.querySelector(".footer tr:nth-child(1)").style.display = "none";
+    }
+  }
+  try {
+    hideFooter();
+  } catch (error) {
+    console.log(error);
+  }
+</script>

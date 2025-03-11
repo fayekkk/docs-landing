@@ -1,0 +1,604 @@
+<div
+  id="barcode_template"
+  class="mceEditable"
+  readonly="readonly"
+  style="
+    padding: 0px 0px 0px 0px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+  "
+>
+  <style>
+    div#PrintableContent strong,
+    div#PrintableContent td,
+    div#PrintableContent span,
+    div#PrintableContent p {
+      font-family: pnu !important;
+      font-size: 16px;
+    }
+    .logo img {
+      max-width: 150px;
+    }
+    .newHead {
+      width: 100%;
+      font-weight: bold;
+      text-align: center;
+    }
+    .newHead td:nth-child(1) {
+      width: 35%;
+    }
+    .newHead td:nth-child(2) {
+      width: 30%;
+    }
+    .newHead td:nth-child(3) {
+      width: 35%;
+    }
+  </style>
+  <div style="padding-top: 10px"></div>
+  <div
+    style="
+      margin: 0 10px;
+      padding: 10px;
+      color: #555555;
+      border: 3px double #555555;
+    "
+  >
+    <div style="padding-bottom: 1px; border-bottom: 3px solid #555555">
+      <div
+        style="
+          direction: ltr;
+          border-bottom: 1px solid #070767;
+          padding-bottom: 5px;
+        "
+      >
+        <table class="newHead">
+          <tr>
+            <td>
+              مؤسسة ميون الخليج |<br />
+              للمقاولات العامة الرقم الضريبى : {%site_bn1%}<br />
+              <br />
+              السجل التجارى : {%site_bn2%}
+            </td>
+            <td>
+              <img
+                src="https://meongulf1.daftra.com/files/cc92a6a9/expense/67c69da370f83_blobid1741069727809.png"
+                alt=""
+                title="logo2.png"
+                style="width: 80%; margin: 0 10%"
+              />
+            </td>
+            <td>
+              Muon Gulf Foundation
+              <br />
+              For General Contracting
+              <br />
+              VAT : {%site_bn1%}
+              <br />
+              C.T : {%site_bn2%}
+            </td>
+          </tr>
+        </table>
+
+        <!-- <table width="100%" cellpadding="0" cellspacing="0" style="border: 0">
+          <tbody>
+            <tr>
+              <td
+                style="
+                  text-align: center;
+                  direction: ltr;
+                  width: 37%;
+                  border: 0;
+                "
+              >
+                <div class="logo">
+                  <span
+                    style="font-family: arial, helvetica, sans-serif"
+                  ></span>
+                </div>
+              </td>
+              <td style="text-align: center; border: 0"></td>
+              <td style="width: 37%; border: 0; vertical-align: top">
+                <div style="text-align: center; line-height: 1.6">
+                  <span
+                    style="
+                      font-family: arial, helvetica, sans-serif;
+                      font-size: 27px;
+                    "
+                    ><strong
+                      class="companyName"
+                      style="
+                        font-size: 27px;
+                        line-height: 1;
+                        padding: 0;
+                        font-family: pnu !important;
+                      "
+                      >{%site_business_name%}</strong
+                    ></span
+                  >
+                </div>
+                <div
+                  style="
+                    direction: rtl;
+                    text-align: center;
+                    margin-top: 3px;
+                    font-size: 10px;
+                  "
+                >
+                  <div>
+                    <span style="font-family: arial, helvetica, sans-serif"
+                      >{%site_address1%}</span
+                    >
+                  </div>
+                  <div>
+                    <span style="font-family: arial, helvetica, sans-serif"
+                      >{%site_address2%}</span
+                    >
+                  </div>
+                  <div>
+                    <span style="font-family: arial, helvetica, sans-serif"
+                      >{%site_city%} {%site_state%} {%site_postal_code%}</span
+                    >
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+       -->
+      </div>
+    </div>
+    <div style="direction: rtl; margin-top: 10px">
+      <table width="100%" cellpadding="0" cellspacing="0" style="border: 0">
+        <tbody>
+          <tr>
+            <td style="text-align: center; border: 0; width: 20%">
+              <p
+                style="
+                  margin-top: 5px;
+                  padding: 5px 6px;
+                  border: 2px solid #555555;
+                  border-radius: 8px;
+                  text-align: center;
+                "
+              >
+                <span
+                  style="
+                    font-family: arial, helvetica, sans-serif;
+                    font-size: 16px;
+                  "
+                  >{%amount%}</span
+                >
+              </p>
+            </td>
+            <td style="text-align: center; border: 0">
+              <span
+                style="
+                  font-family: arial, helvetica, sans-serif;
+                  font-size: 27px;
+                "
+                ><strong
+                  style="
+                    font-size: 27px;
+                    line-height: 1.6;
+                    font-family: pnu !important;
+                  "
+                  >ســــنــد صــــــرف</strong
+                ></span
+              >
+              <p style="padding: 0; margin: 0">
+                <span style="font-family: arial, helvetica, sans-serif"
+                  ><strong
+                    style="
+                      display: inline-block;
+                      padding-bottom: 5px;
+                      border-bottom: 3px double #555555;
+                      font-size: 20px;
+                    "
+                    >Expense Voucher</strong
+                  ></span
+                >
+              </p>
+              <p
+                style="
+                  text-align: center;
+                  border: 1px solid #555555;
+                  color: red;
+                  font-weight: bold;
+                  font-size: 16px;
+                  margin: auto;
+                  height: 30px;
+                  line-height: 30px;
+                  width: 50%;
+                "
+              >
+                <span style="font-family: arial, helvetica, sans-serif"
+                  >#{%expense_id%}</span
+                >
+              </p>
+            </td>
+            <td
+              style="
+                width: 20%;
+                border: 0;
+                font-family: pnu !important;
+                text-align: left;
+              "
+            >
+              <span
+                style="
+                  font-family: arial, helvetica, sans-serif;
+                  font-weight: bold;
+                  font-size: 16px;
+                "
+                >التاريخ: {%date%}</span
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <table
+        cellpadding="0"
+        cellspacing="0"
+        style="width: 100%; border: 0; direction: rtl; margin-top: 5px"
+      >
+        <tbody>
+          <tr>
+            <td
+              style="
+                border: 0;
+                text-align: right;
+                height: 30px;
+                font-family: pnu !important;
+              "
+            >
+              <span
+                style="
+                  font-family: arial, helvetica, sans-serif;
+                  font-size: 15px;
+                  font-weight: bold;
+                "
+                >دفعنا إلى</span
+              >
+            </td>
+            <td
+              style="
+                width: 60%;
+                border: 0;
+                direction: rtl;
+                text-align: center;
+                font-family: pnu !important;
+              "
+            >
+              <span
+                style="
+                  display: inline-block;
+                  width: 100%;
+                  font-family: arial, helvetica, sans-serif;
+                  font-size: 15px;
+                "
+                >{%vendor%}{%client_bussiness_name_or_journal_name%}</span
+              >
+            </td>
+            <td style="text-align: left; border: 0; direction: ltr">
+              <span
+                style="
+                  font-family: arial, helvetica, sans-serif;
+                  font-size: 15px;
+                  font-weight: bold;
+                "
+                >Recevied From Mr.</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="
+                border: 0;
+                text-align: right;
+                height: 30px;
+                font-family: pnu !important;
+              "
+            >
+              <span
+                style="
+                  font-family: arial, helvetica, sans-serif;
+                  font-size: 15px;
+                  font-weight: bold;
+                "
+                >مبلغاً وقدره</span
+              >
+            </td>
+            <td
+              style="
+                width: 60%;
+                direction: rtl;
+                text-align: center;
+                font-family: pnu !important;
+                border: 0;
+              "
+            >
+              <span
+                style="
+                  display: inline-block;
+                  width: 100%;
+                  font-family: arial, helvetica, sans-serif;
+                  font-size: 15px;
+                "
+                >{%spelled_amount%} فقط لا غير</span
+              >
+            </td>
+            <td style="text-align: left; border: 0">
+              <span
+                style="
+                  font-family: arial, helvetica, sans-serif;
+                  font-size: 15px;
+                  font-weight: bold;
+                "
+                >The Sum Of</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="width: 100%; border: 0; direction: rtl; height: 30px"
+              colspan="3"
+            >
+              <span
+                style="
+                  font-family: arial, helvetica, sans-serif;
+                  font-size: 14px;
+                "
+                ><span style="margin: 0px 0px 0px 5px; font-weight: bold"
+                  >نقداً</span
+                ><span
+                  style="
+                    display: inline-block;
+                    width: 10px;
+                    height: 10px;
+                    border: 1px solid #555555;
+                  "
+                ></span
+                ><span style="margin: 0 5px; font-weight: bold">Cash</span
+                ><span style="margin: 0px 5px; font-weight: bold">شيك</span
+                ><span
+                  style="
+                    display: inline-block;
+                    width: 10px;
+                    height: 10px;
+                    border: 1px solid #555555;
+                  "
+                ></span
+                ><span style="margin: 0 5px; font-weight: bold">Cheque</span
+                ><span style="margin: 0px 5px; font-weight: bold">تحويل</span
+                ><span
+                  style="
+                    display: inline-block;
+                    width: 10px;
+                    height: 10px;
+                    border: 1px solid #555555;
+                  "
+                ></span
+                ><span style="margin: 0 5px; font-weight: bold">Transfer</span
+                >رقم<span style="display: inline-block; width: 65px"></span
+                >No<span style="margin: 0px 5px; font-weight: bold"
+                  >من خزينة / بنك</span
+                ><span
+                  style="
+                    display: inline-block;
+                    width: 115px;
+                    text-align: center;
+                  "
+                  >{%treasury%}</span
+                ><span style="margin: 0 5px; float: left; margin-left: 0px"
+                  ><span style="font-weight: bold">بتاريخ </span> {%date%}</span
+                ></span
+              >
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="
+                border: 0;
+                text-align: right;
+                height: 30px;
+                font-family: pnu !important;
+              "
+            >
+              <span
+                style="
+                  font-family: arial, helvetica, sans-serif;
+                  font-size: 15px;
+                  font-weight: bold;
+                "
+                >وذلك مقابل</span
+              >
+            </td>
+            <td style="width: 60%; border: 0">
+              <span
+                style="
+                  display: inline-block;
+                  white-space: pre-line;
+                  width: 100%;
+                  font-family: arial, helvetica, sans-serif;
+                  font-size: 15px;
+                "
+                >{%note%}</span
+              >
+            </td>
+            <td style="text-align: left; border: 0">
+              <span
+                style="
+                  font-family: arial, helvetica, sans-serif;
+                  font-size: 15px;
+                  font-weight: bold;
+                "
+                >For</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <td
+              colspan="3"
+              style="
+                width: 100%;
+                border: 0;
+                height: 30px;
+                vertical-align: bottom;
+              "
+            >
+              <span
+                style="
+                  display: inline-block;
+                  width: 100%;
+                  font-family: arial, helvetica, sans-serif;
+                "
+              ></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top: 10px">
+      <table
+        cellpadding="0"
+        cellspacing="0"
+        style="width: 100%; border: 0; direction: rtl"
+      >
+        <tbody>
+          <tr>
+            <td style="border: 0; width: 30%; text-align: center; height: 30px">
+              <span
+                style="
+                  font-family: arial, helvetica, sans-serif;
+                  font-size: 15px;
+                "
+                ><strong style="font-size: 15px; font-family: pnu !important"
+                  >توقيع المستلم</strong
+                ></span
+              ><br /><span
+                style="
+                  direction: ltr;
+                  display: inline-block;
+                  font-family: arial, helvetica, sans-serif;
+                "
+                >Received Sig.</span
+              >
+            </td>
+            <td style="border: 0; width: 30%; text-align: center">
+              <span
+                style="
+                  font-family: arial, helvetica, sans-serif;
+                  font-size: 15px;
+                "
+                ><strong style="font-size: 15px; font-family: pnu !important"
+                  >أمين الصندوق</strong
+                ></span
+              ><br /><span
+                style="
+                  direction: ltr;
+                  display: inline-block;
+                  font-family: arial, helvetica, sans-serif;
+                "
+                >Cashier Sig.</span
+              >
+            </td>
+            <td style="border: 0; width: 30%; text-align: center">
+              <span
+                style="
+                  font-family: arial, helvetica, sans-serif;
+                  font-size: 15px;
+                "
+                ><strong style="font-size: 15px; font-family: pnu !important"
+                  >توقيع المدير</strong
+                ></span
+              ><br /><span
+                style="
+                  direction: ltr;
+                  display: inline-block;
+                  font-family: arial, helvetica, sans-serif;
+                "
+                >Manager Sig.</span
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table
+        cellpadding="0"
+        cellspacing="0"
+        style="
+          width: 100%;
+          border: 0;
+          direction: rtl;
+          margin-bottom: 15px;
+          margin-top: 5px;
+        "
+      >
+        <tbody>
+          <tr>
+            <td
+              style="
+                border: 0;
+                width: 30%;
+                text-align: center;
+                height: 25px;
+                padding-top: 10px;
+              "
+            >
+              <span
+                style="
+                  width: 115px;
+                  display: inline-block;
+                  border-bottom: 1px solid #555555;
+                  height: 20px;
+                  text-align: right;
+                "
+              ></span>
+            </td>
+            <td
+              style="
+                border: 0;
+                width: 30%;
+                text-align: center;
+                height: 25px;
+                padding-top: 10px;
+              "
+            >
+              <span
+                style="
+                  width: 115px;
+                  display: inline-block;
+                  border-bottom: 1px solid #555555;
+                  height: 20px;
+                  text-align: right;
+                "
+              ></span>
+            </td>
+            <td
+              style="
+                border: 0;
+                width: 30%;
+                text-align: center;
+                height: 25px;
+                padding-top: 10px;
+              "
+            >
+              <span
+                style="
+                  width: 115px;
+                  display: inline-block;
+                  border-bottom: 1px solid #555555;
+                  height: 20px;
+                  text-align: right;
+                "
+              ></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

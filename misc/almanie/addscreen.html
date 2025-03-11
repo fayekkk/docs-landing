@@ -1,0 +1,43 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      function screenCode() {
+        if ($("#InvoiceLayout").val() == 15) {
+          var $head = $("<head>");
+          //   var $style = $("<style>").text(".col-5 {display:none !important }");
+          //   $head.append($style);
+          //   $("html").prepend($head);
+          $(".col-5").attr("style", "display:none !important");
+          $(document).on("change", ".item_name", function () {
+            $(".col-5").attr("style", "display:none !important");
+            setTimeout(() => {
+              $(this).removeAttr("readonly");
+              let $thisTr = $(this).closest("tr");
+              let $customDataTd = $thisTr.find(".col-5 textarea");
+              let $customDataTVAl = {
+                f29: product.field_29,
+                f89: product.field_89,
+                f90: product.field_90,
+                f91: product.field_91,
+                f92: product.field_92,
+                f93: product.field_93,
+                f94: product.field_94,
+                f95: product.field_95,
+              };
+              $customDataTd.val(JSON.stringify($customDataTVAl));
+            }, 200);
+          });
+          $(document).on("click", "#AddItem", function (e) {
+            $(".col-5").attr("style", "display:none !important");
+          });
+        }
+        $("#InvoiceAdjustmentLabel").val("رسوم اللوحات").change();
+        $("#InvoiceAdjustmentLabel").attr("readonly", true);
+      }
+      screenCode();
+      $("#InvoiceLayout").on("change", function () {
+        screenCode();
+      });
+    }, 250);
+  });
+</script>

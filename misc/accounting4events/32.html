@@ -1,0 +1,352 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Lateef:wght@200;300;400;500;600;700;800&family=Noto+Naskh+Arabic:wght@400..700&family=Noto+Sans+Arabic:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      font-family: "Poppins", serif !important;
+    }
+    body {
+      direction: ltr;
+      background: #ffffff;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      text-align: left;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 25px !important;
+    }
+    .listing-table th {
+      text-align: left;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      border-right: none !important;
+      border-left: none !important;
+      text-align: left;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    #listing_table th {
+      font-weight: bold;
+      border: none !important;
+    }
+    #listing_table tr th:last-child,
+    #listing_table tr td:last-child {
+      text-align: left;
+    }
+    .listing-table:nth-child(2) {
+      margin: 20px 0;
+    }
+    .listing-table:nth-child(2) tr td {
+      border: none !important;
+    }
+    .listing-table:nth-child(2) tr td:nth-child(2) {
+      width: 35%;
+    }
+
+    #invoice_title {
+      font-size: 25px;
+      font-weight: bold;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    strong_tag {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .notes-block {
+      margin: 30px 0 0 0;
+      font-family: "Poppins", sans-serif !important;
+      font-style: normal;
+    }
+    .total-row {
+      font-weight: bold;
+    }
+    .listing-table:nth-child(2) strong {
+      font-weight: normal;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+    .qr-code img {
+      margin-top: 10px;
+    }
+    .labels {
+      color: #7d9eb5;
+    }
+    #business_info {
+      width: 90%;
+      margin-left: auto;
+    }
+    #business_info,
+    #client_info {
+      color: #7d9eb5;
+    }
+
+    /*.biz__info td{padding: 0 0 15px;width:33%; border-bottom: 1px solid #c0c0c0}*/
+    .inv__info {
+      margin: 20px 0;
+    }
+
+    .listing-table:nth-child(2) tr:first-child td:nth-child(2) {
+      color: #7d9eb5;
+    }
+    .listing-table:nth-child(2) tr:nth-child(n + 1) td:nth-child(1) {
+      color: #7d9eb5;
+    }
+    #listing_table tr *:first-child {
+      padding-left: 9px;
+    }
+    .invoice-date {
+      font-size: 15px;
+    }
+    .listing-table:nth-child(2) tr:nth-child(n + 1) td:nth-child(1) {
+      width: 40% !important;
+    }
+    .listing-table:nth-child(2) td {
+      text-align: right;
+    }
+    #listing_table th:last-child,
+    #listing_table td:last-child {
+      text-align: right;
+    }
+    #listing_table th:nth-last-child(2),
+    #listing_table td:nth-last-child(2) {
+      padding-left: 5px;
+    }
+    #custom_fields td {
+      text-align: left;
+      padding: 0;
+    }
+    .all__info_all {
+      padding: 3px;
+    }
+    #field1 {
+      color: #7d9eb5;
+    }
+    #listing_table th,
+    #listing_table td {
+      text-align: center;
+    }
+    #listing_table th:nth-child(5),
+    #listing_table td:nth-child(5) {
+      display: none;
+    }
+    #listing_table th:nth-child(2),
+    #listing_table td:nth-child(2) {
+      width: 55%;
+    }
+    #listing_table th:nth-child(1),
+    #listing_table td:nth-child(1) {
+      width: 20%;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+
+      <div class="invoice-inner">
+        <div class="qr-code" style="display: none">{%sa_qr_code_image%}</div>
+
+        <table
+          class="biz__info"
+          width="100%"
+          border="0"
+          cellspacing="0"
+          cellpadding="0"
+        >
+          <tr>
+            <td align="left" valign="top" width="35%">
+              <h1>
+                <p id="invoice_title" class="editable-area invoice-name">
+                  {%invoice_title%}
+                </p>
+              </h1>
+              <strong>#{%invoice_no%}</strong>
+            </td>
+
+            <td align="center" valign="top">
+              <img
+                style="vertical-align: top; margin-bottom: 10px"
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                width="{%logo-width%}"
+                height="{%logo-height%}"
+              />
+            </td>
+
+            <td align="right" valign="top" width="35%">
+              <div id="business_info" class="editable-area" rel="#input-text">
+                <p>{%business_info%}</p>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <table
+          class="inv__info"
+          width="100%"
+          border="0"
+          cellspacing="0"
+          cellpadding="0"
+        >
+          <tr>
+            <td align="left" width="60%">
+              <div class="labels editable-area" id="label_date">
+                {%label_date%}
+              </div>
+              <div align="left" class="invoice-date">{%invoice_date%}</div>
+              <custom_field
+                id="custom_fields"
+                style="clear: both"
+                class="editable-area"
+                border="0"
+                cellspacing="0"
+                cellpadding="0"
+              >
+                {%custom_fields%}
+              </custom_field>
+            </td>
+            <td
+              align="right"
+              rowspan="3"
+              valign="top"
+              class="all__info_all dynamic_background"
+            >
+              <div id="field1" class="editable-area">{%field1%}</div>
+              <div id="client_info" class="editable-area">
+                <p>{%client_info%}</p>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td height="20"></td>
+          </tr>
+
+          <tr>
+            <td>
+              <div calss="pay__info">
+                <span class="labels">Paid</span> &nbsp;&nbsp; {%paid%}<br />
+                <span class="labels">Balance Due</span> &nbsp;&nbsp;
+                <strong>{%unpaid%}</strong>
+              </div>
+            </td>
+          </tr>
+        </table>
+        <br />
+
+        <div id="items-list">{%items_list%}</div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div class="editable-area" id="footer">{%footer%}</div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+
+    <script>
+      function totTableAdj() {
+        var totTableLen = document.querySelector(".listing-table:nth-child(2)")
+          .rows.length;
+        var fstTotCell = document.querySelector(
+          ".listing-table:nth-child(2) tr:first-child td:first-child"
+        );
+        var fstCol = document.querySelectorAll(
+          ".listing-table:nth-child(2) tr td:nth-child(1)"
+        );
+        var qr = document.querySelector(".qr-code").innerHTML;
+
+        for (var i = 0; i < totTableLen - 1; i++) {
+          fstCol[i + 1].outerHTML = "";
+        }
+
+        fstTotCell.rowSpan = totTableLen;
+        fstTotCell.innerHTML = qr;
+        fstTotCell.style.cssText = "text-align:left;";
+      }
+      function select(selectors) {
+        var elements = document.querySelectorAll(selectors);
+        return elements;
+      }
+      function addStyles(elements, addedClass) {
+        for (var i = 0; i < elements.length; i++) {
+          elements[i].classList.add(addedClass);
+        }
+      }
+
+      try {
+        var selectedForBack = select(
+          " #listing_table th, .listing-table:nth-child(2) tr:nth-child(1) td:nth-child(n+2)"
+        );
+        var AllBorders = select("#listing_table th, #listing_table td");
+        var evenRows = select("#listing_table tr:nth-child(even) td");
+        var oddRows = select("#listing_table tr:nth-child(odd) td");
+
+        addStyles(selectedForBack, "dynamic_background");
+        addStyles(selectedForBack, "dynamic_header_color");
+        addStyles(evenRows, "dynamic_even");
+        addStyles(oddRows, "dynamic_odd");
+        addStyles(AllBorders, "dynamic_border_color");
+
+        totTableAdj();
+      } catch (err) {}
+      function hidenotes() {
+        if (
+          document.getElementById("invoice_title").innerHTML.trim() ==
+          "فاتورة<br>Invoice"
+        ) {
+          document.querySelector(".notes-block").style.display = "none";
+        }
+      }
+      try {
+        hidenotes();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

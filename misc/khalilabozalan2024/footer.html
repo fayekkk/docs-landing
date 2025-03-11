@@ -1,0 +1,47 @@
+<style>
+  #footer {
+    /* margin-top: -25px; */
+    /* padding-top: 25px; */
+    padding-right: 15px;
+    background-color: #dbbf8b;
+    font-family: "Changa", sans-serif !important;
+  }
+  #footer * {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Changa:wght@200..800&display=swap"
+  rel="stylesheet"
+/>
+<div
+  id="footer"
+  style="margin-left: -10px !important; margin-right: -10px !important"
+>
+  <table style="width: 90%; margin: 0 auto !important">
+    <tr>
+      <td
+        colspan="100%"
+        style="
+          text-align: right;
+          font-size: 18px;
+          color: gray;
+          font-weight: bold;
+        "
+      >
+        ملاحظات
+      </td>
+    </tr>
+    <tr>
+      <td style="font-size: 15px">
+        <ul>
+          <li>{%invoice_notes%}</li>
+        </ul>
+      </td>
+      <td style="font-size: 15px">موبايل : {%MobileB%}</td>
+    </tr>
+  </table>
+</div>

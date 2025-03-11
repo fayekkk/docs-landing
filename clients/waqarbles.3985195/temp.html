@@ -1,0 +1,754 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    #new_head {
+      width: 100%;
+      text-align: center;
+    }
+    #new_head tr:nth-child(1) td:nth-child(1) {
+      font-size: 16px;
+      font-weight: bold;
+      color: #ce0000;
+      width: 30%;
+    }
+    #new_head td:nth-child(2) {
+      width: 30%;
+    }
+    #new_head td:nth-child(2) img {
+      width: 77%;
+      margin: 0 10%;
+    }
+    #new_head td:nth-child(3) {
+      font-size: 16px;
+      font-weight: bold;
+      color: #ce0000;
+      width: 33%;
+    }
+    #inv_data {
+      width: 100%;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    #inv_data span {
+      color: #ce0000;
+    }
+
+    #inv_data td:nth-child(1) img {
+      width: 90%;
+      margin: 0 5%;
+    }
+    #inv_data td:nth-child(1) {
+      width: 15%;
+    }
+    #inv_data td:nth-child(2) {
+      width: 15%;
+      text-align: right;
+      vertical-align: bottom;
+    }
+    #inv_data td:nth-child(3) {
+      width: 33%;
+      text-align: center;
+      font-size: 20px;
+    }
+    #inv_data td:nth-child(4) {
+      vertical-align: bottom;
+      width: 37%;
+      text-align: left;
+    }
+    .addresss br {
+      display: none;
+    }
+    #client_data {
+      width: 100%;
+      direction: ltr;
+      border-spacing: 0;
+      border-collapse: collapse;
+      margin: 5px 0;
+    }
+    #client_data td {
+      padding: 2px;
+      font-weight: bold;
+      border: 1px solid #000;
+      text-align: center;
+      font-size: 11px;
+    }
+    #client_data td:nth-child(1) {
+      background-color: #d9d9d9;
+      width: 12%;
+    }
+    #client_data td:nth-child(2) {
+      width: 27%;
+    }
+    #client_data td:nth-child(3) {
+      background-color: #d9d9d9;
+      width: 10%;
+    }
+    #client_data td:nth-child(4) {
+      width: 2%;
+      border: none !important;
+    }
+    #client_data td:nth-child(5) {
+      background-color: #d9d9d9;
+      width: 10%;
+    }
+    #client_data td:nth-child(6) {
+      width: 29%;
+    }
+    #client_data td:nth-child(7) {
+      background-color: #d9d9d9;
+      width: 10%;
+    }
+    .listing-table {
+      direction: ltr;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #listing_table {
+      border-collapse: collapse;
+      text-align: center;
+      font-weight: bold;
+      font-size: 11px;
+    }
+    #listing_table th {
+      background-color: #d9d9d9;
+    }
+    #listing_table th,
+    #listing_table td {
+      border: 1px solid #000;
+    }
+    #new_totals {
+      width: 100%;
+      font-weight: bold;
+      font-size: 11px;
+      border-spacing: 0;
+      border-collapse: collapse;
+    }
+    #new_totals td {
+      text-align: center;
+      padding: 2px;
+      border: 1px solid !important;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(1) {
+      width: 25%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(2) {
+      width: 20%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(3) {
+      width: 15%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(4) {
+      width: 40%;
+    }
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table id="new_head">
+          <tbody>
+            <tr>
+              <td>مؤسسة وقار بلس التجارية</td>
+              <td rowspan="100%">{%site_logo%}</td>
+              <td>Waqar Bles Commercial Est</td>
+            </tr>
+            <tr>
+              <td>7014 عبدالله بن محمد بن عبدالوهاب،</td>
+              <td>7014 Abdullah bin Mohammed bin Abdul Wahab,</td>
+            </tr>
+            <tr>
+              <td>،حي المريخ</td>
+              <td>,Al Mars District</td>
+            </tr>
+            <tr>
+              <td>جدة ،3760-23252 المملكة العربية السعودية</td>
+              <td>Jeddah 23252-3760, Kingdom of Saudi Arabia</td>
+            </tr>
+            <tr>
+              <td>{%site_business_email%}</td>
+              <td>{%site_business_email%}</td>
+            </tr>
+            <tr>
+              <td>{%site_mobile%}</td>
+              <td>{%site_mobile%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="inv_data">
+          <tbody>
+            <tr>
+              <td>{%sa_qr_code_image%}</td>
+              <td>
+                {%hijri date%}
+                <br />
+                {%invoice_date%}
+              </td>
+              <td>{%invoice_title%}</td>
+              <td><span>No:</span>{%invoice_no%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="client_data">
+          <tbody>
+            <tr>
+              <td>Customr Code</td>
+              <td>{%client_number%}</td>
+              <td>كود العميل</td>
+              <td></td>
+              <td>Name</td>
+              <td>{%client_business_name%}</td>
+              <td>اسم العميل</td>
+            </tr>
+            <tr>
+              <td>Rep.</td>
+              <td></td>
+              <td>المسؤول</td>
+              <td></td>
+              <td>Province</td>
+              <td>{%client_state%}</td>
+              <td>المنطقة</td>
+            </tr>
+            <tr>
+              <td>Phone</td>
+              <td>{%client_mobile%} / {%client_phone%}</td>
+              <td>جوال / هاتف</td>
+              <td></td>
+              <td>Address</td>
+              <td class="addresss">{%client_full_address%}</td>
+              <td>عنوان العميل</td>
+            </tr>
+            <tr>
+              <td>License No</td>
+              <td>{%client_bn2%}</td>
+              <td>سجل تجاري</td>
+              <td></td>
+              <td>Tax File No</td>
+              <td>{%client_bn1%}</td>
+              <td>رقم ضريبي</td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="items-list">{%items_list%}</div>
+        <table id="new_totals">
+          <tbody>
+            <tr>
+              <td>المجموع</td>
+              <td class="removeCurr" id="subttl"></td>
+              <td>Total</td>
+              <td style="text-align: right" rowspan="3">Note / ملاحظات</td>
+            </tr>
+            <tr>
+              <td>الخصم</td>
+              <td class="removeCurr" id="discountTtl"></td>
+              <td>Discount</td>
+            </tr>
+            <tr>
+              <td>الصافي قبل الضريبة</td>
+              <td class="removeCurr" id="subttlafterdiscounts"></td>
+              <td>Net</td>
+            </tr>
+            <tr>
+              <td>ضريبة القيمة المضافة</td>
+              <td class="removeCurr">{%tax-total%}</td>
+              <td>VAT</td>
+              <td
+                style="border-bottom: none !important"
+                id="ar_invoice_total_spelled"
+              ></td>
+            </tr>
+            <tr>
+              <td>الإجمالى شامل الضريبة</td>
+              <td class="removeCurr" id="invoice_total">{%invoice_total%}</td>
+              <td>Total with VAT</td>
+              <td
+                style="border-top: none !important"
+                id="en_invoice_total_spelled"
+              ></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div class="editable-area" id="footer">{%footer%}</div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div style="display: none">
+        <div id="discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function adddiscCol() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        if (allRows[0].cells.length == 6) {
+          var newTh = document.createElement("th");
+          newTh.innerHTML = "Discount <br> قيمة الخصم";
+
+          allRows[0].insertBefore(newTh, allRows[0].cells[5]);
+          for (var i = 1; i < allRows.length; i++) {
+            var newTd = document.createElement("td");
+            newTd.innerText = "0";
+
+            allRows[i].insertBefore(newTd, allRows[i].cells[5]);
+          }
+        }
+      }
+      try {
+        adddiscCol();
+      } catch (error) {
+        console.log(error);
+      }
+      function addunitpriceafterdiscount() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var newTh = document.createElement("th");
+        newTh.innerHTML = "Unit Price <br> سعر الوحدة";
+        allRows[0].insertBefore(newTh, allRows[0].cells[4]);
+
+        for (var i = 1; i < allRows.length; i++) {
+          var newTd = document.createElement("th");
+          if (allRows[i].cells[5].innerText.indexOf("%") != -1) {
+            newTd.innerHTML = (
+              parseFloat(allRows[i].cells[4].innerText.replace(/,/g, "")) -
+              parseFloat(allRows[i].cells[4].innerText.replace(/,/g, "")) *
+                (parseFloat(
+                  allRows[i].cells[5].innerText
+                    .replace("%", "")
+                    .replace(/,/g, "")
+                ) /
+                  100)
+            )
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          } else {
+            newTd.innerHTML = (
+              parseFloat(allRows[i].cells[4].innerText.replace(/,/g, "")) -
+              parseFloat(allRows[i].cells[5].innerText.replace(/,/g, ""))
+            )
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          }
+          allRows[i].insertBefore(newTd, allRows[i].cells[4]);
+        }
+      }
+      try {
+        addunitpriceafterdiscount();
+      } catch (error) {
+        console.log(error);
+      }
+      function swapCols() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          var temp = allRows[i].cells[4].innerHTML;
+          allRows[i].cells[4].innerHTML = allRows[i].cells[5].innerHTML;
+          allRows[i].cells[5].innerHTML = temp;
+        }
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          var temp = allRows[i].cells[5].innerHTML;
+          allRows[i].cells[5].innerHTML = allRows[i].cells[6].innerHTML;
+          allRows[i].cells[6].innerHTML = temp;
+        }
+      }
+      try {
+        swapCols();
+      } catch (error) {
+        console.log(error);
+      }
+      function hundleTtls() {
+        var allRows = document.querySelectorAll("#listing_table tbody tr");
+        var subttl = 0;
+        var discTtl = 0;
+        for (var i = 0; i < allRows.length; i++) {
+          subttl +=
+            parseFloat(allRows[i].cells[3].innerText.replace(/,/g, "")) *
+            parseFloat(allRows[i].cells[4].innerText.replace(/,/g, ""));
+        }
+        document.getElementById("subttl").innerText = subttl;
+        var discount =
+          parseFloat(
+            document
+              .getElementById("discount")
+              .innerText.replace("元", "")
+              .replace(/,/g, "")
+          ) +
+          parseFloat(
+            document
+              .getElementById("item-discount")
+              .innerText.replace("元", "")
+              .replace(/,/g, "")
+          );
+        document.getElementById("discountTtl").innerText = discount;
+        var subttlafterdiscounts = subttl - discount;
+        document.getElementById("subttlafterdiscounts").innerText =
+          subttlafterdiscounts;
+      }
+      try {
+        hundleTtls();
+      } catch (error) {
+        console.log(error);
+      }
+      function removeCurr() {
+        var allremoveCurr = document.querySelectorAll(".removeCurr");
+        for (var i = 0; i < allremoveCurr.length; i++) {
+          allremoveCurr[i].innerText = parseFloat(
+            allremoveCurr[i].innerText.replace(/,/g, "")
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      try {
+        removeCurr();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+    <script>
+      function numberToWordsArabic(number) {
+        var units = [
+          "",
+          "واحد",
+          "اثنان",
+          "ثلاثة",
+          "أربعة",
+          "خمسة",
+          "ستة",
+          "سبعة",
+          "ثمانية",
+          "تسعة",
+          "عشرة",
+          "أحد عشر",
+          "اثنا عشر",
+          "ثلاثة عشر",
+          "أربعة عشر",
+          "خمسة عشر",
+          "ستة عشر",
+          "سبعة عشر",
+          "ثمانية عشر",
+          "تسعة عشر",
+        ];
+
+        var tens = [
+          "",
+          "",
+          "عشرون",
+          "ثلاثون",
+          "أربعون",
+          "خمسون",
+          "ستون",
+          "سبعون",
+          "ثمانون",
+          "تسعون",
+        ];
+
+        var scales = [
+          "",
+          "ألف",
+          "مليون",
+          "مليار",
+          "تريليون",
+          "كوادريليون",
+          "كوينتليون",
+          "سكستليون",
+          "سبتليون",
+          "أوكتليون",
+          "نونليون",
+          "ديسليون",
+        ];
+
+        if (number === 0) {
+          return "صفر";
+        }
+
+        var words = "";
+
+        if (number < 0) {
+          words += "سالب ";
+          number = Math.abs(number);
+        }
+
+        var scaleIndex = 0;
+
+        while (number > 0) {
+          var triplet = number % 1000;
+          number = Math.floor(number / 1000);
+
+          if (triplet > 0) {
+            var tripletWords = "";
+
+            var hundreds = Math.floor(triplet / 100);
+            var tensAndUnits = triplet % 100;
+
+            if (hundreds > 0) {
+              if (hundreds == 1) {
+                tripletWords += " مئة";
+              } else if (hundreds == 2) {
+                tripletWords += " مائتان";
+              } else if (hundreds == 3) {
+                tripletWords += " ثلاثمائة  ";
+              } else if (hundreds == 4) {
+                tripletWords += " اربعمائة ";
+              } else if (hundreds == 5) {
+                tripletWords += " خمسمائة ";
+              } else if (hundreds == 6) {
+                tripletWords += " ستمائة ";
+              } else if (hundreds == 7) {
+                tripletWords += " سبعمائة ";
+              } else if (hundreds == 8) {
+                tripletWords += " ثمانمائة ";
+              } else if (hundreds == 9) {
+                tripletWords += " تسعمائة ";
+              }
+            }
+            if (tensAndUnits > 0) {
+              if (tripletWords !== "") {
+                tripletWords += " و";
+              }
+
+              if (tensAndUnits < 20) {
+                tripletWords += units[tensAndUnits];
+              } else {
+                var tensDigit = Math.floor(tensAndUnits / 10);
+                var unitsDigit = tensAndUnits % 10;
+
+                if (tensDigit > 0) {
+                  if (unitsDigit === 1) {
+                    tripletWords += units[unitsDigit] + " و";
+                  } else if (unitsDigit > 1) {
+                    tripletWords += units[unitsDigit] + " و";
+                  }
+
+                  tripletWords += tens[tensDigit];
+                }
+              }
+            }
+            if (scaleIndex > 0) {
+              if (triplet === 1) {
+                tripletWords += " " + scales[scaleIndex];
+              } else if (triplet >= 2 && triplet <= 10) {
+                tripletWords += " " + scales[scaleIndex] + "";
+              } else if (triplet > 10) {
+                tripletWords += " " + scales[scaleIndex];
+              }
+            }
+
+            if (words !== "") {
+              words = tripletWords + " و" + words;
+            } else {
+              words = tripletWords;
+            }
+          }
+
+          scaleIndex++;
+        }
+        return words;
+      }
+      function convertFN(num, maincurrency, floatCurr) {
+        var myIntNum = parseInt(num.split(".")[0]);
+        var myFloatNum = parseInt(num.split(".")[1]);
+        return (
+          numberToWordsArabic(myIntNum) +
+          " " +
+          maincurrency +
+          " و " +
+          numberToWordsArabic(myFloatNum) +
+          " " +
+          floatCurr +
+          " فقط"
+        );
+      }
+      try {
+        var myNum = String(
+          parseFloat(
+            document
+              .getElementById("invoice_total")
+              .innerText.replace(/[\$,]/g, "")
+          ).toFixed(2)
+        );
+        document.getElementById("ar_invoice_total_spelled").innerText =
+          convertFN(myNum, "ريال", "هلله");
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+    <script>
+      var ones = [
+        "",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+      ];
+      var tens = [
+        "",
+        "",
+        "twenty",
+        "thirty",
+        "forty",
+        "fifty",
+        "sixty",
+        "seventy",
+        "eighty",
+        "ninety",
+      ];
+      var teens = [
+        "ten",
+        "eleven",
+        "twelve",
+        "thirteen",
+        "fourteen",
+        "fifteen",
+        "sixteen",
+        "seventeen",
+        "eighteen",
+        "nineteen",
+      ];
+
+      function convert_billions(num) {
+        if (num >= 1000000000) {
+          return (
+            convert_billions(Math.floor(num / 1000000000)) +
+            " billion " +
+            convert_millions(num % 1000000000)
+          );
+        } else {
+          return convert_millions(num);
+        }
+      }
+      function convert_millions(num) {
+        if (num >= 1000000) {
+          return (
+            convert_millions(Math.floor(num / 1000000)) +
+            " million " +
+            convert_thousands(num % 1000000)
+          );
+        } else {
+          return convert_thousands(num);
+        }
+      }
+
+      function convert_thousands(num) {
+        if (num >= 1000) {
+          return (
+            convert_hundreds(Math.floor(num / 1000)) +
+            " thousand " +
+            convert_hundreds(num % 1000)
+          );
+        } else {
+          return convert_hundreds(num);
+        }
+      }
+
+      function convert_hundreds(num) {
+        if (num > 99) {
+          return (
+            ones[Math.floor(num / 100)] + " hundred " + convert_tens(num % 100)
+          );
+        } else {
+          return convert_tens(num);
+        }
+      }
+
+      function convert_tens(num) {
+        if (num < 10) return ones[num];
+        else if (num >= 10 && num < 20) return teens[num - 10];
+        else {
+          return tens[Math.floor(num / 10)] + " " + ones[num % 10];
+        }
+      }
+
+      function convert(num) {
+        console.log(convert_billions(num));
+        if (num == 0) return "zero";
+        else return convert_billions(num);
+      }
+      function convertFN(num, maincurrency, floatCurr) {
+        var myIntNum = parseInt(num.split(".")[0]);
+        var myFloatNum = parseInt(num.split(".")[1]);
+        return (
+          convert(myIntNum) +
+          " " +
+          maincurrency +
+          " and " +
+          convert(myFloatNum) +
+          " " +
+          floatCurr
+        );
+      }
+
+      try {
+        var myNum = String(
+          parseFloat(
+            document
+              .getElementById("invoice_total")
+              .innerText.replace(/[\$,]/g, "")
+          ).toFixed(2)
+        );
+
+        document.getElementById("en_invoice_total_spelled").innerText =
+          convertFN(myNum, "SAR", "Hallah");
+      } catch (error) {
+        console.log(error);
+      }
+      function addunit() {
+        var allRows = document.querySelectorAll("#listing_table tbody tr");
+        for (var i = 0; i < allRows.length; i++) {
+          if (allRows[i].cells[3].innerText.trim("").split(" ").length > 1) {
+            allRows[i].cells[2].innerText = allRows[i].cells[3].innerText
+              .trim("")
+              .split(" ")[1];
+            allRows[i].cells[3].innerText = allRows[i].cells[3].innerText
+              .trim("")
+              .split(" ")[0];
+          }
+        }
+      }
+      try {
+        addunit();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

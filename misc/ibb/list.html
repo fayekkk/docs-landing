@@ -1,0 +1,60 @@
+<!-- owner_entity_workflow_le_workflow-type-entity-1_list -->
+<script>
+  $(document).ready(function () {
+    function getdayNeme(Mydate) {
+      let dateString = Mydate;
+      let parts = dateString.split("/");
+      let day = parseInt(parts[0], 10);
+      let month = parseInt(parts[1], 10) - 1;
+      let year = parseInt(parts[2], 10);
+
+      let date = new Date(year, month, day);
+      let days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      let dayName = days[date.getDay()];
+      return dayName;
+    }
+    setTimeout(() => {
+      var allRows = document.querySelectorAll(".list-table tr");
+      for (var i = 0; i < allRows.length; i++) {
+        var c2 = allRows[i].cells[2].innerHTML; // مسمى     9
+        var c3 = allRows[i].cells[3].innerHTML; // الحالة     1
+        var c4 = allRows[i].cells[4].innerHTML; // العميل     3
+        var c5 = allRows[i].cells[5].innerHTML; // 	تاريخ البدء     2
+        var c6 = allRows[i].cells[6].innerHTML; // 	أضيفت بواسطة     10
+        var c7 = allRows[i].cells[7].innerHTML; // الوقت من     7
+        var c8 = allRows[i].cells[8].innerHTML; // الفرق     6
+        var c9 = allRows[i].cells[9].innerHTML; // الموقع     4
+        var c10 = allRows[i].cells[10].innerHTML; // الوقت إلى     8
+        var c11 = allRows[i].cells[11].innerHTML; // جزء البناء     5
+
+        allRows[i].cells[2].innerHTML = c3;
+        allRows[i].cells[3].innerHTML = c5;
+        if (i > 0) {
+          allRows[i].cells[3].innerHTML =
+            getdayNeme(allRows[i].cells[3].innerText.split("-")[0]) +
+            "<br> " +
+            allRows[i].cells[3].innerHTML;
+        } else {
+          allRows[i].cells[3].innerHTML = allRows[i].cells[3].innerHTML;
+        }
+
+        allRows[i].cells[4].innerHTML = c4;
+        allRows[i].cells[5].innerHTML = c9;
+        allRows[i].cells[6].innerHTML = c11;
+        allRows[i].cells[7].innerHTML = c8;
+        allRows[i].cells[8].innerHTML = c7;
+        allRows[i].cells[9].innerHTML = c10;
+        allRows[i].cells[10].innerHTML = c2;
+        allRows[i].cells[11].innerHTML = c6;
+      }
+    }, 500);
+  });
+</script>

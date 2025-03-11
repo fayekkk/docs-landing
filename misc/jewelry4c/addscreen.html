@@ -1,0 +1,405 @@
+<style>
+  .late_th,
+  .late_td {
+    display: table-cell;
+  }
+  .col-5,
+  .tax2 {
+    display: none !important;
+  }
+  .late_th,
+  .late1_th,
+  .late2_th,
+  .late3_th,
+  .late4_th {
+    width: 9% !important;
+  }
+  .late_td textarea,
+  .late1_td textarea,
+  .late2_td textarea,
+  .late3_td textarea,
+  .late4_td textarea {
+    /* width: 9% !important; */
+    overflow-y: clip;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      //   if (USER.branch_id == "1") {
+      function hudleAll() {
+        if (
+          ($("#InvoiceLayout").val() == 14 && USER.branch_id == 1) ||
+          ($("#InvoiceLayout").val() == 15 && USER.branch_id == 2) ||
+          ($("#InvoiceLayout").val() == 16 && USER.branch_id == 3)
+        ) {
+          const searchableSelector = () => {
+            var allrows = document.querySelectorAll("#listing_table tr");
+            console.log(allrows.length);
+          };
+
+          async function createCol(
+            prevTh,
+            prevTd,
+            colTitle,
+            classTh,
+            classTd,
+            colInput
+          ) {
+            var rowsNum = $("#listing_table tr").length;
+
+            if (
+              document.querySelectorAll(
+                "#listing_table tr:nth-child(1) .late_th"
+              ).length == 0 ||
+              document.querySelectorAll(
+                "#listing_table tr:nth-child(1) .late1_th"
+              ).length == 0 ||
+              document.querySelectorAll(
+                "#listing_table tr:nth-child(1) .late2_th"
+              ).length == 0 ||
+              document.querySelectorAll(
+                "#listing_table tr:nth-child(1) .late3_th"
+              ).length == 0 ||
+              document.querySelectorAll(
+                "#listing_table tr:nth-child(1) .late4_th"
+              ).length == 0
+            ) {
+              // Clone TH and attach change event listener
+              $(prevTh).after(
+                $("th.col-3")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-3", classTh)
+                  .replace("", colTitle)
+              );
+
+              $(prevTd).after(
+                $("td.col-3")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-3", classTd)
+                  .replace("item_col_4", colInput)
+              );
+            } else if (
+              !document.querySelector(
+                "#listing_table tr:last-child .late_td"
+              ) ||
+              !document.querySelector(
+                "#listing_table tr:last-child .late1_td"
+              ) ||
+              !document.querySelector(
+                "#listing_table tr:last-child .late2_td"
+              ) ||
+              !document.querySelector(
+                "#listing_table tr:last-child .late3_td"
+              ) ||
+              !document.querySelector("#listing_table tr:last-child .late4_td")
+            ) {
+              $(`#listing_table tr:last-child ${prevTd}`).after(
+                $("#listing_table tr:last-child td.col-3")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-3", classTd)
+                  .replace("item_col_4", colInput)
+              );
+            }
+            $(
+              ".late_td textarea, .late1_td textarea, .late2_td textarea, .late3_td textarea, .late4_td textarea"
+            ).each(function () {
+              $(this).removeAttr("name class id");
+            });
+            $("." + colInput).attr("placeholder", "");
+            $("." + colInput).attr("name", "");
+            searchableSelector();
+          }
+          // adding the columns when screen is loaded
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "إختيار العاملة ",
+            "late_th",
+            "late_td",
+            "late_input"
+          );
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "إختيار العاملة ",
+            "late1_th",
+            "late1_td",
+            "late1_input"
+          );
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "إختيار العاملة ",
+            "late2_th",
+            "late2_td",
+            "late2_input"
+          );
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "إختيار العاملة ",
+            "late3_th",
+            "late3_td",
+            "late3_input"
+          );
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "إختيار العاملة ",
+            "late4_th",
+            "late4_td",
+            "late4_input"
+          );
+          document.querySelector(".late_th").innerText = " وزن الاحجار   ";
+          document.querySelector(".late1_th").innerText = " الشهادة   ";
+          document.querySelector(".late2_th").innerText = " نوع القصه  ";
+          document.querySelector(".late3_th").innerText = " النظافة  ";
+          document.querySelector(".late4_th").innerText = " اللون  ";
+          // adding the columns on add item click
+          $("#AddItem").on("click", () => {
+            createCol(
+              "th.col-3",
+              "td.col-3",
+              "إختيار العاملة ",
+              "late_th",
+              "late_td",
+              "late_input"
+            );
+            createCol(
+              "th.col-3",
+              "td.col-3",
+              "إختيار العاملة ",
+              "late1_th",
+              "late1_td",
+              "late1_input"
+            );
+            createCol(
+              "th.col-3",
+              "td.col-3",
+              "إختيار العاملة ",
+              "late2_th",
+              "late2_td",
+              "late2_input"
+            );
+            createCol(
+              "th.col-3",
+              "td.col-3",
+              "إختيار العاملة ",
+              "late3_th",
+              "late3_td",
+              "late3_input"
+            );
+            createCol(
+              "th.col-3",
+              "td.col-3",
+              "إختيار العاملة ",
+              "late4_th",
+              "late4_td",
+              "late4_input"
+            );
+            hudleAll();
+
+            $("td.late_td:last").find("textarea").val("");
+          });
+        }
+
+        if (
+          ($("#InvoiceLayout").val() == 14 && USER.branch_id == 1) ||
+          ($("#InvoiceLayout").val() == 15 && USER.branch_id == 2) ||
+          ($("#InvoiceLayout").val() == 16 && USER.branch_id == 3)
+        ) {
+          $(".late_th").show();
+          $(".late_td").show();
+          $(".late1_th").show();
+          $(".late1_td").show();
+          $(".late2_th").show();
+          $(".late2_td").show();
+          $(".late3_th").show();
+          $(".late3_td").show();
+          $(".late4_th").show();
+          $(".late4_td").show();
+        } else {
+          $(".late_th").hide();
+          $(".late_td").hide();
+          $(".late1_th").hide();
+          $(".late1_td").hide();
+          $(".late2_th").hide();
+          $(".late2_td").hide();
+          $(".late3_th").hide();
+          $(".late3_td").hide();
+          $(".late4_th").hide();
+          $(".late4_td").hide();
+        }
+        $(document).on("change", "#InvoiceLayout", function () {
+          if (
+            ($("#InvoiceLayout").val() == 14 && USER.branch_id == 1) ||
+            ($("#InvoiceLayout").val() == 15 && USER.branch_id == 2) ||
+            ($("#InvoiceLayout").val() == 16 && USER.branch_id == 3)
+          ) {
+            $(".late_th").show();
+            $(".late_td").show();
+            $(".late1_th").show();
+            $(".late1_td").show();
+            $(".late2_th").show();
+            $(".late2_td").show();
+            $(".late3_th").show();
+            $(".late3_td").show();
+            $(".late4_th").show();
+            $(".late4_td").show();
+          } else {
+            $(".late_th").hide();
+            $(".late_td").hide();
+            $(".late1_th").hide();
+            $(".late1_td").hide();
+            $(".late2_th").hide();
+            $(".late2_td").hide();
+            $(".late3_th").hide();
+            $(".late3_td").hide();
+            $(".late4_th").hide();
+            $(".late4_td").hide();
+          }
+          hudleAll();
+        });
+      }
+      hudleAll();
+
+      // function forEditScreens() {
+      //   var allitemcol3 = $(".item_col_3");
+      //   allitemcol3.each(function () {
+      //     var textareaValue = $(this).val();
+      //     try {
+      //       var parsedValue = JSON.parse(textareaValue);
+      //       console.log("yesssss");
+      //       console.log(parsedValue);
+      //       if (typeof parsedValue === "object") {
+      //         var $closestTr = $(this).closest("tr");
+      //         var $col3ClonedTextarea = $closestTr.find(".col-3 .cloned_td");
+      //         var $col3Textarea = $closestTr.find(".col-3 textarea");
+
+      //         if ($col3ClonedTextarea.length === 0) {
+      //           var $clonedTextarea = $col3Textarea.clone();
+      //           $col3Textarea.hide();
+      //           $clonedTextarea.val(parsedValue.col3Value);
+      //           $clonedTextarea.removeAttr("name").removeAttr("id");
+      //           $clonedTextarea
+      //             .removeClass("item_col_3")
+      //             .addClass("cloned_td");
+      //           $closestTr.find(".col-3").append($clonedTextarea);
+      //         } else {
+      //           $col3ClonedTextarea.val(parsedValue.col3Value);
+      //         }
+      //       } else {
+      //         console.log("not an object type");
+      //         var $closestTr = $(this).closest("tr");
+      //         var $col3ClonedTextarea = $closestTr.find(".col-3 .cloned_td");
+      //         var $col3Textarea = $closestTr.find(".col-3 textarea");
+      //         var $lateTextarea = $closestTr.find(".late_td textarea");
+
+      //         if ($col3ClonedTextarea.length === 0) {
+      //           var $clonedTextarea = $col3Textarea.clone();
+      //           $col3Textarea.hide();
+      //           $clonedTextarea.val(parsedValue.col3Value);
+      //           $clonedTextarea.removeAttr("name").removeAttr("id");
+      //           $clonedTextarea
+      //             .removeClass("item_col_3")
+      //             .addClass("cloned_td");
+      //           $closestTr.find(".late_td textarea").val(" ");
+      //           $closestTr.find(".late_td textarea").trigger("change");
+      //           $closestTr.find(".col-3").append($clonedTextarea);
+      //         } else {
+      //           $col3ClonedTextarea.val(parsedValue.col3Value);
+      //         }
+
+      //         $col3ClonedTextarea.val(
+      //           $(this).closest("tr").find(".item_col_3").val()
+      //         );
+      //       }
+      //     } catch (error) {
+      //       console.log("not an object");
+      //     }
+      //   });
+      // }
+      // // forEditScreens();
+      function changeActions() {
+        setTimeout(() => {
+          $(document).on("change", ".item_name", function () {
+            setTimeout(() => {
+              var $closestTr = $(this).closest("tr");
+
+              // Select all relevant textareas in the specified classes
+              var $lateTextarea = $closestTr.find(".late_td textarea");
+              var $late1Textarea = $closestTr.find(".late1_td textarea");
+              var $late2Textarea = $closestTr.find(".late2_td textarea");
+              var $late3Textarea = $closestTr.find(".late3_td textarea");
+              var $late4Textarea = $closestTr.find(".late4_td textarea");
+              var $col3Textarea = $closestTr.find(".col-5 .item_col_5");
+
+              // Set values from the product object
+              $lateTextarea.val(product.field_3);
+              $late1Textarea.val(product.field_17);
+              $late2Textarea.val(product.field_16);
+              $late3Textarea.val(product.field_19);
+              $late4Textarea.val(product.field_20);
+
+              // Create the object with values from the product fields
+              var object = {
+                lateValue1: $lateTextarea.val(),
+                lateValue2: $late1Textarea.val(),
+                lateValue3: $late2Textarea.val(),
+                lateValue4: $late3Textarea.val(),
+                lateValue5: $late4Textarea.val(),
+              };
+
+              // Update the col3Textarea with the JSON string
+              $col3Textarea.val(JSON.stringify(object));
+
+              // Update the col3Textarea when any late textarea changes
+              $lateTextarea
+                .add($late1Textarea)
+                .add($late2Textarea)
+                .add($late3Textarea)
+                .add($late4Textarea)
+                .on("change", function () {
+                  object.lateValue1 = $lateTextarea.val();
+                  object.lateValue2 = $late1Textarea.val();
+                  object.lateValue3 = $late2Textarea.val();
+                  object.lateValue4 = $late3Textarea.val();
+                  object.lateValue5 = $late4Textarea.val();
+                  $col3Textarea.val(JSON.stringify(object));
+                });
+            }, 250);
+          });
+        }, 500);
+      }
+      // $(document).on("change", "#InvoiceLayout", function () {
+      //     if ($("#InvoiceLayout").val() == 14) {
+      if (
+        ($("#InvoiceLayout").val() == 14 && USER.branch_id == 1) ||
+        ($("#InvoiceLayout").val() == 15 && USER.branch_id == 2) ||
+        ($("#InvoiceLayout").val() == 16 && USER.branch_id == 3)
+      ) {
+        changeActions();
+      }
+      $(document).on("change", "#InvoiceLayout", function () {
+        if (
+          ($("#InvoiceLayout").val() == 14 && USER.branch_id == 1) ||
+          ($("#InvoiceLayout").val() == 15 && USER.branch_id == 2) ||
+          ($("#InvoiceLayout").val() == 16 && USER.branch_id == 3)
+        ) {
+          changeActions();
+        }
+      });
+      //   }
+    }, 1500);
+  });
+</script>

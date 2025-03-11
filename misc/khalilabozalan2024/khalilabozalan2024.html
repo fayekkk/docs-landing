@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Changa:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      font-family: "Changa", sans-serif;
+      font-optical-sizing: auto;
+      font-style: normal;
+    }
+
+    body {
+      direction: rtl;
+      /* background: #ffffff; */
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      text-align: right;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      padding: 0;
+      margin: 0 auto;
+      /* background: #fff; */
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 0;
+      padding: 20px 30px;
+      border-left: 1px solid black;
+      margin: 0 -40px 0 -40px;
+    }
+
+    .listing-table th {
+      text-align: center;
+      padding: 6px 4px;
+    }
+
+    .listing-table td {
+      border-right: none !important;
+      border-left: none !important;
+      text-align: center;
+      padding: 3px 6px;
+      vertical-align: top;
+    }
+
+    #listing_table th {
+      font-weight: bold;
+      border: none !important;
+    }
+
+    /*#listing_table tr th:last-child, #listing_table tr td:last-child{text-align:left}*/
+    .listing-table:nth-child(2) {
+      margin: 20px 0;
+    }
+
+    .listing-table:nth-child(2) tr td {
+      border: none !important;
+    }
+
+    .listing-table:nth-child(2) tr td:nth-child(2) {
+      width: 35%;
+    }
+
+    #invoice_title {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+
+    bold_title {
+      font-weight: bold;
+    }
+
+    strong_tag {
+      font-weight: bold;
+    }
+
+    big_title {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .notes-block {
+      margin: 10px 0 0 0;
+    }
+
+    .total-row {
+      font-weight: bold;
+    }
+
+    .listing-table:nth-child(2) strong {
+      font-weight: normal;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    .qr-code img {
+      margin-top: 10px;
+    }
+
+    .invoice-date {
+      font-size: 15px;
+    }
+
+    /*.biz__info td{padding: 0 0 15px;width:33%; border-bottom: 1px solid #c0c0c0}*/
+    .inv__info {
+      margin: 20px 0;
+    }
+
+    .labels {
+      color: #7d9eb5;
+    }
+
+    .listing-table:nth-child(2) tr:first-child td:nth-child(2) {
+      color: #7d9eb5;
+      text-align: left;
+    }
+
+    .listing-table:nth-child(2) tr:nth-child(n + 1) td:nth-child(1) {
+      color: #7d9eb5;
+      width: 40% !important;
+    }
+
+    .listing-table:nth-child(2) td {
+      text-align: left;
+    }
+
+    #listing_table tr *:first-child {
+      padding-right: 9px;
+    }
+    /* #listing_table {
+    width: 90% !important;
+    margin: 0 auto;
+} */
+    #business_info {
+      width: 100%;
+      margin-right: auto;
+    }
+
+    #business_info,
+    #client_info {
+      color: #7d9eb5;
+    }
+
+    #label_unit_price,
+    #label_quantity {
+      width: 90px;
+    }
+
+    #label_subtotal,
+    #listing_table td:last-child {
+      text-align: center;
+    }
+
+    #listing_table th:nth-last-child(2),
+    #listing_table td:nth-last-child(2) {
+      padding-right: 25px;
+    }
+
+    /* .col-8 {
+      display: none;
+    } */
+
+    #custom_fields td {
+      text-align: right;
+    }
+
+    #listing_table th {
+      background-color: #dbbf8b;
+    }
+
+    #items-list table:nth-child(2) {
+      display: none;
+    }
+    /* #items-list {
+      margin-right: -50px;
+      margin-left: -50px;
+    } */
+    .listing-table tr:last-child td {
+      background-color: #dbbf8b;
+    }
+    #inv_info * {
+font-size: 15px !important;
+    }
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+
+      <div class="invoice-inner">
+        <table
+          width="100%"
+          border="0"
+          cellspacing="0"
+          cellpadding="0"
+          style="margin-top: 15px"
+        >
+          <table style="margin-bottom: 0px">
+            <tr>
+              <td
+                align="left"
+                style="
+                  position: relative;
+                  right: 280px;
+                  bottom: 31px;
+                  font-size: 20px;
+                  font-weight: 900;
+                  color: rgb(75, 74, 74);
+                "
+              >
+                فاتورة {%Invoice Type%}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img
+                  src="https://mahmoudismaeil.daftra.com/files/69ba80a6/logos/6649bbefaa036_blobid1716108270170.png"
+                  alt=""
+                  title="Screenshot 2024-05-19 095633.png"
+                  width="400"
+                  height="15"
+                  style="
+                    z-index: -66666;
+                    right: 400px;
+                    position: relative;
+                    top: -30px;
+                  "
+                />
+              </td>
+            </tr>
+          </table>
+
+          <table id="inv_info" style="margin-bottom: 15px; margin-top: -60px ;">
+            <tr>
+              <td
+                colspan="2"
+                style="
+                  text-align: left;
+                  left: -50px;
+                  position: relative;
+                  top: 25px;
+                  font-size: 22px;
+                "
+              >
+                تاريخ الفاتورة : {%invoice_date%}
+              </td>
+            </tr>
+            <tr>
+              <td
+                style="
+                  top: 10px;
+                  position: relative;
+                  font-size: 20px !important;
+                  left: 25px;
+                "
+              >
+                اسم العميل: {%client_business_name%}
+              </td>
+              <td
+                style="
+                  top: 22px;
+                  position: relative;
+                  font-size: 20px;
+                  left: -5px;
+                "
+              >
+                رقم الفاتورة: {%invoice_no%}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img
+                  src="https://mahmoudismaeil.daftra.com/files/69ba80a6/logos/6649bbefaa036_blobid1716108270170.png"
+                  alt=""
+                  title="Screenshot 2024-05-19 095633.png"
+                  width="430"
+                  height="14"
+                  style="
+                    z-index: -66666;
+                    left: -355px;
+                    position: relative;
+                    bottom: -27px;
+                  "
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img
+                  src="https://mahmoudismaeil.daftra.com/files/69ba80a6/logos/6649bb5546b96_blobid1716108115775.png"
+                  alt=""
+                  title="Screenshot 2024-05-19 085111.png"
+                  width="430"
+                  height="29"
+                  style="
+                    z-index: -66666;
+                    right: -160px;
+                    position: relative;
+                    bottom: -7px;
+                  "
+                />
+              </td>
+            </tr>
+          </table>
+        </table>
+
+        <div id="items-list">{%items_list%}</div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td style="text-align: center; font-size: 15px">توقيع المستلم</td>
+              <td style="text-align: center; font-size: 15px">أمين المخزن</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+
+    <script>
+      function addLastThree() {
+        var newTr = document.createElement("tr");
+        newTr.innerHTML =
+          "<td style='border-bottom:none;' colspan='3'></td><td>المجموع</td><td id='invoice_subtotal'>{%invoice_subtotal%}</td>";
+        document.querySelector("#listing_table tbody").appendChild(newTr);
+        var newTr = document.createElement("tr");
+        newTr.innerHTML =
+          "<td style='border-bottom:none ;' colspan='3'></td><td>الخصم</td><td id='discount'>{%discount%} / {%item-discount-total%}</td>";
+        document.querySelector("#listing_table tbody").appendChild(newTr);
+        var newTr = document.createElement("tr");
+        newTr.innerHTML =
+          "<td style='border-bottom:none ; background-color: #fff;' colspan='3'></td><td>الضريبة</td><td id='taxtotal'>{%tax-total%}</td>";
+        document.querySelector("#listing_table tbody").appendChild(newTr);
+        var newTr = document.createElement("tr");
+        newTr.innerHTML =
+          "<td style='border-bottom:none ; background-color: #fff;' colspan='3'></td><td>الإجمالي</td><td id='invoice_total'>{%invoice_total%}</td>";
+        document.querySelector("#listing_table tbody").appendChild(newTr);
+      }
+      try {
+        addLastThree();
+      } catch (error) {
+        console.log(error);
+      }
+      function hundleTtls() {
+        var invsubttl = document.getElementById("invoice_subtotal");
+        invsubttl.innerText = parseFloat(invsubttl.innerText.replace(/,/g, ""))
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        var discount = document.getElementById("discount");
+        discount.innerText = (
+          parseFloat(discount.innerText.split("/")[0].replace(/,/g, "")) +
+          parseFloat(discount.innerText.split("/")[1].replace(/,/g, ""))
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        var taxtotal = document.getElementById("taxtotal");
+        taxtotal.innerText = parseFloat(taxtotal.innerText.replace(/,/g, ""))
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        if (parseFloat(taxtotal.innerText.replace(/,/g, "")) == 0) {
+          taxtotal.parentElement.style.display = "none";
+        }
+        var invttl = document.getElementById("invoice_total");
+        invttl.innerText = parseFloat(invttl.innerText.replace(/,/g, ""))
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+      try {
+        hundleTtls();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

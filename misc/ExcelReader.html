@@ -1,0 +1,36 @@
+,<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Excel Reader</title>
+  </head>
+  <body>
+    <input id="my_file" type="file" accept=".xls, .xlsx" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+      const sad = async () => {
+        document
+          .getElementById("my_file")
+          .addEventListener("change", async () => {
+            const data = await document
+              .getElementById("my_file")
+              .files[0].arrayBuffer();
+            const workbook = XLSX.read(data);
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+            console.log(jsonData);
+            console.log(jsonData.length);
+            for (const row of jsonData) {
+              const cellAValue = row[0];
+              const cellBValue = row[1];
+              console.log(row);
+            }
+          });
+      };
+
+      sad();
+    </script>
+  </body>
+</html>

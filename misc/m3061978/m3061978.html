@@ -1,0 +1,716 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700&display=swap");
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      font-family: "Tajawal", sans-serif !important;
+      direction: rtl;
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    .invoice-address {
+      margin: 20px 0;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .invoice-name {
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: right;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    .total-table td {
+      border-right: 1px solid #555555;
+    }
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    .notes-block {
+      margin: 50px 0 0 0;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    #business_info {
+      line-height: 1.4;
+      margin-top: 20px;
+    }
+    #listing_table th:last-child,
+    #listing_table td:last-child {
+      border-left: 1px solid #555555;
+    }
+    #label_subtotal {
+      width: 65px;
+    }
+    #label_field3,
+    #label_field4 {
+      width: 55px;
+    }
+    #items-list > table:nth-child(2) tr td:nth-child(1) {
+      width: 60%;
+    }
+    #listing_table th,
+    #listing_table td {
+      text-align: center;
+    }
+    #listing_table th:nth-child(2),
+    #listing_table td:nth-child(2) {
+      text-align: right;
+    }
+    .invoice-inner {
+      margin: 0 25px;
+    }
+    /* #listing_table thead tr th:nth-child(2),
+    #listing_table tbody tr td:nth-child(2) {
+      display: none;
+    } */
+    #listing_table thead tr th:nth-child(8) {
+      width: 16% !important;
+    }
+    #listing_table tbody tr td:nth-child(2) {
+      width: 35%;
+    }
+    #listing_table thead tr th:not(:first-of-type) {
+      border-right: 1px solid black;
+    }
+    .qr-code img {
+      margin-top: 10px;
+      width: 55%;
+    }
+    .total-row {
+      background-color: white !important;
+    }
+    .info {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    #listing_table {
+      margin-bottom: 20px;
+      border-collapse: collapse;
+    }
+    .listing-table:nth-child(2) tbody tr:nth-child(1) td {
+      border: none !important;
+    }
+
+    #spelled {
+      border-collapse: collapse;
+    }
+
+    #spelled td:last-child {
+      padding: 5px 6px;
+      border-bottom: 1px solid;
+    }
+    #new_totals {
+      width: 100%;
+
+      page-break-inside: avoid;
+      border-spacing: 0;
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    #new_totals td:nth-child(1) {
+      width: 70%;
+      text-align: center;
+      font-weight: bold;
+    }
+    #new_totals td {
+      border-left: 1px solid black;
+      border-top: 1px solid black;
+      padding: 3px;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    /* .hiddenrows {
+      display: none;
+    } */
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="right" valign="top">
+              <img
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                width="75"
+                height="{%logo-height%}"
+              />
+              <div id="business_info" class="editable-area">
+                {%business_info%}
+              </div>
+            </td>
+
+            <td valign="top" align="left">
+              <p id="invoice_title" class="editable-area invoice-name">
+                {%invoice_title%} {%invoice_number%}
+              </p>
+              <div class="qr-code">{%sa_qr_code_image%}<br /></div>
+            </td>
+          </tr>
+        </table>
+
+        <div class="invoice-address">
+          <table class="info" border="1">
+            <tr>
+              <td style="width: 60%">
+                <table style="width: 100%">
+                  <tr>
+                    <td style="width: 52%; padding: 10px 3px">
+                      <strong
+                        id="field1"
+                        class="editable-area"
+                        style="text-decoration: underline"
+                        >{%field1%}</strong
+                      ><br />
+                      {%client_business_name%}<br />الرقم الضريبى :
+                      {%client_bn1%}
+                    </td>
+                    <td style="text-align: left; padding: 10px 3px; width: 48%">
+                      المسؤول<br />
+                      {%business_name%}<br />
+                      هاتف : {%telephone%}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 3px">
+                      الرياض<br />
+                      الرياض المملكة العربية السعودية
+                    </td>
+                  </tr>
+                  <tr id="shipping_options" style="display: none !important">
+                    <td valign="top" style="float: right">
+                      <br /><strong id="label_ship" class="editable-area"
+                        >{%label_ship%}</strong
+                      >
+                      <div id="ship_info" class="editable-area">
+                        {%ship_info%}
+                      </div>
+                    </td>
+                    <td></td>
+                  </tr>
+                </table>
+              </td>
+              <td width="40%" style="padding: 10px 3px">
+                <table>
+                  <tr>
+                    <td style="text-align: left; padding: 6px 3px">
+                      {%label_date%}
+                    </td>
+                    <td>{%invoice_date%}</td>
+                  </tr>
+                  <tr>
+                    <td style="text-align: left; padding: 6px 3px">
+                      تاريخ الإستحقاق
+                    </td>
+                    <td>{%due_date%}</td>
+                  </tr>
+                  <tr>
+                    <td style="text-align: left; padding: 6px 3px">
+                      المبلغ المستحق
+                    </td>
+                    <td class="invTotal">{%invoice_total%}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+
+          <!-- 
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="50%" align="right" valign="top">
+                <table border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td valign="top" style="float: right">
+                      <strong id="field1" class="editable-area"
+                        >{%field1%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" valign="top">
+                      <div id="client_info" class="editable-area">
+                        {%client_info%}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr id="shipping_options" style="display: none">
+                    <td valign="top" style="float: right">
+                      <br /><strong id="label_ship" class="editable-area"
+                        >{%label_ship%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" valign="top">
+                      <br />
+                      <div id="ship_info" class="editable-area">
+                        {%ship_info%}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td width="50%" valign="top" align="left">
+                <table
+                  id="invoice_basics"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="left"
+                >
+                  <tr>
+                    <td align="left">
+                      <strong class="editable-area" id="label_invoice_no"
+                        >{%label_invoice_no%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" align="right">
+                      {%invoice_number%}
+                    </td>
+                  </tr>
+                  <tr {%refund_invoice_number_condition%}>
+                    <td align="right">
+                      <strong class="editable-area" id="refund_label_invoice_no"
+                        >{%refund_invoice_no_title%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%refund_invoice_number%}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td align="left">
+                      <strong class="editable-area" id="label_date"
+                        >{%label_date%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" align="right">
+                      {%invoice_date%}
+                    </td>
+                  </tr>
+
+                </table>
+                <custom_field
+                  id="custom_fields"
+                  style="clear: both"
+                  class="editable-area"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="left"
+                >
+                  {%custom_fields%}
+                </custom_field>
+              </td>
+            </tr>
+          </table> -->
+        </div>
+
+        <div id="items-list">
+          {%items_list%}
+          <table id="new_totals">
+            <tbody>
+              <tr>
+                <td>إجمالي قيمة الأعمال حتى تاريخه</td>
+                <td id="subtotalbefdisc" class="val1">0</td>
+              </tr>
+              <tr>
+                <td>خصومات حاليه (غرامات)</td>
+                <td id="item-discount" class="val2">{%item-discount-total%}</td>
+              </tr>
+              <tr>
+                <td>Non-Performance Deduction</td>
+                <td id="discount" class="val3">{%discount%}</td>
+              </tr>
+              <tr>
+                <td>المبلغ الصافى</td>
+                <td id="subTotal" class="val4">{%invoice_subtotal%}</td>
+              </tr>
+              <tr class="hiddenrows">
+                <td>{%Discount 2%}</td>
+                <td id="disc2" class="val5">0</td>
+              </tr>
+              <tr>
+                <td>قيمة المستخلص الصافي قبل الضريبة</td>
+                <td id="subtotalafterdiscs" class="val6">0</td>
+              </tr>
+              <tr>
+                <td>ضريبة القيمة المضافة</td>
+                <td id="tax-total" class="val7">{%tax-total%}</td>
+              </tr>
+              <tr>
+                <td>قيمة المستخلص الصافي بعد إضافة ضريبة القيمة المضافة</td>
+                <td id="plusvat" class="val8">0</td>
+              </tr>
+              <tr class="hiddenrows">
+                <td>{%Discount 1%}</td>
+                <td id="disc1" class="val9">0</td>
+              </tr>
+              <tr>
+                <td>صافى قيمة المستخلص الحالي المستحق للصرف</td>
+                <td class="removecurr">{%invoice_total%}</td>
+              </tr>
+              <tr>
+                <td colspan="2" style="text-align: center">
+                  {%invoice_total_spelled%}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- <table width="100%" id="spelled">
+            <tr>
+              <td width="60%"></td>
+              <td align="center">{%unpaid_spelled%}</td>
+            </tr>
+          </table> -->
+        </div>
+        <div style="display: none" class="hidden">
+          <div id="disc3"></div>
+          <div id="disc4"></div>
+        </div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      var currency = "";
+      function detectCurrency() {
+        var unitPrice = document.querySelector(
+          "#listing_table tr td:nth-child(6)"
+        );
+        var price = unitPrice.innerText;
+        if (price.indexOf("ر.س") > -1) {
+          currency = " ر.س";
+        } else if (price.indexOf("SR") > -1) {
+          currency = " SR";
+        }
+      }
+      function roundingTaxes() {
+        var taxValue = document.querySelectorAll(
+          "#listing_table tr td:nth-child(4)"
+        );
+        var totalWithTax = document.querySelectorAll(
+          "#listing_table tr td:nth-child(5)"
+        );
+        for (var i = 0; i < taxValue.length; i++) {
+          taxValue[i].innerText =
+            parseFloat(taxValue[i].innerText.replace(/\,/g, ""), 10)
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + currency;
+          totalWithTax[i].innerText =
+            parseFloat(totalWithTax[i].innerText.replace(/\,/g, ""), 10)
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + currency;
+        }
+      }
+
+      function addNewColClass() {
+        var allRows = document.getElementById("listing_table").rows;
+        for (var i = 0; i < allRows.length; i++) {
+          for (var x = 0; x < allRows[i].cells.length; x++) {
+            allRows[i].cells[x].className = "";
+            allRows[i].cells[x].classList.add("col-" + (x + 1));
+          }
+        }
+      }
+
+      function swap(in1, in2, table_id) {
+        var table = document.getElementById(table_id);
+        for (var i = 0, row; (row = table.rows[i]); i++) {
+          var temp = row.cells[in1].innerHTML;
+          row.cells[in1].innerHTML = row.cells[in2].innerHTML;
+          row.cells[in2].innerHTML = temp;
+        }
+      }
+
+      function removeCurrency() {
+        var listTable = document.querySelectorAll("#listing_table thead tr th");
+
+        var itemPrice = document.querySelectorAll(
+          "#listing_table tbody tr td:nth-child(4)"
+        );
+        var totalUnderVat = document.querySelectorAll(
+          "#listing_table tbody tr td:nth-child(5)"
+        );
+
+        if (listTable.length == 9) {
+          var vatValue = document.querySelectorAll(
+            "#listing_table tbody tr td:nth-child(8)"
+          );
+          var total = document.querySelectorAll(
+            "#listing_table tbody tr td:nth-child(9)"
+          );
+        } else {
+          var vatValue = document.querySelectorAll(
+            "#listing_table tbody tr td:nth-child(7)"
+          );
+          var total = document.querySelectorAll(
+            "#listing_table tbody tr td:nth-child(8)"
+          );
+        }
+
+        var invTotal = document.querySelector(".invTotal");
+        var currencyTd = document.querySelectorAll(
+          "#items-list table:nth-child(2) tr td:nth-child(3)"
+        );
+
+        // for(var i=0;i<itemPrice.length;i++){
+        //   //itemPrice[i].innerText = itemPrice[i].innerText+" SAR";
+        //   //itemPrice[i].style.width="10%";
+        //   //totalUnderVat[i].innerText=totalUnderVat[i].innerText+" SAR";
+        //   //totalUnderVat[i].style.width="10%"
+        //   //vatValue[i].innerText=vatValue[i].innerText+" SAR";
+        //   //total[i].innerText=total[i].innerText+" SAR";
+        //    //total[i].style.width="15%"
+        // }
+
+        invTotal.innerText = invTotal.innerText.split("ر.س").join("SAR");
+        for (i = 0; i < currencyTd.length; i++) {
+          currencyTd[i].innerText = currencyTd[i].innerText
+            .split("ر.س")
+            .join("SAR");
+        }
+      }
+
+      try {
+        detectCurrency();
+        roundingTaxes();
+
+        swap(5, 3, "listing_table");
+        swap(2, 6, "listing_table");
+        swap(4, 7, "listing_table");
+        swap(2, 3, "listing_table");
+
+        var mainTable = document.getElementById("listing_table");
+        var colCount = mainTable.rows[0].cells;
+
+        if (colCount.length == 9) {
+          swap(5, 8, "listing_table");
+          swap(7, 8, "listing_table");
+          swap(5, 4, "listing_table");
+        } else {
+          swap(5, 6, "listing_table");
+        }
+        addNewColClass();
+        removeCurrency();
+        document.querySelector(
+          ".listing-table:nth-child(2) tbody tr:nth-child(2) td:nth-child(2)"
+        ).innerText = "مجموع ضريبة القيمة المضافة:";
+
+        document.querySelector(
+          ".listing-table:nth-child(2) tbody tr:nth-child(2) td:nth-child(2)"
+        ).style.fontWeight = "Bold";
+      } catch (err) {}
+      //   totals edits
+      function hundleTotals() {
+        var allRows = document.querySelectorAll(
+          ".listing-table:nth-child(2) tr"
+        );
+        for (var i = 0; i < allRows.length; i++) {
+          switch (allRows[i].cells[1].innerText.trim()) {
+            case "خصم 1 (ضمان تنفيذ اعمال)":
+              //   document.getElementById("disc1").parentElement.style.display =
+              //     "table-row";
+
+              document.getElementById("disc1").innerText = (
+                parseFloat(allRows[i].cells[2].innerText.replace(/,/g, "")) * -1
+              )
+                .toFixed(2)
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              break;
+            case "خصم 2 (دفعات مستلمة مقدماً)":
+              //   document.getElementById("disc2").parentElement.style.display =
+              //     "table-row";
+
+              document.getElementById("disc2").innerText = (
+                parseFloat(allRows[i].cells[2].innerText.replace(/,/g, "")) * -1
+              )
+                .toFixed(2)
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              break;
+            case "خصم3 (غرامات متنوعة )":
+              //   document.getElementById("disc3").parentElement.style.display =
+              //     "table-row";
+
+              document.getElementById("disc3").innerText = (
+                parseFloat(allRows[i].cells[2].innerText.replace(/,/g, "")) * -1
+              )
+                .toFixed(2)
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              break;
+            case "ضريبة مستردة لخصميات العميل":
+              //   document.getElementById("disc4").parentElement.style.display =
+              //     "table-row";
+              document.getElementById("disc4").innerText = (
+                parseFloat(allRows[i].cells[2].innerText.replace(/,/g, "")) * -1
+              )
+                .toFixed(2)
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              break;
+            default:
+              break;
+          }
+        }
+
+        // ****************************** val1  ******************************
+        var subtotalbefdiscVal = 0;
+        var allprodsttls = document.querySelectorAll("#listing_table tbody tr");
+        for (var i = 0; i < allprodsttls.length; i++) {
+          subtotalbefdiscVal =
+            subtotalbefdiscVal +
+            parseFloat(allprodsttls[i].cells[2].innerText.replace(/,/g, "")) *
+              parseFloat(allprodsttls[i].cells[3].innerText.replace(/,/g, ""));
+        }
+        document.querySelector(".val1").innerText = subtotalbefdiscVal
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // ******************************** val2 ****************************
+
+        document.querySelector(".val2").innerText = parseFloat(
+          document.querySelector(".val2").innerText.replace(/,/g, "")
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // **************************  val3  **********************************
+        document.querySelector(".val3").innerText = parseFloat(
+          document.querySelector(".val3").innerText.replace(/,/g, "")
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // ************************************************************
+        document.querySelector(".val4").innerText = parseFloat(
+          document.querySelector(".val4").innerText.replace(/,/g, "")
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // ************************************************************
+        document.querySelector(".val5").innerText = parseFloat(
+          document.querySelector(".val5").innerText.replace(/,/g, "")
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // ************************************************************
+        document.querySelector(".val6").innerText = (
+          parseFloat(
+            document.querySelector(".val4").innerText.replace(/,/g, "")
+          ) -
+          parseFloat(
+            document.querySelector(".val5").innerText.replace(/,/g, "")
+          )
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // ************************************************************
+        document.querySelector(".val7").innerText = (
+          parseFloat(
+            document.querySelector(".val7").innerText.replace(/,/g, "")
+          ) -
+          parseFloat(
+            document.querySelector("#disc4").innerText.replace(/,/g, "")
+          )
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // ************************************************************
+        document.querySelector(".val8").innerText = (
+          parseFloat(
+            document.querySelector(".val7").innerText.replace(/,/g, "")
+          ) +
+          parseFloat(
+            document.querySelector(".val6").innerText.replace(/,/g, "")
+          )
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // ************************************************************
+        document.querySelector(".val9").innerText = parseFloat(
+          document.querySelector(".val9").innerText.replace(/,/g, "")
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // ************************************************************
+
+        // removecurr
+        document.querySelector(".removecurr").innerText = parseFloat(
+          document.querySelector(".removecurr").innerText.replace(/,/g, "")
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // ************************************************************
+      }
+      try {
+        hundleTotals();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

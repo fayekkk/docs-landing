@@ -1,0 +1,110 @@
+<style>
+    .inv_header {
+      width: 100%;
+      direction: ltr;
+    }
+    .inv_header td:nth-child(1) {
+      width: 40%;
+    }
+    .inv_header td:nth-child(2) {
+      width: 20%;
+    }
+    .inv_header td:nth-child(3) {
+      width: 40%;
+    }
+    .logocom {
+      width: 80%;
+      margin: 0 10%;
+    }
+    .logotitle {
+      width: 60%;
+      margin: 0 1%;
+    }
+  
+    .recipttitle {
+      font-size: 15px solid black;
+      font-weight: bold;
+      text-align: center;
+    }
+    .siteInfo {
+      width: 100% !important;
+      font-size: 11px;
+    }
+    .siteInfo td:nth-child(1) {
+      width: 56%;
+      text-align: left;
+    }
+    .siteInfo td:nth-child(2) {
+      width: 44%;
+      text-align: right;
+    }
+    .redtr td {
+      color: #000;
+    }
+    .headerimg img:nth-child(2) {
+      width: 35%;
+    }
+    .headerimg br{
+      display: none;
+    }
+  </style>
+  <div style="margin-bottom: -25px">
+    <!-- <div style="padding: 20px"></div> -->
+    <table class="inv_header">
+      <tbody>
+        <tr>
+          <td class="headerimg">
+              {%sa_qr_code_image%}
+            <img
+              src="https://mg4595414.daftra.com/files/df57051b/logos/667ec8483f386_blobid1719584837482.png"
+              alt=""
+              title="rawasylogo11.png"
+              class="logotitle"
+            />
+  
+          
+          </td>
+          <td>
+            <img
+              src="https://mg4595414.daftra.com/files/df57051b/logos/667ec853e8502_blobid1719584848925.png"
+              alt=""
+              title="rawasylogo.png"
+              class="logocom"
+            />
+            <div class="recipttitle">{%invoice_title%}</div>
+          </td>
+          <td>
+            <table class="siteInfo">
+              <tbody>
+                <tr>
+                  <td>kingdom of Saudi Arabia</td>
+                  <td>المملكة العربية السعودية</td>
+                </tr>
+                <tr>
+                  <td>Riyadh</td>
+                  <td>الرياض</td>
+                </tr>
+                <tr>
+                  <td>Mobile : 501000248</td>
+                  <td>جوال : 501000248</td>
+                </tr>
+                <tr>
+                  <td>Email : Rwasy1786@gmail.com</td>
+                  <td>البريد الإلكترونى</td>
+                </tr>
+                <tr>
+                  <td>C.R. : 1010769015</td>
+                  <td>: سجل تجارى</td>
+                </tr>
+                <tr class="redtr">
+                  <td>VAT : 311139385300003</td>
+                  <td>: الرقم الضريبى</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

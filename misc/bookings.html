@@ -1,0 +1,66 @@
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      console.log("111");
+      if (
+        document
+          .querySelectorAll(".status-list ul li:nth-child(4) span")[0]
+          .classList.contains("btn-success")
+      ) {
+        var href = document
+          .querySelectorAll(".status-list ul li")[3]
+          .querySelector("a")
+          .getAttribute("href");
+        function getFormattedDate() {
+          const today = new Date();
+          const dd = String(today.getDate()).padStart(2, "0");
+          const mm = String(today.getMonth() + 1).padStart(2, "0");
+          const yyyy = today.getFullYear();
+
+          return dd + "/" + mm + "/" + yyyy;
+        }
+
+        const formattedDate = getFormattedDate();
+        // console.log(formattedDate);
+        var clientid = document
+          .querySelector(".client-name-sum")
+          .getAttribute("href")
+          .split("/")[4];
+        var clientNAme = document.querySelector(".client-name-sum").innerText;
+        document
+          .querySelectorAll(".status-list ul li")[3]
+          .querySelector("a")
+          .removeAttribute("href");
+        document
+          .querySelectorAll(".status-list ul li")[3]
+          .addEventListener("click", () => {
+            fetch(`/v2/api/credit_usages`, {
+              method: "POST",
+              headers: {
+                apikey: "e384db81527248ab65b3cfde8a225ad832e14a3a",
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                client_id: clientid,
+                usage_date: formattedDate,
+                credit_type_id: "1",
+                amount: "1",
+                description:
+                  "Created to " + clientNAme + " at " + formattedDate,
+                added_by: USER.staff_id,
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data);
+                window.location.href = href;
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          });
+      }
+    }, 250);
+  });
+</script>

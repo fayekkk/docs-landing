@@ -1,0 +1,516 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    #newHead {
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+      text-decoration: underline;
+      border-collapse: collapse;
+
+      /* padding-bottom: 15px;
+      border-bottom: 3px solid #0070c0; */
+    }
+    #newHead img {
+      width: 90%;
+      margin: 0 5%;
+    }
+    #newHead td:nth-child(1) {
+      width: 25%;
+    }
+    #newHead td:nth-child(2) {
+      width: 45%;
+      font-size: 17px;
+    }
+    #newHead td:nth-child(3) {
+      width: 30%;
+    }
+    .addresss br {
+      display: none;
+    }
+    #inv_data {
+      width: 100%;
+      border-spacing: 0;
+      border-collapse: collapse;
+      margin-top: 15px;
+      border: 1px solid #000;
+      text-align: left;
+      /* padding-bottom: 15px;
+      border-bottom: 3px solid #0070c0; */
+    }
+    #inv_data td {
+      border-right: 1px dotted #000;
+      border-top: 1px dotted #000;
+      padding: 3px;
+    }
+    #inv_data tr:nth-child(1) td:nth-child(1) {
+      width: 7%;
+    }
+    #inv_data tr:nth-child(1) td:nth-child(2) {
+      width: 36%;
+    }
+    #inv_data tr:nth-child(1) td:nth-child(3) {
+      width: 7%;
+    }
+    #inv_data tr:nth-child(1) td:nth-child(4) {
+      width: 20%;
+    }
+    #inv_data tr:nth-child(1) td:nth-child(5) {
+      width: 15%;
+    }
+    #inv_data tr:nth-child(1) td:nth-child(6) {
+      width: 15%;
+      color: #00b050;
+      text-align: center !important;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    #customs {
+      width: 100%;
+      border-spacing: 0;
+      border-collapse: collapse;
+      text-align: left;
+      /* padding-bottom: 15px;
+      border-bottom: 3px solid #0070c0; */
+    }
+    #customs {
+      padding: 2px;
+    }
+    .seperate {
+      border-bottom: 2px solid #0070c0;
+      margin: 10px 0;
+    }
+    .bordered {
+      border: 1px solid #000;
+      padding: 3px;
+    }
+    #listing_table {
+      width: 100%;
+      border-spacing: 0;
+      text-align: left;
+      border-collapse: collapse;
+      margin: 20px 0 !important;
+      border: 1px solid #000;
+    }
+    #listing_table th {
+      font-weight: bold;
+      padding: 4px;
+      font-size: 13px;
+    }
+    #listing_table td {
+      padding: 4px;
+    }
+    #listing_table th {
+      border-bottom: 1px solid #000;
+      font-weight: bold;
+      background-color: #fff;
+    }
+    #listing_table td,
+    #listing_table th {
+      border-right: 1px solid #000;
+      border-top: 1px solid #000;
+      border-left: none !important;
+      border-bottom: none !important;
+    }
+    #new_totals {
+      width: 100%;
+      border-spacing: 0;
+      border-collapse: collapse;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(1) {
+      width: 15%1;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(2) {
+      width: 15%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(3) {
+      width: 30%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(4) {
+      border-top: 1px solid #000 !important;
+      width: 20%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(5) {
+      border-top: 1px solid #000 !important;
+      width: 20%;
+    }
+    #new_totals tr:last-child td:nth-child(1) {
+      border-bottom: 1px solid #000 !important;
+      border-left: 1px solid black !important;
+      border-top: 1px dotted black !important;
+    }
+    #new_totals tr:last-child td:nth-child(2) {
+      border-bottom: 1px solid #000 !important;
+      border-left: 1px dotted black !important;
+    }
+    #new_totals tr:last-child td:nth-child(3) {
+      border-bottom: 1px solid #000 !important;
+    }
+    #new_totals td:nth-last-child(1) {
+      border-left: 1px dotted black;
+      border-right: 1px solid black;
+      border-top: 1px dotted black;
+    }
+    #new_totals td:nth-last-child(2) {
+      border-left: 1px solid black;
+      border-top: 1px dotted black;
+    }
+    #new_totals td {
+      padding: 3px;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    .borderspan {
+      border-top: 1px solid black;
+    }
+    .custom_td {
+      border: 1px solid black;
+      padding: 0 !important;
+      vertical-align: bottom;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .custom_td span {
+      display: inline-block;
+      width: 100%;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table id="newHead">
+          <tbody>
+            <tr>
+              <td>{%site_logo%}</td>
+              <td>
+                {%invoice_title%} Num : {%invoice_no%}
+
+                <br />
+                <br />
+                <br />
+                <br />
+                DEFINTIVE : {%DEFINTIVE%}
+              </td>
+              <td class="custom_td" style="">
+                <span style="text-decoration: underline">
+                  PURCHASE ORDER #</span
+                >
+                <br />
+                <br />
+                <br />
+                <br />
+                <span class="borderspan">{%PURCHASE ORDER%}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="seperate"></div>
+        <table id="inv_data">
+          <tbody>
+            <tr>
+              <td>DOIT</td>
+              <td>{%client_business_name%}</td>
+              <td>Phone:</td>
+              <td>{%client_mobile%}</td>
+              <td>Facture proforma #:</td>
+              <td>{%Facture proforma%}</td>
+            </tr>
+            <tr>
+              <td>Addresse:</td>
+              <td>{%le_custom_data_client_geographical_location%}</td>
+              <td>Fax:</td>
+              <td>{%le_custom_data_client_fax%}</td>
+              <td>Date:</td>
+              <td style="text-align: center !important">{%invoice_date%}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td class="addresss">{%client_full_address%}</td>
+              <td colspan="4">Email:{%client_email%}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td colspan="5">
+                RCCM: {%le_custom_data_client_rccm_registration_number%}
+                IFU:{%le_custom_data_client_ifu_tax_registration_number%} REGIME
+                D'IMPOSITION:{%le_custom_data_client_ifu_tax_registration_number%}
+                DIRECTION DES IMPOTS:{%le_custom_data_client_tax_office%}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="seperate"></div>
+        <table id="customs">
+          <tr>
+            <td style="width: 20%">
+              <b style="text-decoration: underline">COTATION POUR:</b>
+            </td>
+            <td style="width: 40%"></td>
+            <td colspan="3" class="bordered">
+              <b style="color: #00b050; font-weight: bold; font-size: 14px"
+                >Offer terms & Conditions</b
+              >
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td class="bordered"><b>Incoterm</b></td>
+            <td class="bordered" colspan="2">{%Incoterm%}</td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td class="bordered"><b>Lieu Incoterm</b></td>
+            <td class="bordered" colspan="2">{%Lieu Incoterm%}</td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td class="bordered" style="width: 20%"><b>Disponibilité</b></td>
+            <td class="bordered" style="width: 8%">Route</td>
+            <td class="bordered" style="width: 12%">{%Disponibilité%}</td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td class="bordered"><b>Délai de livraison en Jours</b></td>
+            <td class="bordered" colspan="2">
+              {%Délai de livraison en Jours%}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td class="bordered"><b>Validité Offre</b></td>
+            <td class="bordered">{%Validité Offre%}</td>
+            <td class="bordered">{%due_date%}</td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td class="bordered"><b>Dévise</b></td>
+            <td class="bordered" colspan="2">{%Dévise%}</td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td class="bordered"><b>Terme de paiement</b></td>
+            <td class="bordered" colspan="2">{%Terme de paiement%}</td>
+          </tr>
+        </table>
+        <div class="seperate"></div>
+        <div id="items-list">{%items_list%}</div>
+        <table id="new_totals">
+          <tr>
+            <td
+              rowspan="100%"
+              style="text-align: center; vertical-align: baseline"
+            >
+              <strong> SALES SERVICE /</strong>
+              <br />
+              <br />
+              <br />
+              <br />
+              <img
+                src="https://sabaoth.enerpize.com/files/aa7ecafb/logos/67aca4cf5a25a_blobid1739367629699.png"
+                alt=""
+                title="Picture22.png"
+                style="width: 80%; margin: 0 10%"
+              />
+            </td>
+            <td
+              rowspan="100%"
+              style="text-align: center; vertical-align: baseline"
+            >
+              <strong> SERVICE VENTES</strong>
+              <br />
+              <img
+                src="https://sabaoth.enerpize.com/files/aa7ecafb/logos/67aca4d9ad4e1_blobid1739367640385.jpg"
+                alt=""
+                title="Picture3.jpg"
+                style="width: 80%; margin: 0 10%"
+              />
+            </td>
+            <td rowspan="100%"></td>
+            <td colspan="2">Goods Total</td>
+            <td id="Subtotal" class="removeCurr">0</td>
+          </tr>
+          <tr>
+            <td colspan="2">Freight Value</td>
+            <td id="Transport" class="removeCurr">0</td>
+          </tr>
+          <tr>
+            <td colspan="2">Invoice Subtotal</td>
+            <td class="removeCurr" id="subttlaftertransport"></td>
+          </tr>
+          <tr>
+            <td colspan="2">VAT Tax Rate</td>
+            <td class="removeCurr" id="taxper"></td>
+          </tr>
+          <tr>
+            <td colspan="2">Sales VAT Tax</td>
+            <td class="removeCurr" id="taxval">{%tax-total%}</td>
+          </tr>
+          <tr>
+            <td colspan="2">Invoice Subtotal Inc VAT</td>
+            <td class="removeCurr" id="ttlaftertax"></td>
+          </tr>
+          <tr>
+            <td colspan="2">BIC</td>
+            <td id="TauxBIC">0</td>
+          </tr>
+          <tr>
+            <td colspan="2">Sales BIC Tax</td>
+            <td class="removeCurr" id="ValeurBIC"></td>
+          </tr>
+          <tr>
+            <td>TOTAL TTC</td>
+            <td>USD</td>
+            <td class="removeCurr">{%invoice_total%}</td>
+          </tr>
+        </table>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function getNums(totalText2) {
+        var totalText = totalText2.trim("").replace("$", "").split(".");
+        var floatValue = 0;
+        if (
+          totalText[totalText.length - 1].length == 2 &&
+          totalText.length > 1
+        ) {
+          floatValue = parseFloat(totalText[totalText.length - 1]);
+          totalText.pop();
+        }
+        var mergedString = totalText.join("");
+        mergedString = mergedString + "." + floatValue;
+        console.log(mergedString);
+        var total = parseFloat(mergedString.replace(/,/g, ""));
+        console.log(total);
+        return total;
+      }
+      function hundleTtls() {
+        var allRows = document.querySelectorAll("#listing_table tbody tr");
+        var subtotal = 0;
+        for (var i = 0; i < allRows.length; i++) {
+          var price = allRows[i].cells[4].innerText;
+          var QTY = allRows[i].cells[5].innerText;
+          if (price.trim("") == "") {
+            price = 0;
+          } else {
+            price = parseFloat(price.replace(/,/g, ""));
+          }
+          if (QTY.trim("") == "") {
+            QTY = 0;
+          } else {
+            QTY = parseFloat(QTY.replace(/,/g, ""));
+          }
+          var subtotal = price * QTY;
+        }
+        document.getElementById("Subtotal").innerText = subtotal;
+        var allTtls = document.querySelectorAll(".listing-table tr");
+        var Shipping = 0;
+        var Bic = 0;
+
+        // Shipping 	BIC (2%)
+        for (var i = 0; i < allTtls.length; i++) {
+          if (allTtls[i].cells[1].innerText.indexOf("BIC") != -1) {
+            console.log(allTtls[i].cells[1].innerText);
+            Bic = getNums(allTtls[i].cells[2].innerText);
+            document.getElementById("ValeurBIC").innerText = Bic;
+            document.getElementById("TauxBIC").innerText =
+              allTtls[i].cells[1].innerText.match(/\((\d+)%\)/)[1] + "%";
+          }
+          if (allTtls[i].cells[1].innerText.indexOf("Shipping") != -1) {
+            Shipping = getNums(allTtls[i].cells[2].innerText);
+            document.getElementById("Transport").innerText = Shipping;
+          }
+        }
+        document.getElementById("subttlaftertransport").innerText =
+          getNums(document.getElementById("Subtotal").innerText) +
+          getNums(document.getElementById("Transport").innerText);
+        document.getElementById("taxper").innerText =
+          allRows[0].cells[allRows[0].cells.length - 2].innerText;
+        document.getElementById("ttlaftertax").innerText =
+          getNums(document.getElementById("subttlaftertransport").innerText) +
+          getNums(document.getElementById("taxval").innerText);
+      }
+      try {
+        hundleTtls();
+      } catch (error) {
+        console.log(error);
+      }
+
+      function removeCurr() {
+        var AllremoveCurr = document.querySelectorAll(".removeCurr");
+        for (var i = 0; i < AllremoveCurr.length; i++) {
+          if (AllremoveCurr[i].innerText.trim("") == "") {
+            AllremoveCurr[i].innerText = "0";
+          }
+          AllremoveCurr[i].innerText = getNums(AllremoveCurr[i].innerText)
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      try {
+        removeCurr();
+      } catch (error) {
+        console.log(error);
+      }
+
+      function addDiscountColumn() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        if (allRows[0].cells.length == 7) {
+          var newTh = document.createElement("th");
+          newTh.innerHTML = "Remise";
+          allRows[0].insertBefore(newTh, allRows[0].cells[6]);
+          for (var i = 1; i < allRows.length; i++) {
+            var newTd = document.createElement("td");
+            newTd.innerText = "0.00";
+            allRows[i].insertBefore(newTd, allRows[i].cells[6]);
+          }
+        }
+      }
+      try {
+        addDiscountColumn();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

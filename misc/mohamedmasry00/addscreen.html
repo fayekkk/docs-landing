@@ -1,0 +1,113 @@
+<!-- <style>
+  #label_quantity,
+  .Quantity {
+    display: none !important;
+  }
+</style> -->
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      console.log("ssss");
+
+      function screenCode() {
+        $(document).on("input", ".item_col_3", function () {
+          let inputValue = $(this).val();
+          if (isNaN(inputValue) || inputValue < 0) {
+            $(this).val("0");
+          }
+        });
+        $(document).on("input", ".item_col_4", function () {
+          let inputValue = $(this).val();
+          if (isNaN(inputValue) || inputValue < 0) {
+            $(this).val("0");
+          }
+        });
+        $(document).on("change", ".item_col_3 ", function () {
+          if ($(this).val() == "") {
+            $(this).val("0");
+          }
+          addQty($(this));
+        });
+
+        $(document).on("change", ".item_col_4 ", function () {
+          if ($(this).val() == "") {
+            $(this).val("0");
+          }
+          addQty($(this));
+        });
+      }
+      function addQty(item) {
+        // console.log(item);
+        console.log($(item).val());
+        let weight = $(item).closest("tr").find(".item_col_3").val();
+        let qty = $(item).closest("tr").find(".item_col_4").val();
+        if ($(item).closest("tr").find(".unit-quantity").length > 0) {
+          if (weight && weight > 0) {
+            $(item)
+              .closest("tr")
+              .find(".unit-quantity")
+              .val(weight)
+              .trigger("change");
+          } else {
+            $(item)
+              .closest("tr")
+              .find(".unit-quantity")
+              .val(qty)
+              .trigger("change");
+          }
+        } else {
+          if (weight && weight > 0) {
+            $(item)
+              .closest("tr")
+              .find(".item-qty")
+              .val(weight)
+              .trigger("change");
+          } else {
+            $(item).closest("tr").find(".item-qty").val(qty).trigger("change");
+          }
+        }
+      }
+      let InvoiceLayout = $("#InvoiceLayout").val();
+      if (InvoiceLayout == "10") {
+        $(".unit-quantity").attr("readonly", "readonly");
+        $(".item-qty").attr("readonly", "readonly");
+        // $(".Quantity").hide();
+
+        $("#AddItem").on("click", function (e) {
+          // $(" #label_quantity").hide();
+          // $(".Quantity").hide();
+          $(".unit-quantity").attr("readonly", "readonly");
+          $(".item-qty").attr("readonly", "readonly");
+        });
+        screenCode();
+      }
+
+      $("#InvoiceLayout").on("change", function () {
+        let InvoiceLayout = $("#InvoiceLayout").val();
+        if (InvoiceLayout == "10") {
+          setTimeout(() => {
+            // $(" #label_quantity").hide();
+            $(".unit-quantity").attr("readonly", "readonly");
+            $(".item-qty").attr("readonly", "readonly");
+            // $(".Quantity").hide();
+
+            $("#AddItem").on("click", function (e) {
+              // $(" #label_quantity").hide();
+              // $(".Quantity").hide();
+              $(".unit-quantity").attr("readonly", "readonly");
+              $(".item-qty").attr("readonly", "readonly");
+            });
+            screenCode();
+          }, 250);
+        } else {
+          $(".unit-quantity").attr("readonly", false);
+          $(".item-qty").attr("readonly", false);
+          $("#AddItem").on("click", function (e) {
+            $(".unit-quantity").attr("readonly", false);
+            $(".item-qty").attr("readonly", false);
+          });
+        }
+      });
+    }, 250);
+  });
+</script>

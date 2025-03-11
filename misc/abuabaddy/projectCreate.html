@@ -1,0 +1,119 @@
+<script>
+  $(document).ready(function () {
+    // Required client
+    $("#client_id").attr("required", true);
+    $(".form-row div:nth-child(5) div label")
+      .eq(0)
+      .append(`<span class="required">*</span>`);
+    function main() {
+      //   Get product Data
+
+      $("[id$='--project_item_name']").on("change", async function () {
+        const currentValue = $(this).val();
+        let isExsist = false;
+        $("[id$='--project_item_name']")
+          .not($(this))
+          .each(function () {
+            const value = $(this).val();
+            console.log(value);
+            console.log(currentValue);
+            if (value == currentValue) {
+              isExsist = true;
+            }
+            console.log(isExsist);
+          });
+        console.log({ isExsist: isExsist });
+
+        if (isExsist && currentValue) {
+          alert("تم إختيار هذا البند مسبقاً .. برجاء إختيار بند أخر");
+          $(this).val("").trigger("change");
+        } else if (currentValue) {
+          let ItemId = $(this).val();
+          try {
+            const response = await fetch(`/v2/api/entity/product/${ItemId}/1`, {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            });
+
+            const data = await response.json();
+            console.log("Response:", data);
+            // Item Number
+            $(this)
+              .closest("tr")
+              .find("[id$='--ttl_price']")
+              .val(data.unit_price);
+            // Unit
+            $(this)
+              .closest("tr")
+              .find("[id$='--description2']")
+              .val(data.description);
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        }
+      });
+    
+      function validate(qty, price, ttl) {
+        $(document).on("input", `${qty},${price}`, function () {
+          let qryVal = !isNaN(parseFloat($(this).closest("tr").find(qty).val()))
+            ? parseFloat($(this).closest("tr").find(qty).val())
+            : 0;
+          let priceVal = !isNaN(
+            parseFloat($(this).closest("tr").find(price).val())
+          )
+            ? parseFloat($(this).closest("tr").find(price).val())
+            : 0;
+          let subttl = priceVal * qryVal;
+          $(this).closest("tr").find(ttl).val(subttl).change();
+        });
+      }
+      validate(
+        "[id$='--quantity']",
+        "[id$='--ttl_price']",
+        "[id$='--item_ttl']"
+      );
+      function hundleDropdowns(dropDown, input) {
+        $(dropDown).on("change", async function () {
+          let dropdownVal = $(this).val();
+          $(this).closest("tr").find(input).val(dropdownVal);
+        });
+      }
+      function addreadonly() {
+        $("[id$='--process_percent']").attr("readonly", true);
+        $("[id$='--item_ttl']").attr("readonly", true);
+      }
+      // innercolorchoose
+      hundleDropdowns(
+        "[id$='--innercolorchoose']",
+        "[id$='--innercolorinput']"
+      );
+      hundleDropdowns(
+        "[id$='--covercolorchoose']",
+        "[id$='--covercolorinput']"
+      );
+      hundleDropdowns(
+        "[id$='--innerpaperchoose']",
+        "[id$='--innerpaperinput']"
+      );
+      hundleDropdowns(
+        "[id$='--coverpaperchoose']",
+        "[id$='--coverpaperinput']"
+      );
+      hundleDropdowns("[id$='--sizechoose']", "[id$='--sizeinput']");
+      hundleDropdowns("[id$='--covertypechoose']", "[id$='--covertypeinput']");
+      hundleDropdowns("[id$='--orderschoose']", "[id$='--ordersinput']");
+      addreadonly();
+    }
+    main();
+    $(
+      "#le_workflow-type-entity-2 > div.form-row > div.col-lg-12 > div.row > div.col-lg-12.col-md-12.col-xs-12 > div > div > div > div.card-body.p-0 > div > div > div > div > div > div.btn-group.add-row.dropdown > button"
+    ).on("click", function () {
+      setTimeout(() => {
+        main();
+      }, 200);
+    });
+  });
+</script>

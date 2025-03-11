@@ -1,0 +1,688 @@
+<style>
+  div[aria-label="item-actions-group"] {
+    display: none;
+  }
+  .main-area {
+    display: none;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    $(".main-area").attr("style", "display:flex");
+    var divElement = $('div[aria-label="item-actions-group"]');
+
+    var clientId;
+    async function fetchStafftData() {
+      try {
+        const response = await fetch(
+          `/v2/api/entity/staff/${USER.staff_id}/1`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const data = await response.json();
+        console.log("Response:", data);
+        return data;
+      } catch (error) {
+        console.error("Error:", error);
+        return null;
+      }
+    }
+
+    let extraId = parseInt(window.location.href.split("/")[7]);
+
+    fetch(`/v2/api/entity/le_deliveryrecipt/${extraId}/1`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) =>
+        response.json().then(async (res) => {
+          console.log(res);
+          clientId = res.client_project1;
+          // discountvalue dicsountvalue2
+          let discpercent = 0;
+          let discAmount = 0;
+          if (res.discountvalue == "نسبة مئوية") {
+            discpercent = res.dicsountvalue2 ? res.dicsountvalue2 : 0;
+          } else {
+            discAmount = res.dicsountvalue2 ? res.dicsountvalue2 : 0;
+          }
+          var invoiceId = res.inv_id;
+          if (invoiceId) {
+            $.get(`/v2/api/entity/invoice/${invoiceId}/1`).then((data) => {
+              console.log(data);
+              const invNo = data.no;
+              $("#item-nav-tabs-responsive").append(`<li class="nav-item">
+                      <a class="nav-link " id="sales-inv-tab" data-toggle="tab" href="#sales-inv" role="tab" aria-controls="sales-inv" aria-selected="true">فواتير المبيعات</a>
+                      </li>`);
+              $("#item-nav-tabs-content-responsive")
+                .append(`<div name="sales-inv" id="sales-inv" class="tab-pane p-3" role="tabpanel" aria-labelledby="sales-inv-tab">
+                                  <div class="panel">
+                                      <div class="panel-head">
+                                          <h3>فواتير المبيعات</h3>
+                                      </div>
+                                  </div>
+                                  <div class="p-3" id="sales-inv-content">
+                                      <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12">
+                                          <div class="mb-4">
+                                            <table>
+                                              <tr>
+                                                  <td><a href="/owner/invoices/view/${invoiceId}" target="_blank">فاتورة رقم ${invNo}</a></td>
+                                              </tr>
+                                          </table>
+                                          </div>
+                                      </div>
+                                      </div>
+                                  </div></div>`);
+            });
+          }
+          console.log(invoiceId);
+          if (USER.staff_id != 0) {
+            const staffData = await fetchStafftData();
+          } else {
+            staffData = null;
+          }
+          function showButtons() {
+            $.get(`/v2/api/entity/le_projects_settings/1/1`).then((data) => {
+              console.log(data);
+              const users = data.extra_confirmation_perm;
+              console.log(users);
+
+              if (
+                (res.status == "مسودة" && users.includes(USER.staff_id)) ||
+                (res.status == "مسودة" && USER.staff_id == 0)
+              ) {
+                console.log("لم يعتمد");
+                console.log("user included");
+                console.log(res.status);
+                $("#details > div > div.p-3").prepend(
+                  `<button type="button" id="confirm-ext" class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">  إعتماد الإذن  </button>`
+                );
+                $(".main-area").show();
+              } else if (
+                (res.status == "تم الإعتماد" &&
+                  users.includes(USER.staff_id)) ||
+                (res.status == "تم الإعتماد" && USER.staff_id == 0)
+              ) {
+                console.log("تحويل إلى فاتورة");
+                $("#details > div > div.p-3").prepend(
+                  `<button type="button" id="add-inv" class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">تحويل إلى فاتورة <i class="list-icon mdi mdi-receipt" style="font-size: 25px;"></i> </button>`
+                );
+                $(".main-area").show();
+              } else if (
+                (res.status == null && users.includes(USER.staff_id)) ||
+                (res.status == "" && USER.staff_id == 0)
+              ) {
+                $(".main-area").show();
+              }
+
+              if (res.status != "مرتجع" && res.status != "مسودة") {
+                $('[aria-label="item-actions-group"] a')
+                  .first()
+                  .after(
+                    `<a href="#" class="btn btn-light" id="refund-ext">  إضافة مرتجع</a>`
+                  );
+
+                // $("#details > div > div.p-3").prepend(
+                //   `<button type="button" id="refund-ext" class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">  مرتجع   </button>`
+                // );
+                $(".main-area").show();
+              }
+            });
+          }
+
+          $.get(`/v2/api/entity/le_deliveryrecipt/${extraId}/1`).then(
+            (data) => {
+              console.log(data);
+              const status = data.status;
+              // aria-label   item-actions-group
+              if (status == "مسودة") {
+                $(".pages-head > div > div > div.col-sm-5 > div")
+                  .append(`<div class="status"><span class="status-symble-2">مسودة</span>
+                            </div>`);
+                $("body").append(
+                  "<style>.pages-head-title { display: flex; align-items: baseline; } .status-symble-2 {margin: 0 10px; background-color: gray; color: white; padding: 8px; border-radius: 3px; width: 80px; text-align: center;  font-size: 14px !important; font-weight: bold; }</style>"
+                );
+                showButtons();
+              } else if (status == "تم الفوترة") {
+                $(
+                  "#main-content > div.main-area > div > div.card.border-white.mb-3 > div.card-header.px-3.bg-faded > div.btn-group.btn-group-responsive.btn-group-sm > a:nth-child(1)"
+                ).hide();
+                $(
+                  "#main-content > div.main-area > div > div.card.border-white.mb-3 > div.card-header.px-3.bg-faded > div.btn-group.btn-group-responsive.btn-group-sm > a:nth-child(2)"
+                ).hide();
+                $(".pages-head > div > div > div.col-sm-5 > div")
+                  .append(`<div class="status"><span class="status-symble-2">تم الفوترة</span>
+                            </div>`);
+                $("body").append(
+                  "<style>.pages-head-title { display: flex; align-items: baseline; } .status-symble-2 {margin: 0 10px; background-color: #0f8f5c; color: white; padding: 8px; border-radius: 3px; width: 80px; text-align: center;  font-size: 14px !important; font-weight: bold; }</style>"
+                );
+                showButtons();
+              } else if (status == "تم الإلغاء") {
+                $(
+                  "#main-content > div.main-area > div > div.card.border-white.mb-3 > div.card-header.px-3.bg-faded > div.btn-group.btn-group-responsive.btn-group-sm > a:nth-child(1)"
+                ).hide();
+                $("#add-inv").attr("disabled", true);
+                $(".pages-head > div > div > div.col-sm-5 > div")
+                  .append(`<div class="status"><span class="status-symble">ملغي</span>
+                            </div>`);
+                $("body").append(
+                  "<style>.pages-head-title { display: flex; align-items: baseline; } .status-symble { margin: 0 10px; background-color: darkred; color: white; padding: 8px; border-radius: 3px; width: 55px; text-align: center; font-size: 14px !important; font-weight: bold; }</style>"
+                );
+                showButtons();
+              } else if (status == "تم الإعتماد") {
+                $(
+                  "#main-content > div.main-area > div > div.card.border-white.mb-3 > div.card-header.px-3.bg-faded > div.btn-group.btn-group-responsive.btn-group-sm > a:nth-child(1)"
+                ).hide();
+                $(
+                  "#main-content > div.main-area > div > div.card.border-white.mb-3 > div.card-header.px-3.bg-faded > div.btn-group.btn-group-responsive.btn-group-sm > a:nth-child(2)"
+                ).hide();
+                $(".pages-head > div > div > div.col-sm-5 > div")
+                  .append(`<div class="status"><span class="status-symble">معتمد</span>
+                            </div>`);
+                $("body").append(
+                  "<style>.pages-head-title { display: flex; align-items: baseline; } .status-symble { margin: 0 10px; background-color: #1877f2; color: white; padding: 8px; border-radius: 3px; width: 55px; text-align: center; font-size: 14px !important; font-weight: bold; }</style>"
+                );
+                showButtons();
+              } else if (status == "مرتجع") {
+                $(
+                  "#main-content > div.main-area > div > div.card.border-white.mb-3 > div.card-header.px-3.bg-faded > div.btn-group.btn-group-responsive.btn-group-sm > a:nth-child(1)"
+                ).hide();
+                $(
+                  "#main-content > div.main-area > div > div.card.border-white.mb-3 > div.card-header.px-3.bg-faded > div.btn-group.btn-group-responsive.btn-group-sm > a:nth-child(2)"
+                ).hide();
+                $(".pages-head > div > div > div.col-sm-5 > div")
+                  .append(`<div class="status"><span class="status-symble">مرتجع</span>
+                            </div>`);
+                $("body").append(
+                  "<style>.pages-head-title { display: flex; align-items: baseline; } .status-symble { margin: 0 10px; background-color: #1877f2; color: white; padding: 8px; border-radius: 3px; width: 55px; text-align: center; font-size: 14px !important; font-weight: bold; }</style>"
+                );
+                showButtons();
+              }
+
+              $(divElement).attr("style", "display: inline-flex");
+            }
+          );
+          function getSubsAccounts(extraction) {
+            console.log(extraction);
+            let subs = extraction["le_deliveryrecipt_le_deliveryrecipt_subs"];
+            let invoiceAccounts = {};
+            subs.forEach((sub) => {
+              const label = sub.sub_label;
+
+              invoiceAccounts[sub.sub_account] = {
+                label: label,
+                value: sub.sub_val.toFixed(2),
+              };
+            });
+
+            let extra_details = JSON.stringify({
+              invoice_accounts: invoiceAccounts,
+            });
+
+            console.log(extra_details);
+            return extra_details;
+          }
+          function getCurrentDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, "0");
+            const day = String(today.getDate()).padStart(2, "0");
+            return `${year}-${month}-${day}`;
+          }
+          $(document).on("click", "#add-inv", async function (e) {
+            const projectData = await fetchProjectData();
+            e.preventDefault();
+            console.log("click1");
+            console.log({ resForItems: res });
+            let itemsarr = [];
+            $(res["le_deliveryrecipt_le_deliveryrecipt_recipt_items"]).each(
+              function (index, item) {
+                let extractItem = item;
+                // Get productIs
+                const selectedOption = projectData.filter(function (item) {
+                  console.log({
+                    Mapitem:
+                      item[
+                        `le_custom_data_le_workflow-type-entity-2_project_items_project_item_name`
+                      ].name,
+                  });
+                  console.log({ extitem: extractItem.single_line_field });
+
+                  return (
+                    item[
+                      `le_custom_data_le_workflow-type-entity-2_project_items_project_item_name`
+                    ].name == extractItem.single_line_field
+                  );
+                });
+
+                console.log({ item: item });
+                var quantity = item.curr_process_percent
+                  ? item.curr_process_percent
+                  : 0;
+                itemsarr.push({
+                  product_id: selectedOption[0].id,
+                  item: item.single_line_field,
+                  description: item.innercolorinput,
+                  unit_price: item.ttl_price,
+                  quantity: quantity,
+                  col_3: "",
+                  col_4: "",
+                  col_5: "",
+                  tax1: item.taxes,
+                  tax2: 0,
+                });
+              }
+            );
+
+            let body = {
+              Invoice: {
+                subscription_id: "",
+                store_id: 1,
+                po_number: 26,
+                client_id: clientId,
+                client_email: "",
+                client_country_code: "SAR",
+                draft: "1",
+                follow_up_status: null,
+                work_order_id: res.reference_id,
+                staff_id: 0,
+                name: "",
+                is_offline: true,
+                currency_code: "SAR",
+                date: getCurrentDate(),
+                discount: 0,
+                discount_amount: 0,
+                deposit: 0,
+                deposit_type: 0,
+                discount_amount: "0",
+                notes: "",
+                html_notes: "",
+                invoice_layout_id: "5",
+                estimate_id: 0,
+                shipping_options: "",
+                shipping_amount: null,
+                follow_up_status: null,
+                requisition_delivery_status: null,
+                pos_shift_id: null,
+              },
+              InvoiceItem: itemsarr,
+              InvoiceCustomField: [],
+            };
+            console.log({ body: body });
+            console.log(JSON.stringify(body, null, 2));
+            fetch(`/api2/invoices`, {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(body),
+            })
+              .then((res) => res.json())
+              .then((response) => {
+                console.log(response);
+                // update the invoiceing status
+                fetch(`/v2/api/entity/le_deliveryrecipt/${extraId}/fields`, {
+                  method: "POST",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    status: "تم الفوترة",
+                    inv_id: response.id,
+                  }),
+                }).then((response) => {
+                  response
+                    .json()
+                    .then((res) => {
+                      console.log("Success:", res);
+                      // location.reload();
+                    })
+                    .catch((error) => {
+                      console.error("Error:", error);
+                    });
+                });
+                setTimeout(() => {
+                  // location.href = `/owner/invoices/edit/${response.id}?extraction_id=${extraId}`;
+                }, 1000);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+        
+          $(document).on("click", "#confirm-ext", function (e) {
+            e.preventDefault();
+            console.log("click2");
+            fetch(`/v2/api/entity/le_deliveryrecipt/${extraId}`, {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }).then((response) => {
+              response
+                .json()
+                .then((res) => {
+                  uptadeprojectdata(res, extraId);
+
+                  console.log("Success:", res);
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            });
+          });
+          $(document).on("click", "#refund-ext", function (e) {
+            e.preventDefault();
+            console.log("click2");
+            fetch(`/v2/api/entity/le_deliveryrecipt/${extraId}`, {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }).then((response) => {
+              response
+                .json()
+                .then((res) => {
+                  uptadeprojectdataonrefund(res, extraId);
+
+                  console.log("Success:", res);
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            });
+          });
+          function parsetoarray(returnedData) {
+            let parsedData;
+            try {
+              parsedData = JSON.parse(returnedData);
+            } catch (e) {
+              parsedData = returnedData;
+            }
+            let dataArray;
+            if (Array.isArray(parsedData)) {
+              dataArray = parsedData;
+            } else if (typeof parsedData === "object" && parsedData !== null) {
+              dataArray = Object.values(parsedData);
+            } else {
+              dataArray = [parsedData];
+            }
+            return dataArray;
+          }
+          async function fetchProjectData() {
+            let projectId = parseInt(
+              $(".breadcrumb-item").eq(1).find("a").attr("href").split("/")[6]
+            );
+
+            try {
+              const response = await fetch(
+                `/v2/api/entity/le_workflow-type-entity-2/${projectId}/4`,
+                {
+                  method: "GET",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                }
+              );
+
+              const data = await response.json();
+              console.log("Response:", data);
+              ProjectItems =
+                data["le_workflow-type-entity-2_custom_data"][
+                  `le_custom_data_le_workflow-type-entity-2_le_custom_data_le_workflow-type-entity-2_project_items`
+                ];
+              return ProjectItems;
+            } catch (error) {
+              console.error("Error:", error);
+              return null;
+            }
+          }
+
+          //   Start of Method of update project0
+          async function uptadeprojectdata(formDataObjtosend, extraId) {
+            console.log("startofUpdating");
+            console.log({ formDataObjtosend: formDataObjtosend });
+            console.log({ extraId: extraId });
+            const projectData = await fetchProjectData();
+            console.log({ projectData: projectData });
+
+            // select all selectors and think F***ing better
+            // extraction-select
+            let counter = 0;
+
+            $(
+              formDataObjtosend[
+                "le_deliveryrecipt_le_deliveryrecipt_recipt_items"
+              ]
+            ).each(function (index, extItem) {
+              let extractItem = extItem;
+              console.log({ extractItem: extractItem });
+
+              const selectedOption = projectData.filter(function (item) {
+                console.log({
+                  Mapitem:
+                    item[
+                      `le_custom_data_le_workflow-type-entity-2_project_items_project_item_name`
+                    ].name,
+                });
+                console.log({ extitem: extractItem.single_line_field });
+
+                return (
+                  item[
+                    `le_custom_data_le_workflow-type-entity-2_project_items_project_item_name`
+                  ].name == extractItem.single_line_field
+                );
+              });
+              console.log(selectedOption);
+
+              console.log(formDataObjtosend);
+              let formDataObjtosendArr = parsetoarray(
+                formDataObjtosend[
+                  "le_deliveryrecipt_le_deliveryrecipt_recipt_items"
+                ]
+              );
+
+              let current_process1 = 0;
+              let prev_process1 = 0;
+
+              if (formDataObjtosendArr[counter].curr_process_percent) {
+                current_process1 =
+                  formDataObjtosendArr[counter].curr_process_percent;
+              }
+              if (projectData[0].process_percent) {
+                prev_process1 = projectData[0].process_percent;
+              }
+              let newProcess =
+                parseFloat(current_process1) + parseFloat(prev_process1);
+
+              let itemId = selectedOption[0].id;
+              console.log({ newProcess: newProcess });
+              console.log({ itemId: itemId });
+
+              if (itemId) {
+                fetch(
+                  `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${itemId}/fields`,
+                  {
+                    method: "POST",
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      process_percent: newProcess,
+                    }),
+                  }
+                ).then((response) => {
+                  response
+                    .json()
+                    .then((res) => {
+                      console.log("Success:", res);
+                      fetch(
+                        `/v2/api/entity/le_deliveryrecipt/${extraId}/fields`,
+                        {
+                          method: "POST",
+                          headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            confirmation: USER.staff_id,
+                            status: "تم الإعتماد",
+                          }),
+                        }
+                      ).then((response) => {
+                        response
+                          .json()
+                          .then((res) => {
+                            console.log("Success:", res);
+                            location.reload();
+                          })
+                          .catch((error) => {
+                            console.error("Error:", error);
+                          });
+                      });
+                    })
+                    .catch((error) => {
+                      console.error("Error:", error);
+                    });
+                });
+              }
+              counter++;
+            });
+          }
+          //   End of Method of update project
+          //   Start of Method of update project on refund
+          async function uptadeprojectdataonrefund(formDataObjtosend, extraId) {
+            console.log("startofUpdating");
+            console.log({ formDataObjtosend: formDataObjtosend });
+            console.log({ extraId: extraId });
+            const projectData = await fetchProjectData();
+            console.log({ projectData: projectData });
+
+            // select all selectors and think F***ing better
+            // extraction-select
+            let counter = 0;
+
+            $(
+              formDataObjtosend[
+                "le_deliveryrecipt_le_deliveryrecipt_recipt_items"
+              ]
+            ).each(function (index, extItem) {
+              let extractItem = extItem;
+              console.log({ extractItem: extractItem });
+
+              const selectedOption = projectData.filter(function (item) {
+                console.log({
+                  Mapitem:
+                    item[
+                      `le_custom_data_le_workflow-type-entity-2_project_items_project_item_name`
+                    ].name,
+                });
+                console.log({ extitem: extractItem.single_line_field });
+
+                return (
+                  item[
+                    `le_custom_data_le_workflow-type-entity-2_project_items_project_item_name`
+                  ].name == extractItem.single_line_field
+                );
+              });
+              console.log(selectedOption);
+
+              console.log(formDataObjtosend);
+              let formDataObjtosendArr = parsetoarray(
+                formDataObjtosend[
+                  "le_deliveryrecipt_le_deliveryrecipt_recipt_items"
+                ]
+              );
+
+              let current_process1 = 0;
+              let prev_process1 = 0;
+
+              if (formDataObjtosendArr[counter].curr_process_percent) {
+                current_process1 =
+                  formDataObjtosendArr[counter].curr_process_percent;
+              }
+              if (projectData[0].process_percent) {
+                prev_process1 = projectData[0].process_percent;
+              }
+              let newProcess =
+                parseFloat(prev_process1) - parseFloat(current_process1);
+
+              let itemId = selectedOption[0].id;
+              console.log({ newProcess: newProcess });
+              console.log({ itemId: itemId });
+
+              if (itemId) {
+                fetch(
+                  `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${itemId}/fields`,
+                  {
+                    method: "POST",
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      process_percent: newProcess,
+                    }),
+                  }
+                ).then((response) => {
+                  response
+                    .json()
+                    .then((res) => {
+                      console.log("Success:", res);
+                      fetch(
+                        `/v2/api/entity/le_deliveryrecipt/${extraId}/fields`,
+                        {
+                          method: "POST",
+                          headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            confirmation: USER.staff_id,
+                            status: "مرتجع",
+                          }),
+                        }
+                      ).then((response) => {
+                        response
+                          .json()
+                          .then((res) => {
+                            console.log("Success:", res);
+                            location.reload();
+                          })
+                          .catch((error) => {
+                            console.error("Error:", error);
+                          });
+                      });
+                    })
+                    .catch((error) => {
+                      console.error("Error:", error);
+                    });
+                });
+              }
+              counter++;
+            });
+          }
+          //   End of Method of update project on Refund
+        })
+      )
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+</script>

@@ -1,0 +1,530 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.cdnfonts.com/css/frutiger-lt-arabic"
+    rel="stylesheet"
+  />
+
+  <style type="text/css">
+    @import url("https://fonts.cdnfonts.com/css/frutiger-lt-arabic");
+    @import url("font_family@https://daftra-clients-data.s3.us-east-2.amazonaws.com/files/d555cf08/implementer_studio_file/6f47b636-3675-44a1-a37a-a64fb0d2ab78.?response-content-disposition=attachment%3B%20filename%3D%22alfont_com_AlFont_com_Frutiger-LT-Arabic-65-Bold-1.ttf%22&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDoaCXVzLWVhc3QtMiJHMEUCIAx7HtkApcKbrrnETcgEcUE2c%2BzrtimvB2MjC9LfrQmdAiEAxI9Huxrt3bkA5Mtd4crQWvPjfAGl4g%2FotL0TtnqXIDcqvQUIRBAEGgw1MDE5MTY3NzkzNTUiDDTLIamBSAyM%2F4IdkiqaBUoQYabiUpcGG144tIXJj4KzCIxKT0ZljcYwduJ5JlLJ7PxANeSiek5xlySEwtPeHbAbvDyWSUp3Czv5Gnl77ihnQQNbiZyWoeUjwBJ8i%2BqAKQADujXiJim42dj24ZH1oG6VeS3Wv72g%2F7XemSBcXzFI2XacyOoTJEyaC378%2BfLzAKmbTvRNUsFmNGvJUjW0OlFuMA7Hb%2BsMKv1mQZvEq3ZG2l9jlIBtG6BnzUgwsM%2FV%2BQS7g4ZroU84hToYANM44GeCqKRO%2BvdU9XUBJIhMMbNPgvQp3u%2FVpmXzFkUHiQfXX0ojn2XDiAimia2hOsQjbPtflBhM7J2YS%2Fx11Gi6pWRv1CNj97DQOgWq4%2FatutaOfO4VUUhiwbZHDN7RBpOHq3Is%2BBeuGd2LeyELPIa92gtNNCcgtyQF1UyvPyO1lUmIygkF6qs3wnJVENW4kfANXp7tVGCr2pqg%2BSvdlnIGo8Rq8jqMiS6H56zpNTNXjHXsdIGyKpyNObYPnG2xQQd1ZB82bCCDpLs4Gps55hSEwKbiQNJtJ0Jo3xJSgkp%2BnHO2B6H6HNnm8hrJkK6HZYtSmL0fKv6MBDi%2B5CgKE%2Fh1Ujf%2FWcLV1KSQliUBWz8crpvOnimjAmw%2F%2Fj7uFEbJOtSlTPRTBghUZfifAIuXxNg%2FQmCn9VE9HXY0CFocet0rrf7t3qNn%2B2LvjQ7yp3j8Ctg4gwR1WMRDn8YNJiz3xeDkmIXjEKQe3JrokXN11VMNq86RRJlwEzc3ibAYB%2BWYVZLg5JlyV%2FZ2MXqQNMJGAR1hHtbcRDiMXOw5a1tYHPpiVW2GWHpMhXMiabx%2B4du9nzTYNSFQr3ajwf%2BWL0JvysrjO%2Fr%2BHxZuHO9vA8kpBcz1WaX81FnjXwwBI4FyLjDtuYy2BjqxAV00UjvA1kWW69zikGtgSDwliTKS90snlKbygpQvVWmFRJljj4RRURdbK5a2GK86QuAtMMA1Y0r59s1KDh2U2c9Zkx%2BxuoqooNUVBqAU8cOeS4H2VHCp9meYziblJj8tGtUjOQGfY1zwjPx4gPz3wKl6u0LwB8YgaMkek3y1TuDDH1pXJdSOC67G7d3PgkoPxDr6znJ8ragLCS0y1%2Bdxkdc5WJOzS95B0lg3A1Zw9pcOBg%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAXJXESINNQGUBLQ4Z%2F20240819%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20240819T111051Z&X-Amz-SignedHeaders=host&X-Amz-Expires=899&X-Amz-Signature=d7204535bac79bcab7caf520a4d464b5617b1c2fc6a98eb112147a7b497cba64");
+
+    * {
+      margin: 0;
+      padding: 0;
+      /* font-family: "Frutiger LT Arabic", "Cairo", "Tajawal" !important; */
+      box-sizing: border-box;
+    }
+
+    body {
+      direction: rtl;
+      text-align: right;
+      font-size: 12px;
+      /* font-family: "Frutiger LT Arabic", "Cairo", "Tajawal" !important; */
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: transparent;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 10px;
+      padding: 15px 0;
+    }
+
+    .invoice-address {
+      border-top: 1px solid #d0d0d0;
+      margin: 15px 0;
+      margin-top: 10px;
+      padding-top: 10px;
+    }
+
+    bold_title {
+      font-weight: bold;
+    }
+
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .listing-table th {
+      background-color: transparent;
+      font-weight: bold;
+      text-align: right;
+      padding: 6px 4px;
+    }
+
+    .listing-table td {
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+
+    .total-row {
+      background-color: transparent;
+      font-weight: bold;
+    }
+
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+
+    .notes-block {
+      margin: 30px 0 0 0;
+      padding: 0 15px;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    #business_info {
+      line-height: 1.4;
+      color: #575656;
+    }
+    #listing_table {
+      direction: rtl !important;
+    }
+    #listing_table th:last-child,
+    #listing_table td:last-child {
+      min-width: 125px;
+    }
+
+    #listing_table th:nth-last-child(2) {
+      width: 60px;
+    }
+
+    #listing_table th:nth-last-child(3) {
+      width: 50px;
+    }
+    #discount-cell,
+    .discount-col {
+      width: 50px !important;
+    }
+    #label_unit_price {
+      width: 68px;
+      text-align: center;
+    }
+    #label_quantity {
+      width: 50px;
+    }
+
+    /* #label_field3,
+    #label_field4 {
+        width: 50px;
+    } */
+
+    #items-list > table:nth-child(2) tr td:last-child {
+      text-align: right !important;
+    }
+
+    #listing_table th,
+    #listing_table td {
+      text-align: center;
+      color: #575656;
+    }
+
+    /* th#label_field5,
+    #listing_table td:nth-child(5) {
+      display: none;
+    } */
+    .qr-code img {
+      width: 70%;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .sellerInformation,
+    .buyerInformation {
+      color: #575656;
+      direction: ltr;
+      text-align: left;
+    }
+
+    .sellerInformation tr td,
+    .buyerInformation tr td {
+      padding: 5px;
+      border-right: 1px solid #000;
+    }
+
+    #items-list table:nth-child(2) {
+      padding-top: 15px;
+      direction: ltr;
+    }
+
+    #items-list table:nth-child(2) tr td:first-child {
+      display: none;
+      width: 60%;
+    }
+
+    #items-list table:nth-child(2) tr td {
+      border-bottom: none !important;
+      background: transparent !important;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: left !important;
+    }
+
+    .total-table {
+      width: 100%;
+      padding: 5px;
+      color: #575656;
+    }
+
+    .total-table td {
+      padding: 5px;
+    }
+
+    .inv-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .info-td {
+      vertical-align: top !important;
+      white-space: normal;
+    }
+
+    .info-table td:first-child,
+    .info-table td:nth-child(2) {
+      width: 210px;
+    }
+
+    .info-table td:nth-child(3) {
+      width: 150px;
+    }
+
+    .info-table td:nth-child(4) {
+      width: 150px;
+    }
+
+    .custom-total-table {
+      display: none;
+    }
+
+    .label_subtotal {
+      width: 110px;
+    }
+    /* Table Border */
+    #listing_table th {
+      border-left: none;
+      border-color: #000;
+      border-right: 1px solid #000;
+    }
+
+    #listing_table th:last-child {
+      border-left: 1px solid #000;
+    }
+
+    #listing_table th:nth-child(3),
+    #listing_table td:nth-child(3) {
+      text-align: right !important;
+    }
+
+    #listing_table td {
+      border-right: 1px solid #000;
+      border-bottom: 1px solid #000;
+    }
+
+    #listing_table td:last-child {
+      border-left: 1px solid #000;
+    }
+    .total-table:nth-child(2) {
+      display: none;
+    }
+
+    #listing_table th:first-child,
+    #listing_table td:first-child {
+      border-right: 0;
+    }
+    tr#shipping_options td > br:first-child {
+      display: none;
+    }
+    .custom-feilds {
+      margin: 10px 0;
+    }
+    #listing_table {
+      direction: ltr;
+      border-collapse: collapse !important;
+    }
+    #label_field5 {
+      border-right: none !important;
+    }
+    #listing_table > tbody > tr > td:last-child {
+      border-right: 1px solid #000 !important;
+    }
+    #label_field1 {
+      border-right: 1px solid #000 !important;
+      border-left: 1px solid #000 !important;
+    }
+    #listing_table > tbody > tr > td:first-child {
+      border-right: 1px solid #000 !important;
+      border-left: 1px solid #000 !important;
+    }
+    #listing_table > thead > tr > th:last-child {
+      border-left: 1px solid #000 !important;
+    }
+    #listing_table > thead > tr > th:not(#label_field1) {
+      border-left: 1px solid #000 !important;
+    }
+    .ar-text,
+    en-text {
+      display: inline-block;
+      margin: 0 10px;
+    }
+
+    div.sub-title {
+      font-size: 13px;
+      color: #000;
+    }
+
+    .addresss br {
+      display: none;
+    }
+    #invInfo {
+      width: 100%;
+      direction: rtl;
+      margin: 15px 0;
+    }
+    #invInfo td:nth-child(1) {
+      width: 80%;
+      text-align: right;
+      font-weight: bold;
+    }
+    #invInfo td:nth-child(2) {
+      width: 80%;
+      text-align: right;
+      font-weight: bold;
+    }
+    #new_totals {
+      width: 100%;
+      margin: 10px 0;
+      direction: ltr;
+    }
+    #new_totals td {
+      padding: 2px;
+    }
+    #new_totals td:nth-child(1) {
+      width: 15%;
+      text-align: right;
+      direction: rtl;
+    }
+    #new_totals td:nth-child(2) {
+      width: 15%;
+      text-align: left;
+      direction: rtl;
+    }
+    #new_totals td:nth-child(3) {
+      text-align: center;
+      width: 70%;
+    }
+    .bg {
+      z-index: -90000;
+      position: absolute;
+      left: 0px;
+      background-image: url("https://unicareco.daftra.com/files/9da6a1bd/logos/67a783886c66e_blobid1739031427349.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      width: 100%;
+      height: 19.7cm;
+    }
+    
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="bg" style="top: 0cm"></div>
+      <div class="invoice-inner">
+        <table id="invInfo">
+          <tr>
+            <td colspan="100%" style="text-align: center">
+              رقم الفاتورة الضريبية {%invoice_no%}
+            </td>
+          </tr>
+          <tr>
+            <td>السادة : {%client_business_name%}</td>
+            <td>التاريخ : {%invoice_date%}</td>
+            <td rowspan="3">{%sa_qr_code_image%}</td>
+          </tr>
+          <tr>
+            <td>الرقم الضريبي: {%client_bn1%}</td>
+            <td>الرقم المرجعى : {%ref no%}</td>
+          </tr>
+          <tr>
+            <td class="addresss">العنوان : {%client_full_address%}</td>
+            <td>رقم الهاتف : {%client_phone%}</td>
+          </tr>
+        </table>
+        <div id="items-list">{%items_list%}</div>
+        <table id="new_totals">
+          <tbody>
+            <tr>
+              <td id="subttll" class="removeCurr"></td>
+              <td>إجمالي</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td id="Discount" class="removeCurr">
+                {%discount%} // {%item-discount-total%}
+              </td>
+              <td>الحسم</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td id="subttllaftertax" class="removeCurr">
+                {%invoice_subtotal%}
+              </td>
+              <td>الصافي قبل الضريبة</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="removeCurr">{%tax-total%}</td>
+              <td>الضريبة 15%</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="removeCurr">{%invoice_total%}</td>
+              <td>صافي بعد الضريبة</td>
+              <td>{%invoice_total_spelled%} لا غير</td>
+            </tr>
+          </tbody>
+        </table>  
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div style="display: none">
+        <div id="discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function hundleTotals() {
+        var disc = document.getElementById("Discount");
+        disc.innerText =
+          parseFloat(disc.innerText.split("//")[0].replace(/,/g, "")) +
+          parseFloat(disc.innerText.split("//")[1].replace(/,/g, "")) +
+          " ر.س ";
+        var subttll = document.getElementById("subttll");
+        var subttllVAl = 0;
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 1; i < allRows.length; i++) {
+          subttllVAl =
+            subttllVAl +
+            parseFloat(allRows[i].cells[3].innerText.replace(/,/g, "")) *
+              parseFloat(allRows[i].cells[4].innerText.replace(/,/g, ""));
+        }
+        subttll.innerText =
+          subttllVAl.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " ر.س ";
+        document.querySelector("#subttllaftertax").innerText =
+          parseFloat(
+            document.querySelector("#subttll").innerText.replace(/,/g, "")
+          ) -
+          parseFloat(
+            document.getElementById("Discount").innerText.replace(/,/g, "")
+          ) +
+          " ر.س ";
+      }
+      try {
+        hundleTotals();
+      } catch (error) {
+        console.log(error);
+      }
+      function removeCurr() {
+        var allremoveCurr = document.querySelectorAll(".removeCurr");
+        for (var i = 0; i < allremoveCurr.length; i++) {
+          allremoveCurr[i].innerText = parseFloat(
+            allremoveCurr[i].innerText.replace(/,/g, "")
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      try {
+        removeCurr();
+      } catch (error) {
+        console.log(error);
+      }
+      function addserials() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var newTh = document.createElement("th");
+        newTh.innerHTML = "م ";
+        allRows[0].insertBefore(newTh, allRows[0].cells[0]);
+        for (var i = 1; i < allRows.length; i++) {
+          var newTd = document.createElement("td");
+          newTd.innerText = i;
+          allRows[i].insertBefore(newTd, allRows[i].cells[0]);
+        }
+      }
+      try {
+        // addserials();
+      } catch (error) {
+        console.log(error);
+      }
+      function repeatBg() {
+        console.log("2");
+        var invoiceHeight =
+          document.querySelector(".invoice-inner").offsetHeight;
+        console.log(invoiceHeight);
+        var pageHeight = document.querySelector(".bg").offsetHeight;
+        console.log(pageHeight);
+        var numPages = Math.ceil(invoiceHeight / pageHeight);
+        console.log(numPages);
+        var bg = document.querySelector(".bg");
+        var topDis = parseFloat(bg.style.top.replace("cm", ""));
+        for (var i = 1; i < numPages; i++) {
+          var newBg = document.createElement("div");
+          newBg.setAttribute("class", "bg");
+          topDis += 19.7;
+          newBg.style.top = topDis + "cm";
+          bg.parentNode.insertBefore(newBg, bg.nextSibling);
+          console.log("3");
+        }
+      }
+      try {
+        repeatBg();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

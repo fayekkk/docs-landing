@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.4/dist/JsBarcode.all.min.js"></script>
+  </head>
+  <body>
+    <canvas id="barcode"></canvas>
+    <script>
+      JsBarcode("#barcode", "1234567890", { format: "CODE128" });
+    </script>
+  </body>
+</html>

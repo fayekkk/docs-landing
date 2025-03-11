@@ -1,0 +1,92 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      function extractLotAndExpiry(code) {
+        let lotNumber = "";
+        let expiryDate = "";
+        let skuCode = "";
+        const lastSixDigitsRegex = /(\d{6})$/;
+        const elevenCharRegex = /([a-zA-Z][\w]{8})(\d+)/;
+        const skuRegex = /^.{2}(\d{14})/;
+        const lastSixMatches = code.match(lastSixDigitsRegex);
+        const isDataable = code.substr(-8, 2) === "17";
+        const isDataable2 = code.length > 41;
+        if (lastSixMatches && isDataable && isDataable2) {
+          expiryDate = lastSixMatches[1];
+        }
+        const elevenCharMatches = code.match(elevenCharRegex);
+        if (elevenCharMatches) {
+          lotNumber = elevenCharMatches[1];
+        }
+        let formattedExpiry = "";
+        if (expiryDate) {
+          const year = "20" + expiryDate.substr(0, 2);
+          const month = expiryDate.substr(2, 2);
+          const day = expiryDate.substr(4, 2);
+          formattedExpiry = `${year}/${month}/${day}`;
+        }
+        const skuMatches = code.match(skuRegex);
+        if (skuMatches) {
+          skuCode = skuMatches[1];
+        }
+        return {
+          lotNumber: lotNumber,
+          expiryDate: formattedExpiry,
+          skuCode: skuCode,
+        };
+      }
+      onReceiveBarCodess = function () {
+        let code = "";
+        $(document).on("keydown", function (event) {
+          if (event.keyCode === 13) {
+            console.log("done");
+            console.log(code);
+            const extractedData = extractLotAndExpiry(
+              "010880012177387410pth22b2381122020921001017300208"
+            );
+            addCodes(extractedData);
+
+            code = "";
+          } else {
+            code += event.key;
+            console.log(code);
+          }
+        });
+      };
+      onReceiveBarCodess();
+
+      function addCodes(generatedCode) {
+        console.log(generatedCode);
+        onReceiveBarCode(generatedCode.skuCode);
+        setTimeout(() => {
+          addclassess(generatedCode);
+        }, 700);
+      }
+      function addclassess(barcodeToadd) {
+        $(".item-id").each(function () {
+          if ($(this).val()) {
+            let closestRow = $(this).closest("tr").hasClass("addedbefore");
+            console.log(closestRow);
+            if (!closestRow) {
+              $(this).closest("tr").addClass("addedbefore");
+              $(this)
+                .closest("tr")
+                .addClass("BAR_" + barcodeToadd.skuCode);
+              console.log($(this).closest("tr").find(".trackingInput input"));
+              $(this)
+                .closest("tr")
+                .find(".trackingInput input")
+                .eq(0)
+                .val(barcodeToadd.lotNumber);
+              $(this)
+                .closest("tr")
+                .find(".trackingInput input")
+                .eq(1)
+                .val(barcodeToadd.expiryDate ? barcodeToadd.expiryDate : "");
+            }
+          }
+        });
+      }
+    }, 500);
+  });
+</script>

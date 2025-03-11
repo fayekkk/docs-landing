@@ -1,0 +1,432 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0;
+      padding: 20px 0;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+    #inv_info {
+      width: 100%;
+      text-align: center;
+      border-spacing: 4px;
+      font-size: 10px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    #inv_info td {
+      border-bottom: 1px solid #808080;
+      border-right: 1px solid #808080;
+      padding: 2px;
+    }
+    #inv_info tr:nth-child(2) td:nth-child(7) {
+      width: 16.3%;
+    }
+    #inv_info tr:nth-child(2) td:nth-child(6) {
+      width: 12.4%;
+    }
+    #inv_info tr:nth-child(2) td:nth-child(5) {
+      width: 28%;
+    }
+    #inv_info tr:nth-child(2) td:nth-child(4) {
+      width: 11.5%;
+    }
+    #inv_info tr:nth-child(2) td:nth-child(3) {
+      width: 9.1%;
+    }
+    #inv_info tr:nth-child(2) td:nth-child(2) {
+      width: 13.2%;
+    }
+    #inv_info tr:nth-child(2) td:nth-child(1) {
+      width: 9.1%;
+    }
+    #adresss br {
+      display: none;
+    }
+
+    #listing_table {
+      text-align: center !important;
+      border-top: none !important;
+      border-left: none !important;
+      border-bottom: none !important;
+      border-right: 1px solid black !important;
+    }
+    #listing_table th {
+      text-align: center !important;
+      background-color: #e5e5e5 !important;
+      border-top: 1px solid black !important;
+      border-left: 1px solid black !important;
+      border-bottom: 1px solid black !important;
+      border-right: none !important;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px;
+    }
+    #listing_table td {
+      text-align: center !important;
+      background-color: #fff !important;
+      border-top: none !important;
+      border-left: 1px solid black !important;
+      border-bottom: 1px solid black !important;
+      border-right: none !important;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px;
+    }
+    #listing_table th:nth-child(1) {
+      width: 10.6;
+    }
+    #listing_table th:nth-child(2) {
+      width: 11.6;
+    }
+    #listing_table th:nth-child(3) {
+      width: 19.4;
+    }
+    #listing_table th:nth-child(4) {
+      width: 7.7;
+    }
+    /* #listing_table th:nth-child(5){
+        width: 9.7;
+    } */
+    #listing_table th:nth-child(6) {
+      width: 9.7;
+    }
+    #listing_table th:nth-child(7) {
+      width: 10.1%;
+    }
+    /* #listing_table th:nth-child(8){
+        width: 11.6%;
+    } */
+    #listing_table th:nth-child(9) {
+      width: 9.7%;
+    }
+
+    #listing_table th:nth-child(4),
+    #listing_table td:nth-child(4),
+    #listing_table th:nth-child(8),
+    #listing_table td:nth-child(8),
+    #listing_table th:nth-child(10),
+    #listing_table td:nth-child(10) {
+      display: none;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #new_totals {
+      width: 100%;
+      border-spacing: 2px 10px;
+      text-align: center;
+      font-size: 10px;
+      font-weight: bold;
+      direction: rtl;
+      margin: 15px 0;
+    }
+    #new_totals td {
+      border-bottom: 1px solid #808080;
+      border-right: 1px solid #808080;
+      padding: 2px;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(1) {
+      width: 15.8%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(2) {
+      width: 12.7;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(3) {
+      width: 5.1%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(4) {
+      width: 14.2%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(5) {
+      width: 14.2%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(6) {
+      width: 6%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(7) {
+      width: 16.2%;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(8) {
+      width: 14.2%;
+    }
+    .noborders {
+      border: none !important;
+    }
+    #invoice_title {
+      font-size: 15px;
+      text-align: center;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    #signs {
+      width: 100%;
+      border-spacing: 0;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    #signs td {
+      width: 50%;
+      padding: 4px;
+    }
+    #signs td span {
+      display: inline-block;
+      text-align: center;
+      width: 100px;
+      padding-bottom: 3px;
+      border-bottom: 1px solid black;
+    }
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <div id="invoice_title">{%invoice_title%}</div>
+        <table id="inv_info">
+          <tbody>
+            <tr>
+              <td colspan="3">رقم الفاتورة : {%invoice_no%}</td>
+              <td>اسم العميل :</td>
+              <td>{%client_business_name%}</td>
+              <td>الرقم الضريبى:</td>
+              <td>{%client_bn1%}</td>
+            </tr>
+            <tr>
+              <td>التاريخ:</td>
+              <td>{%invoice_date%}</td>
+              <td>{%created_time%}</td>
+              <td>جوال العميل :</td>
+              <td>{%client_mobile%}</td>
+              <td>طريقة الدفع:</td>
+              <td>{%custom_طريقة_الدفع_field_11%}</td>
+            </tr>
+            <tr>
+              <td>العنوان</td>
+              <td colspan="4" id="adresss">{%client_full_address%}</td>
+              <td>البائع:</td>
+              <td>{%staff_member_name%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="items-list">{%items_list%}</div>
+        <table id="new_totals">
+          <tbody>
+            <tr>
+              <td>الإجمالي قبل الضريبة</td>
+              <td id="subtotalbefdisc"></td>
+              <td class="noborders"></td>
+              <td>الخصم</td>
+              <td id="discAmount"></td>
+              <td class="noborders"></td>
+              <td>الصافي قبل الضريبة :</td>
+              <td class="removeCurr">{%invoice_subtotal%}</td>
+            </tr>
+            <tr>
+              <td colspan="6" class="noborders"></td>
+              <td>الضريبة 15% :</td>
+              <td class="removeCurr">{%tax-total%}</td>
+            </tr>
+            <tr>
+              <td>المبلغ كتابة:</td>
+              <td colspan="5">{%invoice_total_spelled%}</td>
+              <td>صافي الفاتورة شامل الضريبة:</td>
+              <td class="removeCurr">{%invoice_total%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="signs">
+          <tr>
+            <td><span>توقيع البائع</span></td>
+            <td><span>توقيع المستلم</span></td>
+          </tr>
+        </table>
+        <!-- <div class="notes-block">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                <td>
+                    <div
+                    style="font-style: italic"
+                    class="editable-area"
+                    id="footer"
+                    >
+                    {%footer%}
+                    </div>
+                </td>
+                </tr>
+            </table>
+            </div> -->
+        <br />
+      </div>
+      <div style="display: none">
+        <div id="discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function SwapAll() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          if (allRows[i].cells.length == 8) {
+            var ser = allRows[i].cells[0].innerHTML;
+            var code = allRows[i].cells[1].innerHTML;
+            var name = allRows[i].cells[2].innerHTML;
+            var taxper = allRows[i].cells[3].innerHTML;
+            var cartooncount = allRows[i].cells[4].innerHTML;
+            var price = allRows[i].cells[5].innerHTML;
+            var qty = allRows[i].cells[6].innerHTML;
+            var subttl = allRows[i].cells[7].innerHTML;
+            allRows[i].cells[0].innerHTML = ser;
+            allRows[i].cells[1].innerHTML = code;
+            allRows[i].cells[2].innerHTML = name;
+            allRows[i].cells[3].innerHTML = taxper;
+            allRows[i].cells[4].innerHTML = qty;
+            allRows[i].cells[5].innerHTML = price;
+            allRows[i].cells[6].innerHTML = subttl;
+            allRows[i].cells[7].innerHTML = cartooncount;
+          } else {
+            var ser = allRows[i].cells[0].innerHTML;
+            var code = allRows[i].cells[1].innerHTML;
+            var name = allRows[i].cells[2].innerHTML;
+            var taxper = allRows[i].cells[3].innerHTML;
+            var cartooncount = allRows[i].cells[4].innerHTML;
+            var price = allRows[i].cells[5].innerHTML;
+            var qty = allRows[i].cells[6].innerHTML;
+            var discper = allRows[i].cells[7].innerHTML;
+            var subttl = allRows[i].cells[8].innerHTML;
+            allRows[i].cells[0].innerHTML = ser;
+            allRows[i].cells[1].innerHTML = code;
+            allRows[i].cells[2].innerHTML = name;
+            allRows[i].cells[3].innerHTML = taxper;
+            allRows[i].cells[4].innerHTML = qty;
+            allRows[i].cells[5].innerHTML = price;
+            allRows[i].cells[6].innerHTML = subttl;
+            allRows[i].cells[7].innerHTML = cartooncount;
+            allRows[i].cells[8].innerHTML = discper;
+          }
+        }
+      }
+      try {
+        SwapAll();
+      } catch (error) {
+        console.log(error);
+      }
+      function pricewithvat() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var newTh = document.createElement("th");
+        newTh.innerText = "الافرادى بالضريبة";
+        allRows[0].insertBefore(newTh, allRows[0].cells[6]);
+
+        for (var i = 1; i < allRows.length; i++) {
+          var newTd = document.createElement("td");
+          if (allRows[i].cells[3].innerText.trim() == "%") {
+            allRows[i].cells[3].innerText = "0";
+          }
+          if (allRows[i].cells[5].innerText.trim() == "") {
+            allRows[i].cells[5].innerText = "0";
+          }
+          newTd.innerText = (
+            parseFloat(allRows[i].cells[5].innerText.replace(/,/g, "")) +
+            parseFloat(allRows[i].cells[5].innerText.replace(/,/g, "")) *
+              (parseFloat(allRows[i].cells[3].innerText.replace(/,/g, "")) /
+                100)
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          allRows[i].insertBefore(newTd, allRows[i].cells[6]);
+          if (allRows[i].cells[8].innerText.trim() == "") {
+            allRows[i].cells[8].innerText = "0";
+          }
+          if (
+            parseFloat(allRows[i].cells[8].innerText.replace(/,/g, "")) != 0
+          ) {
+            allRows[i].cells[8].innerText = (
+              parseFloat(allRows[i].cells[4].innerText.replace(/,/g, "")) /
+              parseFloat(allRows[i].cells[8].innerText.replace(/,/g, ""))
+            )
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          } else {
+            allRows[i].cells[8].innerText = "-";
+          }
+        }
+      }
+      try {
+        pricewithvat();
+      } catch (error) {
+        console.log(error);
+      }
+      function hundleTotals() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var subtotalbefdisc = 0;
+        for (var i = 1; i < allRows.length; i++) {
+          subtotalbefdisc =
+            subtotalbefdisc +
+            parseFloat(allRows[i].cells[4].innerText.replace(/,/g, "")) *
+              parseFloat(allRows[i].cells[5].innerText.replace(/,/g, ""));
+          console.log(subtotalbefdisc);
+          console.log(allRows[i].cells[4].innerText);
+          console.log(allRows[i].cells[5].innerText);
+        }
+        document.getElementById("subtotalbefdisc").innerText = subtotalbefdisc
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        var allcurr = document.querySelectorAll(".removeCurr");
+        for (var j = 0; j < allcurr.length; j++) {
+          allcurr[j].innerText = parseFloat(
+            allcurr[j].innerText.replace(/,/g, "")
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        document.getElementById("discAmount").innerText = (
+          parseFloat(
+            document.getElementById("item-discount").innerText.replace(/,/g, "")
+          ) +
+          parseFloat(
+            document.getElementById("discount").innerText.replace(/,/g, "")
+          )
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+      try {
+        hundleTotals();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

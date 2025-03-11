@@ -1,0 +1,410 @@
+<style>
+  * {
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    font-family: arial, helvetica, sans-serif !important;
+    color: #000 !important;
+    cursor: default !important;
+  }
+  #main_con {
+    height: 27cm !important;
+    border: 1px solid #000 !important;
+    padding: 10px 15px !important;
+  }
+  #header {
+    width: 95%;
+    margin: 0 2.5% !important;
+    border-bottom: 1px solid #000 !important;
+  }
+  #header td:nth-child(1) {
+    width: 35%;
+    text-align: center;
+    font-weight: bold !important;
+  }
+  #header td:nth-child(2) {
+    width: 30%;
+  }
+  #header td:nth-child(3) {
+    width: 35%;
+    text-align: center;
+  }
+  #main_info {
+    width: 100%;
+  }
+  #main_info td:nth-child(1) {
+    width: 35%;
+  }
+  #main_info td:nth-child(2) {
+    text-align: center;
+    width: 30%;
+  }
+  #main_info td:nth-child(3) {
+    width: 35%;
+    text-align: left;
+  }
+  .boldTitle {
+    font-weight: bold;
+    font-size: 19px !important;
+  }
+  .right_side {
+    display: inline-block;
+    width: 70%;
+    float: right;
+  }
+  .left_side {
+    display: inline-block;
+    width: 30%;
+    float: left;
+  }
+  .names {
+    display: inline-block;
+    padding: 0 20px;
+    font-weight: bold;
+    font-size: 18px !important;
+  }
+  .left_side table td:nth-child(2) {
+    border: 1px solid black !important;
+    width: 50% !important;
+  }
+  .tableBorders {
+    width: 100%;
+    border-left: 1px solid black !important;
+    border-top: 1px solid black !important;
+  }
+  .tableBorders td,
+  .tableBorders th {
+    border-right: 1px solid black !important;
+    border-bottom: 1px solid black !important;
+    text-align: center !important;
+  }
+  #terms {
+    line-height: 25px;
+  }
+  #termsandsigns {
+    width: 100%;
+    direction: rtl;
+  }
+</style>
+<div id="main_con">
+  <table id="header">
+    <tbody>
+      <tr>
+        <td>مؤسسة الراقي الذهبية <br />للنقــل</td>
+        <td>
+          <img
+            src="https://ahmedfayek.daftra.com/files/48b8e1d3/logos/66cf204de5dca_blobid1724850250902.jpg"
+            alt=""
+            title="Image (6).jpeg"
+            style="width: 80%; margin: 0 10%"
+          />
+        </td>
+        <td>تلفون : 0122718000</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="display: none" id="inv_date">
+    {{Data.le_workflow-type-entity-1.start_date}}
+  </div>
+  <table id="main_info">
+    <tbody>
+      <tr>
+        <td>
+          التاريخ : {{Data.le_workflow-type-entity-1.start_date}} <br />الموافق
+          :
+          {{Data.le_workflow-type-entity-1.le_workflow-type-entity-1_custom_data.hijri_date}}
+        </td>
+        <td>
+          <span class="boldTitle">{{Data.le_workflow-type-entity-1.title}}  </span>
+          <br />رقم({{Data.le_workflow-type-entity-1.number}})
+        </td>
+        <td>أخر تحديث <br />{{Data.le_workflow-type-entity-1.modified}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div>
+    <div class="right_side">
+      إنه فى يوم <span id="dateday"></span> الموافق
+      {{Data.le_workflow-type-entity-1.le_workflow-type-entity-1_custom_data.hijri_date}}
+      هـ تم ابرام عقد توصيل بين كل من : <br /><br /><span class="names"
+        >مؤسسة الراقي الذهبية للنقل
+      </span>
+      ويشار له بـ (الطرف الأول) <br /><br /><span class="names"
+        >{{Data.le_workflow-type-entity-1.work_order_client.business_name}}</span
+      >
+      ويشار له بـ (الطرف الثانى)
+    </div>
+    <div class="left_side">
+      <table>
+        <tbody>
+          <tr>
+            <td>الإشتراك</td>
+            <td id="subttl"></td>
+          </tr>
+          <tr>
+            <td>الضريبة</td>
+            <td id="taxes"></td>
+          </tr>
+          <tr>
+            <td>الاجمالي</td>
+            <td id="totalafter"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <table id="client_more_info1">
+      <tbody>
+        <tr>
+          <td>
+            هوية رقم :
+            <span class="hide1">
+              {{Data.le_workflow-type-entity-1.work_order_client.national_id}}</span
+            >
+          </td>
+          <td>
+            تاريخ الإصدار :
+            <span class="hide2">
+              {{Data.le_workflow-type-entity-1.work_order_client.client_custom_data.datttte}}</span
+            >
+          </td>
+          <td>
+            تاريخ الإنتهاء :
+            <span class="hide3">
+              {{Data.le_workflow-type-entity-1.work_order_client.client_custom_data.date}}</span
+            >
+          </td>
+        </tr>
+        <tr>
+          <td colspan="100%">
+            العنوان : {{Data.le_workflow-type-entity-1.work_order_client.state}}
+            {{Data.le_workflow-type-entity-1.work_order_client.city}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            هاتف منزل :
+            {{Data.le_workflow-type-entity-1.work_order_client.phone1}}
+          </td>
+          <td>
+            هاتف عمل :
+            {{Data.le_workflow-type-entity-1.work_order_client.client_custom_data.work_number}}
+          </td>
+          <td>
+            هاتف جوال :
+            {{Data.le_workflow-type-entity-1.work_order_client.phone2}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="text-align: right">
+    1 - يقوم الطرف الأول بنقل الطلاب المتفق عليهم من وإلى المنزل كما هو مبين فى الجدول
+     أدناه بملبغ شهري وقدره (<span id="totalforClient"></span>) ريال سعودى
+  </div>
+  <table
+    class="mce-inline-non-editable-area mce-hide-table-options tableBorders"
+    border="1"
+    cellpadding="0"
+    cellspacing="0"
+    style="width: 100%"
+  >
+    <thead>
+      <tr>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >الإسم</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >النوع</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >مدرسة/معهد/جامعة</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >بداية الإشتراك</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >نهاية الإشتراك</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >الإتجاه</span
+          >
+        </th>
+        <th>
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >المبلغ</span
+          >
+        </th>
+        <th style="display: none">
+          <span
+            class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >الضريبة</span
+          >
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <!--% foreach({{Data.le_workflow-type-entity-1.le_workflow-type-entity-1_custom_data.le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_multiple_sub_forms}} as {{le_workflow_type_entity_5_custom_data_row}}) { %-->
+      <tr>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_5_custom_data_row.stud_name}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_5_custom_data_row.stud_type}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_5_custom_data_row.single_line_field}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_5_custom_data_row.start_date}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_5_custom_data_row.end_time}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_5_custom_data_row.direction}}</span
+          >
+        </td>
+        <td>
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_5_custom_data_row.cost}}</span
+          >
+        </td>
+        <td style="display: none">
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{le_workflow_type_entity_5_custom_data_row.vat}}</span
+          >
+        </td>
+      </tr>
+      <!--% } %-->
+    </tbody>
+  </table>
+  <div id="terms">
+    {{Data.le_workflow-type-entity-1.le_workflow-type-entity-1_custom_data.multi_lines_field}}
+  </div>
+  <div>
+    <table id="termsandsigns">
+      <tbody>
+        <tr>
+          <td style="width: 30%">
+            توقيع المؤسسة : <br /><img
+              src="https://walshri.daftra.com/files/14228533/logos/66db2ed8a04f3_blobid1725640403862.png"
+              alt=""
+              title="Image (9).jpeg"
+              style="width: 80%; margin: 0 5%"
+            />
+          </td>
+          <td style="width: 40%">
+            <img
+              src="https://ahmedfayek.daftra.com/files/48b8e1d3/logos/66cf204de5dca_blobid1724850250902.jpg"
+              alt=""
+              title="Image (6).jpeg"
+              style="width: 40%; margin: 0 30%"
+            />
+          </td>
+          <td style="width: 30%; vertical-align: sub">
+            توقيع العميل :
+            <!-- <br />{{Data.le_workflow-type-entity-1.follow_up_status_id}}  -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <script>
+    try {
+      var olddateString = document.getElementById("inv_date").innerText;
+      var dateString =
+        olddateString.split("/")[1] +
+        "/" +
+        olddateString.split("/")[0] +
+        "/" +
+        olddateString.split("/")[2];
+      var date = new Date(Date.parse(dateString));
+      var days = [
+        "الأحد",
+        "الإثنين",
+        "الثلاثاء",
+        "الأربعاء",
+        "الخميس",
+        "الجمعة",
+        "السبت",
+      ];
+
+      document.getElementById("dateday").innerText = days[date.getDay()];
+    } catch (error) {
+      console.log(error);
+    }
+    function hundleTtls() {
+      var AllRows = document.querySelectorAll(".tableBorders tr");
+      var subttl = 0;
+      var ttlTaxes = 0;
+      var total = 0;
+      for (var i = 1; i < AllRows.length; i++) {
+        // 6
+        if (AllRows[i].cells[6].innerText.trim() == "") {
+          AllRows[i].cells[6].innerText = 0;
+        }
+        subttl = subttl + parseFloat(AllRows[i].cells[6].innerText);
+        if (AllRows[i].cells[7].innerText.trim() != "بدون ضريبة") {
+          ttlTaxes =
+            ttlTaxes + parseFloat(AllRows[i].cells[6].innerText) * 0.15;
+        }
+      }
+      total = subttl + ttlTaxes;
+      document.getElementById("subttl").innerText = subttl.toFixed(2);
+      document.getElementById("taxes").innerText = ttlTaxes.toFixed(2);
+      document.getElementById("totalafter").innerText = total.toFixed(2);
+      document.getElementById("totalforClient").innerText = total.toFixed(2);
+    }
+    try {
+      hundleTtls();
+    } catch (error) {
+      console.log(error);
+    }
+    function hides() {
+      if (document.querySelector(".hide1").innerText.trim() == "") {
+        document.querySelector(".hide1").parentElement.innerText = "";
+      }
+      if (document.querySelector(".hide2").innerText.trim() == "") {
+        document.querySelector(".hide2").parentElement.innerText = "";
+      }
+      if (document.querySelector(".hide3").innerText.trim() == "") {
+        document.querySelector(".hide3").parentElement.innerText = "";
+      }
+    }
+    try {
+      hides();
+    } catch (error) {
+      console.log(error);
+    }
+  </script>
+</div>

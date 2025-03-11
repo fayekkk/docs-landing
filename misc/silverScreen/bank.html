@@ -1,0 +1,27 @@
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      const currentUrl = window.location.href;
+      const containsSubstring = currentUrl.includes(
+        "owner/entity/le_banks/list"
+      );
+      if (containsSubstring) {
+        var allRows = document.querySelectorAll(".list-table tr");
+        for (let i = 0; i < allRows.length; i++) {
+          var bbranch = allRows[i].cells[1].innerHTML;
+          var bname = allRows[i].cells[2].innerHTML;
+          var accname = allRows[i].cells[3].innerHTML;
+          var swift = allRows[i].cells[4].innerHTML;
+          var iban = allRows[i].cells[5].innerHTML;
+          var accnumber = allRows[i].cells[6].innerHTML;
+          allRows[i].cells[1].innerHTML = accname;
+          allRows[i].cells[2].innerHTML = bname;
+          allRows[i].cells[3].innerHTML = iban;
+          allRows[i].cells[4].innerHTML = accnumber;
+          allRows[i].cells[5].innerHTML = swift;
+          allRows[i].cells[6].innerHTML = bbranch;
+        }
+      }
+    }, 500);
+  });
+</script>

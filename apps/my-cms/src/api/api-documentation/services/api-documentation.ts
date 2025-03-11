@@ -1,0 +1,7 @@
+/**
+ * api-documentation service
+ */
+
+import { factories } from '@strapi/strapi';
+
+export default factories.createCoreService('api::api-documentation.api-documentation');

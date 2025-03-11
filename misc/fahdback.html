@@ -1,0 +1,19 @@
+<style>
+  #label_tax2,
+  .select-item tax2 {
+    display: none !important;
+  }
+</style>
+
+<script>
+  $(document).ready(function () {
+    setTimeout(function () {
+      let layout_id = $("#InvoiceLayout");
+
+      if (window.location.href.includes("?")) {
+        layout_id.val(11).change();
+        console.log(layout_id.val());
+      }
+    }, 100);
+  });
+</script>

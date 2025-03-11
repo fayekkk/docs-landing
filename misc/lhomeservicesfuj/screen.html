@@ -1,0 +1,66 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      function screenCode() {
+        var allrows = $("#listing_table tr");
+        allrows.each(function () {
+          var rows = $(this);
+          const calculate = (selector) => {
+            rows.find(selector).on("input", function () {
+              let val1 = rows.find(".col-3 textarea").val()
+                ? rows.find(".col-3 textarea").val()
+                : 0;
+              let val2 = rows.find(".col-4 textarea").val()
+                ? rows.find(".col-4 textarea").val()
+                : 0;
+              let sum = val1 * val2;
+              rows.find(".item-qty").val(sum.toFixed(2)).change();
+            });
+          };
+          calculate(".col-3 textarea");
+          calculate(".col-4 textarea");
+
+          const numberVals = (selector) => {
+            rows.find(selector).on("keypress", function (event) {
+              var inputValue = $(this).val();
+              var charCode = event.which ? event.which : event.keyCode;
+
+              if (
+                (charCode !== 46 || inputValue.indexOf(".") !== -1) &&
+                (charCode < 48 || charCode > 57)
+              ) {
+                event.preventDefault();
+              }
+            });
+          };
+          numberVals(".col-3 textarea");
+          numberVals(".col-4 textarea");
+        });
+      }
+      if ($("#InvoiceLayout").val() == 9) {
+        setTimeout(() => {
+          screenCode();
+          $("#AddItem").on("click", () => {
+            screenCode();
+            $("#label_quantity").hide();
+            $(".Quantity").hide();
+          });
+        }, 350);
+      }
+      $(document).on("change", "#InvoiceLayout", function () {
+        if ($("#InvoiceLayout").val() == 9) {
+          setTimeout(() => {
+            screenCode();
+            $("#label_quantity").hide();
+            $(".Quantity").hide();
+            $("#AddItem").on("click", () => {
+              $("#label_quantity").hide();
+              $(".Quantity").hide();
+              screenCode();
+            });
+          }, 350);
+        }
+      });
+    }, 500);
+  });
+</script>

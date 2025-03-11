@@ -1,0 +1,65 @@
+<style>
+  #label_quantity,
+  .Quantity {
+    display: none !important;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      console.log("ssss");
+
+      function screenCode() {
+        $(document).on("input", ".item_col_3", function () {
+          let inputValue = $(this).val();
+          if (isNaN(inputValue) || inputValue < 0) {
+            $(this).val("0");
+          }
+        });
+        $(document).on("input", ".item_col_4", function () {
+          let inputValue = $(this).val();
+          if (isNaN(inputValue) || inputValue < 0) {
+            $(this).val("0");
+          }
+        });
+        $(document).on("change", ".item_col_3 ", function () {
+          if ($(this).val() == "") {
+            $(this).val("0");
+          }
+          addQty($(this));
+        });
+
+        $(document).on("change", ".item_col_4 ", function () {
+          if ($(this).val() == "") {
+            $(this).val("0");
+          }
+          addQty($(this));
+        });
+      }
+      function addQty(item) {
+        // console.log(item);
+        console.log($(item).val());
+        let weight = $(item).closest("tr").find(".item_col_3").val();
+        let qty = $(item).closest("tr").find(".item_col_4").val();
+        if (weight && weight > 0) {
+          $(item).closest("tr").find(".item-qty").val(weight).trigger("change");
+        } else {
+          $(item).closest("tr").find(".item-qty").val(qty).trigger("change");
+        }
+      }
+      let InvoiceLayout = $("#InvoiceLayout").val();
+      if (InvoiceLayout == "10") {
+        screenCode();
+      }
+
+      $("#InvoiceLayout").on("change", function () {
+        let InvoiceLayout = $("#InvoiceLayout").val();
+        if (InvoiceLayout == "10") {
+          setTimeout(() => {
+            screenCode();
+          }, 250);
+        }
+      });
+    }, 250);
+  });
+</script>

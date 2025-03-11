@@ -1,0 +1,615 @@
+<!-- Body -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+
+    .invoice-address {
+      border-top: 3px double #555;
+      margin: 35px 0;
+      padding-top: 25px;
+    }
+
+    bold_title {
+      font-weight: bold;
+    }
+
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: left;
+      padding: 6px 4px;
+    }
+
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: left;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+
+    .total-table td {
+      border-left: 1px solid #555555;
+    }
+
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    .qr-code img {
+      width: 80px;
+    }
+
+    /* Custom Styling */
+    #bus-info,
+    #client-info,
+    #invoice-info,
+    #bank {
+      margin: 10px auto;
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+    }
+
+    #invoice-info th {
+      background-color: #9acd03;
+    }
+
+    #bus-info th,
+    #bus-info td,
+    #invoice-info th,
+    #invoice-info td,
+    #client-info th,
+    #client-info td,
+    #totals th,
+    #totals td,
+    #bank td {
+      border: 1px solid #555;
+    }
+
+    #invoice-info td {
+      text-align: center;
+    }
+
+    #bus-info th,
+    #client-info th,
+    #invoice-info th {
+      text-align: left;
+    }
+
+    #listing_table {
+      border-collapse: collapse;
+      margin: 10px auto;
+    }
+
+    #listing_table th {
+      text-align: center;
+    }
+
+    #listing_table th,
+    #listing_table td {
+      border-top: 1px solid #555;
+      border-bottom: 1px solid #555;
+      border-right: 1px solid #555;
+      width: auto;
+    }
+
+    #listing_table th:nth-child(4),
+    #listing_table td:nth-child(4) {
+      min-width: 65px;
+    }
+
+    #totals {
+      table-layout: fixed;
+      border-collapse: collapse;
+    }
+
+    #totals td:first-child {
+      border: 0;
+    }
+
+    #bank {
+      padding-left: 0;
+    }
+
+    #bank td {
+      font-weight: bold;
+    }
+
+    #bank td span {
+      font-weight: normal;
+    }
+
+    #totals tr:nth-child(4) * {
+      background-color: #e5e5e5;
+    }
+
+    /*#totals th,
+  #totals td {
+    height: 35px;
+  }*/
+
+    .listing-table:nth-child(2)
+  /*#listing_table th:nth-child(9),
+  #listing_table td:nth-child(9)*/ {
+      display: none;
+    }
+
+    .notes-block {
+      margin-top: 50px;
+    }
+
+    th,
+    td {
+      padding: 2px !important;
+    }
+
+    /*==========================*/
+
+    /* Styling Classes */
+    .center {
+      text-align: center;
+    }
+
+    .ar {
+      text-align: right !important;
+      direction: rtl !important;
+    }
+
+    /*==========================*/
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <p id="invoice_title" class="editable-area invoice-name center">
+          {%invoice_title%}
+        </p>
+        <!-- Business Info -->
+        <table width="100%" border="0" id="bus-info">
+          <tr>
+            <th>From:</th>
+            <td colspan="3">GULF HEAVY INDUSTRIES COMPANY</td>
+            <td colspan="3" class="ar">شركة الخليج للصناعات الثقيلة</td>
+            <th class="ar">من:</th>
+          </tr>
+          <tr>
+            <th>Address:</th>
+            <td colspan="3">Jubail - Third Industrial Area</td>
+            <td colspan="3" class="ar">الجبيل - المنطقة الصناعية الثالثة</td>
+            <th class="ar">العنوان:</th>
+          </tr>
+          <tr>
+            <th>Box:</th>
+            <td>342</td>
+            <th>Postal Code:</th>
+            <td>31951</td>
+            <td class="ar">31951</td>
+            <th class="ar">الرمز البريدي:</th>
+            <td class="ar">342</td>
+            <th class="ar">صندوق البريد:</th>
+          </tr>
+        </table>
+        <!-- Invoice Info -->
+        <table id="invoice-info" width="100%">
+          <tr>
+            <th colspan="3">ISSUE DATE</th>
+            <td colspan="2">{%invoice_date%}</td>
+            <th colspan="3" class="ar">تاريخ الإصدار</th>
+          </tr>
+          <tr>
+            <th colspan="3">INVOICE NUMBER</th>
+            <td colspan="2">{%invoice_no%}</td>
+            <th colspan="3" class="ar">رقم الفاتورة</th>
+          </tr>
+          <tr>
+            <th colspan="3">DUE DATE</th>
+            <td colspan="2">{%due_date%}</td>
+            <th colspan="3" class="ar">تاريخ الاستحقاق</th>
+          </tr>
+          <tr>
+            <th colspan="3">VAT NUMBER</th>
+            <td colspan="2">300597979700003</td>
+            <th colspan="3" class="ar">رقم ضريبة القيمة المضافة</th>
+          </tr>
+          <tr>
+            <th colspan="3">DELIVERY NOTE NUMBER</th>
+            <td colspan="2">{%Delivery Note No%}</td>
+            <th colspan="3" class="ar">رقم أمر التسليم</th>
+          </tr>
+        </table>
+        <!-- Client Info -->
+        <table border="0" id="client-info">
+          <tr>
+            <th colspan="2">To:</th>
+            <td colspan="2">{%client_business_name%}</td>
+            <td colspan="2" class="ar">
+              {%custom_client_business_name_ar_field_2%}
+            </td>
+            <th colspan="2" class="ar">إلى:</th>
+          </tr>
+          <tr>
+            <th colspan="2">Address:</th>
+            <td colspan="2">{%client_full_address%}</td>
+            <td colspan="2" class="ar">{%custom_client_address_ar_field_3%}</td>
+            <th colspan="2" class="ar">العنوان:</th>
+          </tr>
+          <tr>
+            <th colspan="2">VAT Number:</th>
+            <td colspan="2">{%client_bn1%}</td>
+            <td colspan="2" class="ar">{%client_bn1%}</td>
+            <th colspan="2" class="ar">رقم ضريبة القيمة المضافة:</th>
+          </tr>
+          <tr>
+            <th colspan="2">Your Reference Number PO. NO.:</th>
+            <td colspan="2">{%Reference No%}</td>
+            <td colspan="2" class="ar">{%Reference No%}</td>
+            <th colspan="2" class="ar">رقم أمر الشراء:</th>
+          </tr>
+        </table>
+        <!-- Items Table -->
+        <div id="items-list">{%items_list%}</div>
+        <!-- QR and Totals -->
+        <table width="100%">
+          <tr>
+            <td style="padding: 0 !important" width="50%" valign="top">
+              <!-- QR Code Table -->
+              <table id="qr" width="100%">
+                <tr>
+                  <td
+                    colspan="4"
+                    valign="middle"
+                    align="center"
+                    class="qr-code"
+                  >
+                    {%sa_qr_code_image%}
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td style="padding: 0 !important" width="50%" valign="top">
+              <!-- Totals Table -->
+              <table id="totals" width="100%">
+                <tr>
+                  <th colspan="2" align="right">TOTAL EXCL VAT</th>
+                  <th align="left">(SAR)</th>
+                  <td align="right" class="subtot" colspan="2">
+                    {%invoice_subtotal%}
+                  </td>
+                </tr>
+                <tr>
+                  <th colspan="2" align="right">VAT</th>
+                  <th align="left">(SAR)</th>
+                  <td align="right" class="vat" colspan="2"></td>
+                </tr>
+                <tr id="Retentionrow">
+                  <th colspan="2" align="right">Retention</th>
+                  <th align="left">(SAR)</th>
+                  <td align="right" id="Retention" colspan="2"></td>
+                </tr>
+                <tr>
+                  <th colspan="2" align="right">TOTAL</th>
+                  <th align="left">(SAR)</th>
+                  <td align="right" class="tot" colspan="2"></td>
+                </tr>
+                <!--<tr>
+                <th colspan="2" align="right">BALANCE DUE</th>
+                <th align="left">(SAR)</th>
+                <td align="right" class="due" colspan="2"></td>
+              </tr>-->
+              </table>
+            </td>
+          </tr>
+        </table>
+        <!-- Notes Block -->
+        <div class="notes-block">
+          <!-- Bank Details -->
+          <p><em>Please make cheque and wire transfer payble to:</em></p>
+          <table
+            width="100%"
+            border="0"
+            cellspacing="0"
+            cellpadding="0"
+            id="bank"
+          >
+            <tr>
+              <td>GULF HEAVY INDUSTRIES COMPANY</td>
+              <td align="center" valign="top" style="background-color: #e5e5e5">
+                AUTHORIZED SIGNATORY
+              </td>
+            </tr>
+            <tr>
+              <td>{%Client Bank%}</td>
+              <td rowspan="5"></td>
+            </tr>
+            <tr>
+              <td>A/C NO: <span>{%AC No%}</span></td>
+            </tr>
+            <tr>
+              <td>IBAN: <span>{%IBAN%}</span></td>
+            </tr>
+            <tr>
+              <td>SWIFT CODE: <span>{%Swift Code%}</span></td>
+            </tr>
+          </table>
+          <!-- Footer -->
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <div style="display: none">
+      <div id="subt">{%invoice_subtotal%}</div>
+      <div id="tax">{%tax-total%}</div>
+      <div id="total">{%invoice_total%}</div>
+      <div id="balance">{%unpaid%}</div>
+    </div>
+
+    <script type="text/javascript">
+      // Adding Commas to Numbers
+      function addSeparators(num) {
+        num = num.toString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+      // Removing Currency
+      function removeUnit() {
+        // Subtotal
+        // var subTotal = document.getElementById("subt").innerText;
+        // subTotal = subTotal.replace(/[A-Za-z , ]+/g, "").trim();
+        // subTotal = parseFloat(subTotal)
+        //   .toFixed(2)
+        //   .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // //addSeparators(subTotal);
+        document.querySelector(".subtot").innerText = parseFloat(
+          document.querySelector(".subtot").innerText.replace(/,/g, "")
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // Tax
+        var taxTotal = document.getElementById("tax").innerText;
+        taxTotal = taxTotal.replace(/[A-Za-z , ]+/g, "").trim();
+        taxTotal = parseFloat(taxTotal)
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        //addSeparators(taxTotal);
+        document.getElementsByClassName("vat")[0].innerHTML = taxTotal;
+        // Total
+        var totalAmount = document.getElementById("total").innerText;
+        totalAmount = totalAmount.replace(/[A-Za-z , ]+/g, "").trim();
+        totalAmount = parseFloat(totalAmount)
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        //addSeparators(totalAmount);
+        document.getElementsByClassName("tot")[0].innerHTML = totalAmount;
+        // Balance Due
+        /*var balanceDue = document.getElementById("balance").innerText;
+        balanceDue = balanceDue.replace(/[A-Za-z , ]+/g, "").trim();
+        balanceDue = parseFloat(balanceDue).toFixed(2);
+        addSeparators(balanceDue);
+        document.getElementsByClassName("due")[0].innerHTML = balanceDue;*/
+      }
+
+      // Adding Serial No Col
+      function addSerCol() {
+        var tbl = document.getElementById("listing_table"); // table reference
+        for (i = 0; i < tbl.rows.length; i++) {
+          var newCell = tbl.rows[i].insertCell(0);
+          newCell.id = "serial";
+          newCell.innerText = i;
+        }
+        var firstCell = tbl.rows[0].cells[0];
+        firstCell.id = "th";
+        tbl.rows[0].cells[0].innerHTML = "الصنف<br />Item";
+        // Styling Serial Col Head:
+        var snCell = document.querySelectorAll(
+          "#listing_table tr:first-child td:first-child"
+        )[0];
+        snCell.style.cssText =
+          "font-weight:bold;text-align:center;background:#e5e5e5;vertical-align:middle;";
+      }
+
+      // Adding Total with VAT Column
+      function addTotalCol() {
+        var newTR = document
+          .getElementById("listing_table")
+          .getElementsByTagName("tr");
+        var newTH = document.createElement("th");
+        newTH.setAttribute("id", "newTH");
+        newTH.innerHTML = "الإجمالي<br />Total (SAR)";
+        newTR[0].appendChild(newTH);
+        for (var j = 1; j < newTR.length; j++) {
+          var newTD = document.createElement("td");
+          newTD.setAttribute("class", "newTD");
+          newTR[j].appendChild(newTD);
+        }
+      }
+
+      // Swapping Columns
+      function swap(in1, in2, table_id) {
+        var table = document.getElementById(table_id);
+        for (var i = 0, row; (row = table.rows[i]); i++) {
+          var temp = row.cells[in1].innerHTML;
+          row.cells[in1].innerHTML = row.cells[in2].innerHTML;
+          row.cells[in2].innerHTML = temp;
+        }
+      }
+
+      // Calculating Total Incl. Tax
+      function totalCalc() {
+        var tbl = document.getElementById("listing_table");
+        for (var k = 0; k < tbl.rows.length; k++) {
+          var price = document.querySelectorAll(
+            "#listing_table td:nth-child(6)"
+          )[k].innerText;
+          var taxAmount = document.querySelectorAll(
+            "#listing_table td:nth-child(8)"
+          )[k].innerText;
+          price = price.replace(/[A-Za-z , ]+/g, "").trim();
+          taxAmount = taxAmount.replace(/[A-Za-z , ]+/g, "").trim();
+          price = parseFloat(price);
+          taxAmount = parseFloat(taxAmount);
+          var final = price + taxAmount;
+          final = final.toFixed(2);
+          addSeparators(final);
+          document.getElementsByClassName("newTD")[k].innerHTML = final;
+        }
+      }
+      try {
+        removeUnit();
+        addSerCol();
+        //addTotalCol();
+        swap(4, 6, "listing_table");
+        swap(5, 7, "listing_table");
+        //totalCalc();
+        // adding decimal points to item subtotal
+        var itemSub = document.querySelectorAll(
+          "#listing_table tbody td:last-child"
+        );
+        for (var x = 0; x < itemSub.length; x++) {
+          itemSub[x].innerText = parseFloat(
+            itemSub[x].innerText.replace(/,/g, "")
+          ).replace(/,/g, "");
+        }
+      } catch (e) {
+        console.log(e);
+      }
+      function addretention() {
+        var allRows = document.querySelectorAll(
+          ".listing-table:nth-child(2) tr"
+        );
+        var falg = 0;
+        for (var i = 0; i < allRows.length; i++) {
+          if (allRows[i].cells[1].innerText == "Retention") {
+            falg = 1
+            document.getElementById("Retention").innerText = parseFloat(
+              allRows[i].cells[2].innerText.replace(/,/g, "")
+            )
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.querySelector(".subtot").innerText = parseFloat(
+              document.querySelector(".subtot").innerText.replace(/,/g, "") -
+                parseFloat(allRows[i].cells[2].innerText.replace(/,/g, ""))
+            );
+          }
+        }
+        if(falg == 0){
+document.getElementById('Retentionrow').style.display = 'none'
+        }
+      }
+      try {
+        addretention();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>
+<!-- Footer -->
+
+<!-- Bank Details -->
+<!-- <style>
+          #bank {
+            margin: 10px auto;
+            font-size: 12px;
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+           }
+           #bank td {
+             border: 1px solid #555;
+             font-weight: bold;
+             padding: 5px !important;
+           }
+           #bank td span {
+             font-weight: normal;
+           }
+        </style>
+        <p style="font-size: 12px;"><em>Please make cheque and wire transfer payble to:</em></p>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" id="bank">
+          <tr>
+            <td>GULF HEAVY INDUSTRIES COMPANY</td>
+            <td align="center" valign="top" style="background-color: #e5e5e5;">AUTHORIZED SIGNATORY</td>
+          </tr>
+          <tr>
+            <td>NATIONAL COMMERCIAL BANK (NCB)</td>
+            <td rowspan="4"></td>
+          </tr>
+          <tr>
+            <td>A/C NO: <span>060-719-720-00109</span></td>
+          </tr>
+          <tr>
+            <td>IBAN: <span>SA-541-000-000-607-197-200-0109</span></td>
+          </tr>
+          <tr>
+            <td>SWIFT CODE: <span>N C B K S A J E</span></td>
+          </tr>
+        </table> -->

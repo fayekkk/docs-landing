@@ -1,0 +1,129 @@
+<style>
+  .card-header,
+  .form-row div:nth-of-type(-n + 9) {
+    display: none;
+  }
+  #le_workflow-type-entity-1 > div.form-row > div.col-lg-12,
+  #le_workflow-type-entity-1 > div.form-row > div.col-lg-12 div {
+    display: block;
+  }
+  .container-le_workflow-type-entity-1_custom_data-time1,
+  .container-le_workflow-type-entity-1_custom_data-site,
+  .container-le_workflow-type-entity-1_custom_data-building_position,
+  .container-le_workflow-type-entity-1_custom_data-teams,
+  .container-le_workflow-type-entity-1_custom_data-teams,
+  .container-le_workflow-type-entity-1_custom_data-timeto,
+  .container-le_workflow-type-entity-1_custom_data-building_position1,
+  #le_workflow-type-entity-1
+    > div.form-row
+    > div.col-lg-12
+    > div.row
+    > div.col-lg-12.col-md-12.col-xs-12
+    > div
+    > div
+    > div
+    > div.card-body.p-0
+    > div
+    > div
+    > div
+    > div
+    > div
+    > div.btn-group.add-row.dropdown {
+    display: none !important;
+  }
+  #le_workflow-type-entity-1 > div.form-row > div:nth-child(5),
+  #le_workflow-type-entity-1 > div.form-row > div:nth-child(5) > div {
+    display: block !important;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      // hide client if if exists
+      if ($("#client_id").val() != "") {
+        $(" #le_workflow-type-entity-1 > div.form-row > div:nth-child(5)").attr(
+          "style",
+          " display: none !important;"
+        );
+        $(
+          " #le_workflow-type-entity-1 > div.form-row > div:nth-child(5) > div "
+        ).attr("style", " display: none !important;");
+      }
+      if (USER.staff_id != 0) {
+        for (var i = 0; i < $(".sortable-dynamic-rows tr").length; i++) {
+          console.log(i);
+          $(
+            `.container-le_workflow-type-entity-1_custom_data-le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_items_list--${i}--item_code`
+          ).attr("disabled", "disabled");
+          $(
+            `.container-le_workflow-type-entity-1_custom_data-le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_items_list--${i}--item`
+          ).attr("disabled", "disabled");
+          $(
+            `.container-le_workflow-type-entity-1_custom_data-le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_items_list--${i}--quantity`
+          ).attr("disabled", "disabled");
+          $(
+            `.container-le_workflow-type-entity-1_custom_data-le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_items_list--${i}--price`
+          ).attr("disabled", "disabled");
+        }
+      } else {
+        for (var i = 0; i < $(".sortable-dynamic-rows tr").length; i++) {
+          console.log(i);
+          $(
+            `.container-le_workflow-type-entity-1_custom_data-le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_items_list--${i}--item_code`
+          ).attr("disabled", "disabled");
+          $(
+            `.container-le_workflow-type-entity-1_custom_data-le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_items_list--${i}--item`
+          ).attr("disabled", "disabled");
+        }
+      }
+
+      let projId = parseInt(window.location.href.split("/")[7]);
+      if (USER.staff_id != 0) {
+        fetch(`/v2/api/entity/staff/${USER.staff_id}`, {
+          method: "GET",
+        })
+          .then((staffs) => staffs.json())
+          .then((staff) => {
+            console.log(staff);
+
+            fetch(`/v2/api/entity/le_workflow-type-entity-1/${projId}`, {
+              method: "GET",
+            })
+              .then((res) => res.json())
+              .then((response) => {
+                console.log(response);
+
+                if (
+                  response.follow_up_status_id == 6 ||
+                  !response.follow_up_status_id
+                ) {
+                  // if (staff.role_id == 3) {
+                  for (
+                    var i = 0;
+                    i < $(".sortable-dynamic-rows tr").length;
+                    i++
+                  ) {
+                    $(
+                      `.container-le_workflow-type-entity-1_custom_data-le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_items_list--${i}--quantity`
+                    ).attr("disabled", false);
+                  }
+                  // }
+                } else if (response.follow_up_status_id == 11) {
+                  // if (staff.role_id == 2) {
+                  // }
+                  for (
+                    var i = 0;
+                    i < $(".sortable-dynamic-rows tr").length;
+                    i++
+                  ) {
+                    $(
+                      `.container-le_workflow-type-entity-1_custom_data-le_custom_data_le_workflow-type-entity-1_le_custom_data_le_workflow-type-entity-1_items_list--${i}--price`
+                    ).attr("disabled", false);
+                  }
+                }
+              });
+          });
+      }
+    }, 600);
+  });
+</script>

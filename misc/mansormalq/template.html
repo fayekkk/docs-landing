@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    #head {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    #head td:nth-child(1) {
+      text-align: right;
+      width: 30%;
+    }
+    #head td:nth-child(2) {
+      font-weight: bold;
+      width: 35%;
+      text-align: center;
+      line-height: 2.7;
+      font-size: 15px;
+    }
+    #head td:nth-child(3) {
+      text-align: center;
+      width: 15%;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    #head td:nth-child(4) {
+      width: 20%;
+    }
+    #head td:nth-child(4) img {
+      width: 80%;
+      margin-right: 20%;
+    }
+    .invNo {
+      color: rgb(250, 62, 62);
+      font-weight: bold;
+    }
+    #listing_table {
+      margin-top: 20px;
+      width: 100%;
+      border-right: 1px solid black;
+      border-top: 1px solid black;
+    }
+    #listing_table th,
+    #listing_table td {
+      text-align: center;
+      border-left: 1px solid black;
+      border-bottom: 1px solid black;
+
+      border-right: none !important;
+      border-top: none !important;
+
+      padding: 3px;
+    }
+
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table id="head">
+          <tr>
+            <td align="right" valign="top">
+              <div class="qr-code">
+                {%sa_qr_code_image%}<br />
+                الرقم الضريبى : {%site_bn1%}
+              </div>
+            </td>
+            <td align="right" valign="top">
+              {%invoice_title%}
+              <br />
+              معلومات العميل
+              <br />
+              {%client_business_name%}
+              <br />
+              {%client_mobile%}
+            </td>
+            <td valign="top">
+              <span class="invNo"> {%invoice_no%}</span>
+              <br />
+              {%invoice_date%}
+            </td>
+            <td valign="top" align="left">{%site_logo%}</td>
+          </tr>
+        </table>
+
+        <div id="items-list">{%items_list%}</div>
+
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function hundlettls() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          if (allRows[0].cells.length == 8) {
+            allRows[i].cells[6].style.display = "none";
+            allRows[i].cells[7].style.display = "none";
+          } else if (allRows[0].cells.length == 9) {
+            allRows[i].cells[6].style.display = "none";
+            allRows[i].cells[7].style.display = "none";
+            allRows[i].cells[8].style.display = "none";
+          }
+
+          if (allRows[i].cells[0].innerText.trim() == "خدمة العمولة") {
+            allRows[i].style.display = "none";
+            var serviceFees = parseFloat(
+              allRows[i].cells[5].innerText.replace(/,/g, "")
+            );
+            allRows[i - 1].cells[5].innerText =
+              parseFloat(allRows[i].cells[5].innerText.replace(/,/g, "")) +
+              parseFloat(allRows[i - 1].cells[5].innerText.replace(/,/g, ""));
+          }
+        }
+      }
+      try {
+        hundlettls();
+      } catch (error) {
+        console.log(error);
+      }
+      function addTtlsRow() {
+        var nrwTr = document.createElement("tr");
+        var colsCount = document.querySelectorAll(
+          "#listing_table thead tr th"
+        ).length;
+        var newTd1 = document.createElement("td");
+        var newTd2 = document.createElement("td");
+        newTd1.innerHTML = " الإجمالى : {%invoice_total%}";
+        newTd2.innerHTML = " شاملا ضريبة القيمة المضافة : {%tax-total%}";
+
+        if (colsCount == 8) {
+          newTd2.setAttribute("colspan", "6");
+        }
+        nrwTr.appendChild(newTd1);
+        nrwTr.appendChild(newTd2);
+        document.querySelector("#listing_table tbody").appendChild(nrwTr);
+      }
+
+      try {
+        addTtlsRow();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

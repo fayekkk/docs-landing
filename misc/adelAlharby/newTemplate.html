@@ -1,0 +1,185 @@
+<div
+  id="barcode_template"
+  class="mceEditable"
+  readonly="readonly"
+  style="
+    padding: 0px 0px 0px 0px;
+    margin: 0 0;
+    background-color: #ffffff;
+    margin-bottom: 0px;
+  "
+>
+  <style>
+    * {
+      border: none !important;
+    }
+    .labelbg {
+      background-image: url("https://durobalhijrah.daftara.com/files/d5e2718e/logos/65f941b86d1cb_blobid1710834102572.png");
+      background-size: cover;
+      padding-top: 15px !important;
+      height: 47px;
+      font-size: 22px !important;
+      font-weight: bold !important;
+    }
+    .bluebg {
+      background-color: #054ba6;
+      color: #fff;
+    }
+    #maintable,
+    #flight,
+    #header {
+      width: 100%;
+      border-spacing: 10px;
+      border-collapse: separate !important;
+    }
+    #maintable td,
+    #flight td,
+    #header td {
+      padding: 15px 4px;
+      font-size: 12px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .gray-bg {
+      background-color: #e3e8ff;
+    }
+  </style>
+  <table id="container" style="direction: ltr; height: 28.5cm; width: 20.5cm">
+    <tbody>
+      <tr>
+        <td rowspan="100%" style="width: 5%">
+          <img
+            src="https://durobalhijrah.daftara.com/files/d5e2718e/logos/65f93eba14e5f_blobid1710833335999.png"
+            alt=""
+            title="leftside.png"
+            style="height: 1080px; width: 45px"
+          />
+        </td>
+        <td style="width: 95%; vertical-align: top">
+          <table id="header" style="direction: ltr">
+            <tbody>
+              <tr>
+                <td style="width: 80%; text-align: right">
+                  <img
+                    src="https://durobalhijrah.daftara.com/files/d5e2718e/logos/65f93ec2a5094_blobid1710833344522.png"
+                    alt=""
+                    title="logoelharby.png"
+                    style="width: 300px"
+                  />
+                </td>
+                <td
+                  style="
+                    width: 20%;
+                    text-align: right;
+                    vertical-align: top;
+                    color: #ff3131;
+                  "
+                >
+                  رقم : {{Data.le_routes.id}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table id="maintable">
+            <tbody>
+              <tr>
+                <td colspan="100%" class="labelbg">العميل</td>
+              </tr>
+              <tr>
+                <td class="bluebg">رقم المشرف</td>
+                <td class="bluebg">العدد</td>
+                <td class="bluebg">رقم المجموعة</td>
+                <td class="bluebg">الجنسية</td>
+                <td class="bluebg" colspan="2">العميل</td>
+              </tr>
+              <tr>
+                <td class="gray-bg">
+                  {{Data.le_routes.controller_name_masar1}}
+                </td>
+                <td class="gray-bg">
+                  {{Data.le_routes.passengers_number_masar1}}
+                </td>
+                <td class="gray-bg">{{Data.le_routes.trip_number_masar1}}</td>
+                <td class="gray-bg">{{Data.le_routes.nationality_masar1}}</td>
+                <td class="gray-bg" colspan="2">
+                  {{Data.le_routes.client_name_masar1}}
+                </td>
+              </tr>
+              <tr>
+                <td colspan="100%" class="labelbg">المسار</td>
+              </tr>
+              <tr>
+                <td class="bluebg">الفندق</td>
+                <td class="bluebg">الوجهة إلى</td>
+                <td class="bluebg">الفندق</td>
+                <td class="bluebg">المغادرة من</td>
+                <td class="bluebg">الوقت</td>
+                <td class="bluebg">التاريخ</td>
+              </tr>
+              <tr>
+                <td class="gray-bg">{{Data.le_routes.to_hotel_masar1}}</td>
+                <td class="gray-bg">{{Data.le_routes.masar_to11}}</td>
+                <td class="gray-bg">{{Data.le_routes.from_hotel_masar1}}</td>
+                <td class="gray-bg">{{Data.le_routes.from_masar1}}</td>
+                <td class="gray-bg">{{Data.le_routes.time_masar1}}</td>
+                <td class="gray-bg">{{Data.le_routes.masar_date1}}</td>
+              </tr>
+              <tr>
+                <td
+                  colspan="100%"
+                  class="labelbg"
+                  style="padding-right: 55px !important"
+                >
+                  الحافلة والكابتن
+                </td>
+              </tr>
+              <tr>
+                <td class="bluebg">رقم الحافلة</td>
+                <td class="bluebg">رقم اللوحة</td>
+                <td class="bluebg">الجنسية</td>
+                <td class="bluebg">رقم الهوية</td>
+                <td class="bluebg">رقم الجوال</td>
+                <td class="bluebg">اسم الكابتن</td>
+              </tr>
+              <tr>
+                <td class="gray-bg">{{Data.le_routes.bus_number_masar1}}</td>
+                <td class="gray-bg">{{Data.le_routes.cap_natio_masar1}}</td>
+                <td class="gray-bg">{{Data.le_routes.plate_no_masar1}}</td>
+                <td class="gray-bg">{{Data.le_routes.id_number_masar1}}</td>
+                <td class="gray-bg">{{Data.le_routes.captin_phone_masar1}}</td>
+                <td class="gray-bg">{{Data.le_routes.captin_name_masar1}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <table id="flight">
+            <tbody>
+              <tr>
+                <td
+                  colspan="100%"
+                  class="labelbg"
+                  style="padding-right: 35px !important"
+                >
+                  رحلة الطيران
+                </td>
+              </tr>
+              <tr>
+                <td class="bluebg">الصالة</td>
+                <td class="bluebg">رقم الرحلة</td>
+                <td class="bluebg">شركة الطيران</td>
+                <td class="bluebg">الوقت</td>
+                <td class="bluebg">التاريخ</td>
+              </tr>
+              <tr>
+                <td class="gray-bg">{{Data.le_routes.flight_hall_masar1}}</td>
+                <td class="gray-bg">{{Data.le_routes.flight_no_masar1}}</td>
+                <td class="gray-bg">{{Data.le_routes.flight_com_masar1}}</td>
+                <td class="gray-bg">{{Data.le_routes.flight_time_masar1}}</td>
+                <td class="gray-bg">{{Data.le_routes.flight_date_masar1}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

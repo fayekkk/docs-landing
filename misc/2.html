@@ -1,0 +1,83 @@
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>فاتورة ضريبية</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        direction: rtl;
+        text-align: right;
+      }
+      .invoice-container {
+        width: 80%;
+        margin: auto;
+        border: 1px solid #000;
+        padding: 20px;
+      }
+      .header,
+      .footer {
+        text-align: center;
+      }
+      .table-container {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .table-container th,
+      .table-container td {
+        border: 1px solid black;
+        padding: 10px;
+      }
+      .qr-code {
+        text-align: center;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoice-container">
+      <div class="header">
+        <h2>شركة إعمار الوطن التجارية</h2>
+        <p>رقم السجل التجاري: 920005177</p>
+        <p>رقم التسجيل الضريبي: 310837467710003</p>
+      </div>
+
+      <h3>فاتورة ضريبية</h3>
+      <p><strong>رقم الفاتورة:</strong> SIV-E25001173</p>
+      <p><strong>التاريخ:</strong> 08/01/25</p>
+
+      <div class="qr-code">
+        <p>[ QR Code Placeholder ]</p>
+      </div>
+
+      <table class="table-container">
+        <tr>
+          <th>رقم الصنف</th>
+          <th>الوصف</th>
+          <th>الكمية</th>
+          <th>سعر الوحدة</th>
+          <th>الخصم</th>
+          <th>السعر بعد الخصم</th>
+          <th>ضريبة القيمة المضافة</th>
+          <th>الإجمالي</th>
+        </tr>
+        <tr>
+          <td>3SA120997</td>
+          <td>بلاط سعودي جمال</td>
+          <td>2</td>
+          <td>172.80</td>
+          <td>20.00</td>
+          <td>152.80</td>
+          <td>492.48</td>
+          <td>3,775.68</td>
+        </tr>
+      </table>
+
+      <h4>إجمالي المبلغ المستحق: 3,775.68</h4>
+
+      <div class="footer">
+        <p>شكراً لتعاملكم معنا!</p>
+      </div>
+    </div>
+  </body>
+</html>

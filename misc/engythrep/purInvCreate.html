@@ -1,0 +1,537 @@
+<style>
+  .hidden-elem {
+    display: none !important;
+  }
+  .rtl-span {
+    display: inline-block;
+    direction: rtl;
+  }
+  .error-box span {
+    font-size: 12px;
+    padding: 4px 10px;
+    border: 1px solid rgba(224, 25, 49, 0.8);
+    background: rgba(224, 25, 49, 0.7);
+    color: #fff;
+    border-radius: 3px;
+  }
+  .error-box {
+    display: inline-block;
+    position: inherit;
+    margin-right: 20px;
+  }
+  .error-box:after {
+    border: 0;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    // adding new button HTML
+    var newButton = `<div class="col-md-12 col-sm-12" style="margin-bottom: 25px;">
+            <div class="m-r-md d-inline-flex">
+              <a id="calcBtn" class="ajust-invoice btn-info" style="padding: 8px 15px !important; display: inline-block;">احسب ضمان الأعمال</a>
+            </div>
+            <div style="display: inline-block; max-width: 100px;">
+              <label class="ui-input-label l-input-label adjust-tab-input-label">النسبة</label>
+              <input type="number" style="height: 40px;" placeholder="0" class="number discount-tab-input-discount ui-input l-input form-x3" step="any" value="" id="InvoiceRetention">
+            </div>
+            <div class="error-box hidden">
+              <span class="empty-value hidden-elem rtl-span">قم بإدخال نسبة ضمان الأعمال أولاً</span>
+              <span class="exceed-limit hidden-elem rtl-span">لا يمكن أن تتخطى النسبة 100%</span>
+            </div>
+          </div>`;
+    var tab = $("#tab-1 .row");
+    tab.prepend(newButton);
+
+    // getting second tax
+    var tax = parseFloat(
+      $("#Tax2Row td:nth-child(3)").text().replace(/,/g, "")
+    );
+    if (isNaN(tax)) {
+      tax = 0;
+    }
+
+    // checking if retention is zero or NaN then adding the adjustment label as ضمان أعمال
+    if (
+      isNaN(parseFloat($("#InvoiceRetention").val())) ||
+      parseFloat($("#InvoiceRetention").val()) == 0
+    ) {
+      $("#InvoiceAdjustmentLabel").val("خصم ضمان أعمال");
+    }
+
+    // calculating retention funtion
+    function calcRetention() {
+      var retentionValue = $("#InvoiceAdjustmentValue");
+      var total =
+        parseFloat($("#SubtotalValue").text().replace(/,/g, "")) + tax;
+      if (isNaN(total)) {
+        total = 0;
+      }
+
+      // calculating retention from subtotal
+      $("#InvoiceAdjustmentValue").val(
+        (parseFloat($("#InvoiceRetention").val() * 0.01) * total * -1).toFixed(
+          2
+        )
+      );
+      $("#InvoiceAdjustmentValue").change();
+
+      // getting retention value
+      function getRetPerc() {
+        let retPer = $("#InvoiceRetention").val();
+        return retPer;
+      }
+
+      // changing the adjustment label with the retention percentage
+      $("#InvoiceAdjustmentLabel").val(`خصم ضمان أعمال (${getRetPerc()}%)`);
+
+      // LOCAL STORAGE (saving new retention value)
+      localStorage.setItem("retention", $("#InvoiceRetention").val());
+    }
+
+    // changing التسوية to ضمان أعمال
+    let adjLbl = $(".discount-tab-input-label").eq(1);
+    if (adjLbl.text() == "التسوية") {
+      adjLbl.html(adjLbl.html().replace("التسوية", "خصم ضمان أعمال"));
+    }
+
+    setTimeout(function () {
+      // showing error box if retention was not entered after button click
+      $("#calcBtn").on("click", function () {
+        if (isNaN(parseFloat($("#InvoiceRetention").val()))) {
+          $(".error-box").removeClass("hidden-elem");
+          $(".empty-value").removeClass("hidden-elem");
+        } else {
+          $(".error-box").addClass("hidden-elem");
+          $(".empty-value").addClass("hidden-elem");
+        }
+        calcRetention();
+      });
+
+      // giving error message in case retention percentage exceeds 100%
+      $("#InvoiceRetention").on("input", function () {
+        if (parseFloat($("#InvoiceRetention").val()) > 100) {
+          $("#InvoiceRetention").val(100);
+          $(".error-box").removeClass("hidden-elem");
+          $(".exceed-limit").removeClass("hidden-elem");
+        } else {
+          $(".error-box").addClass("hidden-elem");
+          $(".exceed-limit").addClass("hidden-elem");
+        }
+      });
+    }, 500);
+
+    // LOCAL STORAGE (showing saved retention value)
+    var savedRet = localStorage.getItem("retention");
+    // console.log(savedRet);
+    if (savedRet != 0) {
+      $("#InvoiceRetention").val(savedRet);
+    }
+  });
+</script>
+
+<style>
+  .late_th,
+  .late_td {
+    display: table-cell !important;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      const searchableSelector = () => {
+        let branshId = USER.branch_id;
+        const selector = document.createElement("select");
+        selector.style.width = "100%";
+        selector.setAttribute("class", "itemSelect");
+        const option = document.createElement("option");
+        option.textContent = "إختر الخدمة";
+        option.style.textAlign = "center";
+        selector.appendChild(option);
+        let url = window.location.href;
+        let urlObj = new URL(url);
+        let workOrderId = urlObj.searchParams.get("work_order_id");
+        // console.log(workOrderId);
+        $.get(`/v2/api/entity/le_workflow-type-entity-2/${workOrderId}/4`).then(
+          (response) => {
+            console.log({ response: response });
+
+            let options =
+              response["le_workflow-type-entity-2_custom_data"][
+                "le_custom_data_le_workflow-type-entity-2_le_custom_data_le_workflow-type-entity-2_project_items"
+              ];
+            console.log({ options: options });
+            options.forEach((optionText) => {
+              const option = document.createElement("option");
+              option.textContent = optionText.item_name;
+              option.dataset["purch_estimated_cost"] =
+                optionText.purch_estimated_cost;
+              option.dataset["expenses_estimated_cost"] =
+                optionText.expenses_estimated_cost;
+              option.dataset["rec_id"] = optionText.id;
+              option.dataset["purch_actual_cost"] =
+                optionText.purch_actual_cost;
+              option.dataset["expenses_actual_cost"] =
+                optionText.expenses_actual_cost;
+              option.dataset["purch_actual_cost"] =
+                optionText.purch_actual_cost;
+              option.style.textAlign = "center";
+              selector.appendChild(option);
+            });
+          }
+        );
+
+        var allrows = document.querySelectorAll("#listing_table .itemRow ");
+        // console.log(allrows.length);
+        for (let i = 0; i < allrows.length; i++) {
+          if (!allrows[i].querySelector(".late_td select")) {
+            allrows[i].querySelector(".late_td").innerHTML = "";
+            allrows[i].querySelector(".late_td").appendChild(selector);
+          }
+        }
+        $(document).on(
+          "change",
+          ".item-unit-price, .item-qty, .itemSelect",
+          function () {
+            let closestTr = $(this).closest("tr");
+            let selectedValue = closestTr.find(".itemSelect").val();
+            let totalSubCost = 0;
+            let totalActualCost = 0;
+            let estimatedCost =
+              parseFloat(
+                closestTr
+                  .find(".itemSelect option:selected")
+                  .data("purch_estimated_cost")
+              ) || 0;
+
+            $(".itemRow").each(function () {
+              let row = $(this);
+              let rowSelectedValue = row.find(".itemSelect").val();
+              if (rowSelectedValue === selectedValue) {
+                let price = parseFloat(row.find(".item-unit-price").val()) || 0;
+                let qty = parseFloat(row.find(".item-qty").val()) || 0;
+                totalSubCost += price * qty;
+              }
+            });
+            let actualCost =
+              parseFloat(
+                closestTr
+                  .find(".itemSelect option:selected")
+                  .data("purch_actual_cost")
+              ) || 0;
+
+            totalActualCost += actualCost + totalSubCost;
+            console.log({ selectedValue, totalSubCost, totalActualCost });
+            if (totalActualCost > estimatedCost) {
+              alert(
+                `إجمالى التكلفة أعلى من التكلفة التقديرية لهذا البند (${selectedValue})`
+              );
+            }
+            console.log(`Total Actual Cost for : ${totalActualCost}`);
+          }
+        );
+      };
+
+      async function createCol(
+        prevTh,
+        prevTd,
+        colTitle,
+        classTh,
+        classTd,
+        colInput
+      ) {
+        var rowsNum = $("#listing_table .itemRow").length;
+        if (rowsNum == 1) {
+          $(prevTh).after(
+            $("th.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTh)
+              .replace("", colTitle)
+          );
+
+          $(prevTd).after(
+            $(".itemRow  td.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTd)
+              .replace("item_col_3", colInput)
+          );
+        } else {
+          $(`#listing_table .itemRow`)
+            .last()
+            .find(`${prevTd}`)
+            .after(
+              $("#listing_table .itemRow ")
+                .last()
+                .find("td.col-3")
+                .clone()
+                .wrap("<p>")
+                .parent()
+                .html()
+                .replace("col-3", classTd)
+                .replace("item_col_3", colInput)
+            );
+        }
+
+        $("." + colInput).attr("placeholder", "");
+        $("." + colInput).attr("name", "");
+        $("#InvoiceLayout").triggerHandler("change", ["def"]);
+        searchableSelector();
+        document.querySelector(".late_th").innerText = "إختار الخدمة";
+      }
+      let url = window.location.href;
+      let urlObj = new URL(url);
+      let workOrderId = urlObj.searchParams.get("work_order_id");
+      console.log({ workOrderId: workOrderId });
+      if (workOrderId) {
+        console.log("hereeeeee");
+        // adding the columns when screen is loaded
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "إختيار الخدمة ",
+          "late_th",
+          "late_td",
+          "late_input"
+        );
+
+        // adding the columns on add item click
+        $("#AddItem").on("click", () => {
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "إختيار الخدمة ",
+            "late_th",
+            "late_td",
+            "late_input"
+          );
+        });
+      }
+
+      async function updateProjectItem(
+        workOrderId,
+        invoiceNo,
+        itemvalues,
+        subval,
+        records,
+        itemName
+      ) {
+        let prevCostVal = isNaN(parseFloat(itemvalues.purch_actual_cost))
+          ? 0
+          : parseFloat(itemvalues.purch_actual_cost);
+        let ttlval = prevCostVal + subval;
+
+        const existingRecord = records.find(
+          (record) => record.recId == itemvalues.rec_id
+        );
+
+        if (existingRecord) {
+          ttlval = existingRecord.purch_actual_cost; // Update ttlval if record exists
+        }
+
+        try {
+          const response = await fetch(
+            `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${itemvalues.rec_id}/fields`,
+            {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ purch_actual_cost: ttlval }),
+            }
+          );
+
+          if (!response.ok) {
+            const errorRes = await response.json();
+            throw new Error(
+              `Error ${response.status}: ${
+                errorRes.message || "An error occurred."
+              }`
+            );
+          }
+          const res = await response.json();
+          await postHistory(
+            invoiceNo,
+            itemvalues.rec_id,
+            itemName,
+            subval,
+            workOrderId
+          );
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+
+      async function postHistory(
+        invoiceNo,
+        itemId,
+        itemName,
+        ttlval,
+        workOrderId
+      ) {
+        const postBody = {
+          operations_type: "فاتورة مشتريات",
+          ref_type: "PurchInv",
+          op_date: new Date().toISOString().slice(0, 19).replace("T", " "),
+          operation_no: invoiceNo,
+          item_id: itemId,
+          project_item: itemName,
+          single_line_field: ttlval,
+          reference_id: workOrderId,
+        };
+        console.log({ postBody: postBody });
+
+        try {
+          const response = await fetch(`/v2/api/entity/le_OperationsLog`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(postBody),
+          });
+
+          if (!response.ok) {
+            const errorRes = await response.json();
+            throw new Error(
+              `Error ${response.status}: ${
+                errorRes.message || "An error occurred."
+              }`
+            );
+          }
+
+          await response.json(); // Handle response as needed
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+      async function updateProjectData2(invNo) {
+        //   async function updateProjectData2() {
+        const url = window.location.href;
+        const urlObj = new URL(url);
+        const workOrderId = urlObj.searchParams.get("work_order_id");
+        const invoiceNo = invNo;
+        console.log({ workOrderId: workOrderId, invoiceNo: invoiceNo });
+        let records = [];
+        const itemSelects = $(".itemSelect").toArray();
+        for (const itemSelect of itemSelects) {
+          const recId = $(itemSelect).val();
+          if (recId !== "إختر الخدمة") {
+            const selectedOption = $(itemSelect).find("option:selected");
+            const itemvalues = selectedOption[0].dataset;
+            const price = $(itemSelect)
+              .closest("tr")
+              .find(".unit-price input")
+              .val();
+            const qty = $(itemSelect)
+              .closest("tr")
+              .find(".Quantity input")
+              .val();
+            const priceVal = parseFloat(price) || 0;
+            const qtyVal = parseFloat(qty) || 0;
+            const subval = priceVal * qtyVal;
+
+            const existingRecordIndex = records.findIndex(
+              (record) => record.recId == itemvalues.rec_id
+            );
+            if (existingRecordIndex !== -1) {
+              records[existingRecordIndex].purch_actual_cost += subval;
+            } else {
+              records.push({
+                recId: itemvalues.rec_id,
+                purch_actual_cost:
+                  (parseFloat(itemvalues.purch_actual_cost) || 0) + subval,
+              });
+            }
+            await updateProjectItem(
+              workOrderId,
+              invoiceNo,
+              itemvalues,
+              subval,
+              records,
+              selectedOption[0].textContent
+            );
+          }
+        }
+      }
+      console.log({ workOrderId: workOrderId });
+      if (workOrderId) {
+        document.getElementById("PurchaseOrderForm").onsubmit = async function (
+          e
+        ) {
+          e.preventDefault();
+          //   await updateProjectData2();
+
+          const formData = new FormData(e.target);
+          const formDataObj = {};
+          let isValid = true;
+          let errorMessage = "";
+          formData.forEach((value, key) => {
+            const keys = key.match(/[^\[\]]+/g);
+            let tempObj = formDataObj;
+            const inputElement = e.target.querySelector(`[name="${key}"]`);
+            if (
+              inputElement &&
+              inputElement.hasAttribute("required") &&
+              !value
+            ) {
+              isValid = false;
+              errorMessage += `${
+                inputElement.placeholder || key
+              } is required.\n`;
+            }
+            keys.forEach((k, i) => {
+              if (i === keys.length - 1) {
+                tempObj[k] = value;
+              } else {
+                if (!tempObj[k]) {
+                  tempObj[k] = {};
+                }
+                tempObj = tempObj[k];
+              }
+            });
+          });
+          if (!isValid) {
+            alert(errorMessage);
+            return;
+          }
+          console.log({ formDataObj: formDataObj });
+          await fetch(`/api2/purchase_invoices`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formDataObj.data),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                return response.json().then((errorRes) => {
+                  console.error("Error:", errorRes);
+                  alert(
+                    `Error ${response.status}: ${
+                      errorRes.message || "An error occurred."
+                    }`
+                  );
+                });
+              }
+              return response.json().then(async (res) => {
+                console.log("Success:", res);
+
+                window.location.href = `/owner/purchase_invoices/view/${res.id}`;
+              });
+            })
+            .catch((error) => {
+              console.error("Fetch error:", error);
+              alert("An unexpected error occurred. Please try again.");
+            });
+        };
+      }
+    }, 1000);
+  });
+</script>

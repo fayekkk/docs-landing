@@ -1,0 +1,37 @@
+<script>
+  let x = {
+    map_location: { lat: 30.12876858880438, long: 30.12876858880438, zoom: 14 },
+  };
+  let x2 = {
+    " map_location":
+      '{"lat": "30.12876858880438", "long": "30.907715042431622", "zoom": "14"}',
+  };
+
+  // Parse the JSON string
+  //   let mapLocation = JSON.parse(x);
+
+  //   // Access the latitude, longitude, and zoom level
+  //   let latitude = mapLocation.lat;
+  //   let longitude = mapLocation.long;
+  //   let zoomLevel = mapLocation.zoom;
+
+  //   console.log("Latitude:", latitude);
+  //   console.log("Longitude:", longitude);
+  //   console.log("Zoom Level:", zoomLevel);
+
+  fetch("/v2/api/entity/le_maprf/1/fields", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(x),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Response:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+</script>

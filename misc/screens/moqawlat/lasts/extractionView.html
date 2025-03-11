@@ -1,0 +1,409 @@
+<style>
+  div[aria-label="item-actions-group"] {
+    display: none;
+  }
+  .main-area {
+    display: none;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    var divElement = $('div[aria-label="item-actions-group"]');
+
+    var clientId;
+    async function fetchStafftData() {
+      try {
+        const response = await fetch(
+          `/v2/api/entity/staff/${USER.staff_id}/1`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const data = await response.json();
+        console.log("Response:", data);
+        return data;
+      } catch (error) {
+        console.error("Error:", error);
+        return null;
+      }
+    }
+
+    let extraId = parseInt(window.location.href.split("/")[7]);
+
+    fetch(`/v2/api/entity/le_clientextraction/${extraId}/1`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) =>
+        response.json().then(async (res) => {
+          console.log(res);
+          clientId = res.client_project1;
+          var invoiceId = res.inv_id;
+          if (invoiceId) {
+            $.get(`/v2/api/entity/invoice/${invoiceId}/1`).then((data) => {
+              console.log(data);
+              const invNo = data.no;
+              $("#item-nav-tabs-responsive").append(`<li class="nav-item">
+                  <a class="nav-link " id="sales-inv-tab" data-toggle="tab" href="#sales-inv" role="tab" aria-controls="sales-inv" aria-selected="true">فواتير المبيعات</a>
+                  </li>`);
+              $("#item-nav-tabs-content-responsive")
+                .append(`<div name="sales-inv" id="sales-inv" class="tab-pane p-3" role="tabpanel" aria-labelledby="sales-inv-tab">
+                              <div class="panel">
+                                  <div class="panel-head">
+                                      <h3>فواتير المبيعات</h3>
+                                  </div>
+                              </div>
+                              <div class="p-3" id="sales-inv-content">
+                                  <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                      <div class="mb-4">
+                                        <table>
+                                          <tr>
+                                              <td><a href="/owner/invoices/view/${invoiceId}" target="_blank">فاتورة رقم ${invNo}</a></td>
+                                          </tr>
+                                      </table>  
+                                      </div>
+                                  </div>
+                                  </div>
+                              </div></div>`);
+            });
+          }
+          console.log(invoiceId);
+          if (USER.staff_id != 0) {
+            const staffData = await fetchStafftData();
+          } else {
+            staffData = null;
+          }
+          function showButtons() {
+            $.get(`/v2/api/entity/le_projects_settings/1/1`).then((data) => {
+              console.log(data);
+              const users = data.extra_confirmation_perm;
+              console.log(users);
+              if (
+                (res.status == "مسودة" && users.includes(USER.staff_id)) ||
+                (res.status == "مسودة" && USER.staff_id == 0)
+              ) {
+                console.log("لم يعتمد");
+                console.log("user included");
+                console.log(res.status);
+                $("#details > div > div.p-3").prepend(
+                  `<button type="button" id="confirm-ext" class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">  إعتماد المستخلص  </button>`
+                );
+                $(".main-area").show();
+              } else if (
+                (res.status == "تم الإعتماد" &&
+                  users.includes(USER.staff_id)) ||
+                (res.status == "تم الإعتماد" && USER.staff_id == 0)
+              ) {
+                console.log("تحويل إلى فاتورة");
+                $("#details > div > div.p-3").prepend(
+                  `<button type="button" id="add-inv" class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">تحويل إلى فاتورة <i class="list-icon mdi mdi-receipt" style="font-size: 25px;"></i> </button>`
+                );
+                $(".main-area").show();
+              } else if (
+                (res.status == null && users.includes(USER.staff_id)) ||
+                (res.status == "" && USER.staff_id == 0)
+              ) {
+                $(".main-area").show();
+              }
+            });
+          }
+
+          $.get(`/v2/api/entity/le_clientextraction/${extraId}/1`).then(
+            (data) => {
+              console.log(data);
+              const status = data.status;
+              // aria-label   item-actions-group
+              if (status == "مسودة") {
+                $(".pages-head > div > div > div.col-sm-5 > div")
+                  .append(`<div class="status"><span class="status-symble-2">مسودة</span>
+                        </div>`);
+                $("body").append(
+                  "<style>.pages-head-title { display: flex; align-items: baseline; } .status-symble-2 {margin: 0 10px; background-color: gray; color: white; padding: 8px; border-radius: 3px; width: 80px; text-align: center;  font-size: 14px !important; font-weight: bold; }</style>"
+                );
+                showButtons();
+              } else if (status == "تم الفوترة") {
+                $(
+                  "#main-content > div.main-area > div > div.card.border-white.mb-3 > div.card-header.px-3.bg-faded > div.btn-group.btn-group-responsive.btn-group-sm > a:nth-child(1)"
+                ).hide();
+                $(
+                  "#main-content > div.main-area > div > div.card.border-white.mb-3 > div.card-header.px-3.bg-faded > div.btn-group.btn-group-responsive.btn-group-sm > a:nth-child(2)"
+                ).hide();
+                $(".pages-head > div > div > div.col-sm-5 > div")
+                  .append(`<div class="status"><span class="status-symble-2">تم الفوترة</span>
+                        </div>`);
+                $("body").append(
+                  "<style>.pages-head-title { display: flex; align-items: baseline; } .status-symble-2 {margin: 0 10px; background-color: #0f8f5c; color: white; padding: 8px; border-radius: 3px; width: 80px; text-align: center;  font-size: 14px !important; font-weight: bold; }</style>"
+                );
+                showButtons();
+              } else if (status == "تم الإلغاء") {
+                $(
+                  "#main-content > div.main-area > div > div.card.border-white.mb-3 > div.card-header.px-3.bg-faded > div.btn-group.btn-group-responsive.btn-group-sm > a:nth-child(1)"
+                ).hide();
+                $("#add-inv").attr("disabled", true);
+                $(".pages-head > div > div > div.col-sm-5 > div")
+                  .append(`<div class="status"><span class="status-symble">ملغي</span>
+                        </div>`);
+                $("body").append(
+                  "<style>.pages-head-title { display: flex; align-items: baseline; } .status-symble { margin: 0 10px; background-color: darkred; color: white; padding: 8px; border-radius: 3px; width: 55px; text-align: center; font-size: 14px !important; font-weight: bold; }</style>"
+                );
+                showButtons();
+              } else if (status == "تم الإعتماد") {
+                $(
+                  "#main-content > div.main-area > div > div.card.border-white.mb-3 > div.card-header.px-3.bg-faded > div.btn-group.btn-group-responsive.btn-group-sm > a:nth-child(1)"
+                ).hide();
+                $(
+                  "#main-content > div.main-area > div > div.card.border-white.mb-3 > div.card-header.px-3.bg-faded > div.btn-group.btn-group-responsive.btn-group-sm > a:nth-child(2)"
+                ).hide();
+                $(".pages-head > div > div > div.col-sm-5 > div")
+                  .append(`<div class="status"><span class="status-symble">معتمد</span>
+                        </div>`);
+                $("body").append(
+                  "<style>.pages-head-title { display: flex; align-items: baseline; } .status-symble { margin: 0 10px; background-color: #1877f2; color: white; padding: 8px; border-radius: 3px; width: 55px; text-align: center; font-size: 14px !important; font-weight: bold; }</style>"
+                );
+                showButtons();
+              } else {
+                showButtons();
+              }
+              $(divElement).attr("style", "display: inline-flex");
+            }
+          );
+          function getSubsAccounts(extraction) {
+            console.log(extraction);
+            let subs =
+              extraction["le_clientextraction_le_clientextraction_subs"];
+            let invoiceAccounts = {};
+            subs.forEach((sub) => {
+              const label = sub.sub_label;
+              //   .replace(
+              //     /[\u0600-\u06FF]/g,
+              //     (c) => "\\u" + ("0000" + c.charCodeAt(0).toString(16)).slice(-4)
+              //   );
+              invoiceAccounts[sub.sub_account] = {
+                label: label,
+                value: sub.sub_val.toFixed(2), // Format value to two decimal places
+              };
+            });
+
+            let extra_details = JSON.stringify({
+              invoice_accounts: invoiceAccounts,
+            });
+
+            console.log(extra_details);
+            return extra_details;
+          }
+          $(document).on("click", "#add-inv", function (e) {
+            e.preventDefault();
+            console.log("click1");
+            function getinvoiceTotal(items) {
+              let total = 0;
+              if (items.length > 0) {
+                for (let i = 0; i < items.length; i++) {
+                  let unitPrice = items[i].price11;
+                  if (unitPrice == "" || unitPrice == null) {
+                    unitPrice = 0;
+                  }
+                  let totQty = items[i].ttlqty11;
+                  if (totQty == "" || totQty == null) {
+                    totQty = 0;
+                  }
+                  let currProcess = items[i].current_process11;
+                  if (currProcess == "" || currProcess == null) {
+                    currProcess = 0;
+                  }
+                  let ta3lyaQty = items[i].ta3lyattlqty1;
+                  if (ta3lyaQty == "" || ta3lyaQty == null) {
+                    ta3lyaQty = 0;
+                  }
+                  let ta3lyaPerc = items[i].curr_ta3lya_per1;
+                  if (ta3lyaPerc == "" || ta3lyaPerc == null) {
+                    ta3lyaPerc = 0;
+                  }
+                  total +=
+                    parseFloat(unitPrice) * //10
+                      parseFloat(totQty) * //100
+                      (parseFloat(currProcess) / 100) + //10/100   * 10*100
+                    parseFloat(unitPrice) *
+                      parseFloat(ta3lyaQty) *
+                      (parseFloat(ta3lyaPerc) / 100);
+                  console.log(
+                    parseFloat(unitPrice),
+                    parseFloat(totQty),
+                    parseFloat(currProcess),
+                    parseFloat(ta3lyaQty),
+                    parseFloat(ta3lyaPerc)
+                  );
+
+                  console.log(total);
+                }
+              }
+              return total;
+            }
+            console.log(res);
+
+            let extraTotal = getinvoiceTotal(
+              res.le_clientextraction_le_clientextraction_extraction_items11
+            );
+
+            function getCurrentDate() {
+              const today = new Date();
+              const year = today.getFullYear();
+              const month = String(today.getMonth() + 1).padStart(2, "0");
+              const day = String(today.getDate()).padStart(2, "0");
+
+              return `${year}-${month}-${day}`;
+            }
+            console.log({ resForItems: res });
+
+            // var itemsarr = [
+            //   {
+            //     item: `مسلخلص عميل رقم ${clientId} `,
+            //     description: "",
+            //     unit_price: extraTotal,
+            //     quantity: 1,
+            //     col_3: "",
+            //     col_4: " ",
+            //     tax1: 0,
+            //     tax2: 0,
+            //   },
+            // ];
+            var itemsarr = res[
+              "le_clientextraction_le_clientextraction_extraction_items11"
+            ].map(function (item) {
+              var quantity =
+                item.current_process11 !== null
+                  ? (item.ttlqty11 * item.current_process11) / 100
+                  : 0;
+
+              return {
+                item: item.extraction_item11,
+                description: item.unit11,
+                unit_price: item.price11,
+                quantity: quantity,
+                col_3: item.item_number11,
+                col_4: item.current_process11,
+                col_5: item.ttlqty11,
+                tax1: item.taxes,
+                tax2: 0,
+              };
+            });
+            let subsToSend = getSubsAccounts(res);
+            console.log({ subsToSend: subsToSend });
+
+            let body = {
+              Invoice: {
+                subscription_id: "",
+                store_id: 1,
+                po_number: 26,
+                client_id: clientId,
+                client_email: "",
+                client_country_code: "SAR",
+                draft: "1",
+                follow_up_status: null,
+                work_order_id: res.reference_id,
+                staff_id: 0,
+                name: "",
+                is_offline: true,
+                currency_code: "SAR",
+                date: getCurrentDate(),
+                discount: 0,
+                discount_amount: 0,
+                deposit: 0,
+                deposit_type: 0,
+                notes: "",
+                html_notes: "",
+                invoice_layout_id: "2",
+                estimate_id: 0,
+                shipping_options: "",
+                shipping_amount: null,
+                follow_up_status: null,
+                requisition_delivery_status: null,
+                pos_shift_id: null,
+                extra_details: getSubsAccounts(res),
+              },
+              InvoiceItem: itemsarr,
+              InvoiceCustomField: [],
+            };
+            console.log({ body: body });
+            console.log(JSON.stringify(body, null, 2));
+            fetch(`/api2/invoices`, {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(body),
+            })
+              .then((res) => res.json())
+              .then((response) => {
+                console.log(response);
+                // update the invoiceing status
+                // fetch(`/v2/api/entity/le_clientextraction/${extraId}/fields`, {
+                //   method: "POST",
+                //   headers: {
+                //     Accept: "application/json",
+                //     "Content-Type": "application/json",
+                //   },
+                //   body: JSON.stringify({
+                //     status: "تم الفوترة",
+                //     inv_id: response.id,
+                //   }),
+                // }).then((response) => {
+                //   response
+                //     .json()
+                //     .then((res) => {
+                //       console.log("Success:", res);
+                //     })
+                //     .catch((error) => {
+                //       console.error("Error:", error);
+                //     });
+                // });
+                setTimeout(() => {
+                  // location.href = `/owner/invoices/edit/${response.id}?extraction_id=${extraId}`;
+                }, 1000);
+                // location.reload();
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+          $(document).on("click", "#confirm-ext", function (e) {
+            e.preventDefault();
+            console.log("click2");
+            fetch(`/v2/api/entity/le_clientextraction/${extraId}/fields`, {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                confirmation: USER.staff_id,
+                status: "تم الإعتماد",
+              }),
+            }).then((response) => {
+              response
+                .json()
+                .then((res) => {
+                  console.log("Success:", res);
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            });
+            location.reload();
+          });
+        })
+      )
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+</script>

@@ -1,0 +1,152 @@
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      if (USER.staff_id != 0 && USER.staff_id != 1) {
+        document
+          .getElementById("InvoiceNo")
+          .setAttribute("readonly", "readonly");
+      }
+      function handleSerials() {
+        var InvoiceLayout = document.getElementById("InvoiceLayout").value;
+        if (InvoiceLayout == 6 || InvoiceLayout == 7) {
+          $.get(
+            `/v2/api/entity/invoice/list/-1?filter[invoice_layout_id]=${InvoiceLayout}&&filter[draft]=0&&sort[date]=desc`
+          ).then((lastInvs) => {
+            console.log(lastInvs);
+            invNo = lastInvs.data[0].no;
+            var newinvNo = 0;
+            var invNoinput = document.getElementById("InvoiceNo");
+            if (invNo.split("-").length == 2) {
+              newinvNo =
+                invNo.split("-")[0] +
+                "-" +
+                (parseFloat(invNo.split("-")[1]) + 1);
+            } else if (invNo.split("-").length == 1) {
+              newinvNo = parseFloat(invNo) + 1;
+            }
+            if (newinvNo != 0) {
+              var ishere = 0;
+
+              async function checkNext() {
+                ishere++;
+                if (ishere < 20) {
+                  await $.get(
+                    `/v2/api/entity/invoice/list/-1?filter[no]=${newinvNo}`
+                  ).then((isinvtest) => {
+                    console.log(isinvtest);
+
+                    if (isinvtest.data.length == 0) {
+                      console.log("Put Value");
+
+                      invNoinput.value = newinvNo;
+                    } else {
+                      console.log(" Try next value");
+
+                      if (String(newinvNo).split("-").length == 2) {
+                        newinvNo =
+                          newinvNo.split("-")[0] +
+                          "-" +
+                          (parseFloat(newinvNo.split("-")[1]) + 1);
+                        checkNext();
+                      } else if (String(newinvNo).split("-").length == 1) {
+                        newinvNo = parseFloat(newinvNo) + 1;
+                        checkNext();
+                      }
+                    }
+                  });
+                }
+              }
+              checkNext();
+            }
+          });
+        }
+      }
+      handleSerials();
+      document
+        .getElementById("InvoiceLayout")
+        .addEventListener("change", () => {
+          handleSerials();
+        });
+    });
+  });
+</script>
+
+<style>
+  .client-data-box label[for="InvoiceClientAddress1"] {
+    display: none;
+  }
+  .client-data-box #InvoiceClientAddress1 {
+    display: none;
+  }
+  .client-data-box label[for="InvoiceClientAddress2"] {
+    display: none;
+  }
+  .client-data-box #InvoiceClientAddress2 {
+    display: none;
+  }
+  .client-data-box label[for="InvoiceClientState"] {
+    display: none;
+  }
+  .client-data-box #InvoiceClientState {
+    display: none;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      //   if (USER.staff_id != 0) {
+      document.getElementById(
+        "CustomModelField62"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField63"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField64"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField65"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField66"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField67"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField68"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField69"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField89"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField90"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField91"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField92"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField93"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField94"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField95"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField96"
+      ).parentElement.style.display = "none";
+      document.getElementById(
+        "CustomModelField97"
+      ).parentElement.style.display = "none";
+      //   }
+    }, 100);
+  });
+</script>

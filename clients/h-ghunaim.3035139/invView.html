@@ -1,0 +1,303 @@
+<style>
+  .custom_hiden2 {
+    display: none;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(async () => {
+      let newAction = `<a class="btn btn-default btn-sm quick-action-btn custom_hiden2" id="sendInv" href="#">
+                        إرسال الفاتورة
+                      </a>`;
+
+      $(".invoice-actions a:first").after(newAction);
+      async function fetchstaffsData(invId) {
+        return fetchData(`/v2/api/entity/le_invoicepers/3/1`);
+      }
+      async function fetchData(url, additionalHeaders = {}) {
+        try {
+          const response = await fetch(url, {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              ...additionalHeaders,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.error("Error:", error);
+          return null;
+        }
+      }
+      const staffs = await fetchstaffsData();
+      console.log({ staffs: staffs });
+      let currentstaff = USER.staff_id;
+      console.log({ currentstaff: currentstaff });
+
+      if (staffs.stafff.includes(parseInt(currentstaff)) || currentstaff == 0) {
+        $("#sendInv").removeClass("custom_hiden2");
+      }
+      $("#sendInv").on("click", () => {
+        $("#sendInv").attr("disabled", true);
+        $("#sendInv").text("جارى التحقق ");
+        let invId = parseInt(window.location.href.split("/")[6]);
+        validateInv(invId);
+      });
+      async function fetchInvData(invId) {
+        try {
+          const response = await fetch(`/api2/invoices/${invId}`, {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          });
+
+          const data = await response.json();
+          console.log("Response:", data);
+          return data;
+        } catch (error) {
+          console.error("Error:", error);
+          return null;
+        }
+      }
+
+      async function validateClient(clientCode) {
+        try {
+          const response = await fetch(
+            `https://csppower.daftra.com/v2/api/entity/client/list/1?filter[client_number]=${clientCode}&&filter[branch_id][in][]=1`,
+            {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                apikey: "1db7398925ab0eb21116a9e664b125be603b4328",
+              },
+            }
+          );
+
+          const data = await response.json();
+          console.log("Response:", data);
+          return data;
+        } catch (error) {
+          console.error("Error:", error);
+          return null;
+        }
+      }
+      async function validateStaff(staffId) {
+        try {
+          const staffResponse = await fetchData(
+            `/v2/api/entity/staff/${staffId}`,
+            {}
+          );
+          if (
+            !staffResponse ||
+            !staffResponse.staff_custom_data ||
+            !staffResponse.staff_custom_data.refno
+          ) {
+            throw new Error("Staff refno not found");
+          }
+          const refno = staffResponse.staff_custom_data.refno;
+          const staffListResponse = await fetchData(
+            `https://csppower.daftra.com/v2/api/entity/staff/list/1?filter[staff_custom_data.refno]=${refno}&&filter[branch_id][in][]=1`,
+            {
+              apikey: "1db7398925ab0eb21116a9e664b125be603b4328",
+            }
+          );
+          return staffListResponse;
+        } catch (error) {
+          console.error("Error validating staff:", error);
+          throw error;
+        }
+      }
+
+      async function validateProducts(productCode) {
+        try {
+          const response = await fetch(
+            `https://csppower.daftra.com/v2/api/entity/product/list/1?filter[product_code]=${productCode}&&filter[branch_id][in][]=1`,
+            {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                apikey: "1db7398925ab0eb21116a9e664b125be603b4328",
+              },
+            }
+          );
+
+          const data = await response.json();
+          console.log("Response:", data);
+          return data;
+        } catch (error) {
+          console.error("Error:", error);
+          return null;
+        }
+      }
+      function getCurrentDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, "0");
+        const day = String(today.getDate()).padStart(2, "0");
+
+        return `${year}-${month}-${day}`;
+      }
+      async function validateInv(invId) {
+        const InvDataData22 = await fetchInvData(invId);
+        const InvDataData = InvDataData22.data.Invoice;
+        console.log(InvDataData);
+        if (InvDataData.follow_up_status == 4) {
+          alert("تم إرسال الفاتورة مسبقاً");
+          $("#sendInv").text("تم الإرسال");
+          return;
+        }
+        let clientCode = InvDataData.Client.client_number;
+        console.log({ clientCode: clientCode });
+
+        const clients = await validateClient(clientCode);
+        console.log({ clients: clients });
+        if (clients.data.length == 0) {
+          alert("العميل غير موجود");
+        } else {
+          let clientId = clients.data[0].id;
+          console.log({ clientId: clientId });
+          let invItems = InvDataData.InvoiceItem;
+          let itemsarr = [];
+          let flag1 = 1;
+          let staffId = await validateStaff(InvDataData.staff_id);
+          console.log({ staffIdddddd: staffId });
+
+          if (!staffId || staffId.data.length === 0) {
+            staffId = 0;
+          } else {
+            staffId = staffId.data[0].id;
+          }
+          console.log({ staffIdddddd: staffId });
+          function hundlestores(storeId) {
+            if (storeId == "2") {
+              return "5";
+            } else if (storeId == "3") {
+              return "5";
+            } else if (storeId == "1") {
+              return "1";
+            } else {
+              return "";
+            }
+          }
+          for (let i = 0; i < invItems.length; i++) {
+            const product = await validateProducts(invItems[i].item);
+            console.log({ product: product });
+            if (product.length == 0) {
+              flag1 = 0;
+              break;
+              alert("المنتج غير موجود");
+            } else {
+              itemsarr.push({
+                product_id: product.data[0].id,
+                item: invItems[i].item,
+                description: invItems[i].description,
+                unit_price: invItems[i].unit_price,
+                quantity: invItems[i].quantity,
+                col_3: "",
+                col_4: "",
+                col_5: "",
+                tax1: invItems[i].tax1,
+                tax2: 0,
+                store_id: hundlestores(invItems[i].store_id),
+              });
+            }
+          }
+          console.log(itemsarr);
+          let body = {
+            Invoice: {
+              subscription_id: "",
+              po_number: 26,
+              client_id: clientId,
+              client_email: "",
+              client_country_code: "SAR",
+              draft: "0",
+              follow_up_status: 4,
+              staff_id: staffId,
+              name: "",
+              is_offline: true,
+              currency_code: "SAR",
+              date: InvDataData.date,
+              discount: InvDataData.discount,
+              discount_amount: InvDataData.discount_amount,
+              deposit: 0,
+              deposit_type: 0,
+              notes: "",
+              html_notes: "",
+              invoice_layout_id: 10,
+              estimate_id: 0,
+              shipping_options: "",
+              shipping_amount: null,
+              requisition_delivery_status: null,
+              pos_shift_id: null,
+              branch_id: 1,
+              shipping_options: InvDataData.shipping_options,
+              shipping_amount: InvDataData.shipping_amount,
+              shipping_option_id: InvDataData.shipping_option_id,
+              shipping_tax_id: InvDataData.shipping_tax_id,
+              // payment_status: InvDataData.payment_status,
+              requisition_delivery_status:
+                InvDataData.requisition_delivery_status,
+            },
+            InvoiceItem: itemsarr,
+            // Payment: InvDataData.InvoicePayment.map((payment) => ({
+            //   payment_method: payment.payment_method,
+            //   amount: parseFloat(payment.amount),
+            //   transaction_id: payment.transaction_id || "N/A",
+            //   treasury_id: parseInt(payment.treasury_id),
+            //   date: payment.date,
+            //   staff_id: parseInt(payment.staff_id),
+            // })),
+            InvoiceCustomField: [],
+          };
+          console.log(body);
+          $("#sendInv").text("جارى إرسال الفاتورة ");
+          fetch(`https://csppower.daftra.com/api2/invoices`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              apikey: "1db7398925ab0eb21116a9e664b125be603b4328",
+            },
+            body: JSON.stringify(body),
+          })
+            .then((res) => res.json())
+            .then((response) => {
+              console.log(response);
+              alert("تم إضافة فاتورة بنجاح");
+              window.location.reload();
+
+              fetch(`/v2/api/entity/invoice/${invId}/fields`, {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ follow_up_status: 4 }),
+              })
+                .then((res) => res.json())
+                .then((response) => {
+                  console.log(response);
+                  console.log("sssssssssssssssssssssssssssssssssssss");
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      }
+    }, 200);
+  });
+</script>

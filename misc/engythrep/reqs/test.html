@@ -1,0 +1,377 @@
+<style>
+  .late_input {
+    overflow: hidden;
+    width: 113px;
+  }
+  .late1_input {
+    overflow: hidden;
+    width: 113px;
+  }
+</style>
+
+<script>
+  $(document).ready(function () {
+    // Function to update a project item
+    async function updateProjectItem(
+      workOrderId,
+      invoiceNo,
+      itemValues,
+      subValue,
+      records,
+      itemName
+    ) {
+      let previousCost = parseFloat(itemValues.requisitions_spend) || 0;
+      let totalValue = previousCost + subValue;
+
+      const existingRecord = records.find(
+        (record) => record.recId === itemValues.rec_id
+      );
+      if (existingRecord) {
+        totalValue = existingRecord.requisitions_spend;
+      }
+
+      try {
+        const response = await fetch(
+          `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${itemValues.rec_id}/fields`,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ requisitions_spend: totalValue }),
+          }
+        );
+
+        if (!response.ok) {
+          const errorRes = await response.json();
+          throw new Error(
+            `Error ${response.status}: ${
+              errorRes.message || "An error occurred."
+            }`
+          );
+        }
+
+        await postHistory(
+          invoiceNo,
+          itemValues.rec_id,
+          itemName,
+          subValue,
+          workOrderId
+        );
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+
+    // Function to log the history of operations
+    async function postHistory(
+      invoiceNo,
+      itemId,
+      itemName,
+      totalValue,
+      workOrderId
+    ) {
+      const postBody = {
+        operations_type: "فاتورة مشتريات",
+        ref_type: "PurchInv",
+        op_date: new Date().toISOString().slice(0, 19).replace("T", " "),
+        operation_no: invoiceNo,
+        item_id: itemId,
+        project_item: itemName,
+        single_line_field: totalValue,
+        reference_id: workOrderId,
+      };
+
+      try {
+        const response = await fetch(`/v2/api/entity/le_OperationsLog`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(postBody),
+        });
+
+        if (!response.ok) {
+          const errorRes = await response.json();
+          throw new Error(
+            `Error ${response.status}: ${
+              errorRes.message || "An error occurred."
+            }`
+          );
+        }
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+
+    // Function to update project data
+    async function updateProjectData(invoiceNo) {
+      const url = new URL(window.location.href);
+      const workOrderId = url.searchParams.get("work_order_id");
+      let records = [];
+      const itemSelects = $(".itemSelect").toArray();
+
+      for (const itemSelect of itemSelects) {
+        const recId = $(itemSelect).val();
+
+        if (
+          recId !== "إختر الخدمة" &&
+          window.location.href.includes("/requisitions/add/2")
+        ) {
+          const selectedOption = $(itemSelect).find("option:selected");
+          const itemValues = selectedOption[0].dataset;
+          const price =
+            parseFloat(
+              $(itemSelect).closest("tr").find(".unit-price input").val()
+            ) || 0;
+          const qty =
+            parseFloat(
+              $(itemSelect).closest("tr").find(".Quantity input").val()
+            ) || 0;
+          const subValue = price * qty;
+
+          const existingRecordIndex = records.findIndex(
+            (record) => record.recId === itemValues.rec_id
+          );
+          if (existingRecordIndex !== -1) {
+            records[existingRecordIndex].requisitions_spend += subValue;
+          } else {
+            records.push({
+              recId: itemValues.rec_id,
+              requisitions_spend:
+                (parseFloat(itemValues.requisitions_spend) || 0) + subValue,
+            });
+          }
+
+          await updateProjectItem(
+            workOrderId,
+            invoiceNo,
+            itemValues,
+            subValue,
+            records,
+            selectedOption[0].textContent
+          );
+        }
+      }
+    }
+
+    // Initialize the form and item prices based on the current URL
+    if (
+      window.location.href.includes("/requisitions/add") ||
+      window.location.href.includes("/requisitions/edit")
+    ) {
+      $(".item-unit-price").attr("readonly", false);
+
+      // Function to create a searchable selector for services
+      const createServiceSelector = () => {
+        const selector = $("<select>", {
+          class: "itemSelect",
+          style: "width: 100%;",
+        });
+        selector.append(
+          $("<option>", { text: "إختر الخدمة", style: "text-align: center;" })
+        );
+
+        const workOrderId = new URL(window.location.href).searchParams.get(
+          "work_order_id"
+        );
+        $.get(`/v2/api/entity/le_workflow-type-entity-2/${workOrderId}/4`).then(
+          (response) => {
+            const options =
+              response["le_workflow-type-entity-2_custom_data"][
+                "le_custom_data_le_workflow-type-entity-2_le_custom_data_le_workflow-type-entity-2_project_items"
+              ];
+            options.forEach((optionText) => {
+              const option = document.createElement("option");
+              option.textContent = optionText.item_name;
+              option.dataset["purch_estimated_cost"] =
+                optionText.purch_estimated_cost;
+              option.dataset["expenses_estimated_cost"] =
+                optionText.expenses_estimated_cost;
+              option.dataset["rec_id"] = optionText.id;
+              option.dataset["requisitions_spend"] =
+                optionText.requisitions_spend;
+              option.dataset["expenses_actual_cost"] =
+                optionText.expenses_actual_cost;
+              option.dataset["requisitions_add"] = optionText.requisitions_add;
+              option.dataset["requisitions_spend"] =
+                optionText.requisitions_spend;
+              option.style.textAlign = "center";
+              selector.append(option);
+            });
+
+            // Append selector to item rows
+            $("#listing_table .itemRow").each(function () {
+              if (!$(this).find(".itemSelect").length) {
+                $(this).find(".late_td").empty().append(selector.clone());
+              }
+            });
+          }
+        );
+      };
+
+      // Create service selector on load
+      createServiceSelector();
+
+      // Event listener for changes in item pricing and quantity
+      $(document).on(
+        "change",
+        ".item-unit-price, .item-qty, .itemSelect",
+        function () {
+          const closestTr = $(this).closest("tr");
+          const selectedValue = closestTr.find(".itemSelect").val();
+          let totalSubCost = 0;
+
+          $(".itemRow").each(function () {
+            const row = $(this);
+            if (row.find(".itemSelect").val() === selectedValue) {
+              const price = parseFloat(row.find(".item-unit-price").val()) || 0;
+              const qty = parseFloat(row.find(".item-qty").val()) || 0;
+              totalSubCost += price * qty;
+            }
+          });
+
+          const actualSpendCost =
+            parseFloat(
+              closestTr
+                .find(".itemSelect option:selected")
+                .data("requisitions_spend")
+            ) || 0;
+          const actualAddCost =
+            parseFloat(
+              closestTr
+                .find(".itemSelect option:selected")
+                .data("requisitions_add")
+            ) || 0;
+
+          let totalActualCost = window.location.href.includes(
+            "/requisitions/add/2"
+          )
+            ? actualSpendCost + totalSubCost
+            : window.location.href.includes("/requisitions/add/1")
+            ? actualAddCost + totalSubCost
+            : 0;
+
+          console.log(`Total Actual Cost for: ${totalActualCost}`);
+        }
+      );
+
+      // Function to create a new column for service selection
+      function createCol(prevTh, prevTd, colTitle, classTh, classTd, colInput) {
+        if ($(`#listing_table th.${classTh}`).length === 0) {
+          $(prevTh).before(`<th class='${classTh}'>${colTitle}</th>`);
+        }
+
+        // Append new TD with input area to each row
+        $(`#listing_table tr`).each(function () {
+          if (!$(this).find(`td.${classTd}`).length) {
+            $(this)
+              .find(prevTd)
+              .before(
+                `<td class='${classTd}'><textarea class='${colInput} editable-input'></textarea></td>`
+              );
+          }
+        });
+        createServiceSelector(); // Refresh selector after creating columns
+      }
+
+      // Get work order ID from URL and create the necessary columns
+      const workOrderId = new URL(window.location.href).searchParams.get(
+        "work_order_id"
+      );
+      if (workOrderId) {
+        createCol(
+          "#label_unit_price",
+          ".unit-price",
+          "إختار الخدمة",
+          "late_th",
+          "late_td",
+          "late_input"
+        );
+        $(".items-totals").find("td").eq(0).attr("colspan", "6");
+      }
+
+      // Add new item and create service selection column
+      $(document).on("click", "#AddItem", function () {
+        if (workOrderId) {
+          setTimeout(() => {
+            $(".item-unit-price").attr("readonly", false);
+            createCol(
+              "#label_unit_price",
+              ".unit-price",
+              "إختار الخدمة",
+              "late_th",
+              "late_td",
+              "late_input"
+            );
+          }, 250);
+        }
+      });
+
+      // Form submission handling
+      //   $("#InvoiceForm").on("submit", async function (e) {
+      //     e.preventDefault();
+
+      //     const formData = new FormData(e.target);
+      //     const formDataObj = {};
+      //     let isValid = true;
+      //     let errorMessage = "";
+
+      //     // Validate form data
+      //     formData.forEach((value, key) => {
+      //       const keys = key.match(/[^\[\]]+/g);
+      //       let tempObj = formDataObj;
+      //       const inputElement = e.target.querySelector(`[name="${key}"]`);
+      //       if (inputElement && inputElement.hasAttribute("required") && !value) {
+      //         isValid = false;
+      //         errorMessage += `${inputElement.placeholder || key} is required.\n`;
+      //       }
+      //       keys.forEach((k, i) => {
+      //         if (i === keys.length - 1) {
+      //           tempObj[k] = value;
+      //         } else {
+      //           if (!tempObj[k]) {
+      //             tempObj[k] = {};
+      //           }
+      //           tempObj = tempObj[k];
+      //         }
+      //       });
+      //     });
+
+      //     if (!isValid) {
+      //       alert(errorMessage);
+      //       return;
+      //     }
+
+      //     // Submit form data
+      //     try {
+      //       const response = await fetch(`/api2/purchase_invoices`, {
+      //         method: "POST",
+      //         headers: {
+      //           Accept: "application/json",
+      //           "Content-Type": "application/json",
+      //         },
+      //         body: JSON.stringify(formDataObj.data),
+      //       });
+
+      //       if (!response.ok) {
+      //         const errorRes = await response.json();
+      //         throw new Error(
+      //           `Error ${response.status}: ${
+      //             errorRes.message || "An error occurred."
+      //           }`
+      //         );
+      //       }
+
+      //       const res = await response.json();
+      //       await updateProjectData(res.id);
+      //       window.location.href = `/owner/purchase_invoices/view/${res.id}`;
+      //     } catch (error) {
+      //       alert(error.message);
+      //     }
+      //   });
+    }
+  });
+</script>

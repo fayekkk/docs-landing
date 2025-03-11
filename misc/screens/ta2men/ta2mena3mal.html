@@ -1,0 +1,112 @@
+<style>
+  .hidden-elem {
+    display: none !important;
+  }
+  #listing_table th:last-child,
+  #listing_table td:last-child {
+    border-left: 1px solid black;
+  }
+  #listing_table th:nth-child(1) {
+    border-right: 1px solid black;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      var newButton = `<div class="col-md-12 col-sm-12" style="margin-bottom: 25px;">
+        <div class="m-r-md d-inline-flex">
+          <a id="calcBtn" class="ajust-invoice btn-info" style="padding: 8px 15px !important; display: inline-block;">احسب تأمين الأعمال</a>
+        </div>
+        <div style="display: inline-block; max-width: 100px;">
+          <label class="ui-input-label l-input-label adjust-tab-input-label">النسبة</label>
+          <input type="number" style="height: 40px;" placeholder="0" class="number discount-tab-input-discount ui-input l-input form-x3" step="any" value="" id="InvoiceRetention">
+        </div>
+        <div class="error-box hidden">
+          <span class="empty-value hidden-elem rtl-span"> قم بإدخال النسبة أولاً   </span>
+          <span class="exceed-limit hidden-elem rtl-span">لا يمكن أن تتخطى النسبة 100%</span>
+        </div>
+      </div>`;
+      var tab = $("#tab-1 .row");
+      tab.prepend(newButton);
+      var retentionValue = $("#InvoiceAdjustmentValue");
+      function calcRetention() {
+        onReceiveBarCode(3416300000027);
+        setTimeout(() => {
+          var intervalId = setInterval(() => {
+            var allRows = document.querySelectorAll("#listing_table tr");
+            for (let i = 1; i < allRows.length; i++) {
+              console.log(
+                "//" + allRows[i].querySelector(".item-id").value + "//"
+              );
+              if (allRows[i].querySelector(".item-id").value == 15) {
+                console.log("I'm here");
+                $(".item-qty")
+                  .eq(i - 1)
+                  .val(1);
+                $(".item-qty")
+                  .eq(i - 1)
+                  .trigger("change");
+                var retentionperc = parseFloat(
+                  $("#InvoiceRetention").val() * 0.01
+                );
+                $(".item-unit-price")
+                  .eq(i - 1)
+                  .val(0);
+                $(".item-unit-price")
+                  .eq(i - 1)
+                  .trigger("change");
+                var subttl = parseFloat(
+                  document
+                    .getElementById("SubtotalValue")
+                    .innerText.replace(/,/g, "")
+                );
+                $(".item-unit-price")
+                  .eq(i - 1)
+                  .val((retentionperc * subttl * -1).toFixed(2));
+                $(".item-unit-price")
+                  .eq(i - 1)
+                  .trigger("change");
+
+                if (
+                  allRows[allRows.length - 1].querySelector(".item-id").value ==
+                  ""
+                ) {
+                  console.log(" no id ");
+                  allRows[allRows.length - 1]
+                    .querySelector(".delete-product-cell .removeItem ")
+                    .click();
+                }
+                clearInterval(intervalId); // Clear the interval using the interval ID
+              }
+            }
+          }, 500);
+        }, 250);
+      }
+      setTimeout(function () {
+        // showing error box if retention was not entered after button click
+        $("#calcBtn").on("click", function () {
+          if (isNaN(parseFloat($("#InvoiceRetention").val()))) {
+            $(".error-box").removeClass("hidden-elem");
+            $(".empty-value").removeClass("hidden-elem");
+          } else {
+            $(".error-box").addClass("hidden-elem");
+            $(".empty-value").addClass("hidden-elem");
+          }
+          calcRetention();
+        });
+
+        // giving error message in case retention percentage exceeds 100%
+        $("#InvoiceRetention").on("input", function () {
+          if (parseFloat($("#InvoiceRetention").val()) > 100) {
+            $("#InvoiceRetention").val(100);
+            $(".error-box").removeClass("hidden-elem");
+            $(".exceed-limit").removeClass("hidden-elem");
+          } else {
+            $(".error-box").addClass("hidden-elem");
+            $(".exceed-limit").addClass("hidden-elem");
+          }
+        });
+      }, 500);
+    }, 200);
+  });
+</script>

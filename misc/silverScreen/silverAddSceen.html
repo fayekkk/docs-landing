@@ -1,0 +1,1025 @@
+<style>
+  .count-cell,
+  .item-qty {
+    pointer-events: none;
+    background-color: #eee;
+  }
+  .late_th,
+  .loc_th,
+  .late_td,
+  .loc_td,
+  .loca_th,
+  .loca_td,
+  .shootingPrice_th,
+  .shootingPrice_td,
+  .shootingQty_th,
+  .shootingQty_td {
+    display: table-cell !important;
+  }
+  /* .mainstr input,
+  .subsstr input {
+    background-color: #000;
+    color: #000;
+  } */
+  .csutom-editable-area {
+    width: 97%;
+    padding: 0 4px;
+    overflow: hidden;
+    line-height: 17px;
+    height: 45px;
+    resize: none;
+    background: 0 0;
+    margin: 0;
+    font-size: 12px;
+  }
+
+  .custom-editable-input {
+    border: 0;
+    background: 0 0;
+    padding: 6px 0;
+  }
+
+  #due_after_row {
+    display: table-row !important;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    $(document).on("change", "#InvoiceLayout", function () {
+      let layout_id = $("#InvoiceLayout").val();
+      if (layout_id == "5") {
+        setTimeout(() => {
+          $(".col-4, .tax2").hide();
+        }, 300);
+
+        function createCol(
+          prevTh,
+          prevTd,
+          colTitle,
+          classTh,
+          classTd,
+          colInput
+        ) {
+          var rowsNum = $("#listing_table tr").length;
+
+          if (
+            document.querySelectorAll("#listing_table tr:nth-child(1) th")
+              .length == 14 ||
+            document.querySelectorAll("#listing_table tr:nth-child(1) th")
+              .length == 15 ||
+            document.querySelectorAll("#listing_table tr:nth-child(1) th")
+              .length == 16 ||
+            document.querySelectorAll("#listing_table tr:nth-child(1) th")
+              .length == 17 ||
+            document.querySelectorAll("#listing_table tr:nth-child(1) th")
+              .length == 18
+          ) {
+            // Clone TH and attach change event listener
+            $(prevTh).after(
+              $("th.col-3")
+                .clone()
+                .wrap("<p>")
+                .parent()
+                .html()
+                .replace("col-3", classTh)
+                .replace("الوحدة <br> Unit", colTitle)
+            );
+
+            $(prevTd).after(
+              $("td.col-3")
+                .clone()
+                .wrap("<p>")
+                .parent()
+                .html()
+                .replace("col-3", classTd)
+                .replace("item_col_3", colInput)
+            );
+          } else {
+            if (
+              document.querySelectorAll("#listing_table tr:last-child td")
+                .length < 19
+            ) {
+              $(`#listing_table tr:last-child ${prevTd}`).after(
+                $("#listing_table tr:last-child td.col-3")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-3", classTd)
+                  .replace("item_col_3", colInput)
+              );
+            }
+          }
+
+          $("." + colInput).attr("placeholder", "");
+          $("." + colInput).attr("name", "");
+          // $("#InvoiceLayout").triggerHandler("change", ["def"]);
+        }
+        // adding the columns when screen is loaded
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "رقم الكتالوج",
+          "late_th",
+          "late_td",
+          "late_input"
+        );
+
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "رقم البند التجارى  ",
+          "loc_th",
+          "loc_td",
+          "loc_input"
+        );
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "رقم البند التجارى  ",
+          "loca_th",
+          "loca_td",
+          "loca_input"
+        );
+
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "رقم البند التجارى  ",
+          "shootingQty_th",
+          "shootingQty_td",
+          "shootingQty_input"
+        );
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "رقم البند التجارى  ",
+          "shootingPrice_th",
+          "shootingPrice_td",
+          "shootingPrice_input"
+        );
+        const hundleAddScreen = () => {
+          setTimeout(() => {
+            let allRows = document.querySelectorAll("#listing_table tr");
+            for (let z = 0; z < allRows.length; z++) {
+              allRows[z].cells[9].style.display = "none";
+            }
+            for (let i = 1; i < allRows.length; i++) {
+              /********************** Crate And append inputs ******************************/
+
+              let PrepDaysPrice = document.createElement("input");
+              PrepDaysPrice.setAttribute("id", "PrepDaysPrice");
+              PrepDaysPrice.setAttribute(
+                "class",
+                "custom-editable-input csutom-editable-area "
+              );
+              PrepDaysPrice.setAttribute("type", "number");
+              let PrepDays = document.createElement("input");
+              PrepDays.setAttribute("id", "PrepDays");
+              PrepDays.setAttribute(
+                "class",
+                "custom-editable-input csutom-editable-area "
+              );
+              PrepDays.setAttribute("type", "number");
+              let ShootngDays = document.createElement("input");
+              ShootngDays.setAttribute("id", "ShootngDays");
+              ShootngDays.setAttribute(
+                "class",
+                "custom-editable-input csutom-editable-area "
+              );
+              let shootingPrice = document.createElement("input");
+              shootingPrice.setAttribute("id", "shootingPrice");
+              shootingPrice.setAttribute(
+                "class",
+                "custom-editable-input csutom-editable-area "
+              );
+              let shootingQty = document.createElement("input");
+              shootingQty.setAttribute("id", "shootingQty");
+              shootingQty.setAttribute(
+                "class",
+                "custom-editable-input csutom-editable-area "
+              );
+              ShootngDays.setAttribute("type", "number");
+              if (!allRows[i].querySelector(".late_td input")) {
+                allRows[i].querySelector(".late_td").innerHTML = "";
+                allRows[i].querySelector(".late_td").appendChild(ShootngDays);
+              }
+              if (!allRows[i].querySelector(".loc_td input")) {
+                allRows[i].querySelector(".loc_td").innerHTML = "";
+                allRows[i].querySelector(".loc_td").appendChild(PrepDays);
+              }
+              if (!allRows[i].querySelector(".loca_td input")) {
+                allRows[i].querySelector(".loca_td").innerHTML = "";
+                allRows[i].querySelector(".loca_td").appendChild(PrepDaysPrice);
+              }
+              if (!allRows[i].querySelector(".shootingPrice_td input")) {
+                allRows[i].querySelector(".shootingPrice_td").innerHTML = "";
+                allRows[i]
+                  .querySelector(".shootingPrice_td")
+                  .appendChild(shootingPrice);
+              }
+              if (!allRows[i].querySelector(".shootingQty_td input")) {
+                allRows[i].querySelector(".shootingQty_td").innerHTML = "";
+                allRows[i]
+                  .querySelector(".shootingQty_td")
+                  .appendChild(shootingQty);
+              }
+              /********************** addEventListeners ******************************/
+
+              if (allRows[i].querySelector(" .item_col_4").value == "") {
+                if (allRows[i].querySelector("#PrepDaysPrice").value == "") {
+                  allRows[i].querySelector("#PrepDaysPrice").value = 0;
+                }
+                if (allRows[i].querySelector("#PrepDays").value == "") {
+                  allRows[i].querySelector("#PrepDays").value = 0;
+                }
+                if (allRows[i].querySelector("#ShootngDays").value == "") {
+                  allRows[i].querySelector("#ShootngDays").value = 0;
+                }
+                if (allRows[i].querySelector("#shootingPrice").value == "") {
+                  allRows[i].querySelector("#shootingPrice").value = 0;
+                }
+                if (allRows[i].querySelector("#shootingQty").value == "") {
+                  allRows[i].querySelector("#shootingQty").value = 0;
+                }
+                if (allRows[i].querySelector(".unit-price input").value == "") {
+                  allRows[i].querySelector(".unit-price input").value = 0;
+                }
+                allRows[i].querySelector(" .item_col_4").value =
+                  allRows[i].querySelector("#shootingPrice").value +
+                  "/*/" +
+                  allRows[i].querySelector("#ShootngDays").value +
+                  "/*/" +
+                  allRows[i].querySelector("#shootingQty").value +
+                  "/*/" +
+                  allRows[i].querySelector("#PrepDaysPrice").value +
+                  "/*/" +
+                  allRows[i].querySelector("#PrepDays").value;
+              } else if (
+                allRows[i].querySelector(" .item_col_4").value.split("/*/")
+                  .length == 5
+              ) {
+                allRows[i].querySelector("#shootingPrice").value = allRows[i]
+                  .querySelector(" .item_col_4")
+                  .value.split("/*/")[0];
+                allRows[i].querySelector("#ShootngDays").value = allRows[i]
+                  .querySelector(" .item_col_4")
+                  .value.split("/*/")[1];
+                allRows[i].querySelector("#shootingQty").value = allRows[i]
+                  .querySelector(" .item_col_4")
+                  .value.split("/*/")[2];
+                allRows[i].querySelector("#PrepDaysPrice").value = allRows[i]
+                  .querySelector(" .item_col_4")
+                  .value.split("/*/")[3];
+                allRows[i].querySelector("#PrepDays").value = allRows[i]
+                  .querySelector(" .item_col_4")
+                  .value.split("/*/")[4];
+              }
+
+              allRows[i]
+                .querySelector(".late_td input")
+                .addEventListener("change", (e) => {
+                  console.log(e.target.value);
+                  if (e.target.value == "" || e.target.value < 0) {
+                    e.target.value = 0;
+                  }
+                  allRows[i].querySelector(".unit-price input").value =
+                    allRows[i].querySelector("#shootingPrice").value *
+                      allRows[i].querySelector("#ShootngDays").value *
+                      allRows[i].querySelector("#shootingQty").value +
+                    allRows[i].querySelector("#PrepDaysPrice").value *
+                      allRows[i].querySelector("#PrepDays").value;
+                  allRows[i].querySelector(" .item_col_4").value =
+                    allRows[i].querySelector("#shootingPrice").value +
+                    "/*/" +
+                    allRows[i].querySelector("#ShootngDays").value +
+                    "/*/" +
+                    allRows[i].querySelector("#shootingQty").value +
+                    "/*/" +
+                    allRows[i].querySelector("#PrepDaysPrice").value +
+                    "/*/" +
+                    allRows[i].querySelector("#PrepDays").value;
+                  $(allRows[i].querySelector(".unit-price input")).trigger(
+                    "change"
+                  );
+                });
+              allRows[i]
+                .querySelector(".loc_td input")
+                .addEventListener("change", (e) => {
+                  console.log(e.target.value);
+                  if (e.target.value == "" || e.target.value < 0) {
+                    e.target.value = 0;
+                  }
+                  allRows[i].querySelector(".unit-price input").value =
+                    allRows[i].querySelector("#shootingPrice").value *
+                      allRows[i].querySelector("#ShootngDays").value *
+                      allRows[i].querySelector("#shootingQty").value +
+                    allRows[i].querySelector("#PrepDaysPrice").value *
+                      allRows[i].querySelector("#PrepDays").value;
+                  $(allRows[i].querySelector(".unit-price input")).trigger(
+                    "change"
+                  );
+
+                  allRows[i].querySelector(" .item_col_4").value =
+                    allRows[i].querySelector("#shootingPrice").value +
+                    "/*/" +
+                    allRows[i].querySelector("#ShootngDays").value +
+                    "/*/" +
+                    allRows[i].querySelector("#shootingQty").value +
+                    "/*/" +
+                    allRows[i].querySelector("#PrepDaysPrice").value +
+                    "/*/" +
+                    allRows[i].querySelector("#PrepDays").value;
+                });
+
+              allRows[i]
+                .querySelector(".loca_td input")
+                .addEventListener("change", (e) => {
+                  console.log(e.target.value);
+                  if (e.target.value == "" || e.target.value < 0) {
+                    e.target.value = 0;
+                  }
+                  allRows[i].querySelector(".unit-price input").value =
+                    allRows[i].querySelector("#shootingPrice").value *
+                      allRows[i].querySelector("#ShootngDays").value *
+                      allRows[i].querySelector("#shootingQty").value +
+                    allRows[i].querySelector("#PrepDaysPrice").value *
+                      allRows[i].querySelector("#PrepDays").value;
+                  $(allRows[i].querySelector(".unit-price input")).trigger(
+                    "change"
+                  );
+
+                  allRows[i].querySelector(" .item_col_4").value =
+                    allRows[i].querySelector("#shootingPrice").value +
+                    "/*/" +
+                    allRows[i].querySelector("#ShootngDays").value +
+                    "/*/" +
+                    allRows[i].querySelector("#shootingQty").value +
+                    "/*/" +
+                    allRows[i].querySelector("#PrepDaysPrice").value +
+                    "/*/" +
+                    allRows[i].querySelector("#PrepDays").value;
+                });
+              allRows[i]
+                .querySelector(".shootingPrice_td input")
+                .addEventListener("change", (e) => {
+                  console.log(e.target.value);
+                  if (e.target.value == "" || e.target.value < 0) {
+                    e.target.value = 0;
+                  }
+                  allRows[i].querySelector(".unit-price input").value =
+                    allRows[i].querySelector("#shootingPrice").value *
+                      allRows[i].querySelector("#ShootngDays").value *
+                      allRows[i].querySelector("#shootingQty").value +
+                    allRows[i].querySelector("#PrepDaysPrice").value *
+                      allRows[i].querySelector("#PrepDays").value;
+                  $(allRows[i].querySelector(".unit-price input")).trigger(
+                    "change"
+                  );
+
+                  allRows[i].querySelector(" .item_col_4").value =
+                    allRows[i].querySelector("#shootingPrice").value +
+                    "/*/" +
+                    allRows[i].querySelector("#ShootngDays").value +
+                    "/*/" +
+                    allRows[i].querySelector("#shootingQty").value +
+                    "/*/" +
+                    allRows[i].querySelector("#PrepDaysPrice").value +
+                    "/*/" +
+                    allRows[i].querySelector("#PrepDays").value;
+                });
+              allRows[i]
+                .querySelector(".shootingQty_td input")
+                .addEventListener("change", (e) => {
+                  console.log(e.target.value);
+                  if (e.target.value == "" || e.target.value < 0) {
+                    e.target.value = 0;
+                  }
+                  allRows[i].querySelector(".unit-price input").value =
+                    allRows[i].querySelector("#shootingPrice").value *
+                      allRows[i].querySelector("#ShootngDays").value *
+                      allRows[i].querySelector("#shootingQty").value +
+                    allRows[i].querySelector("#PrepDaysPrice").value *
+                      allRows[i].querySelector("#PrepDays").value;
+                  $(allRows[i].querySelector(".unit-price input")).trigger(
+                    "change"
+                  );
+
+                  allRows[i].querySelector(" .item_col_4").value =
+                    allRows[i].querySelector("#shootingPrice").value +
+                    "/*/" +
+                    allRows[i].querySelector("#ShootngDays").value +
+                    "/*/" +
+                    allRows[i].querySelector("#shootingQty").value +
+                    "/*/" +
+                    allRows[i].querySelector("#PrepDaysPrice").value +
+                    "/*/" +
+                    allRows[i].querySelector("#PrepDays").value;
+                });
+            }
+          }, 300);
+        };
+        hundleAddScreen();
+        // adding the columns on add item click
+        $("#AddItem").on("click", () => {
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "رقم الكتالوج",
+            "late_th",
+            "late_td",
+            "late_input"
+          );
+
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "رقم البند التجارى  ",
+            "loc_th",
+            "loc_td",
+            "loc_input"
+          );
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "رقم البند التجارى  ",
+            "loca_th",
+            "loca_td",
+            "loca_input"
+          );
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "رقم البند التجارى  ",
+            "shootingQty_th",
+            "shootingQty_td",
+            "shootingQty_input"
+          );
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "رقم البند التجارى  ",
+            "shootingPrice_th",
+            "shootingPrice_td",
+            "shootingPrice_input"
+          );
+
+          hundleAddScreen();
+        });
+        setTimeout(() => {
+          document.querySelector(".late_th").innerHTML = `
+     
+          Shooting Days
+          `;
+          document.querySelector(".late_th").style.background = "#000";
+          document.querySelector(".late_th").style.color = "#fff";
+          document.querySelector(".loc_th").innerHTML = `
+          
+          Prep Days
+          `;
+          document.querySelector(".loc_th").style.background = "#000";
+          document.querySelector(".loc_th").style.color = "#fff";
+
+          document.querySelector(".loca_th").innerHTML = `
+Prep Days Price
+            `;
+          document.querySelector(".loca_th").style.background = "#000";
+          document.querySelector(".loca_th").style.color = "#fff";
+
+          document.querySelector(".shootingPrice_th").innerHTML = `
+           Main 2 
+           <br>
+            Unit Price
+            `;
+          document.querySelector(".shootingPrice_th").style.background = "#000";
+          document.querySelector(".shootingPrice_th").style.color = "#fff";
+
+          document.querySelector(".shootingQty_th").innerHTML = `
+           Main 2 
+           <br>
+            Qty
+            `;
+          document.querySelector(".shootingQty_th").style.background = "#000";
+          document.querySelector(".shootingQty_th").style.color = "#fff";
+        }, 250);
+        setTimeout(() => {
+          $(".select-item textarea").each(function () {
+            var currentValue = $(this).val().toLowerCase();
+
+            if (
+              currentValue == "main 1" ||
+              currentValue == "main 2" ||
+              currentValue == "main 3" ||
+              currentValue == "sub" ||
+              currentValue == "ppl sub"
+            ) {
+              $(this).attr("readonly", true);
+              // $(this).closest("tr").find("#PrepDays").val(0);
+              $(this).closest("tr").find("#PrepDays").attr("readonly", true);
+              // $(this).closest("tr").find("#shootingPrice").val(0);
+              $(this)
+                .closest("tr")
+                .find("#shootingPrice")
+                .attr("readonly", true);
+              // $(this).closest("tr").find("#PrepDaysPrice").val(0);
+              $(this)
+                .closest("tr")
+                .find("#PrepDaysPrice")
+                .attr("readonly", true);
+              // $(this).closest("tr").find("#shootingQty").val(0);
+              $(this).closest("tr").find("#shootingQty").attr("readonly", true);
+              // $(this).closest("tr").find("#ShootngDays").val(0);
+              $(this).closest("tr").find("#ShootngDays").attr("readonly", true);
+              $(this).closest("tr").find(".unit-price input").val(0);
+              $(this)
+                .closest("tr")
+                .find(".unit-price input")
+                .attr("readonly", true);
+              $(this).closest("tr").find(".Quantity input").val(1);
+              $(this)
+                .closest("tr")
+                .find(".Quantity input")
+                .attr("readonly", true);
+            } else {
+              $(this).attr("readonly", false);
+            }
+            switch ($(this).val().toLowerCase()) {
+              case "main 1":
+                $(this).val("Main 1");
+                break;
+              case "main 2":
+                $(this).val("Main 2");
+
+                $(this).closest("tr").find(".late_td ").html("Shooting Days");
+                $(this)
+                  .closest("tr")
+                  .find(".shootingPrice_td")
+                  .html("Main 2 Unit Price");
+                $(this)
+                  .closest("tr")
+                  .find(".shootingQty_td")
+                  .html("Main 2 <br> QTY");
+                $(this).closest("tr").find(".loc_td ").html("Prep Days");
+                $(this).closest("tr").find(".loca_td").html("Prep Days Price");
+
+                $(this).closest("tr").find(".late_td ").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingPrice_td").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingQty_td").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loc_td ").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loca_td").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+
+                break;
+              case "main 3":
+                $(this).val("Main 3");
+                $(this).closest("tr").find(".late_td ").html("Shooting Days");
+                $(this)
+                  .closest("tr")
+                  .find(".shootingPrice_td")
+                  .html("Main 2 Unit Price");
+                $(this)
+                  .closest("tr")
+                  .find(".shootingQty_td")
+                  .html("Main 2 <br> QTY");
+                $(this).closest("tr").find(".loc_td ").html("Prep Days");
+                $(this).closest("tr").find(".loca_td").html("Prep Days Price");
+
+                $(this).closest("tr").find(".late_td ").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingPrice_td").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingQty_td").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loc_td ").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loca_td").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                break;
+              case "sub":
+                $(this).val("Sub");
+                $(this).closest("tr").find(".late_td ").html("sub");
+                $(this).closest("tr").find(".shootingPrice_td").html("sub");
+                $(this).closest("tr").find(".shootingQty_td").html("sub");
+                $(this).closest("tr").find(".loc_td ").html("sub");
+                $(this).closest("tr").find(".loca_td").html("sub");
+
+                $(this).closest("tr").find(".late_td ").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingPrice_td").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingQty_td").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loc_td ").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loca_td").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                break;
+              case "ppl sub":
+                $(this).val("PPL Sub");
+                $(this).closest("tr").find(".late_td ").html("PPL Sub");
+                $(this).closest("tr").find(".shootingPrice_td").html("PPL Sub");
+                $(this).closest("tr").find(".shootingQty_td").html("PPL Sub");
+                $(this).closest("tr").find(".loc_td ").html("PPL Sub");
+                $(this).closest("tr").find(".loca_td").html("PPL Sub");
+
+                $(this).closest("tr").find(".late_td ").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingPrice_td").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingQty_td").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loc_td ").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loca_td").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                break;
+              default:
+                break;
+            }
+          });
+        }, 4000);
+        $(document).on("input", ".select-item textarea", function () {
+          if (
+            $(this).val().toLowerCase() == "main 1" ||
+            $(this).val().toLowerCase() == "main 2" ||
+            $(this).val().toLowerCase() == "main 3" ||
+            $(this).val().toLowerCase() == "sub" ||
+            $(this).val().toLowerCase() == "ppl sub"
+          ) {
+            $(this).attr("readonly", true);
+
+            // $(this).closest("tr").find("#PrepDays").val(0);
+            $(this).closest("tr").find("#PrepDays").attr("readonly", true);
+            // $(this).closest("tr").find("#shootingPrice").val(0);
+            $(this).closest("tr").find("#shootingPrice").attr("readonly", true);
+            // $(this).closest("tr").find("#PrepDaysPrice").val(0);
+            $(this).closest("tr").find("#PrepDaysPrice").attr("readonly", true);
+            // $(this).closest("tr").find("#shootingQty").val(0);
+            $(this).closest("tr").find("#shootingQty").attr("readonly", true);
+            // $(this).closest("tr").find("#ShootngDays").val(0);
+            $(this).closest("tr").find("#ShootngDays").attr("readonly", true);
+            $(this).closest("tr").find(".unit-price input").val(0);
+            $(this)
+              .closest("tr")
+              .find(".unit-price input")
+              .attr("readonly", true);
+            $(this).closest("tr").find(".Quantity input").val(1);
+            $(this)
+              .closest("tr")
+              .find(".Quantity input")
+              .attr("readonly", true);
+            $("#AddItem").click();
+          } else {
+            $(this).attr("readonly", false);
+          }
+          setTimeout(() => {
+            switch ($(this).val().toLowerCase()) {
+              case "main 1":
+                $(this).val("Main 1");
+                break;
+              case "main 2":
+                $(this).val("Main 2");
+
+                $(this).closest("tr").find(".late_td ").html("Shooting Days");
+                $(this)
+                  .closest("tr")
+                  .find(".shootingPrice_td")
+                  .html("Main 2 Unit Price");
+                $(this)
+                  .closest("tr")
+                  .find(".shootingQty_td")
+                  .html("Main 2 <br> QTY");
+                $(this).closest("tr").find(".loc_td ").html("Prep Days");
+                $(this).closest("tr").find(".loca_td").html("Prep Days Price");
+
+                $(this).closest("tr").find(".late_td ").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingPrice_td").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingQty_td").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loc_td ").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loca_td").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+
+                break;
+              case "main 3":
+                $(this).val("Main 3");
+                $(this).closest("tr").find(".late_td ").html("Shooting Days");
+                $(this)
+                  .closest("tr")
+                  .find(".shootingPrice_td")
+                  .html("Main 2 Unit Price");
+                $(this)
+                  .closest("tr")
+                  .find(".shootingQty_td")
+                  .html("Main 2 <br> QTY");
+                $(this).closest("tr").find(".loc_td ").html("Prep Days");
+                $(this).closest("tr").find(".loca_td").html("Prep Days Price");
+
+                $(this).closest("tr").find(".late_td ").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingPrice_td").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingQty_td").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loc_td ").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loca_td").css({
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  "text-align": "center",
+                });
+                break;
+              case "sub":
+                $(this).val("Sub");
+                $(this).closest("tr").find(".late_td ").html("sub");
+                $(this).closest("tr").find(".shootingPrice_td").html("sub");
+                $(this).closest("tr").find(".shootingQty_td").html("sub");
+                $(this).closest("tr").find(".loc_td ").html("sub");
+                $(this).closest("tr").find(".loca_td").html("sub");
+
+                $(this).closest("tr").find(".late_td ").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingPrice_td").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingQty_td").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loc_td ").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loca_td").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                break;
+              case "ppl sub":
+                $(this).val("PPL Sub");
+                $(this).closest("tr").find(".late_td ").html("PPL Sub");
+                $(this).closest("tr").find(".shootingPrice_td").html("PPL Sub");
+                $(this).closest("tr").find(".shootingQty_td").html("PPL Sub");
+                $(this).closest("tr").find(".loc_td ").html("PPL Sub");
+                $(this).closest("tr").find(".loca_td").html("PPL Sub");
+
+                $(this).closest("tr").find(".late_td ").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingPrice_td").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".shootingQty_td").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loc_td ").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                $(this).closest("tr").find(".loca_td").css({
+                  backgroundColor: "#e5e5e5",
+                  color: "#000",
+                  "text-align": "center",
+                });
+                break;
+              default:
+                break;
+            }
+          }, 3000);
+        });
+
+        setTimeout(() => {
+          var allcustoms = document.querySelectorAll(".field-row");
+          function addclasses() {
+            for (var i = 0; i < allcustoms.length; i++) {
+              console.log(
+                allcustoms[i].querySelector("td:nth-child(1) input").value
+              );
+              switch (
+                allcustoms[i].querySelector("td:nth-child(1) input").value
+              ) {
+                case "Bank Branch":
+                  allcustoms[i]
+                    .querySelector("td:nth-child(2) input")
+                    .classList.add("BankBranch");
+                  break;
+                case "Name of Bank":
+                  allcustoms[i]
+                    .querySelector("td:nth-child(2) input")
+                    .classList.add("NameofBank");
+                  break;
+
+                case "Account Name":
+                  allcustoms[i]
+                    .querySelector("td:nth-child(2) input")
+                    .classList.add("AccountName");
+                  break;
+
+                case "Swift Code":
+                  allcustoms[i]
+                    .querySelector("td:nth-child(2) input")
+                    .classList.add("SwiftCode");
+                  break;
+
+                case "IBAN":
+                  allcustoms[i]
+                    .querySelector("td:nth-child(2) input")
+                    .classList.add("IBAN");
+                  break;
+
+                case "Account Number":
+                  allcustoms[i]
+                    .querySelector("td:nth-child(2) input")
+                    .classList.add("AccountNumber");
+                  break;
+
+                default:
+                  break;
+              }
+            }
+          }
+          addclasses();
+          var newTr = document.createElement("tr");
+          var newTd = document.createElement("td");
+          newTd.setAttribute("colspan", "100%");
+          var selector = document.createElement("select");
+          selector.setAttribute("id", "bankselector");
+          selector.setAttribute("value", "-1");
+          selector.style.width = "100%";
+          selector.style.textAlign = "center";
+
+          async function bankselectorOptopns() {
+            await $.get(
+              `https://silverscreen.daftra.com/v2/api/entity/le_banks/list`
+            ).then((banks) => {
+              let bankslist = banks.data;
+              var option = document.createElement("option");
+              option.innerText = "select bank";
+              option.value = "-1";
+              option.style.textAlign = "center";
+              selector.appendChild(option);
+              for (let i = 0; i < bankslist.length; i++) {
+                var option = document.createElement("option");
+                option.innerText =
+                  bankslist[i].account_name +
+                  "  .... " +
+                  bankslist[i].name_of_bank;
+                option.value = bankslist[i].id;
+                option.style.textAlign = "center";
+                selector.appendChild(option);
+              }
+              newTd.appendChild(selector);
+              newTr.appendChild(newTd);
+              if (!document.querySelector("#ClientSection #bankselector")) {
+                var newTBL = document.createElement("table");
+                newTBL.appendChild(newTr);
+                newTBL.style.marginTop = "15px";
+                document.querySelector("#ClientSection").appendChild(newTBL);
+              }
+              document
+                .getElementById("bankselector")
+                .addEventListener("change", (e) => {
+                  addclasses();
+                  if (e.target.value == "-1") {
+                    document.querySelector(".BankBranch").value = "";
+                    document.querySelector(".NameofBank").value = "";
+                    document.querySelector(".AccountName").value = "";
+                    document.querySelector(".SwiftCode").value = "";
+                    document.querySelector(".IBAN").value = "";
+                    document.querySelector(".AccountNumber").value = "";
+                  } else {
+                    for (let i = 0; i < bankslist.length; i++) {
+                      if (bankslist[i].id == e.target.value) {
+                        document.querySelector(".BankBranch").value =
+                          bankslist[i].bank_branch;
+                        document.querySelector(".NameofBank").value =
+                          bankslist[i].name_of_bank;
+                        document.querySelector(".AccountName").value =
+                          bankslist[i].account_name;
+                        document.querySelector(".SwiftCode").value =
+                          bankslist[i].swift_code;
+                        document.querySelector(".IBAN").value =
+                          bankslist[i].iban;
+                        document.querySelector(".AccountNumber").value =
+                          bankslist[i].account_number;
+                      }
+                    }
+                  }
+                });
+            });
+          }
+          bankselectorOptopns();
+        }, 200);
+      }
+    });
+  });
+</script>

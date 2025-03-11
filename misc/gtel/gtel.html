@@ -1,0 +1,64 @@
+<script>
+  $(document).ready(() => {
+    $("#submitBtn").on("click", function (e) {
+      async function hunleUsersShow() {
+        var allRows = document.querySelectorAll(".number-column");
+        if (allRows.length > 1) {
+          let allreqs = [];
+          var newTd = document.createElement("td");
+          newTd.classList.add("py-1");
+          newTd.style.color = "#8186b5";
+          newTd.style.padding = "0 6px";
+          newTd.innerHTML = "الموظف المعين";
+          allRows[0].parentElement.insertBefore(
+            newTd,
+            allRows[0].parentElement.cells[7]
+          );
+          for (let i = 1; i < allRows.length; i++) {
+            var rowId = allRows[i].innerText.trim();
+            var newTd = document.createElement("td");
+            newTd.classList.add("py-1");
+            if (rowId != "") {
+              allreqs.push(
+                $.get(
+                  `https://gtel.daftra.com/v2/api/entity/le_workflow-type-entity-1/${rowId}/4`
+                ).then((data) => {
+                  let users = data.assigned_users;
+                  for (let j = 0; j < users.length; j++) {
+                    let staffName =
+                      data.assigned_users[j].employee.staff_info
+                        .staff_info_related_to_staff.last_name;
+                    newTd.innerText += staffName;
+                    console.log(i);
+                    allRows[i].parentElement.insertBefore(
+                      newTd,
+                      allRows[i].parentElement.cells[7]
+                    );
+                    console.log(staffName);
+                  }
+                })
+              );
+              await Promise.all(allreqs);
+            } else {
+              allRows[i].parentElement.insertBefore(
+                newTd,
+                allRows[i].parentElement.cells[7]
+              );
+            }
+          }
+        }
+        var AllTableRows = document.querySelectorAll(".report tr");
+        for (let k = 0; k < AllTableRows.length; k++) {
+          if (AllTableRows[k].cells[0].getAttribute("colspan")) {
+            var newcolspan =
+              parseInt(AllTableRows[k].cells[0].getAttribute("colspan")) + 1;
+            AllTableRows[k].cells[0].setAttribute("colspan", newcolspan);
+          }
+        }
+      }
+      setTimeout(() => {
+        hunleUsersShow();
+      }, 500);
+    });
+  });
+</script>

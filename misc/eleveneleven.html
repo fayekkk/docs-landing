@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        border: none;
+      }
+      .eleven_eleven {
+        direction: ltr;
+        text-align: left;
+        margin-top: -50px;
+      }
+      table,
+      td,
+      th {
+        border: none !important;
+        padding: 2px !important;
+      }
+      /* start of header styles */
+      .eleven_header {
+        width: 100%;
+      }
+      .eleven_header div {
+        display: inline-block;
+        width: 49%;
+      }
+      .eleven_header div table {
+        width: 100%;
+        padding-top: 30px;
+      }
+      .eleven_header div table td:nth-child(1) {
+        text-align: right;
+        width: 50%;
+      }
+      .eleven_header div table td:nth-child(2) {
+        text-align: right;
+        width: 50%;
+      }
+      .eleven_header .date {
+        width: 100%;
+        margin: 30px 0;
+      }
+      .eleven_header .date span {
+        display: inline-block;
+        width: 49%;
+        text-align: right;
+        font-weight: 600;
+      }
+      .business_info {
+        position: relative;
+        bottom: -170px;
+      }
+      /* end of header styles */
+      /* start of client_info styles */
+      .client_info {
+        margin-top: 50px;
+        width: 100%;
+      }
+      .client_info table {
+        border-spacing: 0;
+        width: 100%;
+      }
+
+      .client_info table tr:nth-child(1) td {
+        font-size: 18px !important;
+        font-weight: 600 !important;
+        text-decoration: underline;
+        text-align: left !important;
+      }
+      .client_info table tr td:nth-child(1),
+      .client_info table tr td:nth-child(3) {
+        font-size: 15px;
+        font-weight: 600;
+        width: 20%;
+      }
+      .client_info table tr td:nth-child(2),
+      .client_info table tr td:nth-child(4) {
+        text-align: left;
+        width: 29%;
+      }
+      /* end of client_info styles */
+      /* start of service_required styles */
+      .service_required {
+        width: 100%;
+        margin-top: 50px;
+      }
+      .service_required div:nth-child(1) {
+        text-decoration: underline;
+        text-align: center;
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 23px;
+      }
+      .service_required div:nth-child(3),
+      .service_required div:nth-child(4),
+      .service_required div:nth-child(5),
+      .service_required div:nth-child(6),
+      .service_required div:nth-child(7),
+      .service_required div:nth-child(8) {
+        display: inline-block;
+        width: 24%;
+      }
+
+      /* end of service_required styles */
+      /* start of hair_cut styles */
+      .hair_cut {
+        width: 100%;
+        margin-top: 50px;
+      }
+      .hair_cut div:nth-child(1) {
+        margin-bottom: 30px;
+      }
+      .hair_cut div:nth-child(1) span {
+        background-color: #b2b2b2;
+      }
+      .hair_cut table {
+        margin-top: 20px;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      /* end of hair_cut styles */
+    </style>
+  </head>
+  <body>
+    <div class="eleven_eleven">
+      <div class="container">
+        <div class="eleven_header">
+          <div class="logo">
+            <img
+              src="https://ahmedfayek.daftra.com/files/48b8e1d3/client/653604f28809e_blobid1698039025074.png"
+              alt=""
+              title="Grooming_formlogo1.png"
+              width="233"
+              height="244"
+            />
+          </div>
+          <div class="business_info">
+            <table>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td>dd{%site_business_name%}</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>dd{%site_address1%}</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>ss{%site_city%}</td>
+                </tr>
+                <tr>
+                  <td>Ph:</td>
+                  <td>aa{%site_mobile%}</td>
+                </tr>
+                <tr>
+                  <td>Fax:</td>
+                  <td>aa{%site_postal_code%}</td>
+                </tr>
+                <tr>
+                  <td>Email:</td>
+                  <td>aa{%site_business_email%}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="date">
+              <span>Date </span>
+              <span> {%invoice_date%}</span>
+            </div>
+          </div>
+        </div>
+        <div class="client_info">
+          <table>
+            <tbody>
+              <tr>
+                <td colspan="2">Client Details</td>
+                <td colspan="2">Animal Details</td>
+              </tr>
+              <tr>
+                <td>Name</td>
+                <td>{%client_business_name%}</td>
+                <td>Name</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Address</td>
+                <td>{%client_address%}</td>
+                <td>Species</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Breed</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Age</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Phone(s)</td>
+                <td>{%client_mobile%}</td>
+                <td>Sex</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>{%client_phone%}</td>
+                <td>Weight</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="service_required">
+          <div>Grooming Form</div>
+          <div>Service Required:</div>
+          <div>
+            Hair Cut <input type="checkbox" name="myCheckbox" value="1" />
+          </div>
+          <div>
+            Nail trimming <input type="checkbox" name="myCheckbox" value="1" />
+          </div>
+          <div>
+            Ear cleaning <input type="checkbox" name="myCheckbox" value="1" />
+          </div>
+          <div>
+            Eye cleaning <input type="checkbox" name="myCheckbox" value="1" />
+          </div>
+          <div>
+            Teeth cleaning <input type="checkbox" name="myCheckbox" value="1" />
+          </div>
+          <div>
+            Anal gland evacuation
+            <input type="checkbox" name="myCheckbox" value="1" />
+          </div>
+        </div>
+        <div class="hair_cut">
+          <div><span>If hair cut needed:</span></div>
+          <div>Hair Cut name:</div>
+          <p>
+            Please let us know the length required to be removed /To be left for
+            each Body part.
+          </p>
+          <table>
+            <tbody>
+              <tr>
+                <td>Head:</td>
+                <td>Neck:</td>
+                <td>Body:</td>
+                <td>Tail:</td>
+              </tr>
+              <tr>
+                <td>Front legs:</td>
+                <td>Back legs:</td>
+                <td colspan="2">Any special request?:</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="agreement">
+          I Have Read and Agree To The Member Agreement/Terms And Conditions
+          understand that all reasonable care and precautions will be taken and
+          that there are some risks involved and I accept responsibility for
+          those risks. I have read and understood this release and accept full
+          financial responsibility for all charges related to the above
+          procedures.
+        </div>
+        <div class="signature">Case owner signature</div>
+      </div>
+    </div>
+  </body>
+</html>

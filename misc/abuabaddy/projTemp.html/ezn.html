@@ -1,0 +1,213 @@
+  <style>
+    #mainCon * {
+      color: #024eba;
+    }
+    .titlee {
+      font-size: 15px;
+      text-align: center;
+      margin: 20px 0;
+    }
+    #main_data {
+      width: 100%;
+      border: none !important;
+    }
+    #main_data * {
+      border: none !important;
+    }
+    .recipt_items {
+      width: 100%;
+      border-spacing: 0;
+      border-right: 1px solid #024eba;
+      border-top: 1px solid #024eba;
+    }
+    .recipt_items th,
+    .recipt_items td {
+      padding: 3px;
+      text-align: center;
+      border-left: 1px solid #024eba;
+      border-bottom: 1px solid #024eba;
+    }
+    #signs {
+      width: 100%;
+      border-spacing: 0;
+      border: none !important;
+      margin-top: 50px;
+    }
+    #signs * {
+      border: none !important;
+    }
+    #signs td {
+      text-align: right;
+    }
+  </style>
+  <div id="mainCon">
+    <!-- <table id="headerr"></table> -->
+    <div class="titlee">
+      سند تسليم
+      <br />
+      DELIVERY NOTE
+    </div>
+    <table id="main_data">
+      <tbody>
+        <tr>
+          <td>تاريخ</td>
+          <td>{{Data.le_deliveryrecipt.recipt_date}}</td>
+          <td>Date</td>
+          <td>إشعار إستلام رقم</td>
+          <td>{{Data.le_deliveryrecipt.recipt_no}}</td>
+          <td>Bill Of Delivery No</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>رقم أمر التشغيل</td>
+          <td>{{Data.le_deliveryrecipt.print_no}}</td>
+          <td>Jop Order</td>
+        </tr>
+        <tr>
+          <td colspan="100%">
+            السادة:{{Data.le_deliveryrecipt.le_deliveryrecipt_client_project1.business_name}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="100%">
+            M/S :
+            {{Data.le_deliveryrecipt.le_deliveryrecipt_client_project1.client_custom_data.client_english_name}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table
+      class="mce-inline-non-editable-area mce-hide-table-options recipt_items"
+      border="1"
+      cellpadding="0"
+      cellspacing="0"
+      style="width: 100%"
+    >
+      <thead>
+        <tr>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >
+              DESCRIPTION
+              <br />
+              البيان</span
+            >
+          </th>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >
+              SIZE
+              <br />
+              المقاس</span
+            >
+          </th>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >
+              ITEM <br />
+              البند</span
+            >
+          </th>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+            >
+              QUANTITY
+              <br />
+              الكمية</span
+            >
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <!--% foreach({{Data.le_deliveryrecipt.le_deliveryrecipt_le_deliveryrecipt_recipt_items}} as {{le_deliveryrecipt_le_deliveryrecipt_recipt_items_row}}) { %-->
+        <tr>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_deliveryrecipt_le_deliveryrecipt_recipt_items_row.description2}}</span
+            >
+          </td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_deliveryrecipt_le_deliveryrecipt_recipt_items_row.size}}</span
+            >
+          </td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_deliveryrecipt_le_deliveryrecipt_recipt_items_row.single_line_field}}</span
+            >
+          </td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_deliveryrecipt_le_deliveryrecipt_recipt_items_row.quantity}}</span
+            >
+          </td>
+        </tr>
+        <!--% } %-->
+      </tbody>
+    </table>
+    <table id="signs">
+      <tbody>
+        <tr>
+          <td>إسم المستلم : .................................... : signnature</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            توقيع المستلم : .................................... : signnature
+          </td>
+          <td>
+            توقيع المسئول : .................................... : signnature
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <script>
+      function addserials() {
+        var allRows = document.querySelectorAll(".recipt_items tr");
+        var newTh = document.createElement("th");
+        newTh.innerText = " JOB No";
+        allRows[0].insertBefore(newTh, allRows[0].cells[0]);
+
+        for (var i = 1; i < allRows.length; i++) {
+          var newTd = document.createElement("td");
+          newTd.innerText = i;
+          allRows[i].insertBefore(newTd, allRows[i].cells[0]);
+        }
+      }
+      try {
+        addserials();
+      } catch (error) {
+        console.log(error);
+      }
+      function addNewRows() {
+        var selectedDiv = document.querySelector(".recipt_items");
+        while (selectedDiv.offsetHeight < 800) {
+          var i = document.querySelectorAll(".recipt_items tbody tr").length;
+          const newTr = document.createElement("tr");
+          for (var j = 0; j < 5; j++) {
+            if (j == 0) {
+              var newTd = document.createElement("td");
+              newTd.innerText = i + 1;
+              newTr.appendChild(newTd);
+            } else {
+              var newTd = document.createElement("td");
+              newTr.appendChild(newTd);
+            }
+          }
+          document.querySelector(".recipt_items tbody").appendChild(newTr);
+          i++;
+        }
+      }
+      try {
+        addNewRows();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </div>

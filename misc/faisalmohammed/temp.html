@@ -1,0 +1,526 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    .invoice-address {
+      border-top: 3px double #000000;
+      margin: 35px 0;
+      padding-top: 25px;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #ccc !important;
+      border-top: 1px solid #ccc;
+      font-weight: bold;
+      padding: 6px 4px;
+      text-align: center !important;
+    }
+    .listing-table td {
+      border-bottom: 1px solid #ccc !important;
+      text-align: center !important;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    .total-table td {
+      border-left: 1px solid #ccc !important;
+    }
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #ccc !important;
+      border-top: 1px solid #ccc;
+      font-weight: bold;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    .notes-block {
+      padding: 2px;
+      border: 1px solid #ccc !important;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+    #business_info {
+      line-height: 1.4;
+    }
+    #label_subtotal {
+      width: 65px;
+    }
+    #label_field3,
+    #label_field4 {
+      width: 55px;
+    }
+    #items-list > table:nth-child(2) tr td:nth-child(1) {
+      width: 60%;
+    }
+    #listing_table th,
+    #listing_table td {
+      text-align: center;
+    }
+    #listing_table th:nth-child(2),
+    #listing_table td:nth-child(2) {
+      text-align: left;
+    }
+    .invoice-inner {
+      margin: 0 25px;
+    }
+
+    .qr-code img {
+      margin-top: 10px;
+    }
+    #newhead {
+      width: 100%;
+      direction: rtl !important;
+    }
+    #newhead td:nth-child(1) {
+      width: 33%;
+      vertical-align: top;
+      text-align: right;
+      font-size: 14px;
+    }
+    #newhead td:nth-child(2) {
+      width: 33%;
+      vertical-align: bottom;
+      text-align: center;
+      font-size: 14px;
+    }
+    #newhead td:nth-child(3) {
+      width: 33%;
+      vertical-align: baseline;
+      text-align: right;
+      font-size: 14px;
+    }
+    #newhead td:nth-child(3) img {
+      width: 100%;
+    }
+    .qr-img {
+      width: 70%;
+      margin-right: 30%;
+    }
+    .alignright {
+      text-align: right;
+    }
+    .aligncenter {
+      text-align: center;
+    }
+    .alignleftt {
+      text-align: left;
+    }
+    .boldd {
+      font-weight: bold;
+    }
+    #client_info {
+      width: 100%;
+      border-spacing: 0;
+      border-right: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+      direction: rtl;
+    }
+    #client_info td {
+      padding: 3px;
+      border-left: 1px solid #ccc;
+      border-top: 1px solid #ccc;
+    }
+    #client_info tr:nth-child(1) td:nth-child(1) {
+      width: 25%;
+    }
+    #client_info tr:nth-child(1) td:nth-child(2) {
+      width: 25%;
+    }
+    #client_info tr:nth-child(1) td:nth-child(3) {
+      width: 25%;
+    }
+    #client_info tr:nth-child(1) td:nth-child(4) {
+      width: 25%;
+    }
+    .hidden {
+      display: none;
+    }
+    #listing_table th {
+      background-color: #b7d3f0 !important;
+    }
+    .csutomtbl {
+      width: 100%;
+      border-spacing: 0;
+      border: 1px solid #ccc;
+    }
+    .csutomtbl td {
+      width: 50%;
+      background-color: #d0eff9 !important;
+      padding: 2px;
+      font-weight: bold;
+    }
+    .csutomtbl td:nth-child(1) {
+      width: 50%;
+      border-right: 1px solid #ccc;
+    }
+    .csutomtbl td:nth-child(2) {
+      text-align: right;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #new_tables {
+      width: 100%;
+      border-spacing: 0;
+      border-left: 1px solid #ccc;
+      border-top: 1px solid #ccc;
+    }
+    #new_tables th {
+      background-color: #d0eff9;
+    }
+    #new_tables td,
+    #new_tables th {
+      border-right: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+      padding: 2px;
+      font-weight: bold;
+    }
+    #new_tables td:nth-child(1) {
+      width: 24%;
+    }
+    #new_tables td:nth-child(2) {
+      text-align: left;
+
+      width: 29%;
+    }
+    #new_tables td:nth-child(3) {
+      text-align: right;
+
+      width: 29%;
+    }
+    #new_tables td:nth-child(4) {
+      width: 14%;
+      text-align: center;
+    }
+    #new_tables td:nth-child(5) {
+      width: 5%;
+      text-align: center;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table id="newhead">
+          <tbody>
+            <tr>
+              <td>
+                <h3>مؤسسة فيصل محمد علي الدعسري</h3>
+
+                العنوان : المنطقة الشرقية - الدمام
+                <br />
+                الرقم الضريبي : 311714821600003
+              </td>
+              <td><h3>{%invoice_title%}</h3></td>
+              <td>{%site_logo%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table style="width: 100%">
+          <tbody>
+            <tr>
+              <td style="width: 30%" id="qr-img">{%sa_qr_code_image%}</td>
+              <td style="width: 70%">
+                <table id="client_info">
+                  <tbody>
+                    <tr>
+                      <td class="alignright">رقم الفاتورة</td>
+                      <td class="boldd">{%invoice_no%}</td>
+                      <td class="aligncenter boldd">الدفع</td>
+                      <td class="aligncenter">{%payment%}</td>
+                    </tr>
+                    <tr>
+                      <td class="alignright">تاريخ اصدار الفاتورة</td>
+                      <td class="aligncenter boldd">{%created_time%}</td>
+                      <td class="aligncenter boldd">{%invoice_date%}</td>
+                      <td class="alignleftt">Invoice Issue Date</td>
+                    </tr>
+                    <tr>
+                      <td>اسم العميل</td>
+                      <td colspan="2" class="aligncenter boldd">
+                        {%client_business_name%}
+                      </td>
+
+                      <td class="alignleftt">Customer Name</td>
+                    </tr>
+                    <tr>
+                      <td>الرقم الضريبي</td>
+                      <td colspan="2" class="aligncenter boldd">
+                        {%client_bn1%}
+                      </td>
+                      <td class="alignleftt">Tax Number</td>
+                    </tr>
+                    <tr>
+                      <td>البيان</td>
+                      <td colspan="3" class="aligncenter boldd">
+                        {%description%}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="csutomtbl">
+          <tr>
+            <td>Line Items</td>
+            <td>توصيف السلعة</td>
+          </tr>
+        </table>
+        <div id="items-list">{%items_list%}</div>
+        <table id="new_tables">
+          <thead>
+            <tr>
+              <th style="text-align: left" colspan="2">Total Amount</th>
+              <th style="text-align: right" colspan="32">اجمالي المبالغ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td>Total (Excluding VAT)</td>
+              <td>الاجمالي (غير شامل ضريبة القيمة المضافة)</td>
+              <td class="removeCurr" id="subttll"></td>
+              <td>SR</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Discount</td>
+              <td>مجموع الخصومات</td>
+              <td class="removeCurr" id="discttl"></td>
+              <td>SR</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Value Added (FAS)</td>
+              <td>FAS مجموع الاضافة</td>
+              <td class="removeCurr" id="retentionValue"></td>
+              <td>SR</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Total Taxable Amount</td>
+              <td>الاجمالي الخاضع للضريبة</td>
+              <td class="removeCurr" id="taxablettl"></td>
+              <td>SR</td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td>Total VAT</td>
+              <td>مجموع ضريبة القيمة المضافة</td>
+              <td class="removeCurr" id="taxttl">{%tax-total%}</td>
+              <td>SR</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Total Amount Due</td>
+              <td>اجمالي المبلغ المستحق</td>
+              <td class="removeCurr">{%invoice_total%}</td>
+              <td>SR</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="notes-block">
+          <h4 style="text-align: right">ملاحظات /comments</h4>
+
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div style="text-align: left; font-weight: bold;margin-top: 10px;" id="signs">
+          التوقيع /signature -----------------------------------
+          <br />
+          <br />
+          customer signature -----------------------------------
+        </div>
+        <br />
+      </div>
+      <div style="display: none">
+        <div id="discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function addserials() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        console.log(allRows[0].cells.length);
+        if (allRows[0].cells.length == 9) {
+          var newTh = document.createElement("th");
+          newTh.innerHTML = "Discount";
+
+          allRows[0].insertBefore(newTh, allRows[0].cells[7]);
+          for (var i = 1; i < allRows.length; i++) {
+            var newTd = document.createElement("td");
+            newTd.innerText = "0";
+
+            allRows[i].insertBefore(newTd, allRows[i].cells[7]);
+          }
+        }
+      }
+      try {
+        addserials();
+      } catch (error) {
+        console.log(error);
+      }
+      function swapAll() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          var CONTAINER = allRows[i].cells[0].innerHTML;
+          var TRUCK = allRows[i].cells[1].innerHTML;
+          var FROM = allRows[i].cells[2].innerHTML;
+          var TO = allRows[i].cells[3].innerHTML;
+          var FAS = allRows[i].cells[4].innerHTML;
+          var Price = allRows[i].cells[5].innerHTML;
+          var Quantity = allRows[i].cells[6].innerHTML;
+          var discount = allRows[i].cells[7].innerHTML;
+          var TAX = allRows[i].cells[8].innerHTML;
+          var Subtotal = allRows[i].cells[9].innerHTML;
+          allRows[i].cells[0].innerHTML = CONTAINER;
+          allRows[i].cells[1].innerHTML = TRUCK;
+          allRows[i].cells[2].innerHTML = Quantity;
+          allRows[i].cells[3].innerHTML = FROM;
+          allRows[i].cells[4].innerHTML = TO;
+          allRows[i].cells[5].innerHTML = Price;
+          allRows[i].cells[6].innerHTML = discount;
+          allRows[i].cells[6].style.display = "none";
+          allRows[i].cells[7].innerHTML = FAS;
+          allRows[i].cells[8].innerHTML = TAX;
+          allRows[i].cells[9].innerHTML = Subtotal;
+        }
+      }
+      try {
+        swapAll();
+      } catch (error) {
+        console.log(error);
+      }
+      function hundleTotals() {
+        var disc = document.getElementById("discount");
+        var disc2 = document.getElementById("item-discount");
+        document.getElementById("discttl").innerText =
+          parseFloat(disc.innerText.replace(/,/g, "")) +
+          parseFloat(disc2.innerText.replace(/,/g, ""));
+
+        var subttll = document.getElementById("subttll");
+        var subttllVAl = 0;
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 1; i < allRows.length; i++) {
+          subttllVAl =
+            subttllVAl +
+            parseFloat(allRows[i].cells[2].innerText.replace(/,/g, "")) *
+              parseFloat(allRows[i].cells[5].innerText.replace(/,/g, ""));
+        }
+        subttll.innerText = subttllVAl
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // retentionValue
+        var allttls = document.querySelectorAll(
+          ".listing-table:nth-child(2) tr"
+        );
+        for (var i = 0; i < allttls.length; i++) {
+          if (allttls[i].cells[1].innerText.trim() === "FAS") {
+            document.getElementById("retentionValue").innerText =
+              allttls[i].cells[2].innerText;
+          }
+        }
+        document.getElementById("taxablettl").innerText =
+          parseFloat(
+            document.getElementById("subttll").innerText.replace(/,/g, "")
+          ) -
+          parseFloat(
+            document.getElementById("discttl").innerText.replace(/,/g, "")
+          );
+      }
+      try {
+        hundleTotals();
+      } catch (error) {
+        console.log(error);
+      }
+      function removeCurr() {
+        var alltotals = document.querySelectorAll(".removeCurr");
+        for (var i = 0; i < alltotals.length; i++) {
+          alltotals[i].innerText = parseFloat(
+            alltotals[i].innerText.replace(/,/g, "")
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      try {
+        removeCurr();
+      } catch (error) {
+        console.log(error);
+      }
+      function addtaxtottl() {
+        var allRows = document.querySelectorAll("#listing_table tbody tr");
+        for (var i = 0; i < allRows.length; i++) {
+          allRows[i].cells[9].innerText = (
+            parseFloat(allRows[i].cells[8].innerText.replace(/,/g, "")) +
+            parseFloat(allRows[i].cells[9].innerText.replace(/,/g, ""))
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      try {
+        addtaxtottl();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

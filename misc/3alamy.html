@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    body {
+      background: #ffffff;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    .listing-table th {
+      text-align: right;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      border-right: none !important;
+      border-left: none !important;
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+      border-bottom: 0 !important;
+    }
+    #listing_table th {
+      font-weight: bold;
+      border-right: none !important;
+      border-left: none !important;
+      border-top: none !important;
+    }
+
+    .listing-table th {
+      background: #fff;
+      color: #555555;
+      border-bottom: 1px solid #c0c0c0;
+    }
+    #listing_table tr th:last-child,
+    #listing_table tr td:last-child {
+      text-align: left;
+    }
+    .listing-table:nth-child(2) {
+      margin: 20px 0;
+    }
+
+    .listing-table:nth-child(2) td:nth-child(2) {
+      width: 35%;
+    }
+    .listing-table:nth-child(2) tr:nth-child(2) td:last-child,
+    .listing-table:nth-child(2) tr:nth-child(2) td:nth-child(2) {
+      border-top: 1px solid #c0c0c0;
+    }
+    #invoice_title {
+      font-size: 20px;
+      font-weight: normal;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    strong_tag {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .notes-block {
+      margin: 30px 0 0 0;
+    }
+
+    #client_info {
+      max-width: 75%;
+    }
+    .invoice-info td {
+      font-size: 13px;
+    }
+    .invoice-num {
+      margin-bottom: 10px;
+    }
+    .invoice-summary-lable {
+      font-weight: bold;
+      color: #555555;
+    }
+    #field1 {
+      margin-bottom: 5px;
+    }
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+    .qr-code img {
+      margin-top: 10px;
+    }
+    .listing-table:nth-child(2) strong {
+      font-weight: normal;
+    }
+    .total-row,
+    .total-row td h4 strong {
+      font-weight: bold !important;
+    }
+    .total-row {
+      color: #555555;
+      border-bottom: 0;
+    }
+    #custom_fields td {
+      text-align: right;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+
+      <div class="invoice-inner">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="right" valign="top">
+              <img
+                style="vertical-align: top; margin-bottom: 10px"
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                width="{%logo-width%}"
+                height="{%logo-height%}"
+              />
+            </td>
+
+            <td align="left" valign="top">
+              <h1>
+                <table style="width: 100%; direction: ltr">
+                  <tr>
+                    <td
+                      style="width: 40%; font-size: 20px; font-weight: normal"
+                    >
+                      {%invoice_title%}
+                    </td>
+                    <td style="width: 20%"></td>
+                    <td style="width: 40%; font-size: 14px; font-weight: bold">
+                      {%label_invoice_no%} #{%invoice_number%}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      colspan="2"
+                      align="left"
+                      style="font-size: 13px; font-weight: normal"
+                    >
+                      {%label_date%} {%invoice_date%}
+                    </td>
+                    <td style="font-size: 13px; font-weight: normal"></td>
+                  </tr>
+                </table>
+              </h1>
+              <div class="qr-code">{%sa_qr_code_image%}</div>
+            </td>
+          </tr>
+        </table>
+
+        <table
+          style="margin: 20px 0"
+          width="100%"
+          border="0"
+          cellspacing="0"
+          cellpadding="0"
+        >
+          <tr class="invoice-info">
+            <td align="right" valign="top" style="line-height: 20px">
+              <custom_field
+                id="custom_fields"
+                style="clear: both"
+                class="editable-area"
+                border="0"
+                cellspacing="0"
+                cellpadding="0"
+                align="right"
+              >
+                {%custom_fields%}
+              </custom_field>
+            </td>
+          </tr>
+        </table>
+
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="right" valign="top" width="60%">
+              <div id="field1" class="editable-area">{%field1%}</div>
+              <div id="client_info" class="editable-area">
+                <p>{%client_info%}</p>
+              </div>
+            </td>
+
+            <td align="right" valign="top">
+              <div id="field1" class="editable-area"></div>
+              <div id="business_info" class="editable-area">
+                <div>{%business_info%}</div>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <br />
+
+        <div id="items-list">{%items_list%}</div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+
+    <script>
+      function select(selectors) {
+        var elements = document.querySelectorAll(selectors);
+        return elements;
+      }
+      function addStyles(elements, addedClass) {
+        for (var i = 0; i < elements.length; i++) {
+          elements[i].classList.add(addedClass);
+        }
+      }
+      try {
+        var totTable = document.querySelector(".listing-table:nth-child(2)");
+        var fstRow = totTable.insertRow(0);
+        var cell0 = fstRow.insertCell(0);
+        var cell1 = fstRow.insertCell(1);
+        var cell2 = fstRow.insertCell(2);
+        cell1.classList.add("invoice-summary-lable");
+        cell1.innerHTML = "ملخص الفاتورة";
+        cell1.style.cssText = "font-size:13px;";
+
+        var selectedForBack = select(
+          "#listing_table th,  .listing-table:nth-child(2) tr:nth-child(1) td:nth-child(n+2)"
+        );
+        var AllBorders = select("#listing_table th, #listing_table td");
+        var evenRows = select("#listing_table tr:nth-child(even) td");
+        var oddRows = select("#listing_table tr:nth-child(odd) td");
+        var text = select("strong#label_invoice_no");
+
+        addStyles(selectedForBack, "dynamic_background");
+        addStyles(selectedForBack, "dynamic_header_color");
+        addStyles(text, "dynamic_header_color");
+        addStyles(evenRows, "dynamic_even");
+        addStyles(oddRows, "dynamic_odd");
+        addStyles(AllBorders, "dynamic_border_color");
+      } catch (err) {}
+    </script>
+  </body>
+</html>

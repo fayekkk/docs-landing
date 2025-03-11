@@ -1,0 +1,130 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      function screenCode() {
+        let invLayout = $("#InvoiceLayout").val();
+        if (invLayout == "14") {
+          $("#CustomModelField10").on("change", function () {
+            if ($("#CustomModelField10").val() == "نسبة مئوية") {
+              $("#discount_type").empty();
+              $("#discount_type").append(
+                $("<option>", {
+                  value: "percent",
+                  text: "نسبة مئوية",
+                })
+              );
+              $("#discount_type").val("fixed").change();
+
+              $(
+                "#tab-1 > div > div:nth-child(2) > div > div > div > div.selectize-input.items.has-options.full.has-items > div"
+              ).text("نسبة مئوية");
+            } else {
+              $("#discount_type").empty();
+              $("#discount_type").append(
+                $("<option>", {
+                  value: "fixed",
+                  text: "مبلغ",
+                })
+              );
+              $("#discount_type").val("fixed").change();
+              $(
+                "#tab-1 > div > div:nth-child(2) > div > div > div > div.selectize-input.items.has-options.full.has-items > div"
+              ).text("مبلغ");
+            }
+          });
+
+          function addDiscounts() {
+            var $discinput1 = $("#CustomModelField11");
+            var $discinput2 = $("#CustomModelField12");
+
+            var discinput1VAL = parseFloat($discinput1.val());
+            var discinput2VAL = parseFloat($discinput2.val());
+
+            console.log(discinput1VAL + discinput2VAL);
+            var subttlVal = parseFloat(
+              $("#SubtotalValue").text().replace(/,/g, "")
+            );
+            if (
+              discinput1VAL + discinput2VAL > 100 &&
+              $("#CustomModelField10").val() == "نسبة مئوية"
+            ) {
+              alert("لا يمكن أن يكون مجموع القيم أكبر من 100%");
+            } else if (
+              discinput1VAL + discinput2VAL > subttlVal &&
+              $("#CustomModelField10").val() == "مبلغ"
+            ) {
+              alert(
+                "لا يمكن أن يكون مجموع القيم أكبر من 100% من مجموع المستخلص"
+              );
+            } else {
+              if ($("#CustomModelField10").val() == "نسبة مئوية") {
+                $("#InvoiceDiscount")
+                  .val(discinput1VAL + discinput2VAL)
+                  .trigger("change");
+              } else {
+                $("#InvoiceDiscountAmount")
+                  .val(discinput1VAL + discinput2VAL)
+                  .trigger("change");
+              }
+            }
+          }
+          // numbers onl
+
+          $(document).ready(function () {
+            if (
+              isNaN($("#CustomModelField12").val()) ||
+              $("#CustomModelField12").val() < 0 ||
+              $("#CustomModelField12").val() == ""
+            ) {
+              $("#CustomModelField12").val("0");
+            }
+
+            if (
+              isNaN($("#CustomModelField11").val()) ||
+              $("#CustomModelField11").val() < 0 ||
+              $("#CustomModelField11").val() == ""
+            ) {
+              $("#CustomModelField11").val("0");
+            }
+
+            $("#CustomModelField12").on("input", function () {
+              let inputValue = $(this).val();
+              console.log(isNaN(inputValue));
+              if (isNaN(inputValue) || inputValue < 0) {
+                $(this).val("0");
+              }
+            });
+
+            $("#CustomModelField11").on("input", function () {
+              let inputValue = $(this).val();
+              if (isNaN(inputValue) || inputValue < 0) {
+                $(this).val("0");
+              }
+            });
+          });
+          $("#CustomModelField11").on("change", function () {
+            if ($(this).val() == "") {
+              $(this).val(0).change();
+            }
+            addDiscounts();
+          });
+          $("#CustomModelField12").on("change", function () {
+            if ($(this).val() == "") {
+              $(this).val(0).change();
+            }
+            addDiscounts();
+          });
+        } else {
+          $("#CustomModelField10").off("change");
+          $("#CustomModelField12").off("change");
+
+          $("#CustomModelField11").off("change");
+        }
+      }
+      screenCode();
+      $("#InvoiceLayout").on("change", function () {
+        screenCode();
+      });
+    }, 400);
+  });
+</script>

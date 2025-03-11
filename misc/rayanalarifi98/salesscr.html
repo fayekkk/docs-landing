@@ -1,0 +1,22 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      if ($("#PaymentIsPaid").is(":checked")) {
+        $("#CustomModelField3").val("نقدى");
+        console.log("Checkbox is now checked.");
+      } else {
+        $("#CustomModelField3").val("آجل");
+        console.log("Checkbox is now unchecked.");
+      }
+      $("#PaymentIsPaid").on("change", function () {
+        if ($(this).is(":checked")) {
+          $("#CustomModelField3").val("نقدى");
+          console.log("Checkbox is now checked.");
+        } else {
+          $("#CustomModelField3").val("آجل");
+          console.log("Checkbox is now unchecked.");
+        }
+      });
+    }, 450);
+  });
+</script>

@@ -1,0 +1,90 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      function extractLotAndExpiry(code) {
+        let lotNumber = "";
+        let expiryDate = "";
+        let skuCode = "";
+
+        const lastSixDigitsRegex = /(\d{6})$/;
+        const elevenCharRegex = /([a-zA-Z][\w]{8})(\d+)/;
+        const skuRegex = /^.{2}(\d{14})/;
+
+        const lastSixMatches = code.match(lastSixDigitsRegex);
+        const isDataable = code.substr(-8, 2) === "17";
+        const isDataable2 = code.length > 41;
+
+        if (lastSixMatches && isDataable && isDataable2) {
+          expiryDate = lastSixMatches[1];
+        }
+
+        const elevenCharMatches = code.match(elevenCharRegex);
+        if (elevenCharMatches) {
+          lotNumber = elevenCharMatches[1];
+        }
+
+        let formattedExpiry = "";
+        if (expiryDate) {
+          const year = "20" + expiryDate.substr(0, 2);
+          const month = expiryDate.substr(2, 2);
+          const day = expiryDate.substr(4, 2);
+          formattedExpiry = `${year}/${month}/${day}`;
+        }
+
+        const skuMatches = code.match(skuRegex);
+        if (skuMatches) {
+          skuCode = skuMatches[1];
+        }
+
+        return {
+          lotNumber: lotNumber,
+          expiryDate: formattedExpiry,
+          skuCode: skuCode,
+        };
+      }
+      // onReceiveBarCode = function () {
+      //   let code = "";
+      //   $(document).on("keydown", function (event) {
+      //     if (event.keyCode === 13) {
+      //       console.log("done");
+      //       console.log(code);
+      //       const extractedData = extractLotAndExpiry(
+      //         "010880012177387810pth22b2381122020921001017300208"
+      //       );
+      //       addCodes(extractedData);
+
+      //       code = "";
+      //     } else {
+      //       code += event.key;
+      //       console.log(code);
+      //     }
+      //   });
+      // };
+      // onReceiveBarCode();
+
+      setTimeout(() => {
+        console.log("stating");
+        $("#CustomTable0field_106").after("<input>");
+        $("#CustomTable0field_106").on("input", function (e) {
+          if ($(this.val().length) > 40) {
+            if ($(this).val() != "") {
+              var generalcodes = extractLotAndExpiry($(this).val());
+              addCodes(generalcodes);
+              // $(this).val("").change();
+              // setTimeout(() => {
+              //   $(this).focus();
+              // }, 1000);
+            }
+          }
+        });
+      }, 3000);
+
+      function addCodes(generatedCode) {
+        console.log(generatedCode);
+        // $("#ProductProductCode").val(generatedCode.skuCode);
+        $("#ProductBarcode").val(generatedCode.skuCode);
+        $("#ProductTrackingType").val("lot_and_expiry_date").change();
+      }
+    }, 500);
+  });
+</script>

@@ -1,0 +1,59 @@
+<div
+  id="barcode_template"
+  class="mceEditable"
+  readonly="readonly"
+  style="padding: 0px 0px 0px 0px; margin: 0px auto; background-color: #ffffff"
+>
+  <style>
+    .barTable,
+    .barTable * {
+      border: none !important;
+      font-size: 7px !important;
+    }
+    #barcode_image {
+      width: 80%;
+      margin: 0 10%;
+      height: 15px !important;
+    }
+  </style>
+  <div
+    id="barcode_template"
+    class="mceEditable"
+    readonly="readonly"
+    style="
+      padding: 0px 0px 0px 0px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      margin-bottom: 0;
+    "
+  >
+    <table
+      style="
+        width: 100%;
+        text-align: center;
+        height: 1.1cm;
+        direction: ltr;
+        padding: 0px 0px 0px 0px;
+        margin: 0 auto;
+      "
+      class="barTable"
+    >
+      <tbody>
+        <tr>
+          <td style="width: 3cm"></td>
+          <td style="width: 2.1cm">
+            {%product_name%} <br />{%product_unit_price%}
+          </td>
+          <td style="width: 2.1cm">
+            <img
+              id="barcode_image"
+              src="https://mahmoudismaeil.daftra.com/img/dummy_barcode.jpg"
+            />
+            <br />
+            {%product_barcode_number%}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

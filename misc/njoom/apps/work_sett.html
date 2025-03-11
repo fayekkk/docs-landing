@@ -1,0 +1,359 @@
+<!-- owner_workflow_settings -->
+
+<style>
+    .links-container {
+        position: absolute;
+    top: 20%;
+    max-height: 700px;
+    overflow-y: scroll;
+    right: 30%;
+    width: 50%;
+    margin: auto;
+    padding: 30px;
+    padding-top: 0;
+    background: #fff;
+    box-shadow: 0 0 5px 1px #ddd;
+    z-index: 9999;
+    display: none;
+}
+
+th.link-value {
+    width: 25%;
+}
+
+.link-value i {
+    font-size: 20px;
+    vertical-align: middle;
+}
+.links-table th, .links-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
+    font-size: 16px;
+}
+.links-table th {
+    background-color: #edf0ff;
+}
+td.link-value {
+    font-weight: 500;
+}
+td.link-value:hover {
+    color: rgb(50, 205, 146);
+   cursor: pointer;
+}
+.hide-bar {
+    text-align: center;
+    line-height: 30px;
+}
+
+.hide-btn-bar {
+    display: inline-block;
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    font-weight: 700;
+    background-color: #edf0ff;
+    padding: 5px 8px;
+    border-radius: 3px;
+    box-shadow: 0 0 3px 1px #ddd;
+    margin: 5px 0;
+
+    
+}
+.hide-btn-bar:hover {
+    box-shadow: 0 0 5px 1px #ddd;
+    background-color: #d0d8ff;
+
+    color: rgb(240, 64, 64);
+    cursor: pointer;
+}
+</style>
+<script>
+    
+    const linksTable = `
+    <div class="links-container">
+        <div class="hide-bar"><span class="hide-btn-bar">إخــفـــاء</span></div>
+<table class="links-table">
+    <thead>
+        <tr>
+            <th class="link-value">
+                الرابط
+            </th>
+            <th class="link-disc">
+                الوصف
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+                <a href="/v2/owner/entity/le_09122022/list" target="_blank">رابط تخصيص المستودعات</a>
+            </td>
+            <td class="link-disc">
+                هذا الرابط لكي يتم ضبط قائمة تصنيفات المنتجات وربطها مع مستودع محدد، بحيث يتم اختيار المستودع الخاص بها آلياً عند إنشاء الفاتورة. (يجب أن يكون إعداد "تحديد المستودع لكل بند" مُفعّل عند إنشاء الفاتورة لكي تعمل الخاصية بكش صحيح)
+            </td>
+
+        </tr>
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+                <a href="/v2/owner/entity/le_shopfront-text/1/edit" target="_blank"> الرسالة الترحيبية في المتجر الإلكتروني
+                </a>
+            </td>
+            <td class="link-disc">
+                من خلال تعديل النص في هذا الإعداد سيتم تعديل رسالة الترحيب الرئيسية بالمتجر الإلكتروني (العبارة الافتراضية هي "مرحبا  بكم في موقع نجوم العمران ...")
+            </td>
+        </tr>
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_shopfront-bar-text/1/edit" target="_blank"> الرسالة الترويجية في المتجر الإلكتروني</a>
+            </td>
+            <td class="link-disc">
+                يعطي هذا الإعداد إمكانية تسجيل أكثر من عبارة لتظهر في الشريط الترويجي المتحرك بالصفحة الرئيسية في المتجر الإلكتروني
+           </td>
+        </tr>
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_210/list" target="_blank">مجموعات التحضير للموظفين</a>
+            </td>
+            <td class="link-disc">
+                الإعداد خاص بتسجيل مجموعة جديدة وتحديد الموظفين المنتمين إليها، لكي يتم استدعاء قائمة هاؤلاء الموظفين في الشاشة الخاصة بتسجيل الحضور الآلي
+            </td>
+        </tr>
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_165/1/edit" target="_blank"> إعدادات المواعيد </a>
+            </td>
+            <td class="link-disc">
+                الإعداد خاص بتفعيل أو تعطيل السماح بحجز يوم "الجمعة" عند إنشاء موعد في الحساب
+            </td>
+        </tr>
+
+
+        
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_415/list" target="_blank"> تحديد الأصناف المسموحة لكل قالب فاتورة </a>
+            </td>
+            <td class="link-disc">
+                يتم هنا تحديد الأصناف والتصنيفات المسموح إدخالها في الفاتورة، وذلك وفقاً لنوع قالب الفاتورة (العقد) المحدد.
+                </td>
+        </tr>
+
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_425/1/edit" target="_blank"> تحديد تصنيفات وبنود المواد المساعدة </a>
+            </td>
+            <td class="link-disc">
+                يتم تعبأة النموذج بقائمة المواد المساعدة التي تظهر بشاشة عرض الفاتورة، ويمكن تحديدها وفقاً للبنود الواردة في الفاتورة مع تحديد المنتجات المجمعة المرتبطة بكل مادة مساعدة.  
+                </td>
+        </tr>
+
+
+
+
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/local_entities/builder/le_custom_data_le_workflow-type-entity-5?related_entity=le_workflow-type-entity-5" target="_blank"> قائمة الخدمات الموزعة </a>
+            </td>
+            <td class="link-disc">
+               لإضافة أو حذف الخدمات التي تظهر بشاشة "توزيع الخدمات" الخاصة بالفنيين، ويجب الضغط على حقل "الخدمة" ثم التعديل في قائمة الخدمات التي ستظهر على اليسار (يجب الإنتباء إلى عدم المساس بالحقول في الشاشة وعدم حذفها أو استبدالها)
+            </td>
+        </tr>
+
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_copper_type/list" target="_blank"> قائمة التأسيس </a>
+            </td>
+            <td class="link-disc">
+                يتم فيها إضافة الأصناف التابعة للتأسيس لكي تظهر بشكل مستقل في القسم المخصص لها بنموذج التمتير الفعلي التابع لدورة عمل التأسيس (تحقق عند إضافة صنف جديد من أن الحقول تُظهر اسم الصنف والرقم المعرف آلياً، وفي حالة عدم ظهورها يرجى التواصل مع القسم التقني)
+            </td>
+        </tr>
+
+
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_holes_list/list" target="_blank"> قائمة الأخرام </a>
+            </td>
+            <td class="link-disc">
+                يتم فيها إضافة الأصناف التابعة للأخرام لكي تظهر بشكل مستقل في القسم المخصص لها بنموذج التمتير الفعلي التابع لدورة عمل التأسيس (تحقق عند إضافة صنف جديد من أن الحقول تُظهر "اسم الصنف" و"الرقم المعرف" آلياً، وفي حالة عدم ظهورها يرجى التواصل مع القسم التقني)
+            </td>
+        </tr>
+
+        
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_services_list/list" target="_blank"> قائمة الخدمات </a>
+            </td>
+            <td class="link-disc">
+                يتم فيها إضافة الأصناف التابعة للخدمات لكي تظهر بشكل مستقل في القسم المخصص لها بنموذج التمتير الفعلي التابع لدورة عمل التأسيس (تحقق عند إضافة صنف جديد من أن الحقول تُظهر "اسم الخدمة" و"الرقم المعرف" آلياً، وفي حالة عدم ظهورها يرجى التواصل مع القسم التقني)
+            </td>
+        </tr>
+
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_duckt_devices/list" target="_blank"> قائمة الأجهزة للدكت </a>
+            </td>
+            <td class="link-disc">
+                يتم فيها إضافة وتعريف الأصناف التي ستظهر بقائمة "الأجهزة" في دورة عمل الدكت
+            </td>
+        </tr>
+
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_duckt_items/list" target="_blank"> قائمة بنود الدكت </a>
+            </td>
+            <td class="link-disc">
+                يتم فيها تحديد الأصناف التي ستظهر بقائمة "بنود الدكت" في دورة عمل الدكت
+                </td>
+        </tr>
+
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_duckt_services/list" target="_blank"> قائمة خدمات الدكت </a>
+            </td>
+            <td class="link-disc">
+                يتم فيها تعريف الخدمات التي تظهر بقائمة "خدمات الدكت"  في دورة عمل الدكت
+                </td>
+        </tr>
+
+
+        
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_287/list" target="_blank"> صلاحيات دورة العمل </a>
+            </td>
+            <td class="link-disc">
+                يتم فيها تحديد الصلاحيات الخاصة شاشات دورة العمل المختلفة بحسب الدور الوظيفي
+                </td>
+        </tr>
+
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_174/1/edit" target="_blank"> قائمة الإجراءات الجديد </a>
+            </td>
+            <td class="link-disc">
+                يتم فيها تسجيل الإجراء المطلوب أن يظهر بقائمة الإجراءات المُختصرة في شاشات المواعيد، ومن الضروري جداً أن يتطابق اسم الإجراء نصاً مع الاسم الخاص به في قائمة الإجراءات الأساسية بالنظام، دون أي اختلاف (يجب كذلك مراعاة أي مسافات أو فراغات قبل أو بعد اسم الإجراء) 
+            </td>
+        </tr>
+
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/owner/follow_up_actions/update/2?box=1" target="_blank"> قائمة الإجراءات الأساسية (القديمة) </a>
+            </td>
+            <td class="link-disc">
+                هي قائمة الإجراءات الأساسية في نظام دفترة، ويجب أن يتم فيها تعريف أي إجراء جديد قبل أن يتم إضافته بعد ذلك في "قائمة الإجراءات الجديد"، ويفضل بعد تعريف الإجراء أن يتم نسخه كما هو ويتم إضافته بعد ذلك مباشرة وحفظه في قائمة الإجراءات الجديدة
+            </td>
+        </tr>
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_refund_role/1/edit" target="_blank"> قائمةالمستخدمين المصرح لهم إنشاء مرتجع خدمات </a>
+            </td>
+            <td class="link-disc">
+                هي قائمة يتم من خلالها تعيين المستخدمين الذين لهم صلاحية إنشاء فاتورة مرتجعة على الخدمات
+            </td>
+        </tr>
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_permission/1/edit" target="_blank"> قائمةالمستخدمين المصرح لهم إضافة منتجات في المرتجعات </a>
+            </td>
+            <td class="link-disc">
+                هي قائمة يتم من خلالها تعيين المستخدمين الذين لهم صلاحية إضافة وتعديل المنتجات الموجودة في الفاتورة المرتجعة
+            </td>
+        </tr>
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_change_notes_attachments/1/edit?" target="_blank"> قائمة المستخدمين المصرح لهم تغيير الحالة في إضافة الملاحظات </a>
+            </td>
+            <td class="link-disc">
+                هي قائمة يتم من خلالها تعيين المستخدمين الذين لهم صلاحية تغيير الحالة في شاشة إضافة ملاحظة على الفاتورة
+            </td>
+        </tr>
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_work_reports_perm/1/edit" target="_blank"> قائمة المستخدمين المصرح لهم إضافة تقارير العمل </a>
+            </td>
+            <td class="link-disc">
+                هي قائمة يتم من خلالها تعيين المستخدمين الذين لهم صلاحية إضافة تقرير عمل على الفاتورة بعد إنهاء العمل أو اثناؤه
+            </td>
+        </tr>
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_workflow-type-entity-9/permissions" target="_blank"> صلاحيات تذاكر العملاء </a>
+            </td>
+            <td class="link-disc">
+                هي قائمة يتم من خلالها تحديد صلاحيات الموظفين أو الأدوار الوظيفية الخاصة بتذاكر العملاء
+            </td>
+        </tr>
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_add_appintment_for_finished_invoices/1/edit" target="_blank"> صلاحيات اضافة مواعيد للفواتير المنتهية </a>
+            </td>
+            <td class="link-disc">
+                هي قائمة يتم من خلالها تحديد صلاحيات الموظفين المسموح لهم بإضافة موعد للفواتير المنتهية
+            </td>
+        </tr>
+        <tr>
+            <td class="link-value">
+                <i class="mdi mdi-arrow-up-bold-circle"></i>
+               <a href="/v2/owner/entity/le_cancel_inv_appointments_permission/1/edit" target="_blank"> صلاحيات إلغاء مواعيد الفواتير   </a>
+            </td>
+            <td class="link-disc">
+                هي قائمة يتم من خلالها تحديد صلاحيات الموظفين المسموح لهم بإلغاء مواعيد الفواتير
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+</div>
+
+    
+    `
+
+    $(document).ready(()=>{
+        let cloneCard = $('.entity-settings>div').eq(0).clone()
+        cloneCard.find('a').attr('href', '#')
+        cloneCard.addClass('view-links')
+    cloneCard.find('span').html(`<i class="mdi mdi-format-list-bulleted"></i> روابط دورة العمل `)
+    $('.entity-settings').append(cloneCard)
+
+    $('#main-content').append(linksTable)
+    $('.view-links').on('click', (e)=>{
+        e.preventDefault()
+        $('.links-container').show('fast')
+    })
+
+    $('.view-links').on('click', (e)=>{
+        e.preventDefault()
+        $('.links-container').show('fast')
+    })
+    $('.hide-btn-bar').on('click', ()=>{
+        $('.links-container').hide('fast')
+
+    })
+    })
+
+</script>
+

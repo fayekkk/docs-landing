@@ -1,0 +1,60 @@
+<script>
+  if (
+    document.referrer.includes("edit") ||
+    document.referrer.includes("le_workflow-type-entity-2/list")
+  ) {
+    $(document).ready(() => {
+      var extraIframe = $("#tab-iframe-0");
+      extraIframe.on("load", function () {
+        var iframeContents = $(this).contents();
+        var deleteBtn = iframeContents.find(".delete-action");
+        var editBtn = iframeContents.find(".rowActionDropDown a:nth-child(2)");
+        console.log(deleteBtn);
+        for (let i = 0; i < deleteBtn.length; i++) {
+          $.get(
+            `/v2/api/entity/le_clientextraction/${
+              deleteBtn[i].href.split("/")[7]
+            }/1`
+          ).then((data) => {
+            console.log(data);
+            const status = data.invoicing_status1;
+            const confirmStatus = data.confirmation_status;
+            if (status == "تم الفوترة" || confirmStatus == "تم الإعتماد") {
+              $(deleteBtn[i]).hide();
+              $(editBtn[i]).hide();
+              console.log("status = تم الفوترة");
+            } else {
+              console.log("status !== تم الفوترة");
+            }
+          });
+        }
+      });
+    });
+  }
+</script>
+<!-- Fayek Code -->
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      let ProjId = parseInt(window.location.href.split("/")[6]);
+      $(".dropdown-btn-group > a:last-child")
+        .clone()
+        .attr("href", `/v2/owner/children/le_clientextraction/create/${ProjId}`)
+        .html(
+          '<span class="list-icon mdi mdi-receipt" aria-hidden="true"></span>أضف مستخلص عميل  '
+        )
+        .appendTo(".invoice-actions");
+      // ****************************************************************
+      $(".dropdown-btn-group > a:last-child")
+        .clone()
+        .attr(
+          "href",
+          `/v2/owner/children/le_vendorextractions/create/${ProjId}`
+        )
+        .html(
+          '<span class="list-icon mdi mdi-receipt" aria-hidden="true"></span>أضف مستخلص مقاول باطن  '
+        )
+        .appendTo(".invoice-actions");
+    }, 500);
+  });
+</script>

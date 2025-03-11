@@ -1,0 +1,77 @@
+<script>
+  function getCurrentDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+  var itemsarr = [
+    {
+      item: " item test",
+      description: "",
+      unit_price: 10,
+      quantity: 1,
+      col_3: "",
+      col_4: " ",
+      tax1: 0,
+      tax2: 0,
+      product_id: 1,
+    },
+  ];
+
+  let body = {
+    Invoice: {
+      subscription_id: "",
+      store_id: 1,
+      po_number: 26,
+      client_id: 1,
+      client_email: "",
+      client_country_code: "SAR",
+      draft: "1",
+      follow_up_status: null,
+      work_order_id: null,
+      staff_id: 0,
+      name: "",
+      is_offline: true,
+      currency_code: "SAR",
+      date: getCurrentDate(),
+      discount: 0,
+      discount_amount: 0,
+      deposit: 0,
+      deposit_type: 0,
+      notes: "",
+      html_notes: "",
+      invoice_layout_id: 5,
+      estimate_id: 0,
+      shipping_options: "",
+      shipping_amount: null,
+      follow_up_status: null,
+      requisition_delivery_status: null,
+      pos_shift_id: null,
+      branch_id: 13,
+    },
+    InvoiceItem: itemsarr,
+    InvoiceCustomField: [],
+  };
+  console.log({ body: body });
+  console.log(JSON.stringify(body));
+
+  fetch(`/api2/invoices`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  })
+    .then((res) => res.json())
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+</script>

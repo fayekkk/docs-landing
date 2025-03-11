@@ -1,0 +1,212 @@
+<script>
+  $(document).ready(function () {
+    // $(
+    //   'div[data-izam1-forms1-form-rows="le_workflow-type-entity-10_custom_data[le_custom_data_le_workflow-type-entity-10_le_custom_data_le_workflow-type-entity-10_staff_vac]"]'
+    // ).hide();
+    $('div[data-izam1-forms1-input-container="start_date').parent().hide();
+    $('div[data-izam1-forms1-input-container="delivery_date').parent().hide();
+    $('div[data-izam1-forms1-input-container="client_id').parent().hide();
+    $('div[data-izam1-forms1-input-container="assigned_users').parent().hide();
+    $('div[data-izam1-forms1-input-container="budget').parent().hide();
+    $('div[data-izam1-forms1-input-container="tags').parent().hide();
+    $('div[data-izam1-forms1-input-container="description').parent().hide();
+    $('div[data-izam1-forms1-input-container="attachments').parent().hide();
+    let departments = $(
+      ".container-le_workflow-type-entity-10_custom_data-dynamic_dropdown"
+    );
+    let staffGroups = $(
+      ".container-le_workflow-type-entity-10_custom_data-staff_groups"
+    );
+    let singleStaff = $(
+      ".container-le_workflow-type-entity-10_custom_data-single_staff"
+    );
+    function hideAll() {
+      $(departments).hide();
+      $(staffGroups).hide();
+      $(singleStaff).hide();
+      $(departments).find("select").val("").change();
+      $(staffGroups).find("select").val("").change();
+      $(singleStaff).find("select").val("").change();
+    }
+    hideAll();
+    $("#le_workflow-type-entity-10_custom_data-vac_type").on(
+      "change",
+      function () {
+        const vacType = $(this).val();
+        console.log(vacType);
+        if (vacType == "أجازة عامة") {
+          hideAll();
+          console.log("dont add");
+        } else if (vacType == "أجازة مهندس قسم") {
+          hideAll();
+          $(departments).show();
+        } else if (vacType == "أجازة مشرف مجموعة") {
+          hideAll();
+          $(staffGroups).show();
+        } else if (vacType == "أجازة موظف") {
+          hideAll();
+          $(singleStaff).show();
+        }
+      }
+    );
+    function addStaffRow(option) {
+      $(
+        'button[data-izam1-forms1-form-rows-add-btn="le_workflow-type-entity-10_custom_data[le_custom_data_le_workflow-type-entity-10_le_custom_data_le_workflow-type-entity-10_staff_vac]'
+      ).click();
+      setTimeout(() => {
+        let tablelastRows = $(
+          'tbody[data-izam1-forms1-form-rows-tbody="le_workflow-type-entity-10_custom_data[le_custom_data_le_workflow-type-entity-10_le_custom_data_le_workflow-type-entity-10_staff_vac]'
+        )
+          .find("tr")
+          .last();
+
+        $(tablelastRows)
+          .find("[id$='--staff']")
+          .append(option.selector)
+          .val(option.staffId)
+          .change();
+        updatedates();
+      }, 250);
+    }
+
+    function formatDate(dateString) {
+      const [year, month, day] = dateString.split("-");
+
+      return `${day}/${month}/${year}`;
+    }
+    function updatedates() {
+      console.log("update dates");
+
+      const startDate = $(
+        "#le_workflow-type-entity-10_custom_data-start_date"
+      ).val();
+      const endDate = $(
+        "#le_workflow-type-entity-10_custom_data-end_date "
+      ).val();
+      console.log(startDate);
+      console.log(endDate);
+      $("[id$='--start_date']").each(function () {
+        $(this).prev("input").val(formatDate(startDate)).change();
+      });
+      $("[id$='--end_date']").each(function () {
+        $(this).prev("input").val(formatDate(endDate)).change();
+      });
+      //   $("[id$='--start_date']").val(startDate).change();
+      //   $("[id$='--end_date']").val(endDate).change();
+    }
+    $(".applyBtn ").on("click", function () {
+      console.log("changed");
+      updatedates();
+    });
+    function addstaffdata(data) {
+      // Get staffs data
+      fetch(`${data}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Response:", data.data);
+          let staffsSelectors = data.data.map((staffdata) => {
+            console.log(staffdata);
+            return {
+              selector: `<option value="${staffdata.id}">${staffdata.name}</option>`,
+              staffId: staffdata.id,
+              staffname: staffdata.name,
+            };
+          });
+          console.log(staffsSelectors);
+          $(".remove-row").click();
+          staffsSelectors.map((selector) => {
+            addStaffRow(selector);
+          });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+    // department Change
+    $("#le_workflow-type-entity-10_custom_data-dynamic_dropdown").on(
+      "change",
+      function () {
+        if ($(this).val()) {
+          let selectedtext = $(this).find("option:selected").text();
+          let selectedVal = $(this).val();
+          console.log(selectedtext);
+          console.log(selectedVal);
+          fetch(`/v2/api/entity/department/${selectedVal}/1`, {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Response:", data);
+              // managers
+
+              if (data.managers.length == 0) {
+                alert("لا يوجد مهندس لهذة المجموعة");
+              } else {
+                let apiURL = "/v2/api/entity/staff/list/1?";
+                let managers = data.managers.map((manager) => {
+                  console.log(manager);
+                  apiURL += `filter[id][in][]=${manager}&`;
+                });
+                addstaffdata(apiURL);
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
+      }
+    );
+    // group change
+    $("#le_workflow-type-entity-10_custom_data-staff_groups").on(
+      "change",
+      function () {
+        if ($(this).val()) {
+          let selectedtext = $(this).find("option:selected").text();
+          let selectedVal = $(this).val();
+          console.log(selectedtext);
+          console.log(selectedVal);
+
+          fetch(`/v2/api/entity/le_workflow-type-entity-3/${selectedVal}/1`, {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Response:", data);
+              let staffs =
+                data["le_workflow-type-entity-3_custom_data"].emp_ids.split(
+                  ","
+                );
+
+              if (staffs.length == 0) {
+                alert("لا يوجد مهندس لهذة المجموعة");
+              } else {
+                let apiURL = "/v2/api/entity/staff/list/1?";
+                let managers = staffs.map((manager) => {
+                  console.log(manager);
+                  apiURL += `filter[id][in][]=${manager}&`;
+                });
+                addstaffdata(data);
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
+      }
+    );
+  });
+</script>

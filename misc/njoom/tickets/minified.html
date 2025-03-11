@@ -1,0 +1,557 @@
+owner_entity_le_workflow-type-entity-9_create
+<style>
+    .container-le_workflow-type-entity-9_custom_data-create_ticket_staff,
+    .container-le_workflow-type-entity-9_custom_data-staff_group,
+    .container-le_workflow-type-entity-9_custom_data-group_admin,
+    .container-le_workflow-type-entity-9_custom_data-close_ticket_staff {
+      pointer-events: none;
+    }
+    #le_workflow-type-entity-9_custom_data-create_ticket_staff,
+    #le_workflow-type-entity-9
+      > div.form-row
+      > div.col-lg-12
+      > div.row
+      > div.col-lg-6.col-md-6.col-sm-6.container-le_workflow-type-entity-9_custom_data-staff_group
+      > div
+      > span,
+    #le_workflow-type-entity-9
+      > div.form-row
+      > div.col-lg-12
+      > div.row
+      > div.col-lg-6.col-md-6.col-sm-6.container-le_workflow-type-entity-9_custom_data-group_admin
+      > div
+      > span,
+    #le_workflow-type-entity-9
+      > div.form-row
+      > div.col-lg-12
+      > div.row
+      > div.col-lg-6.col-md-6.col-sm-6.container-le_workflow-type-entity-9_custom_data-close_ticket_staff
+      > div
+      > span {
+      background-color: #e6e6e6;
+    }
+  </style>
+  <script>
+    $(document).ready(() => {
+      const userId = USER.staff_id;
+  
+      if (userId == 0) {
+        $("#le_workflow-type-entity-9_custom_data-create_ticket_staff").val(
+          "Owner"
+        );
+      } else {
+        $.get(`/api2/staff/${userId}`).then(function (data) {
+          const staffName = data.data.Staff.name;
+          console.log(staffName);
+          $("#le_workflow-type-entity-9_custom_data-create_ticket_staff").val(
+            staffName
+          );
+        });
+      }
+  
+      // $("#le_workflow-type-entity-9_custom_data-create_ticket_staff").attr("disabled", true)
+  
+      $(".container-le_workflow-type-entity-9_custom_data-hidden_inv_no").css(
+        "display",
+        "none"
+      );
+      let clientId = $("#client_id");
+      let invNo = $("#le_workflow-type-entity-9_custom_data-invoice_no");
+      $(document).on("change", "#client_id", function () {
+        $("#le_workflow-type-entity-9_custom_data-invoice_no").html(
+          '<option value="" selected="1" data-select2-id="2">من فضلك اختر</option>'
+        );
+        $.get(`/api2/invoices?client_id=${clientId.val()}&per_page=100`).then(
+          function (data) {
+            console.log(
+              `/api2/invoices?client_id=${clientId.val()}&per_page=100`
+            );
+            console.log(data);
+            const invoiceData = data.data;
+            for (i = 0; i < invoiceData.length; i++) {
+              console.log(invoiceData[i].Invoice.no);
+              invNo.append(
+                `<option value=${invoiceData[i].Invoice.no} invid=${invoiceData[i].Invoice.id}> ${invoiceData[i].Invoice.no}</option>`
+              );
+            }
+          }
+        );
+      });
+  
+      $(document).on(
+        "change",
+        "#le_workflow-type-entity-9_custom_data-invoice_no",
+        function () {
+          $("#le_workflow-type-entity-9_custom_data-hidden_inv_no").val(
+            $("#le_workflow-type-entity-9_custom_data-invoice_no").val()
+          );
+        }
+      );
+  
+      $("#le_workflow-type-entity-9_custom_data-ticket_open_notes").attr(
+        "required",
+        "required"
+      );
+      const reqSpan = document.createElement("span");
+      reqSpan.setAttribute("class", "required");
+      reqSpan.innerText = "*";
+      $("#le_workflow-type-entity-9_custom_data-ticket_open_notes").prepend(
+        reqSpan
+      );
+      $(
+        "#le_workflow-type-entity-9 > div.form-row > div.col-lg-12 > div.row > div.col-lg-12.col-md-12.col-sm-12.container-le_workflow-type-entity-9_custom_data-ticket_open_notes > div > label"
+      ).append(reqSpan);
+    });
+  </script>
+  <script>
+    $(document).ready(() => {
+      $("#le_workflow-type-entity-9_custom_data-technician_name").on(
+        "change",
+        function () {
+          $.get(
+            "/v2/api/entity/le_workflow-type-entity-3/list/1?per_page=60"
+          ).then(function (data) {
+            console.log(data);
+            const res = data.data;
+            console.log(res);
+            for (let i = 0; i < res.length; i++) {
+              const groupId = res[i].id;
+              const groupTitle = res[i].title;
+              const supervisor =
+                res[i]["le_workflow-type-entity-3_custom_data"].group_sup;
+              console.log(supervisor);
+              const empIds =
+                res[i]["le_workflow-type-entity-3_custom_data"].emp_ids;
+              console.log(empIds);
+              employees = empIds.split(",");
+              console.log(employees);
+              // var empName
+              for (let j = 0; j < employees.length; j++) {
+                console.log("Changed");
+                if (
+                  $(
+                    "#le_workflow-type-entity-9_custom_data-technician_name"
+                  ).val() == employees[j]
+                ) {
+                  console.log("TEST");
+                  $.get(
+                    `/v2/api/entity/staff/list/1?filter[id]=${supervisor}`
+                  ).then(function (data) {
+                    // console.log(data)
+                    const empName = data.data[0].full_name;
+                    $(
+                      "#le_workflow-type-entity-9_custom_data-group_admin"
+                    ).append(`<option value="${supervisor}">${empName}</option>`);
+                    $("#le_workflow-type-entity-9_custom_data-group_admin")
+                      .val(supervisor)
+                      .change();
+                  });
+                  $("#le_workflow-type-entity-9_custom_data-staff_group").append(
+                    `<option value="${groupId}">${groupTitle}</option>`
+                  );
+                  $("#le_workflow-type-entity-9_custom_data-staff_group")
+                    .val(groupId)
+                    .change();
+                }
+              }
+            }
+          });
+        }
+      );
+    });
+  </script>
+  <style>
+    #appointment_frame {
+      /* display: none; */
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+    }
+  
+    #appointment_frame .popup-content {
+      background-color: #fefefe;
+      margin: 20px auto;
+      padding: 20px;
+      width: 100%;
+      border: none !important;
+    }
+  
+    .appcontainer {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      text-align: center;
+      font-weight: 700;
+      margin: 20px 0;
+      border: 1px solid;
+      border-radius: 12px;
+      padding: 6px 2px;
+    }
+    .prevent_hiddens {
+      display: block !important;
+    }
+    .appcontainer button {
+      padding: 4px;
+      border-radius: 9px;
+    }
+    .booked-appointment-list {
+      height: 370px;
+      overflow-y: auto;
+    }
+    .booked-appointment-list h3 {
+      display: none;
+    }
+    .custom-row {
+      width: 100%;
+      display: block;
+      background: #f8fcff;
+      box-shadow: 0 0 2px 1px #ddd;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 3px;
+    }
+    .custom-date:hover {
+      border-bottom: 2px solid #d8c6ab;
+    }
+    .custom-date {
+      outline: 0;
+      border: none;
+      background: 0 0;
+      text-align: right;
+      font-weight: 500;
+      margin: 0;
+      margin-right: -18px;
+      border-bottom: 2px solid #f8fcff;
+  
+      transition: all 0.2s ease-in;
+    }
+    div.datepicker {
+      width: 100%;
+      margin: 15px 0;
+    }
+    .datepicker--cell {
+      height: 45px !important;
+    }
+    #myTable {
+      border: 1px solid #ddd;
+      border-spacing: 10px;
+      border-collapse: separate;
+      text-align: center !important;
+    }
+    .time-shift div {
+      display: block !important;
+      text-align: center !important;
+    }
+    #myTable th {
+      background-color: #4caf50;
+    }
+    #myTable tr:hover .overlay {
+      display: block;
+    }
+    #myTable .time {
+      font-size: smaller;
+    }
+    #myTable .status {
+      font-size: larger;
+    }
+    #myTable .selected,
+    #myTable .time-shift,
+    #myTable .unavailable {
+      border-radius: 10px;
+      height: 80px;
+      transition: background-color 0.3s ease-in-out;
+      cursor: pointer;
+      min-width: 100px;
+    }
+    #myTable .selected:before,
+    #myTable .time-shift:before,
+    #myTable .unavailable:before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      bottom: -5px;
+      left: -5px;
+      z-index: -1;
+      border-radius: inherit;
+    }
+    #myTable .time-shift:before {
+      background-image: linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.8),
+          rgba(255, 255, 255, 0)
+        ),
+        linear-gradient(-45deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
+    }
+    #myTable .selected:before {
+      background-image: linear-gradient(
+          45deg,
+          rgba(255, 165, 0, 0.8),
+          rgba(255, 165, 0, 0)
+        ),
+        linear-gradient(-45deg, rgba(255, 165, 0, 0.8), rgba(255, 165, 0, 0));
+    }
+    #myTable .unavailable:before {
+      background-image: linear-gradient(
+          45deg,
+          rgba(255, 0, 0, 0.8),
+          rgba(255, 0, 0, 0)
+        ),
+        linear-gradient(-45deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0));
+    }
+    #myTable .time-shift {
+      background-color: #b4ffcc;
+      font-weight: 500;
+      color: #1c6a35;
+    }
+    #myTable .selected {
+      background-color: rgb(241 200 125);
+      color: #7e5f26;
+    }
+    #myTable .unavailable {
+      background-color: rgb(255 178 178);
+      color: #931111;
+    }
+    #myTable td .overlay {
+      content: "";
+      display: none;
+      position: absolute;
+      top: 0;
+      z-index: 1;
+      border-radius: inherit;
+      background-color: rgb(147 147 147 / 15%);
+      width: 100%;
+      height: 100%;
+    }
+    .time.shifts {
+      overflow-x: auto !important;
+      overflow-y: auto !important;
+      max-height: 350px;
+    }
+    #myTable td:first-child,
+    #myTable th:first-child {
+      min-width: 100px !important;
+    }
+    #myTable td,
+    #myTable th {
+      width: 100px;
+    }
+    td.time-shift {
+      min-width: 90px;
+      position: relative;
+    }
+    .status {
+      text-align: center;
+    }
+    @media (max-width: 770px) {
+      #myTable td.time-shift div:last-child {
+        display: block !important;
+        text-align: center !important;
+      }
+    }
+    #myTable tr:first-child td {
+      font-weight: 700;
+      padding: 10px;
+      font-size: 15px;
+      background: #fff;
+      border-radius: 5px;
+      color: #555;
+      box-shadow: 0 0 2px 1px #e9e9e9;
+    }
+    div.datepicker {
+      width: 100%;
+      margin: 15px 0;
+    }
+    .datepicker--cell {
+      height: 45px !important;
+    }
+    .date-div {
+      display: inline-block;
+      width: 45%;
+      margin: 15px 0 15px 15px;
+    }
+    .date-div label.custom_label {
+      margin-right: 5px;
+    }
+    .shift_table,
+    .time.shifts {
+      display: none;
+      font-family: Roboto, "Segoe UI", Tahoma, Helvetica, "Open Sans", arial,
+        serif;
+      color: #3a3e63 !important;
+      margin: 15px;
+      max-width: 98%;
+    }
+    .custom-row {
+      width: 100%;
+      display: block;
+      background: #f8fcff;
+      box-shadow: 0 0 2px 1px #ddd;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 3px;
+    }
+    .custom-date:hover {
+      border-bottom: 2px solid #d8c6ab;
+    }
+    .custom-date {
+      outline: 0;
+      border: none;
+      background: 0 0;
+      text-align: right;
+      font-weight: 500;
+      margin: 0;
+      margin-right: -18px;
+      border-bottom: 2px solid #f8fcff;
+      transition: all 0.2s ease-in;
+    }
+    #main-content {
+      opacity: 0;
+      transition: all 0.1s ease-in-out;
+    }
+    .week-day {
+      position: relative;
+    }
+    span.select2-selection.select2-selection--single,
+    span.select2.select2-container.select2-container--default,
+    span.select2.select2-container.select2-container--default.select2-container--below.select2-container--open.select2-container--focus,
+    span.select2.select2-container.select2-container--default.select2-container--focus {
+      width: 100% !important;
+    }
+    .datepicker-inline {
+      display: none;
+    }
+    .shift_table,
+    .time.shifts {
+      display: none;
+      font-family: Roboto, "Segoe UI", Tahoma, Helvetica, "Open Sans", arial,
+        serif;
+      color: #3a3e63 !important;
+      margin: 15px;
+      max-width: 98%;
+    }
+    #showPopupBtn {
+      display: none;
+      width: 137px;
+      height: 50px;
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      font-size: 17px;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+    .appointment-form {
+      margin-bottom: 20px;
+    }
+  
+    .appointment-form .row {
+      margin-bottom: 15px;
+    }
+  
+    .appointment-form .form-label {
+      margin-top: 7px;
+    }
+  
+    .appointment-form .form-control {
+      max-width: 100%;
+    }
+  
+    .appointment-desc {
+      height: 100px;
+    }
+    #appTitle {
+      text-align: center;
+      font-size: 30px;
+      background: #e5e5e5;
+      padding: 15px 0;
+      font-weight: 900;
+      margin-top: 55px;
+    }
+    .action-buttons button:nth-child(2) {
+      display: none;
+    }
+  </style>
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.1.0/css/datepicker.min.css"
+  />
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.1.0/js/datepicker.min.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.1.0/js/i18n/datepicker.en.min.js"
+  ></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.16/js/bootstrap-multiselect.min.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.16/css/bootstrap-multiselect.css"
+  />
+  
+  <script>
+    $(document).ready(()=>{var e;let t=`<button id="addappointments" class="btn btn-success btn-icon  ml-sm-2 " n >
+                              <i class="mdi mdi-content-save-outline"></i>حفظ</button>`;document.querySelector(".action-buttons").innerHTML+=t;let l=`
+  
+          <div class="row custom-row"><div class="col-md-6 col-s-6"><div class="form-group" > <label for="new_action_list">الإجراءات</label><select id="new_actions" class=" form-control"> <option value="0"> -- اختر الإجراء </option> </select></div> </div></div> <div class="row custom-row" style="">
+        <div class="col-md-4 col-s-4" style = "display:inline-block">
+        <div class="form-group" id="dep_select"><label class="deb-label">أقسام الشركة</label><select class="deb-list"><option value="-1"> -- اختر القسم -- </option></select></div>
+        </div><div class="col-md-4 col-s-4" style = "display:inline-block"><div class="form-group" id="group_select"> <label class="groups_label">المجموعات المتاحة</label>
+        <select class="groups-list" disabled="disabled" autocomplete="off" ><option value="-1"> -- اختر المجموعة -- </option></select></div>
+        </div><div class="clearfix"></div><div class="col-md-6 col-sm-6"> <div class="form-group date-div">  <label class="custom_label">من تاريخ</label> <input class="date_from custom_input custom-date" id="fromDate" type="date" readonly="readonly">
+            </div> <div class="form-group date-div"> <label class="custom_label">إلى تاريخ</label><input class="date_to custom_input custom-date" type="date" id="toDate" " readonly="readonly">
+          </div></div> <div class="clearfix"></div> <div class="col-md-8 col-sm-8"> <div class="data_picker" > <input style="display:none" id="date_picker" class="custom_input hasDate hasDatepicker" type="text">
+            </div> </div>
+            <div class="col-md-4 col-sm-8 hidden" >
+              <div class="booked-appointment-list">
+                  <h3>المواعيد المحجوزة خلال الفترة: </h3>
+                  </div>
+                  </div>
+                  <div class="clearfix"></div><h2 class="shift_table" style="display:none; color:#3a3e63" >جدول الفترات</h2><div class="time shifts col-md-12 col-sm-12"><table id="myTable"></table></div></div>
+                  <div class="appointment-form">
+  
+                        <div class="row">
+                            <div class="col-md-4">
+                        <input id="ClientAppointmentDuration" class="form-control" />
+                    </div>
+                        <div class="col-md-4">
+                        <input id="ClientAppointmentDateTime" class="form-control" />
+                    </div>
+                        </div>
+  
+                    <div class="row">
+                        <div class="col-md-6">
+                        <input id="ClientAppointmentBody" class="form-control appointment-desc" />
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-md-6">
+                        <button id="checkapp" class="btn btn-primary">checkapp</button>
+                        </div>
+                        </div>
+                        <div class="row">
+  
+                   <label for="fliter-staff" class="form-label">  الموظفين المعينين: </label>
+  
+                   </div>
+                   <div class="row">
+                   <select id="fliter-staff" multiple class="form-control"></select>
+               </div>
+                    </div>
+           `,i=["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت",],a=`
+        <div class = "col-lg-12 ">
+            <button id="showPopupBtn" added = "0"> أضف موعد</button>
+            <div id = "appTitle">المواعيد </div>
+               <div id="appointment_frame" class="popup">
+                <div class="popup-content">
+                   ${l}
+                </div>
+               </div>
+               </div>`;$(".container-le_workflow-type-entity-9_custom_data-close_ticket_staff").after(a);let n=!1;function s(e){var t=Math.floor(e),l=Math.round((e-t)*60);return t+":"+(l<10?"0":"")+l}function o(e){let t=$("#showPopupBtn"),l=$("#appointment_frame");t.on("click",e=>{e.preventDefault(),"0"==$("#showPopupBtn").attr("added")?(l.css("display","block"),$("#showPopupBtn").attr("added","1"),$("#showPopupBtn").text("إلغاء الموعد")):(l.css("display","none"),$("#showPopupBtn").attr("added","0"),$("#showPopupBtn").text("أضف موعد"))})}$(document).ready(function(){$(document).ready(function(){$.ajax({url:"/v2/api/entity/staff/list/1?filter[type]=user&per_page=170",type:"GET",dataType:"json"}).done(function e(t){let l=$("#fliter-staff");l.empty(),$.each(t.data,function(e,t){l.append(`<option value="${t.id}">${t.name}</option>`)}),l.multiselect({enableClickableOptGroups:!0,enableCollapsibleOptGroups:!0,enableFiltering:!0,enableCaseInsensitiveFiltering:!0,buttonWidth:"100%",maxHeight:400,buttonText:function(e,t){return 0===e.length?"Select options":e.length+" options selected"}})}).fail(function(e){console.error("Error fetching options:",e)}),$("#fliter-staff").on("change",function(){let e=$(this).val();console.log("Selected options:",e)})})}),o();let d=()=>{message=`تاريخ تسجيل الموعد ${g()}<br/>`+note1+"<br/>"+e+"<br/>"+note3+"<br/>"+note4+"<br>"+note5,$(".note-editor").find("p").eq(0).html(message),$("#ClientAppointmentBody").val(message)};function r(e){return e.toISOString().split("T")[0]}function c(e,t){return e.setDate(e.getDate()+t),e}function p(e,t,l){return console.log({idArray:e}),new Promise(async i=>{let a=r(c(new Date(l),1));if(null!=e&&0!=e.length){let n=[];for(let s of e){let o=await $.get(`/v2/api/entity/item_staff/list/1?filter[item_type]=9&filter[staff_id]=${s}&filter[follow_up_reminder.date][lte]=${a}&filter[follow_up_reminder.date][gte]=${t}&filter[follow_up_reminder.status]=0&per_page=100`);0!=o.data.length&&o.data.map(e=>{n.push({appointment_id:e.follow_up_reminder.id,star_date_time:e.follow_up_reminder.date,end_date_time:e.follow_up_reminder.end_date,invoice_Id:e.follow_up_reminder.item_id})})}i(n)}else i(null)})}function u(){return new Promise(e=>{$.ajax({url:"/v2/api/entity/le_174/1",type:"GET",success(t){console.log(t.le_174_le_174_add_actions),e(t.le_174_le_174_add_actions.map(e=>e))},error(t){console.log(t),e(t)}})})}function m(){$(".loading-overlay").show();let e=[],t=[],l=[];$.get("/v2/api/entity/le_workflow-type-entity-3/list/2?per_page=100").then(i=>{let a=[],n=[],s=[];for(var o=0;o<i.data.length;o++){a.push(i.data[o].id);let d=i.data[o],r=d.title,c=d.id,p=d["le_workflow-type-entity-3_custom_data"]["le_custom_data_le_workflow-type-entity-3_group_dep"],u=p.id,m=p.name,f=d["le_workflow-type-entity-3_custom_data"]["le_custom_data_le_workflow-type-entity-3_group_sup"],v=f.id,g=`${f.name}_${f.middle_name}_${f.last_name}`,h=d["le_workflow-type-entity-3_custom_data"].emp_ids,y;null!=h&&(y=h.split(","),t.push(y));let b;-1==e.indexOf(m)&&(e.push(m),b=`<option data-id="option${o}" value=${u} data-sup=${v}>${m}</option>`,n.push(b),$(".deb-list").append(b)),-1==l.map(e=>e.dep_id).indexOf(u)?l.push({dep_id:u,group_option:[`<option data-id="option${o}" value=${c} data-depid=${u} data-supName=${g} data-supID=${v} data-emps=${y}>${r}</option>`,]}):l[l.map(e=>e.dep_id).indexOf(u)].group_option.push(`<option data-id="option${o}" value=${c} data-depid=${u} data-supName=${g} data-supID=${v} data-emps=${y}>${r}</option>`);let _=`<option data-id="option${o}" value=${c} data-depid=${u} data-supName=${g} data-supID=${v} data-emps=${y}>${r}</option>`;s.push(_)}return l}).then(e=>{$(".loading1").hide(),$(".loading2").hide(),$(".deb-list").removeAttr("disabled"),$(".deb-list").select2(),$(".groups-list").select2(),f(e),$(".loading-overlay").hide()}).then(()=>{})}function f(e){$(".deb-list").change(()=>{-1==$(".deb-list").val()?$(".groups-list").attr("disabled","disabled"):$(".groups-list").attr("disabled",!1),$(".groups-list option:eq(0)").attr("selected","selected");let t=$(".deb-list option:selected").text();parseInt($(".deb-list option:selected").val());let l=e.filter(e=>e.dep_id==$(".deb-list").val())[0].group_option;$(".groups-list").html(`<option value="-1"> -- اختر المجموعة -- </option>`),l.map(e=>{$(".groups-list").append(e)}),$(".groups-list").val(-1).change(),note3="اسم القسم: "+t}),$(".groups-list").change(()=>{let e=[],t=[];if(-1!=$(".groups-list").val()){let l=$(".groups-list option:selected").text();$(".datepicker-inline").show("fast");let i=$(".groups-list :selected").data("supname");$("#ClientAppointmentChooseStaff").attr("checked","true"),$.each($(".multiselect-container.dropdown-menu li"),e=>{$(".multiselect-container.dropdown-menu li").eq(e).find("input").attr("checked",!0)});let a=$(".groups-list :selected").data("emps");console.log(a),a.toString().includes(",")?(t=a.split(",").map(Number),console.log(t)):t.push(a),console.log(t),$.each($(".multiselect-container button"),l=>{let i=$(".multiselect-container button").eq(l),a=parseInt(i.find("input").val());if($("#fliter-staff").val(t),t.includes(a)){i.css({display:"block"}),i.find("input").attr("checked","true"),i.find("input").on("click change",function(e){return $(this),e.preventDefault(),!1});let n=i.find("label").text();e.push(n)}else i.css({display:"none"})}),n&&$("#toDate").trigger("change"),note4=i+"<br>اسم المجموعة: "+l,note5="أسماء الموظفين المعينيين:<br>"+e.join("<br/>")}})}function v(e){var t=e.split(":"),l=parseInt(t[0],10),i=parseInt(t[1],10);return(l<10?"0"+l:l)+":"+(i<10?"0"+i:i)+":00"}function g(){let e=new Date;return`${e.getDate()}/${e.getMonth()+1}/${e.getFullYear()}`}function h(e,t){for(var l=document.getElementById("myTable"),i=1;i<l.rows.length;i++){if($(l.rows[i].cells[e]).hasClass("unavailable"))return!1;$(l.rows[i].cells[e]).hasClass("disabled-day")||(t?$(l.rows[i].cells[e]).addClass("selected"):$(l.rows[i].cells[e]).removeClass("selected"))}return!0}function y(e){for(var t=document.getElementById("myTable"),l=1;l<t.rows.length;l++)$(t.rows[l].cells[e]).removeClass("selected");alert("هذه الفترة غير متاحة في جميع الأيام المحددة، لا يمكن تحديد هذه الفترة")}function b(){return new Promise(e=>{$.ajax({url:"/v2/api/entity/le_165/1",type:"GET",success(t){e(t)},error(t){e(t)}})})}function _(t,l){$(".loading-overlay").show(),l.filter((e,t,l)=>t===l.findIndex(t=>t.appointment_id===e.appointment_id));let a=t.start_from;dateArray=[];let n=Math.round(parseFloat(t.end_at)),o=new Date(document.getElementById("fromDate").value),r=new Date(document.getElementById("toDate").value),p=document.getElementById("fromDate").value.split("-"),u=document.getElementById("toDate").value.split("-"),m=c(r,1),f=document.getElementById("myTable"),g=`${p[2]}/${p[1]}/${p[0]}`,b=`${p[2]}/${p[1]}/${p[0]} ${$("#ClientAppointmentDateTime").val()}`;$("#ClientAppointmentDateDate").val(g),$("#final_date_time_value").val(b),f.innerHTML="";let _=f.insertRow(0);_.insertCell(0).innerHTML="التاريخ";let w=1;for(let C=a;C<n;C++)_.insertCell(-1).innerHTML="الفترة "+w,w++;note1="المدة بالأيام: "+Math.ceil(Math.abs(o-r)/864e5)+"يومًا  :من تاريخ "+`${p[2]}/${p[1]}/${p[0]}`+"إلى تاريخ: "+`${u[2]}/${u[1]}/${u[0]}`,d();for(let T=o;T<=m;T.setDate(T.getDate()+1)){let D,k=[];0!=l.length&&(D=l.map(e=>new Date(e.star_date_time.split(" ")[0])).some(e=>e.toISOString().slice(0,10)===T.toISOString().slice(0,10))),D&&l.filter(e=>(e.star_date_time.split(" ")[0],e.star_date_time.split(" ")[0]===T.toISOString().slice(0,10))).map(e=>{k.push({start_time:e.star_date_time.split(" ")[1],end_time:e.end_date_time.split(" ")[1]})});let x=f.insertRow(-1),A=!1,I=x.insertCell(0);$(I).addClass("week-day"),5==T.getDay()&&1!=t.friday_active?($(I).addClass("disabled-day"),A=!0):dateArray.push(T.toISOString().slice(0,10));let S=i[T.getDay()];I.innerHTML=`<span class="day-name">${S}</span><br><span>${T.toISOString().slice(0,10)}</span> <div class='overlay'></div>`;for(let q=parseFloat(a);q<n;q++){let B=x.insertCell(-1),O=s(q),E=s(q+1);A?B.className="time-shift disabled-day":B.className="time-shift";let P=!1;0!=k.length&&(P=k.some(e=>{let t=v(E),l=v(O),i=new Date("1970-01-01T"+t+"Z"),a=new Date("1970-01-01T"+l+"Z"),n=new Date("1970-01-01T"+e.start_time+"Z"),s=new Date("1970-01-01T"+e.end_time+"Z");return a.getTime()>=n.getTime()&&i.getTime()<=s.getTime()||n.getTime()>=a.getTime()&&n.getTime()<i.getTime()||s.getTime()>a.getTime()&&s.getTime()<i.getTime()})),P?(B.innerHTML="<div class='time'>"+O+" - "+E+"</div><div class='status'> غيـر مـتــاح </div><div class='overlay'></div>",$(B).addClass("unavailable")):B.innerHTML="<div class='time' data-start-time='"+O+"'>"+O+" - "+E+"</div><div class='status'>مـتــاح</div><div class='overlay'></div>",B.onclick=function(){let t=$(this);if($(this).hasClass("selected")){$(this).removeClass("selected");h(this.cellIndex,!1)||y(this.cellIndex);let l=$(this).closest("tr").find("td.selected");if(l.length>=1){let i=$("td").index(l.first()),a=$("td").index(l.last()),n=$("#myTable tr:first-child td").eq(l.first().first().index()).text(),s=$("#myTable tr:first-child td").eq(l.last().index()).text();startAppointmentTime=v($("#myTable td").eq(i).find(".time").data("start-time"));let o=!0;for(let r=i+1;r<a;r++){let c=$("#myTable td").eq(r);if($(c).attr("class"),$(c).hasClass("selected"));else if($(c).hasClass("unavailable")){alert("لا يمكن اختيار الفترة لأن الفترات في الوسط محجوزة"),t.removeClass("selected"),o=!1;break}else $(c).click()}o&&(e=`من ${"undefined"!=n?n:""} إلى ${"undefined"!=s?s:""}`,d(),$("#ClientAppointmentDateTime").val(startAppointmentTime).change(),$("#ClientAppointmentDuration").val(a-i+1))}else $("#ClientAppointmentDuration").val(0)}else if(!$(this).hasClass("selected")&&!$(this).hasClass("unavailable")&&!$(this).hasClass("disabled-day")){$(this).addClass("selected");let p=$(this).closest("tr").find("td.selected");if(h(this.cellIndex,!0)||y(this.cellIndex),p.length>=1){let u=$("td").index(p.first()),m=$("td").index(p.last()),f=$("#myTable tr:first-child td").eq(p.first().first().index()).text(),g=$("#myTable tr:first-child td").eq(p.last().index()).text();startAppointmentTime=v($("#myTable td").eq(u).find(".time").data("start-time"));let b=!0;for(let _=u+1;_<m;_++){let w=$("#myTable td").eq(_);if($(w).hasClass("selected"));else if($(w).hasClass("unavailable")){alert("لا يمكن اختيار الفترة لأن الفترات في الوسط محجوزة"),t.removeClass("selected"),b=!1;break}else $(w).click()}b&&(e=`من ${"undefined"!=f?f:""} إلى ${"undefined"!=g?g:""}`,d(),$("#ClientAppointmentDateTime").val(startAppointmentTime).change(),$("#ClientAppointmentDuration").val(m-u+1))}}}}T.setHours(12,0,0,0)}$(".loading-overlay").hide()}function w(){$("#new_actions").val(""!=$("#ClientAppointmentActionId").val()?$("#ClientAppointmentActionId option:selected").text():0),$("#new_actions").on("change",function(){let e=$("#ClientAppointmentActionId option").filter((e,t)=>$(t).text()===$(this).val());$("#ClientAppointmentActionId").val($(e).val()).change(),$("ul.dropdown-menu.inner.selectpicker .selected").removeClass("selected"),$(`ul.dropdown-menu.inner.selectpicker li[data-original-index=${$(e).val()}]`).addClass("selected")})}m(),b().then(e=>{let t=e;if($("#main-content").append(overlay),$("#ClientAppointmentDuration").attr("readonly","readonly"),$("#ClientAppointmentDateTime").attr("readonly","readonly"),$("#ClientAppointmentDateDate").attr("readonly","readonly"),1==t.new_appointment){$("#PostForm button.btn-success").css({"pointer-events":"auto","background-color":"#13b272"}),$(".panel-body").eq(0).prepend(l);let i=$("#new_actions");i.on("change",()=>{$(i).parent().find(".new-error-message").remove()}),$('label[for="new_action_list"]').append('<span class="red-star">*</span>'),$("#toDate").on("change",()=>{let e=$("#fromDate").val(),l=$("#toDate").val(),i=$("#fliter-staff").val();p(i,e,l).then(e=>{n=!0,null!=e?_(t,e):alert("لا يوجد مستخدم في هذه المجموعة، الرجاء تعيين مستخدم أولاً")})}),$(".col-md-4.col-sm-4").eq(3).find(".form-group").eq(0).addClass("hidden");let a=`<option value="122" > تذكرة دعم فني </option> `;async function s(){let e=$("#fromDate").val(),t=$("#toDate").val(),l=function e(t,l){let i=[],a=new Date(t),n=new Date(l);for(;a<=n;)i.push(new Date(a)),a.setDate(a.getDate()+1);return i.map(e=>e.toISOString().slice(0,10))}(e,t);console.log(l);let i=$("#le_workflow-type-entity-9_custom_data-invoice_no").find(":selected").attr("invid"),a=$("#ClientAppointmentBody").val(),n=$("#ClientAppointmentDateTime").val(),s=$("#ClientAppointmentDuration").val(),o=$("#fliter-staff").val();console.log(o);let d=[];for(let r=0;r<l.length;r++){let c={InvoiceAppointments:{item_id:i,body:a,date:l[r]+" "+n,start_time:n,duration:s,choose_staff:"1",status:0,staff_id:o,action_id:"122"}};d.push(c)}console.log(d);let p=0,u=[];for(let m=0;m<d.length;m++){let f=d[m].InvoiceAppointments;f.choose_staff||(alert("Please select a group and staff"),p=1),f.date||(alert("يوجد خطأ فى حفظ الموعد برجاء التواصل"),p=1),f.duration||(alert("يوجد خطأ فى حفظ الموعد برجاء التواصل"),p=1),f.item_id||(alert("يرجى إختيار رقم الفاتورة"),p=1);let v=JSON.stringify(d[m]);console.log(v),1!=p&&(document.querySelector(".btn-success").setAttribute("disabled","disabled"),$(".loading-overlay").show(),u.push($.ajax({url:"/api2/invoice_appointments",method:"POST",contentType:"application/json",accept:"application/json",data:v}).then(e=>{console.log("The app Id ****************************************************************"),$(".action-buttons button").eq(1).attr("disabled",!1),$(".action-buttons button").eq(1).trigger("click"),$(".loading-overlay").hide(),console.log(e)}).catch(e=>console.log(e))),await Promise.all(u))}}$("#new_actions").append(a),$("#new_actions").val("122").attr("disabled",!0).change(),m(),$("#date_picker").datepicker({language:"en",minDate:new Date,inline:!0,multipleDatesSeparator:" / ",container:"#date-range12-container",alwaysOpen:!0,dateFormat:"yyyy-mm-dd",controls:["calendar"],select:"range",range:!0,touchUi:!0,onSelect:function(e,l){let i=e.split("/");null!=i[0]&&void 0!=i[1]&&$(".date_from").val(i[0].replace(" ","")),null!=i[1]&&void 0!=i[1]&&($(".date_to").val(i[1].replace(" ","")).change(),$(".time.shifts").show("fast"),setTimeout(()=>{$(".shift_table ").show("fast")},100));let a=l[0],n=l[1];void 0!=a&&5==a.getDay()&&1!=t.friday_active&&(alert("لا يمكن تحديد يوم الجمعة"),$("#date_picker").datepicker().data("datepicker").clear()),void 0!=n&&5==n.getDay()&&1!=t.friday_active&&(alert("لا يمكن تحديد يوم الجمعة"),$("#date_picker").datepicker().data("datepicker").clear())}}),$("#addappointments").click(e=>{console.log("start"),e.preventDefault(),s(),setTimeout(()=>{if(2==location.href.split("/").slice(-2)[1]){if(!checkValidation().status)return alert(checkValidation().message),!1;$(".loading-overlay").show(),$(".loading-overlay").addClass("prevent_hiddens")}},3e3)}),setTimeout(()=>{$("#main-content").css("opacity",1)},500)}})});
+  </script>

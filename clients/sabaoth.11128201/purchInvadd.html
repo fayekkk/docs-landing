@@ -16,8 +16,44 @@
               cstVals.eq(i).addClass("Devise");
             } else if (cstLbls.eq(i).val() == "Terme de paiement") {
               cstVals.eq(i).addClass("Termedepaiement");
+            } else if (cstLbls.eq(i).val() == "TOTAL") {
+              cstVals.eq(i).addClass("TOTAL");
+            } else if (cstLbls.eq(i).val() == "Délai de livraison en Jours") {
+              cstVals.eq(i).addClass("livraison");
+            } else if (cstLbls.eq(i).val() == "Arrival date at Place") {
+              cstVals.eq(i).addClass("Arrivaldate");
             }
           }
+
+          // ********************************** Update dates custom fields *******************************
+
+          $(document).on(
+            "change",
+            ".livraison, #PurchaseOrderDate",
+            function () {
+              var dateInput = $("#PurchaseOrderDate").val();
+              var daysToAdd = parseInt($(".livraison").val()) || 0;
+
+              // Parse the date in MM/DD/YYYY format
+              var dateParts = dateInput.split("/");
+              var date = new Date(dateParts[2], dateParts[0] - 1, dateParts[1]); // Year, Month (0-indexed), Day
+
+              // Add days to the date
+              date.setDate(date.getDate() + daysToAdd);
+
+              // Format the new date to MM/DD/YYYY
+              var newDate =
+                ("0" + date.getDate()).slice(-2) +
+                "/" +
+                ("0" + (date.getMonth() + 1)).slice(-2) +
+                "/" +
+                date.getFullYear();
+
+              console.log("New Date: " + newDate);
+              $(".Arrivaldate").val(newDate);
+            }
+          );
+
           // ********************************** create selectors to custom fields ********************************
           function fetchApiData(url) {
             return $.ajax({
@@ -31,7 +67,9 @@
               console.log("API Response:", response);
 
               // Hide inputs with specific classes
-              $(".Incoterm, .Disponibilite, .Devise, .Termedepaiement").hide();
+              $(
+                ".Incoterm, .Disponibilite, .Devise, .Termedepaiement,.TOTAL"
+              ).hide();
 
               // Create selectors based on the response
               createSelectors(
@@ -55,6 +93,7 @@
                 ".Devise",
                 "Select Option"
               );
+              createSelectors(["TTC", "HT"], ".TOTAL", "Select Option");
               $("#DiscountSelect").empty();
               console.log("changed");
               $("#DiscountSelect").append(
@@ -93,7 +132,8 @@
                   item.incoterm ||
                   item.disponibilite ||
                   item.currency_currency ||
-                  item.terms_text
+                  item.terms_text ||
+                  item
                 }</option>`
               );
             });

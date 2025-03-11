@@ -1,0 +1,111 @@
+<script>
+  // hundle equations in add screen
+  $(document).ready(function () {
+    setTimeout(() => {
+      function screenCode() {
+        var allrows = $("#listing_table tr");
+        allrows.each(function () {
+          var rows = $(this);
+
+          const calculate = (selector) => {
+            rows.find(selector).on("input", function () {
+              if (
+                rows.find(".col-2 textarea").val() != 0 &&
+                rows.find(".col-3 textarea").val() != 0
+              ) {
+                let sum =
+                  (rows.find(".col-2 textarea").val() *
+                    rows.find(".col-3 textarea").val() *
+                    rows.find(".col-4 textarea").val()) /
+                  10000;
+                rows.find(".item-qty").val(sum).change();
+              } else if (
+                rows.find(".col-2 textarea").val() == 0 &&
+                rows.find(".col-3 textarea").val() == 0
+              ) {
+                rows
+                  .find(".item-qty")
+                  .val(rows.find(".col-4 textarea").val())
+                  .change();
+              }
+            });
+          };
+          calculate(".col-2 textarea");
+          calculate(".col-3 textarea");
+          calculate(".col-4 textarea");
+          const numberVals = (selector) => {
+            rows.find(selector).on("keypress", function (event) {
+              var inputValue = $(this).val();
+              var charCode = event.which ? event.which : event.keyCode;
+
+              if (
+                (charCode !== 46 || inputValue.indexOf(".") !== -1) &&
+                (charCode < 48 || charCode > 57)
+              ) {
+                event.preventDefault();
+              }
+        
+            });
+          };
+          numberVals(".col-2 textarea");
+          numberVals(".col-3 textarea");
+          numberVals(".col-4 textarea");
+        });
+      }
+      if ($("#InvoiceLayout").val() == 3 || $("#InvoiceLayout").val() == 4) {
+        setTimeout(() => {
+          screenCode();
+          $("#AddItem").on("click", () => {
+            screenCode();
+          });
+        }, 350);
+      }
+      $(document).on("change", "#InvoiceLayout", function () {
+        if ($("#InvoiceLayout").val() == 3 || $("#InvoiceLayout").val() == 4) {
+          setTimeout(() => {
+            screenCode();
+            $("#AddItem").on("click", () => {
+              screenCode();
+            });
+          }, 350);
+        }
+      });
+    }, 500);
+    setTimeout(() => {
+      //   document.getElementById("custom-fields-container").style.display = "none";
+      var newButton = `<div class="col-md-12 col-sm-12 " id="toggle_disc_div" style="margin-bottom: 25px; display = none">
+            <div class="m-r-md d-inline-flex">
+              <a id="calcBtn1" class="ajust-invoice btn-info" style="padding: 8px 15px !important; display: inline-block;">احسب التسوية </a>
+            </div>
+         
+          </div>`;
+      var tab = $("#tab-1 .row");
+      tab.prepend(newButton);
+      var retentionValue = $("#InvoiceAdjustmentValue");
+
+      $("#calcBtn1").on("click", function () {
+        $("#InvoiceAdjustmentLabel").val("خصم التسوية").change();
+        retentionValue.val(0).change();
+        setTimeout(() => {
+          var totalaftervat = parseFloat(
+            $("#TotalValue").text().replace(/,/g, "")
+          );
+          var discvalue = (totalaftervat % 1).toFixed(2);
+          retentionValue.val(discvalue * -1).change();
+        }, 250);
+      });
+      if ($("#InvoiceLayout").val() == 3 || $("#InvoiceLayout").val() == 4) {
+        $("#toggle_disc_div").show();
+      } else {
+        $("#toggle_disc_div").hide();
+      }
+      $(document).on("change", "#InvoiceLayout", function () {
+        if ($("#InvoiceLayout").val() == 3 || $("#InvoiceLayout").val() == 4) {
+          $("#toggle_disc_div").show();
+        } else {
+          $("#toggle_disc_div").hide();
+        }
+      });
+    }, 500);
+  });
+</script>

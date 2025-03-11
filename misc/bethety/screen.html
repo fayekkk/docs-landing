@@ -1,0 +1,351 @@
+<!-- code_Posts_owner_post -->
+<style>
+  .staffs {
+    display: none;
+  }
+  .flexboxes {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .alignitems {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+  }
+  #appointment {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    justify-content: space-evenly;
+    width: 100%;
+    align-items: normal;
+    padding: 0 25px;
+    background-color: #fff;
+  }
+  .tigglehidedivs {
+    display: none;
+  }
+  .halfwid {
+    width: 50%;
+  }
+  #appointmentNots {
+    width: 80%;
+    height: 120px;
+    margin: 0 !important;
+  }
+  #tooltip {
+    display: none;
+  }
+</style>
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.1.0/css/datepicker.min.css"
+/>
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.1.0/js/datepicker.min.js"
+></script>
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.1.0/js/i18n/datepicker.en.min.js"
+></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.16/js/bootstrap-multiselect.min.js"></script>
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.16/css/bootstrap-multiselect.css"
+/>
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      if (window.location.href.includes("/posts/post/2")) {
+        $(".note-frame").hide();
+        $("#PostBody").show();
+        const newHtml = `
+        <div id="appointment">
+    <button id="toggleShow" class = "add-new-btn btn btn-addon  button btn-block">تحديد موعد جديد</button>
+   <div class="row alignitems tigglehidedivs">
+    <div class = "halfwid">
+      <label for="FollowUpReminderDateDate">التاريخ</label>
+      <input type="text" autocomplete="off" id="date_picker" />
+    </div>
+    <div class = "halfwid">
+      <label for="FollowUpReminderDuration">مدة</label>
+      <input
+        type="text"
+        placeholder="00:00"
+        id="FollowUpReminderDuration"
+      />
+    </div>
+  </div>
+  <div class="row alignitems tigglehidedivs">
+    <div class = "halfwid">
+      <label for="FollowUpReminderDateTime">الوقت</label>
+      <input type="time" autocomplete="off" id="FollowUpReminderDateTime" />
+    </div>
+    <div class = "halfwid">
+      <label for="FollowUpReminderActionId">الإجراء المطلوب</label>
+      <select
+      
+        id="FollowUpReminderActionId"
+      >
+        <option value="">-</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="row flexboxes tigglehidedivs" >
+         <div style = "width:100%">
+          <label for="appointmentNots"> ملاحظات </label>
+          <input type="text" class="" id="appointmentNots" />
+          </div>
+  </div>
+  <div class="row flexboxes tigglehidedivs" >
+    <label for="FollowUpReminderShareWithPartner1">مشاركة مع العميل</label>
+    <input type="checkbox" class="" id="FollowUpReminderShareWithPartner1" />
+  </div>
+  <div class="row flexboxes tigglehidedivs">
+   
+    <label for="FollowUpReminderChooseStaff">تعيين إلى موظفين</label>
+    <input
+      type="checkbox"
+
+      class=""
+      id="FollowUpReminderChooseStaff"
+    />
+  </div>
+  
+  <div class="row staffs tigglehidedivs">
+    <label for="fliter-staff" class="form-label"> الموظفين المعينين: </label>
+    <select id="fliter-staff" multiple ></select>
+  </div>
+  </div>
+        `;
+        const paneltoappend = document.querySelectorAll("ol")[1];
+        paneltoappend.innerHTML += newHtml;
+        const apiUrl =
+          "/v2/api/entity/staff/list/1?filter[type]=user&per_page=150";
+        function fetchOptions() {
+          return $.ajax({
+            url: apiUrl,
+            type: "GET",
+            dataType: "json",
+          });
+        }
+        fetchOptions()
+          .done(populateMultiSelect)
+          .fail(function (error) {
+            console.error("Error fetching options:", error);
+          });
+        function populateMultiSelect(response) {
+          setTimeout(() => {
+            const $multiSelect = $(" #appointment #fliter-staff");
+
+            $(" #appointment #fliter-staff").empty();
+
+            $.each(response.data, function (index, option) {
+              $(" #appointment #fliter-staff").append(
+                `<option value="${option.id}">${option.name}</option>`
+              );
+            });
+            $(" #appointment #fliter-staff").multiselect({
+              enableClickableOptGroups: true,
+              enableCollapsibleOptGroups: true,
+              enableFiltering: true,
+              enableCaseInsensitiveFiltering: true,
+              buttonWidth: "100%",
+              maxHeight: 400,
+              buttonText: function (options, select) {
+                if (options.length === 0) {
+                  return "Select options";
+                } else {
+                  return options.length + " options selected";
+                }
+              },
+            });
+          }, 250);
+        }
+        const apiUrl2 =
+          "/v2/api/entity/follow_up_action/list/1?box=1&callback=FollowUpReminderActionId";
+        function fetchOptions2() {
+          return $.ajax({
+            url: apiUrl2,
+            type: "GET",
+            dataType: "json",
+          });
+        }
+        fetchOptions2()
+          .done(populateMultiSelect2)
+          .fail(function (error) {
+            console.error("Error fetching options:", error);
+          });
+        function populateMultiSelect2(response) {
+          //   const $multiSelect2 = $("#appointment #FollowUpReminderActionId");
+          $("#appointment #FollowUpReminderActionId").empty();
+          $("#appointment #FollowUpReminderActionId").append(
+            `<option value="">إختر الإجراء</option>`
+          );
+          $.each(response.data, function (index, option) {
+            $("#appointment #FollowUpReminderActionId").append(
+              `<option value="${option.id}">${option.name}</option>`
+            );
+          });
+        }
+        var $datePicker = $("#appointment #date_picker");
+        $("#appointment #date_picker").datepicker({
+          language: "en",
+          minDate: new Date(),
+          inline: false,
+          multipleDatesSeparator: " / ",
+          container: "#date-range12-container",
+          dateFormat: "yyyy-mm-dd",
+          controls: ["calendar"],
+          select: "single",
+          range: false,
+          touchUi: true,
+          autoClose: true,
+          onSelect: function (dateSelected) {
+            $("#appointment #date_picker").val(dateSelected);
+            $("#appointment #date_picker").datepicker("hide");
+            console.log(dateSelected);
+          },
+          onShow: function () {
+            $("#appointment #date_picker").datepicker("show");
+          },
+          onHide: function () {
+            $("#appointment #date_picker").datepicker("hide");
+          },
+        });
+
+        $("#appointment #date_picker").on("click", function () {
+          $("#appointment #date_picker").datepicker("show");
+        });
+        var flag = 0;
+        $("#appointment #toggleShow").on("click", function (e) {
+          e.preventDefault();
+          if (flag == 0) {
+            $("#appointment .tigglehidedivs").css("display", "flex");
+            $(this).attr("app", "1");
+            flag = 1;
+            $("#appointment #FollowUpReminderChooseStaff").prop(
+              "checked",
+              true
+            );
+            $("#appointment #FollowUpReminderChooseStaff")
+              .prop("checked", false)
+              .change();
+          } else {
+            $("#appointment .tigglehidedivs").css("display", "none");
+            $(this).attr("app", "0");
+            flag = 0;
+          }
+        });
+        var $staffSelectionContainer = $("#appointment .staffs");
+        var $checkbox = $("#appointment #FollowUpReminderChooseStaff");
+        $checkbox.on("change", function () {
+          if ($(this).is(":checked")) {
+            $staffSelectionContainer.show();
+          } else {
+            $staffSelectionContainer.hide();
+          }
+        });
+
+        var ischeced = 0;
+        var $checkbox2 = $("#appointment #FollowUpReminderShareWithPartner1");
+        $checkbox2.on("change", function () {
+          if ($(this).is(":checked")) {
+            ischeced = 1;
+          } else {
+            ischeced = 0;
+          }
+          console.log(ischeced);
+        });
+        var postActionElement = document.getElementById("PostActionId");
+        postActionElement.style.display = "block";
+        var nextDiv = postActionElement.nextElementSibling;
+        nextDiv.style.display = "none";
+        var postActionElement1 = document.getElementById("PostStatusId");
+        postActionElement1.style.display = "block";
+        var nextDiv1 = postActionElement1.nextElementSibling;
+        nextDiv1.style.display = "none";
+        $(".btn-success").on("click", function (e) {
+          e.preventDefault();
+          let isappointemt = $("#appointment #toggleShow").attr("app");
+          if (isappointemt == "1") {
+            let date = $("#appointment #date_picker").val();
+            let time = $("#appointment #FollowUpReminderDateTime").val();
+            let duration = $("#appointment #FollowUpReminderDuration").val();
+            let action = $("#appointment #FollowUpReminderActionId").val();
+            let staff = $("#appointment #fliter-staff").val();
+            let share = $("#appointment #FollowUpReminderShareWithPartner1").is(
+              ":checked"
+            );
+
+            let isshared = 0;
+            if (share) {
+              isshared = 1;
+            } else {
+              isshared = 0;
+            }
+            let assign = $("#appointment #FollowUpReminderChooseStaff").is(
+              ":checked"
+            );
+            let assignedstaffs = 0;
+            if (assign) {
+              assignedstaffs = 1;
+            } else {
+              assignedstaffs = 0;
+            }
+            let emparr = [];
+            if (assign) {
+              if (staff) {
+                emparr = staff;
+              }
+            }
+            let stringsArray = emparr.map(String);
+
+            let invoiceId = window.location.href.split("/")[7];
+            let appointmentBody = $("#appointment #appointmentNots").val();
+            let appointment = {
+              InvoiceAppointments: {
+                item_id: invoiceId,
+                body: appointmentBody,
+                date: ` ${date} ${time}`,
+                start_time: time,
+                duration: duration,
+                choose_staff: "1",
+                status: 0,
+                staff_id: stringsArray,
+                action_id: action,
+                share_with_partner: isshared,
+              },
+            };
+            console.log(appointment);
+            console.log(JSON.stringify(appointment));
+            $.ajax({
+              url: "/api2/invoice_appointments",
+              method: "POST",
+              contentType: "application/json",
+              accept: "application/json",
+              data: JSON.stringify(appointment),
+            })
+              .then((res) => {
+                console.log(res);
+                $("#PostForm").trigger("submit");
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          } else {
+            $("#PostForm").trigger("submit");
+          }
+        });
+      }
+    }, 500);
+  });
+</script>

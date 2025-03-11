@@ -1,0 +1,140 @@
+<style>
+  .disabled {
+    pointer-events: none;
+    background-color: #13b272 !important;
+    color: white !important;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    function addFilterToDropdown(selector, filter) {
+      const dropdown = document.querySelector(selector);
+      if (dropdown) {
+        const dropdownData = JSON.parse(
+          dropdown.getAttribute("data-izam1-forms1-dynamic-drop-down")
+        );
+        dropdownData.queryParams = {
+          ...dropdownData.queryParams,
+          ...filter,
+        };
+        dropdown.setAttribute(
+          "data-izam1-forms1-dynamic-drop-down",
+          JSON.stringify(dropdownData)
+        );
+      }
+    }
+    addFilterToDropdown("#le_workflow-type-entity-2_custom_data-vendor", {
+      "filter[supplier_custom_data.type]": "مقاول باطن",
+    });
+    $("#client_id").attr("required", true);
+    $(".form-row div:nth-child(5) div label").eq(0).append(
+      `<span class="required">*</span>`
+    );
+    setTimeout(() => {
+      // Required client
+      // $('button[type="submit"]').eq(0).addClass("disabled");
+      // $("#client_id").on("change", function () {
+      //   if ($(this).val() == "") {
+      //     $('button[type="submit"]').eq(0).addClass("disabled");
+      //   } else {
+      //     $('button[type="submit"]').eq(0).removeClass("disabled");
+      //   }
+      // });
+
+      function addDisabled() {
+        $("[id$='--process_percent']").attr("disabled", true);
+        $("[id$='--ta3lya_percent']").attr("disabled", true);
+        $("[id$='--vendor_process_percent']").attr("disabled", true);
+        $("[id$='--ta3lya_vendor_process_percent']").attr("disabled", true);
+        $("[id$='--ta3lya']").attr("disabled", true);
+        $("[id$='--process_percent']").parent().parent().hide();
+        $("[id$='--ta3lya_percent']").parent().parent().hide();
+        $("[id$='--vendor_process_percent']").parent().parent().hide();
+        $("[id$='--ta3lya_vendor_process_percent']").parent().parent().hide();
+        $("[id$='--ta3lya']").parent().parent().hide();
+      }
+      addDisabled();
+      //   dublicate items
+      function hundleDublications() {
+        $("[id$='--project_item_name']").on("change", async function () {
+          const currentValue = $(this).val();
+          let isExsist = false;
+          $("[id$='--project_item_name']")
+            .not($(this))
+            .each(function () {
+              const value = $(this).val();
+              console.log(value);
+              console.log(currentValue);
+              if (value == currentValue) {
+                isExsist = true;
+              }
+              console.log(isExsist);
+            });
+          console.log({ isExsist: isExsist });
+
+          if (isExsist && currentValue) {
+            alert(
+              "This selection has already been made. Please choose a different item."
+            );
+            $(this).val("").trigger("change");
+          } else if (currentValue) {
+            // selectedValues.push(currentValue);
+            // console.log(currentValue);
+            // $("[id$='--project_item_name']").on("change", async function () {
+            // console.log($(this).val());
+            let ItemId = $(this).val();
+            try {
+              const response = await fetch(
+                `/v2/api/entity/le_projectsItems/${ItemId}/1`,
+                {
+                  method: "GET",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                }
+              );
+
+              const data = await response.json();
+              console.log("Response:", data);
+              // Item Number
+              $(this)
+                .closest("tr")
+                .find("[id$='--item_number_in_contract']")
+                .val(data.item_no);
+              // Unit
+              $(this).closest("tr").find("[id$='--unit']").val(data.item_unit);
+              // Price
+              $(this)
+                .closest("tr")
+                .find("[id$='--ttl_price']")
+                .val(data.item_price);
+              const newOption = $("<option></option>")
+                .val(data.item_tax)
+                .text(data.le_projectsItems_item_tax.name);
+              $(this).closest("tr").find("[id$='--taxes']").append(newOption);
+              $(this)
+                .closest("tr")
+                .find("[id$='--taxes']")
+                .val(data.item_tax)
+                .trigger("change");
+              // return data;
+            } catch (error) {
+              console.error("Error:", error);
+              // return null;
+            }
+            // });
+          }
+        });
+      }
+      hundleDublications();
+
+      $(
+        "#le_workflow-type-entity-2 > div.form-row > div.col-lg-12 > div.row > div.col-lg-12.col-md-12.col-xs-12 > div > div > div > div.card-body.p-0 > div > div > div > div > div > div.btn-group.add-row.dropdown > button"
+      ).on("click", function () {
+        addDisabled();
+        hundleDublications();
+      });
+    }, 250);
+  });
+</script>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="invoice_total">$121,252,124,521.521</div>
+    <div id="ar_invoice_total_spelled"></div>
+    <script>
+      function numberToWordsArabic(number) {
+        var units = [
+          "",
+          "واحد",
+          "اثنان",
+          "ثلاثة",
+          "أربعة",
+          "خمسة",
+          "ستة",
+          "سبعة",
+          "ثمانية",
+          "تسعة",
+          "عشرة",
+          "أحد عشر",
+          "اثنا عشر",
+          "ثلاثة عشر",
+          "أربعة عشر",
+          "خمسة عشر",
+          "ستة عشر",
+          "سبعة عشر",
+          "ثمانية عشر",
+          "تسعة عشر",
+        ];
+
+        var tens = [
+          "",
+          "",
+          "عشرون",
+          "ثلاثون",
+          "أربعون",
+          "خمسون",
+          "ستون",
+          "سبعون",
+          "ثمانون",
+          "تسعون",
+        ];
+
+        var scales = [
+          "",
+          "ألف",
+          "مليون",
+          "مليار",
+          "تريليون",
+          "كوادريليون",
+          "كوينتليون",
+          "سكستليون",
+          "سبتليون",
+          "أوكتليون",
+          "نونليون",
+          "ديسليون",
+        ];
+
+        if (number === 0) {
+          return "صفر";
+        }
+
+        var words = "";
+
+        if (number < 0) {
+          words += "سالب ";
+          number = Math.abs(number);
+        }
+
+        var scaleIndex = 0;
+
+        while (number > 0) {
+          var triplet = number % 1000;
+          number = Math.floor(number / 1000);
+
+          if (triplet > 0) {
+            var tripletWords = "";
+
+            var hundreds = Math.floor(triplet / 100);
+            var tensAndUnits = triplet % 100;
+
+            if (hundreds > 0) {
+              if (hundreds == 1) {
+                tripletWords += " مئة";
+              } else if (hundreds == 2) {
+                tripletWords += " مائتان";
+              } else if (hundreds == 3) {
+                tripletWords += " ثلاثمائة  ";
+              } else if (hundreds == 4) {
+                tripletWords += " اربعمائة ";
+              } else if (hundreds == 5) {
+                tripletWords += " خمسمائة ";
+              } else if (hundreds == 6) {
+                tripletWords += " ستمائة ";
+              } else if (hundreds == 7) {
+                tripletWords += " سبعمائة ";
+              } else if (hundreds == 8) {
+                tripletWords += " ثمانمائة ";
+              } else if (hundreds == 9) {
+                tripletWords += " تسعمائة ";
+              }
+            }
+            if (tensAndUnits > 0) {
+              if (tripletWords !== "") {
+                tripletWords += " و";
+              }
+
+              if (tensAndUnits < 20) {
+                tripletWords += units[tensAndUnits];
+              } else {
+                var tensDigit = Math.floor(tensAndUnits / 10);
+                var unitsDigit = tensAndUnits % 10;
+
+                if (tensDigit > 0) {
+                  if (unitsDigit === 1) {
+                    tripletWords += units[unitsDigit] + " و";
+                  } else if (unitsDigit > 1) {
+                    tripletWords += units[unitsDigit] + " و";
+                  }
+
+                  tripletWords += tens[tensDigit];
+                }
+              }
+            }
+            if (scaleIndex > 0) {
+              if (triplet === 1) {
+                tripletWords += " " + scales[scaleIndex];
+              } else if (triplet >= 2 && triplet <= 10) {
+                tripletWords += " " + scales[scaleIndex] + "";
+              } else if (triplet > 10) {
+                tripletWords += " " + scales[scaleIndex];
+              }
+            }
+
+            if (words !== "") {
+              words = tripletWords + " و" + words;
+            } else {
+              words = tripletWords;
+            }
+          }
+
+          scaleIndex++;
+        }
+        return words;
+      }
+      function convertFN(num, maincurrency, floatCurr) {
+        var myIntNum = parseInt(num.split(".")[0]);
+        var myFloatNum = parseInt(num.split(".")[1]);
+        return (
+          numberToWordsArabic(myIntNum) +
+          " " +
+          maincurrency +
+          " و " +
+          numberToWordsArabic(myFloatNum) +
+          " " +
+          floatCurr +
+          " فقط"
+        );
+      }
+      try {
+        var myNum = String(
+          parseFloat(
+            document
+              .getElementById("invoice_total")
+              .innerText.replace(/[\$,]/g, "")
+          ).toFixed(2)
+        );
+        document.getElementById("ar_invoice_total_spelled").innerText =
+          convertFN(myNum, "هلله", "ريال");
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

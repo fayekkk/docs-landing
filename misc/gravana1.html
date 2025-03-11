@@ -1,0 +1,345 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: transparent;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+
+    .invoice-address {
+      border-top: 3px double #000000;
+      margin: 35px 0;
+      padding-top: 25px;
+    }
+
+    bold_title {
+      font-weight: bold;
+    }
+
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .invoice-name {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: left;
+      padding: 6px 4px;
+    }
+
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: left;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+
+    .total-table td {
+      border-left: 1px solid #555555;
+    }
+
+    .total-row {
+      /* background-color: #e5e5e5; */
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+
+    .notes-block {
+      margin: 50px 0 0 0;
+    }
+
+    tr,
+    td,
+    th,
+    #bank,
+    .listing-table:nth-child(2) {
+      page-break-inside: avoid !important;
+    }
+
+    .qr-code img {
+      margin-top: 10px;
+      width: 100px;
+    }
+
+    /* Custom Styling */
+    #header {
+      table-layout: fixed;
+      border-bottom: 1px double #000;
+      padding-bottom: 5px;
+    }
+
+    #inv {
+      table-layout: fixed;
+      border: 1px solid #000;
+    }
+
+    #bank td,
+    .listing-table th,
+    .listing-table td,
+    .det td {
+      border: 1px solid #000 !important;
+    }
+
+    .listing-table tr * {
+      text-align: center;
+    }
+
+    .addr br,
+    .listing-table:nth-child(2) td:first-child {
+      display: none;
+    }
+
+    .listing-table:nth-child(2) td:nth-child(2) {
+      font-weight: bold;
+    }
+
+    .bg {
+      z-index: -90000;
+      position: absolute;
+      left: 0px;
+      background: url("https://trustexcellence.daftra.com/files/a4deda64/logos/65f6d553ddaeb_blobid1710675276600.jpg");
+      /* background: url("https://trustexcellence.daftra.com/files/a4deda64/logos/65f6d658a33df_blobid1710675539277.jpg"); */
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      width: 100%;
+      height: 29cm;
+      opacity: 0.1;
+    }
+
+    th {
+      background-color: #3a3838 !important;
+      color: #fff !important;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 5px;
+      vertical-align: top;
+    }
+    /*===========================*/
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      <!-- Background -->
+      <div class="bg" style="top: 0cm"></div>
+      <!-- {%html_sticky_header%} -->
+      <div class="invoice-inner">
+        <!-- Header -->
+        <table id="header" width="100%">
+          <tr>
+            <td class="qr-code">{%sa_qr_code_image%}</td>
+            <td
+              align="center"
+              valign="bottom"
+              style="vertical-align: bottom !important; width: 50%"
+            >
+              <p id="invoice_title" class="editable-area invoice-name">
+                {%invoice_title%}
+              </p>
+            </td>
+            <td></td>
+          </tr>
+        </table>
+        <br />
+        <!-- Client & Business Info -->
+        <table id="inv" width="100%">
+          <tr>
+            <th>المرسل / SENDER</th>
+            <th>المستلم / RECIPIENT</th>
+          </tr>
+          <tr>
+            <td>{%site_business_name%} / ثقة التميز للاستشارات الأمنية</td>
+            <td>{%client_business_name%}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td align="right">{%custom__field_8%}</td>
+          </tr>
+          <tr>
+            <td>
+              Office 11, Floor 11 Aknaz Center 2239 Prince Mohammed bin
+              AbdulAziz Road Unit No 332, Riyadh – 1222-7872 Kingdom of Saudi
+              Arabia
+            </td>
+            <td class="addr">
+              <strong>ADDRESS/العنوان:</strong> {%client_full_address%}
+            </td>
+          </tr>
+          <tr>
+            <td align="right">
+              مكتب 11، الطابق 11، مركز أكنز 2239، طريق الأمير محمد بن عبد
+              العزيز، وحدة رقم 332، الرياض 1222 - 7872، المملكة العربية السعودية
+            </td>
+            <td align="right">{%custom__field_9%}</td>
+          </tr>
+          <tr>
+            <td><strong>CR No.:</strong> 1010467091</td>
+            <td>
+              <strong>CR No. / رقم السجل:</strong>
+              <div style="display: inline-block">{%custom_cr_no_field_10%}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>VAT / الرقم الضريبي:</strong>
+              <div style="display: inline-block">302246736600003</div>
+            </td>
+            <td>
+              <strong>VAT / الرقم الضريبي:</strong>
+              <div style="display: inline-block">{%client_bn1%}</div>
+            </td>
+          </tr>
+          <tr class="det">
+            <td>
+              <strong
+                >INVOICE REFERENCE NUMBER / الرقم المرجعي للفاتورة:</strong
+              >
+            </td>
+            <td>{%invoice_no%}</td>
+          </tr>
+          <tr class="det">
+            <td><strong>INVOICE DATE / تاريخ الفاتورة:</strong></td>
+            <td>{%invoice_date%}</td>
+          </tr>
+          <tr class="det">
+            <td><strong>INVOICE DUE DATE / تاريخ استحقاق الفاتورة:</strong></td>
+            <td>{%due_date%}</td>
+          </tr>
+          <tr class="det">
+            <td><strong>PROJECT DETAILS / تفاصيل المشروع:</strong></td>
+            <td>{%Project%}</td>
+          </tr>
+        </table>
+        <br />
+        <!-- Items List -->
+        <div id="items-list">{%items_list%}</div>
+        <br />
+        <!-- Payment Info -->
+        <table id="bank" width="100%">
+          <tr>
+            <th align="center" colspan="2">
+              PAYMENT INFORMATION / معلومات الدفع
+            </th>
+          </tr>
+          <tr>
+            <td><strong>Account Name / اسم الحساب</strong></td>
+            <td>Excellence Trust Security Consultancy</td>
+          </tr>
+          <tr>
+            <td><strong>Bank Name / اسم البنك</strong></td>
+            <td>Saudi National Bank (SNB)</td>
+          </tr>
+          <tr>
+            <td><strong>Account No / رقم الحساب</strong></td>
+            <td>25900000098506</td>
+          </tr>
+          <tr>
+            <td><strong>IBAN / رقم الأيبان</strong></td>
+            <td>SA6910000025900000098506</td>
+          </tr>
+          <tr>
+            <td><strong>SWIFT / رقم السويفت</strong></td>
+            <td>NCBKSAJE</td>
+          </tr>
+        </table>
+        <br />
+        <p>
+          Invoice Acknowledged by / تم إقرار الفاتورة بواسطة
+          _________________________________________________________
+        </p>
+      </div>
+      <!-- {%html_sticky_footer%} -->
+    </div>
+    <script>
+      // Removing Currency from Totals
+      function remCurr() {
+        var totLbls = document.querySelectorAll(
+          ".listing-table:nth-child(2) td:nth-child(2)"
+        );
+        var tots = document.querySelectorAll(
+          ".listing-table:nth-child(2) td:last-child"
+        );
+        for (var i = 0; i < totLbls.length; i++) {
+          if (totLbls[i].innerText.split(" ")[0] == "DISCOUNT") {
+            tots[i].innerHTML = document.querySelector(
+              ".row-summary-discount td:last-child span"
+            ).innerText;
+          }
+          tots[i].innerHTML = tots[i].innerHTML
+        }
+      }
+
+      // Repeat Background
+      function repeatBg() {
+        var invoiceHeight =
+          document.querySelector(".invoice-inner").offsetHeight;
+        var pageHeight = document.querySelector(".bg").offsetHeight;
+        var numPages = Math.ceil(invoiceHeight / pageHeight);
+        var bg = document.querySelector(".bg");
+        var topDis = parseFloat(bg.style.top.replace("cm", ""));
+        for (var i = 1; i < numPages; i++) {
+          var newBg = document.createElement("div");
+          newBg.setAttribute("class", "bg");
+          topDis += 29;
+          console.log(topDis);
+          newBg.style.top = topDis + "cm";
+          bg.parentNode.insertBefore(newBg, bg.nextSibling);
+        }
+      }
+      try {
+        remCurr();
+        repeatBg();
+        // changing total vat title
+        if (document.querySelector(".row-tax-summary") != null) {
+          document.querySelector(".row-tax-summary td:nth-child(2)").innerText =
+            "VAT 15% / %15 القيمة المضافة";
+        }
+      } catch (err) {}
+    </script>
+  </body>
+</html>

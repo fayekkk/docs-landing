@@ -1,0 +1,187 @@
+<style>
+  #barcode_template table {
+    border-radius: 0;
+    text-align: center;
+  }
+  #header {
+    width: 100%;
+    border: none !important;
+  }
+  #header td {
+    border: none !important;
+  }
+  #header td:nth-child(1) {
+    width: 20%;
+  }
+  #header td:nth-child(1) img {
+    width: 80%;
+    margin: 0 10%;
+  }
+  #header td:nth-child(2) {
+    width: 55%;
+  }
+  #header td:nth-child(3) {
+    width: 25%;
+  }
+  #Newtitle {
+    width: 100%;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+  }
+  .eyes {
+    width: 70%;
+    margin: 15px 15%;
+    text-align: center;
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    direction: ltr;
+  }
+  .eyes td {
+    width: 16%;
+  }
+  #fixeds {
+    border: none;
+    width: 80%;
+    margin: 15px 10%;
+    direction: ltr;
+  }
+  #fixeds td {
+    border: none;
+    padding: 2px;
+  }
+  .bordered1 {
+    border: 1px solid black !important;
+  }
+  .bordered2 {
+    border: 1px solid black !important;
+
+    border-top: 1px solid black !important;
+    border-bottom: 1px solid black !important;
+    border-right: 1px solid black !important;
+  }
+  .bordered2:nth-last-child(1) {
+    border-left: 1px solid black !important;
+  }
+</style>
+<div
+  id="barcode_template"
+  class="mceEditable"
+  readonly="readonly"
+  style="
+    padding: 15px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+  "
+>
+  <table id="header">
+    <tbody>
+      <tr>
+        <td rowspan="100%">
+          <img
+            src="https://eyecare1.daftra.com/files/images/site-logos/6714d797c5e04_%D8%B4%D8%B9%D8%A7%D8%B1_%D8%B1%D8%B9%D8%A7%D9%8A%D8%A9_%D8%A7%D9%84%D8%B9%D9%8A%D9%88%D9%86.jpg"
+          />
+        </td>
+        <td rowspan="100%">
+          <strong>بصريات رعاية العيون</strong>
+          <br />
+          طريق على بن أبى طالب - ص.ب.77-بريدة-51421
+          <br />
+          المملكة العربية السعودية- هاتف : 920012315
+          <br />
+          البريد الالكترونى :Info@eyecare.sa
+        </td>
+        <td style="direction: ltr">إسم العميل :{%client_business_name%}</td>
+      </tr>
+      <tr>
+        <td style="direction: ltr">{%client_mobile%} : رقم جوال العميل</td>
+      </tr>
+      <tr>
+        <td style="direction: ltr">
+          {%custom_تاريخ_الفحص_field_50%} : التاريخ
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="Newtitle">
+    وصفة نظارات
+    <br />
+    Glasses Prescriptions
+  </div>
+  <table class="eyes">
+    <tbody>
+      <tr>
+        <td style="width: 20%; background-color: #e5e5e5">Right Eye</td>
+        <td>Sph</td>
+        <td>Cyl</td>
+        <td>Axix</td>
+        <td>Prism</td>
+        <td>VA</td>
+      </tr>
+      <tr>
+        <td>Distance</td>
+        <td>{%custom_sph_field_2%}</td>
+        <td>{%custom_cyl_field_3%}</td>
+        <td>{%custom_axis_field_4%}</td>
+        <td>{%custom_prism_field_5%}</td>
+        <td>{%custom_va_field_41%}</td>
+      </tr>
+      <tr>
+        <td>Near</td>
+        <td>{%custom_sph_field_37%}</td>
+        <td>{%custom_cyl_field_38%}</td>
+        <td>{%custom_axis_field_39%}</td>
+        <td>{%custom_prism_field_40%}</td>
+        <td>{%custom_va_field_42%}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="eyes">
+    <tbody>
+      <tr>
+        <td style="width: 20%; background-color: #e5e5e5">Left Eye</td>
+        <td>Sph</td>
+        <td>Cyl</td>
+        <td>Axix</td>
+        <td>Prism</td>
+        <td>VA</td>
+      </tr>
+      <tr>
+        <td>Distance</td>
+        <td>{%custom_sph_field_7%}</td>
+        <td>{%custom_cyl_field_8%}</td>
+        <td>{%custom_axis_field_9%}</td>
+        <td>{%custom_prism_field_10%}</td>
+        <td>{%custom_va_field_43%}</td>
+      </tr>
+      <tr>
+        <td>Near</td>
+        <td>{%custom_sph_field_45%}</td>
+        <td>{%custom_cyl_field_46%}</td>
+        <td>{%custom_axis_field_47%}</td>
+        <td>{%custom_prism_field_48%}</td>
+        <td>{%custom_va_field_49%}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table id="fixeds">
+    <tbody>
+      <tr>
+        <td style="width: 10%">Add:</td>
+        <td style="width: 25%" class="bordered1">
+          {%custom_right_add_field_51%}
+        </td>
+        <td style="width: 10%">IPD</td>
+        <td style="width: 10%" class="bordered2">{%custom_sph_field_27%}</td>
+        <td style="width: 5%" class="bordered2"></td>
+        <td style="width: 10%" class="bordered2"></td>
+        <td style="width: 10%">Add:</td>
+        <td style="width: 20%" class="bordered1">
+          {%custom_right_add_field_52%}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

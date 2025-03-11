@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <script>
+      function subst() {
+        // Decoding the invoice page url to detect page number
+        var vars = {};
+        var x = document.location.search.substring(1).split("&");
+        for (var i in x) {
+          var z = x[i].split("=", 2);
+          vars[z[0]] = unescape(z[1]);
+        }
+        // Adding Pagination Text
+        var x = [
+          "frompage",
+          "topage",
+          "page",
+          "webpage",
+          "section",
+          "subsection",
+          "subsubsection",
+        ];
+        for (var i in x) {
+          var y = document.getElementsByClassName(x[i]);
+          for (var j = 0; j < y.length; ++j) y[j].textContent = vars[x[i]];
+        }
+      }
+    </script>
+  </head>
+  <body style="border: 0; margin: 0" onload="subst()">
+    <table style="width: 100%; direction: ltr; font-size: 12px !important">
+      <tr>
+        <td style="width: 90%">
+          <div style="text-align: left; font-weight: bold">
+            Important: Refer to the
+            <a
+              href="https://sabaoth.enerpize.com/contents/process_content/terms"
+              target="_blank"
+              style="text-decoration: underline; cursor: pointer"
+              >General Terms and Conditions</a
+            >
+            in Annex for Order execution.
+          </div>
+        </td>
+        <td style="text-align: right">
+          <span class="page"></span> / <span class="topage"></span>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

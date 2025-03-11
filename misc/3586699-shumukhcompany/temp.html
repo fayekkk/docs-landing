@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    #headLogo {
+      text-align: right;
+    }
+    #headLogo img {
+      float: right;
+      width: 120px;
+    }
+    #inv_data {
+      width: 100%;
+      text-align: center;
+      margin: 5px 0;
+    }
+    #inv_data td {
+      width: 50%;
+    }
+    .widths td {
+      width: 25%;
+      width: 25%;
+      border: none !important;
+      padding: 0 !important;
+    }
+    /* cc9900 */
+    .yellowColor {
+      color: #cc9900;
+    }
+    #titleandclient {
+      width: 100%;
+      border-spacing: 0;
+      text-align: center;
+      border-left: 1px solid #000;
+      border-bottom: 1px solid #000;
+    }
+    #titleandclient td {
+      padding: 3px;
+      border-right: 1px solid #000;
+      border-top: 1px solid #000;
+      font-weight: bold;
+    }
+    .ardata {
+      font-size: 13px;
+      text-align: right;
+    }
+    .endata {
+      font-size: 11px;
+      text-align: left;
+    }
+    #titleandclient tr:nth-child(1) td {
+      font-size: 15px;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #listing_table {
+      width: 100%;
+      border-spacing: 0;
+      border-right: 1px solid #000 !important;
+      border-bottom: 1px solid #000 !important;
+      border-top: none !important;
+      border-left: none !important;
+      /* margin: 10px 0; */
+    }
+    #listing_table td,
+    #listing_table th {
+      font-weight: bold;
+      border-top: 1px solid #000 !important;
+      border-left: 1px solid #000 !important;
+      border-bottom: none !important;
+      border-right: none !important;
+      text-align: center;
+      font-weight: bold;
+      padding: 2px 0;
+    }
+    #listing_table th {
+      background-color: #959595;
+      color: #fff;
+    }
+    .redcolor {
+      color: #ff0000;
+    }
+    .orangeBg td {
+      background-color: #e36c0a !important;
+      color: #fff !important;
+    }
+    .redBg td {
+      background-color: #943634 !important;
+      color: #fff !important;
+    }
+    .blueBg td {
+      background-color: #1f497d !important;
+      color: #fff !important;
+    }
+    .MainTitle td {
+      font-size: 30px;
+    }
+    #listing_table tr:nth-last-child(1) td,
+    #listing_table tr:nth-last-child(2) td,
+    #listing_table tr:nth-last-child(3) td {
+      font-size: 15px;
+      border-left: none !important;
+    }
+    #listing_table tr:nth-last-child(4) td {
+      font-size: 15px;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <div id="headLogo">{%site_logo%}</div>
+        <table id="inv_data">
+          <tbody>
+            <tr>
+              <td><strong>Reference:</strong> {%invoice_no%}</td>
+              <td><strong>Date:</strong>{%invoice_date%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="titleandclient">
+          <tbody>
+            <tr>
+              <td colspan="100%" class="yellowColor">
+                عرض أسعار توريد وتركيب أنظمة أمنية –Quotation Systems Security
+              </td>
+            </tr>
+            <tr>
+              <td>Attn.</td>
+              <td colspan="2">{%client_business_name%}</td>
+              <td>عناية</td>
+            </tr>
+            <tr>
+              <td colspan="2" class="endata">
+                Thank you for giving us the opportunity to send <br />this
+                quotation for you. It’s a pleasure doing
+
+                <br />
+                business with you. We look forward to completing
+                <br />
+                this order to your satisfaction.
+              </td>
+              <td colspan="2" class="ardata">
+                نشكركم على إتاحة الفرصة لنا لتقديم عرض السعر الخاص بنا
+                <br />
+                لكم،ويسعدنا دوماً العمل معكم، ونتطلع إلكمال هذا العرض
+                <br />
+                .لتلبية احتياجاتكم
+              </td>
+            </tr>
+            <tr class="widths">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="items-list">{%items_list%}</div>
+    
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+      </div>
+      <div style="display: none">
+        <div id="discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function addNewRows() {
+        var thCount = document.querySelectorAll("#listing_table th").length;
+        var newTr = document.createElement("tr");
+        var newTd1 = document.createElement("td");
+        newTd1.innerHTML = "{%Main Title%}";
+        newTr.classList.add("MainTitle");
+        newTd1.setAttribute("colspan", "100%");
+        newTd1.classList.add("yellowColor");
+        newTr.appendChild(newTd1);
+        document
+          .querySelector("#listing_table tbody")
+          .insertBefore(
+            newTr,
+            document.querySelectorAll("#listing_table tbody tr")[0]
+          );
+        //   ****************
+        var newTr = document.createElement("tr");
+        var newTd1 = document.createElement("td");
+        newTd1.innerHTML =
+          "اعمال التمديد والتركيب والتشغيل والبرمجة شامل جميع المواد والملحقات<br> وكل ما يلزم إلنهاء العمل بالشكل بالمطلوب";
+        newTd1.setAttribute("colspan", thCount - 1);
+        newTd1.classList.add("redcolor");
+        var newTd2 = document.createElement("td");
+        newTd2.innerHTML = "{%invoice_total%}";
+        newTd2.classList.add("redcolor");
+        newTr.appendChild(newTd1);
+        newTr.appendChild(newTd2);
+        document.querySelector("#listing_table tbody").appendChild(newTr);
+        //   ****************
+        var newTr = document.createElement("tr");
+        newTr.classList.add("orangeBg");
+        var newTd1 = document.createElement("td");
+        newTd1.innerHTML = "Price";
+        newTd1.setAttribute("colspan", thCount - 1);
+        var newTd2 = document.createElement("td");
+        newTd2.innerHTML = "{%invoice_subtotal%}";
+        newTr.appendChild(newTd1);
+        newTr.appendChild(newTd2);
+        document.querySelector("#listing_table tbody").appendChild(newTr);
+        //   ****************
+        var newTr = document.createElement("tr");
+        newTr.classList.add("redBg");
+        var newTd1 = document.createElement("td");
+        newTd1.innerHTML = "VAT 15%";
+        newTd1.setAttribute("colspan", thCount - 1);
+        var newTd2 = document.createElement("td");
+        newTd2.innerHTML = "{%tax-total%}";
+        newTr.appendChild(newTd1);
+        newTr.appendChild(newTd2);
+        document.querySelector("#listing_table tbody").appendChild(newTr);
+        //   ****************
+        var newTr = document.createElement("tr");
+        newTr.classList.add("blueBg");
+        var newTd1 = document.createElement("td");
+        newTd1.innerHTML = "Total Price Include VAT";
+        newTd1.setAttribute("colspan", thCount - 1);
+        var newTd2 = document.createElement("td");
+        newTd2.innerHTML = "{%invoice_total%}";
+        newTr.appendChild(newTd1);
+        newTr.appendChild(newTd2);
+        document.querySelector("#listing_table tbody").appendChild(newTr);
+      }
+      try {
+        addNewRows();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

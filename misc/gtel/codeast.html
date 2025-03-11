@@ -1,0 +1,639 @@
+<style>
+  .notify-left::after {
+    left: 48px;
+  }
+  .notify-right::after {
+    right: 48px;
+  }
+  .notify-green::after {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #35b41f;
+    top: 21px;
+
+    position: absolute;
+    animation: blinker 1s ease-in-out infinite;
+  }
+
+  @keyframes blinker {
+    0%,
+    100% {
+      opacity: 0;
+    }
+
+    50% {
+      opacity: 1;
+    }
+  }
+  .formula-tag.tooltipstered {
+    filter: saturate(0.4);
+  }
+
+  .flexy {
+    display: flex;
+    gap: 25px;
+    background: beige;
+    color: gray;
+    padding: 10px;
+    font-weight: 500;
+  }
+  .form-check-label {
+    padding-right: 0.55rem;
+  }
+
+  .disabled-btn {
+    pointer-events: none;
+    opacity: 0.4;
+    user-select: none;
+  }
+  input[id$="auth_sn"] {
+    background: #0000001c;
+    opacity: 0.7;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .apploader {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    position: relative;
+    animation: rotate 1s linear infinite;
+  }
+  .apploader::before {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    inset: 0px;
+    border-radius: 50%;
+    border: 5px solid #1877f2;
+    animation: prixClipFix 2s linear infinite;
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes prixClipFix {
+    0% {
+      clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
+    }
+    25% {
+      clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
+    }
+    50% {
+      clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+    }
+    75% {
+      clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+    }
+    100% {
+      clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
+    }
+  }
+  .special-app-spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    z-index: 99;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: #fff;
+  }
+
+  .indicator-left {
+    left: 57px;
+  }
+  .indicator-right {
+    right: 57px;
+  }
+  .indicator {
+    border-radius: 50%;
+    top: 10px;
+    /* padding: 4px 3px; */
+    position: absolute;
+    width: 19px;
+    /* color: #fff; */
+    font-size: 10px;
+    font-weight: 500;
+    text-align: center;
+    height: 19px;
+    padding-top: 2.9px;
+    /* box-shadow: 1px 1px 4px #00000033; */
+  }
+
+  .new-request {
+    background-color: #35b41f;
+    left: 25px !important;
+  }
+</style>
+<script>
+  var myHeaders = new Headers();
+  myHeaders.append("apikey", "0901a9722ff9018f1aa5a3a4186ba0eb61264a1b");
+
+  var requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+  };
+
+  const appSpinner = (show = false) => {
+    if (show)
+      $("body").append(
+        `<div class="special-app-spinner"><span class="apploader"></span></div>`
+      );
+    if (!show) setTimeout(() => $(".special-app-spinner").remove(), 2000);
+  };
+
+  const faultedPage = new RegExp(/\/workflow_view\/(\d+)$/g);
+  const authObj = {
+    1: "manager",
+    3: "material",
+    4: "tools",
+    5: "project_manager",
+    6: "sup",
+  };
+
+  function currentHeirarchy(reqType) {
+    if (reqType == "أدوات") {
+      return ["sup", "tools", "project_manager", "manager", "material"];
+    } else {
+      return ["sup", "project_manager", "manager", "tools"];
+    }
+  }
+
+  function notify(x) {
+    return fetch(
+      "/v2/api/entity/le_workflow-type-entity-1/list/1?per_page=100",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const allStatus = data.data.map((d) => d.follow_up_status_id);
+        console.log(allStatus);
+        if (allStatus.includes(x)) {
+          const c = allStatus.filter((e) => e == x).length;
+          if ($("html").attr("dir") == "rtl") {
+            $(".mn_workflows").addClass("notify-left").addClass("notify-green");
+            $(".mn_workflows").prepend(
+              `<span class="indicator indicator-left daftraeginvoice open-quot">${c}</span>`
+            );
+          } else {
+            $(".mn_workflows")
+              .addClass("notify-right")
+              .addClass("notify-green");
+            $(".mn_workflows").prepend(
+              `<span class="indicator indicator-right daftraeginvoice open-quot">${c}</span>`
+            );
+          }
+        }
+      });
+  }
+  function statusURLs(id, roleKey, reqType) {
+    const toolsRequest = {
+      without:
+        "/v2/owner/workflow/update_status/le_workflow-type-entity-1/" +
+        id +
+        "/10",
+      sup:
+        "/v2/owner/workflow/update_status/le_workflow-type-entity-1/" +
+        id +
+        "/11",
+      tools:
+        "/v2/owner/workflow/update_status/le_workflow-type-entity-1/" +
+        id +
+        "/12",
+      project_manager:
+        "/v2/owner/workflow/update_status/le_workflow-type-entity-1/" +
+        id +
+        "/13",
+      manager:
+        "/v2/owner/workflow/update_status/le_workflow-type-entity-1/" +
+        id +
+        "/14",
+      out:
+        "/v2/owner/workflow/update_status/le_workflow-type-entity-1/" +
+        id +
+        "/16",
+      reject:
+        "/v2/owner/workflow/update_status/le_workflow-type-entity-1/" +
+        id +
+        "/17",
+    };
+
+    const materialRequest = {
+      without:
+        "/v2/owner/workflow/update_status/le_workflow-type-entity-1/" +
+        id +
+        "/10",
+      sup:
+        "/v2/owner/workflow/update_status/le_workflow-type-entity-1/" +
+        id +
+        "/11",
+      tools:
+        "/v2/owner/workflow/update_status/le_workflow-type-entity-1/" +
+        id +
+        "/12",
+      project_manager:
+        "/v2/owner/workflow/update_status/le_workflow-type-entity-1/" +
+        id +
+        "/13",
+      manager:
+        "/v2/owner/workflow/update_status/le_workflow-type-entity-1/" +
+        id +
+        "/14",
+      material:
+        "/v2/owner/workflow/update_status/le_workflow-type-entity-1/" +
+        id +
+        "/15",
+      out:
+        "/v2/owner/workflow/update_status/le_workflow-type-entity-1/" +
+        id +
+        "/16",
+    };
+
+    if (reqType == "أدوات" && roleKey == "material") {
+      return null;
+    }
+    if (reqType == "أدوات") {
+      console.log(toolsRequest[roleKey]);
+      return {
+        url: toolsRequest[roleKey],
+        levelStatus: toolsRequest[roleKey].split("/").slice(-1)[0],
+        type: "tools",
+      };
+    } else {
+      return {
+        url: materialRequest[roleKey],
+        levelStatus: materialRequest[roleKey].split("/").slice(-1)[0],
+        type: "material",
+      };
+    }
+  }
+
+  let currentUserRole;
+  const onFiltering = (e) => {
+    const $this = $(e.target);
+    const val = $this.val();
+    if (val == 1) {
+      location.href =
+        "https://gtel.daftra.com/v2/owner/entity/workflow/le_workflow-type-entity-1/list?filter[le_workflow-type-entity-1_custom_data.req_type]=مواد";
+    } else {
+      location.href =
+        "https://gtel.daftra.com/v2/owner/entity/workflow/le_workflow-type-entity-1/list?filter[le_workflow-type-entity-1_custom_data.req_type]=أدوات";
+    }
+  };
+
+  const filterPane = () => {
+    const el = `
+    <div class="flexy">
+    <div>نوع الطلب:</div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="rq-type" id="option1" value="1">
+      <label class="form-check-label" for="option1">مواد</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="rq-type" id="option2" value="2">
+      <label class="form-check-label" for="option2">أدوات</label>
+    </div>
+    `;
+    return el;
+  };
+
+  const GETcurrentUserRole = (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("apikey", "0901a9722ff9018f1aa5a3a4186ba0eb61264a1b");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+
+    return fetch("/v2/api/entity/staff/" + id, requestOptions)
+      .then((response) => response.json())
+      .then((result) => (currentUserRole = result.role_id))
+      .then(() => {
+        return currentUserRole;
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  const GETreqOnOrder = async (id) => {
+    const res = await fetch(
+      "/v2/api/entity/requisition/list/1?filter[work_order_id]=" + id,
+      requestOptions
+    );
+    return (await res.json()).total;
+  };
+
+  const GETstatusChecker = (id, userID) => {
+    return fetch(
+      "/v2/api/entity/le_workflow-type-entity-1/" + id,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then(async (result) => {
+        const currentStatus = result.follow_up_status_id;
+        const thisReqType =
+          result["le_workflow-type-entity-1_custom_data"].req_type;
+        const thisHeirarchy = currentHeirarchy(thisReqType);
+        const createdReq = await GETreqOnOrder(id);
+        GETcurrentUserRole(userID).then((d) => {
+          const thisLevelStatus = statusURLs(
+            id,
+            authObj[currentUserRole],
+            thisReqType
+          )?.levelStatus;
+          notify(thisLevelStatus - 1);
+
+          console.log(
+            thisReqType,
+            "currentStatus==>",
+            currentStatus,
+            `${thisLevelStatus - 1}P`,
+            thisLevelStatus != 15
+          );
+          $(".pull-right > .btn-group.pull-right:first-child").hide();
+          console.log(currentStatus);
+          if (!currentStatus) {
+            $(".pull-right > .btn-group.pull-right:first-child").hide();
+            window.open(statusURLs(id, "without", thisReqType).url, "_self");
+          }
+          if (createdReq && currentStatus != 16) {
+            //$(".pull-right > .btn-group.pull-right:first-child").hide()
+            window.open(statusURLs(id, "out", thisReqType).url, "_self");
+          }
+
+          if (
+            thisReqType == "مواد" &&
+            currentStatus == 15 &&
+            thisLevelStatus == 15
+          ) {
+            $(".pull-right > .btn-group.pull-right:first-child").show();
+          }
+          if (thisReqType == "مواد" && currentStatus != thisLevelStatus - 1) {
+            $(".update-status-btn").addClass("disabled-btn");
+          }
+          if (currentStatus == 17) {
+            $(".update-status-btn").addClass("disabled-btn");
+          }
+
+          // Tools handling:
+
+          if (
+            thisReqType == "أدوات" &&
+            currentStatus == 12 &&
+            thisLevelStatus == 12
+          ) {
+            $(".pull-right > .btn-group.pull-right:first-child").show();
+          }
+          if (thisReqType == "أدوات" && currentStatus == 16) {
+            $(".update-status-btn").addClass("disabled-btn");
+          }
+          if (
+            thisReqType == "أدوات" &&
+            currentStatus == 14 &&
+            thisLevelStatus != 12
+          ) {
+            $(".update-status-btn").addClass("disabled-btn");
+          }
+          if (
+            thisReqType == "أدوات" &&
+            currentStatus == 10 &&
+            thisLevelStatus != 11
+          ) {
+            $(".update-status-btn").addClass("disabled-btn");
+          }
+          if (
+            thisReqType == "أدوات" &&
+            currentStatus == 11 &&
+            thisLevelStatus != 13
+          ) {
+            $(".update-status-btn").addClass("disabled-btn");
+          }
+          if (
+            thisReqType == "أدوات" &&
+            currentStatus == 13 &&
+            thisLevelStatus != 14
+          ) {
+            $(".update-status-btn").addClass("disabled-btn");
+          }
+
+          $(".update-status-btn")
+            .attr(
+              "href",
+              statusURLs(id, authObj[currentUserRole], thisReqType).url
+            )
+            .attr("data-level", d);
+          $(".update-status-btn.reject-btn")
+            .attr(
+              "href",
+              `/v2/owner/workflow/update_status/le_workflow-type-entity-1/${id}/17`
+            )
+            .attr("data-level", d);
+
+          $(
+            "#main-content > div > div.main-area.clearfix > div > ol > div.pages-head.fixed-div > div > div.top-actions.w-100 > div.pull-right > div:nth-child(1) > ul > li:last-child, #main-content > div > div.main-area.clearfix > div > ol > div.pages-head.fixed-div > div > div.top-actions.w-100 > div.pull-right > div:nth-child(1) > ul > li:nth-child(1)"
+          ).hide();
+        });
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  $(document).ready(() => {
+    setTimeout(() => {
+      $(
+        "#main-nav > div.nav-scroll.app-manager-dropdown-container > div.simplebar-wrapper > div.simplebar-mask > div > div > div > ul > li.super-menu.mn_7.mn_workflows.open-submenu > div > ul > li:nth-child(1) > a, #main-nav > div.nav-scroll.app-manager-dropdown-container > div.simplebar-wrapper > div.simplebar-mask > div > div > div > ul > li.super-menu.mn_7.mn_workflows > div > ul > li:nth-child(1) > a, #main-nav > div.prim-nav.main-nav.nav-scroll.clearfix.app-manager-dropdown-container > div.simplebar-wrapper > div.simplebar-mask > div > div > div > div > ul > li.super-menu.mn_7.mn_workflows.open-submenu > div > ul > li:nth-child(1) > a, #main-nav > div.prim-nav.main-nav.nav-scroll.clearfix.app-manager-dropdown-container > div.simplebar-wrapper > div.simplebar-mask > div > div > div > div > ul > li.super-menu.mn_7.mn_workflows > div > ul > li:nth-child(1) > a"
+      ).attr(
+        "href",
+        "/v2/owner/entity/workflow/le_workflow-type-entity-1/list?filter[le_workflow-type-entity-1_custom_data.req_type]=مواد"
+      );
+
+      //$("#main-content > div > div.main-area.clearfix > div > ol > div.px-2 > div.form-row-flex.align-items-center > div.col-flex-lg-4.text-right.s2020").append(`<a href="/v2/owner/entity/le_auth_struct/1/edit" class="btn-s2020 btn-light-s2020 shadow-light"><span>تعديل صلاحيات المواد</span></a>`)
+      //$("#main-content > div > div.main-area.clearfix > div > ol > div.px-2 > div.form-row-flex.align-items-center > div.col-flex-lg-4.text-right.s2020").append(`<a href="/v2/owner/entity/le_auth_struct/2/edit" class="btn-s2020 btn-light-s2020 shadow-light"><span>تعديل صلاحيات الأدوات</span></a>`)
+      //$("#main-content > div > div.main-area.clearfix > div > ol > div.px-2 > div.form-row-flex.align-items-center > div.col-flex-lg-4.text-right.s2020").append(`<a href="/v2/owner/entity/le_request_status/list" class="btn-s2020 btn-light-s2020 shadow-light"><span>إدارة حالات الطلبات</span></a>`)
+    }, 200);
+
+    const userID = USER.staff_id || 1;
+    const workflowID = location.pathname.split("/").slice(-1)[0];
+    GETstatusChecker(workflowID, userID);
+    if (
+      document.referrer.split("/").slice(-2, -1)[0] ==
+        "le_workflow-type-entity-1" &&
+      document.referrer.split("/").slice(-1)[0] == "create"
+    ) {
+      window.open(statusURLs(workflowID).without, "_self");
+    }
+
+    if (location.href.includes("/workflow_view")) {
+      appSpinner(true);
+      let elWorkflowType,
+        acc = 0;
+      const intervalX = setInterval(() => {
+        elWorkflowType = $(".breadcrumb-item");
+        acc += 200;
+        if (acc > 3000) {
+          clearInterval(intervalX);
+          appSpinner(false);
+        }
+        if (elWorkflowType.length) {
+          clearInterval(intervalX);
+          setTimeout(
+            () =>
+              $(
+                "#item-content-responsive > div > div.pl-3.pr-3.pt-3 > div > div:nth-child(6) > div > span"
+              ).css({ filter: "saturate(.4)" }),
+            2000
+          );
+          const isWarehouseOrders = elWorkflowType
+            .eq(0)
+            .find("a")
+            .attr("href")
+            .includes("le_workflow-type-entity-1");
+          if (isWarehouseOrders) {
+            GETstatusChecker(workflowID, userID);
+            $(
+              "#main-content > div > div.main-area.clearfix > div > ol > div.pages-head.fixed-div > div > div.top-actions.w-100 > div.pull-right > div.btn-group.status-list.pull-right.float-right-mob.button-toggle"
+            ).hide();
+            $(
+              "#main-content > div > div.main-area.clearfix > div > ol > div.pages-head.fixed-div > div > div.top-actions.w-100 > div.pull-right > div.btn-group.status-list.pull-right.float-right-mob.button-toggle"
+            ).before(
+              `<a href="#" class="btn btn-danger update-status-btn reject-btn mx-1 shadow-sm" data-level=''>رفض</a>`
+            );
+            $(
+              "#main-content > div > div.main-area.clearfix > div > ol > div.pages-head.fixed-div > div > div.top-actions.w-100 > div.pull-right > div.btn-group.status-list.pull-right.float-right-mob.button-toggle"
+            ).before(
+              `<a href="#" class="btn btn-success update-status-btn mx-1 shadow-sm" data-level=''>أوافق</a>`
+            );
+
+            $(
+              "#main-content > div > div.main-area.clearfix > div > ol > div.invoice-actions.btn-group.dropdown-btn-group > a:not(#print_button)"
+            ).hide();
+            $(
+              "#main-content > div > div.main-area.clearfix > div > ol > div.pages-head.fixed-div > div > div.top-actions.w-100 > div.pull-right > a.btn.m-r-xs.btn-lg.btn-default.pull-right"
+            ).hide();
+            const allLinks = $(
+              "#main-content > div > div.main-area.clearfix > div > ol > div.pages-head.fixed-div > div > div.top-actions.w-100 > div.pull-right > div:nth-child(1) > ul > li"
+            );
+            allLinks.map((idx, el) => {
+              const hrefVal = $(el).find("a").attr("href");
+              const match = hrefVal.match(/add\/(\d+)/);
+              console.log(match);
+              if (match) {
+                match[1] != 2 ? $(el).hide() : null;
+              } else {
+                $(el).hide();
+              }
+            });
+          }
+        }
+        appSpinner(false);
+      }, 200);
+    }
+
+    //if materials
+    if (
+      location.href.split("?")[1] &&
+      location.href.split("?")[1].includes("%D9%85%D9%88%D8%A7%D8%AF")
+    ) {
+      $(
+        "#MultiSelectForm > div.table-responsive > table > *> tr > *:nth-last-child(2)"
+      ).hide();
+      setTimeout(() => {
+        $("input[name='rq-type']").eq(0).prop("checked", true);
+      }, 300);
+    }
+
+    if (
+      location.href.split("?")[1] &&
+      location.href.split("?")[1].includes("%D8%A3%D8%AF%D9%88%D8%A7%D8%AA")
+    ) {
+      setTimeout(() => {
+        $("input[name='rq-type']").eq(1).prop("checked", true);
+      }, 300);
+    }
+
+    if (location.href.includes("/le_workflow-type-entity-1/list")) {
+      $("#MultiSelectForm").prepend(filterPane());
+      $(
+        "#MultiSelectForm > div > table > tbody > tr > td.text-right.row-actions > div > div > a:nth-last-child(-n+3)"
+      ).remove();
+      $("input[name='rq-type']").change(onFiltering);
+    }
+  });
+</script>
+<script>
+  $(document).ready(() => {
+    async function hunleUsersShow() {
+      var allRows = document.querySelectorAll(".number-column");
+      if (allRows.length > 1) {
+        appSpinner(true);
+        let allreqs = [];
+        var newTd = document.createElement("td");
+        newTd.classList.add("py-1");
+        newTd.style.color = "#8186b5";
+        newTd.style.padding = "0 6px";
+        newTd.innerHTML = "الموظف المعين";
+        allRows[0].parentElement.insertBefore(
+          newTd,
+          allRows[0].parentElement.cells[7]
+        );
+        for (let i = 1; i < allRows.length; i++) {
+          var rowId = allRows[i].innerText.trim();
+          var newTd = document.createElement("td");
+          newTd.classList.add("py-1");
+          if (rowId != "") {
+            allreqs.push(
+              $.get(
+                `https://gtel.daftra.com/v2/api/entity/le_workflow-type-entity-1/${rowId}/4`
+              ).then((data) => {
+                let users = data.assigned_users;
+                for (let j = 0; j < users.length; j++) {
+                  let staffName =
+                    data.assigned_users[j].employee.staff_info
+                      .staff_info_related_to_staff.last_name;
+                  newTd.innerText += staffName;
+                  console.log(i);
+                  allRows[i].parentElement.insertBefore(
+                    newTd,
+                    allRows[i].parentElement.cells[7]
+                  );
+                  console.log(staffName);
+                }
+              })
+            );
+            await Promise.all(allreqs);
+          } else {
+            allRows[i].parentElement.insertBefore(
+              newTd,
+              allRows[i].parentElement.cells[7]
+            );
+          }
+          if (i == allRows.length - 1) {
+            appSpinner(false);
+          }
+        }
+      }
+      var AllTableRows = document.querySelectorAll(".report tr");
+      for (let k = 0; k < AllTableRows.length; k++) {
+        if (AllTableRows[k].cells[0].getAttribute("colspan")) {
+          var newcolspan =
+            parseInt(AllTableRows[k].cells[0].getAttribute("colspan")) + 1;
+          AllTableRows[k].cells[0].setAttribute("colspan", newcolspan);
+        }
+      }
+    }
+    hunleUsersShow();
+    $("#submitBtn").on("click", function (e) {
+      setTimeout(() => {
+        hunleUsersShow();
+      }, 500);
+    });
+  });
+</script>

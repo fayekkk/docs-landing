@@ -1,0 +1,393 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 -10px;
+      padding: 10px 0;
+    }
+    .invoice-address {
+      border-top: 3px double #000000;
+      margin: 35px 0;
+      padding-top: 25px;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .listing-table th {
+      background-color: #c7c5c0;
+      border-bottom: 1px solid;
+      border-top: 1px solid;
+      font-weight: bold;
+      text-align: right;
+      padding: 6px 4px;
+    }
+    #listing_table th {
+      width: 60px;
+    }
+    #listing_table th:nth-child(2) {
+      width: 150px !important;
+    }
+    #listing_table th:nth-child(1) {
+      width: 10px !important;
+    }
+    #listing_table th:last-child {
+      width: 80px !important;
+    }
+    #listing_table th:nth-last-child(3) {
+      width: 30px !important;
+    }
+    #listing_table th:nth-last-child(2) {
+      width: 45px !important;
+    }
+    #listing_table th {
+      border-right: 1px solid !important;
+    }
+    .listing-table td {
+      border-bottom: 1px solid;
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    .listing-table th,
+    .listing-table td {
+      border-color: #000 !important;
+    }
+    .total-table td {
+      border-right: 1px solid;
+    }
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid;
+      border-top: 1px solid;
+      font-weight: bold;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    .notes-block {
+      margin: 50px 0 0 0;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+    .qr-code img {
+      margin-top: 10px;
+    }
+    #invoice_title {
+      font-size: 16px;
+      padding: 5px;
+    }
+    .custom-info {
+      border-collapse: collapse;
+      background-color: #a6a39e;
+      margin: 8px 0;
+    }
+    .custom-info td {
+      border: 1px solid;
+      padding: 3px;
+      text-align: center;
+    }
+
+    #fines td:nth-child(2),
+    #fines td:nth-child(3),
+    #fines td:nth-child(4),
+    #totals_row td:nth-child(2),
+    #totals_row td:nth-child(3),
+    #totals_row td:nth-child(4) {
+      display: none;
+    }
+    .total-rows td {
+      text-align: center;
+    }
+    .info td {
+      padding: 5px;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <div align="center">
+          <p id="invoice_title" class="editable-area invoice-name">
+            {%invoice_title%}
+          </p>
+        </div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="50%">
+              تاريخ إصدار الفاتورة: {%invoice_date%} <br />
+              رقم الفاتورة التسلسلي: {%invoice_no%}<br />
+              اسم المورد:- شركة سعد صالح الباحوث للمقاولات <br />
+              عنوان المورد:- (حائل - حي الصناعية) <br />
+              الرقم الضريبي للمورد:- {%site_bn1%} <br />
+              <br />
+              {%client_business_name%} <br />
+              {%client_full_address%} <br />
+              {%client_bn1%}
+              <!-- اسم العميل:- {%client_business_name%} <br />
+              عنوان العميل :- {%client_full_address%} <br />
+              الرقم الضريبي للعميل:- {%client_bn1%} -->
+            </td>
+            <td>
+              <div class="qr-code">{%sa_qr_code_image%}<br /></div>
+            </td>
+          </tr>
+        </table>
+        <table
+          class="custom-info"
+          width="100%"
+          border="0"
+          cellspacing="0"
+          cellpadding="0"
+        >
+          <tr>
+            <td width="65%">رقم المستخلص / امر العمل</td>
+            <td width="35%">رقم العقد</td>
+          </tr>
+          <tr>
+            <td>{%Work Order No%}</td>
+            <td>{%Contract No%}</td>
+          </tr>
+        </table>
+        <div id="items-list">{%items_list%}</div>
+        <div>
+          <table
+            width="100%"
+            border="0"
+            cellspacing="0"
+            cellpadding="0"
+            class="info"
+          >
+            <tr>
+              <td width="40%" align="center">
+                نأمل منكم التكرم بصرف قيمة الفاتورة ،،،،،
+              </td>
+              <td class="total">{%invoice_total_spelled%}</td>
+            </tr>
+            <tr>
+              <td colspan="2" align="center">ولكم جزيل الشكر ،،،،،</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td align="center">شركة سعد صالح الباحوث للمقاولات</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <div style="display: none">
+      <div id="sub">{%invoice_subtotal%}</div>
+      <div id="tax">{%tax-total%}</div>
+      <div id="discount">{%discount%}</div>
+      <div id="item-discount">{%item-discount-total%}</div>
+      <div id="total">{%invoice_total%}</div>
+    </div>
+    <script>
+      function insertCol(index, colLabel, labelId, cellClass) {
+        var tbl = document.getElementById("listing_table");
+
+        for (i = 0; i < tbl.rows.length; i++) {
+          var newCell = tbl.rows[i].insertCell(index);
+          newCell.classList.add(cellClass);
+
+          //  newCell.innerText = parseFloat(tax[i].innerText.replace(/,/g, "")) + parseFloat(total[i].innerText.replace(/,/g, ""))
+        }
+        var firstCell = tbl.rows[0].cells[index];
+        firstCell.outerHTML = "<th id=" + labelId + ">" + colLabel + "</th>";
+        // firstCell.id = labelId
+        firstCell.style.cssText =
+          "border-top:1px solid #000;font-weight:bold;text-align:center;background:#e5e5e5";
+      }
+      function totalAfterVat() {
+        var totalAfterVat = document.querySelectorAll(".total_after");
+        var vat = document.querySelectorAll("#listing_table td:nth-child(5)");
+        var totalBeforeVat = document.querySelectorAll(
+          "#listing_table td:nth-child(6)"
+        );
+
+        for (var i = 0; i < totalAfterVat.length; i++) {
+          totalAfterVat[i].innerText = (
+            parseFloat(vat[i].innerText.replace(/,/g, "")) +
+            parseFloat(totalBeforeVat[i].innerText.replace(/,/g, ""))
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      function addTotalRow(rowNum, cellNum) {
+        var tbl = document.getElementById("listing_table");
+        var rowCount = tbl.rows.length;
+        var rowCells = tbl.rows[0].cells.length;
+        for (var x = 0; x < rowNum; x++) {
+          var totalRow = tbl.insertRow(rowCount + x);
+          totalRow.classList.add("total-rows");
+          for (var i = 0; i < cellNum; i++) {
+            var cell = totalRow.insertCell(i);
+          }
+        }
+      }
+      function swap(in1, in2, table_id) {
+        var table = document.getElementById(table_id);
+        for (var i = 0, row; (row = table.rows[i]); i++) {
+          var temp = row.cells[in1].innerHTML;
+          row.cells[in1].innerHTML = row.cells[in2].innerHTML;
+          row.cells[in2].innerHTML = temp;
+        }
+      }
+
+      function addTotalValues() {
+        var totalTd = document.querySelectorAll(".total-rows td");
+        var tbl = document.getElementById("listing_table");
+        var rowNum = tbl.rows.length;
+        var rowCells = tbl.rows[0].cells.length;
+        rowCells = rowCells - 1;
+        var subtotalRow = document.getElementsByClassName("total-rows");
+
+        var fines = 0;
+        var tableText = document.querySelectorAll(
+          ".listing-table:nth-child(2) td:nth-child(2)"
+        );
+        var value = document.querySelectorAll(
+          ".listing-table:nth-child(2) td:nth-child(3)"
+        );
+        for (var i = 0; i < tableText.length; i++) {
+          if (tableText[i].innerText == "التسوية") {
+            fines = value[i].innerText;
+            fines = parseFloat(fines.replace(/[, ر س -]+/g, "").trim());
+          }
+        }
+
+        var tot = document.getElementById("total").innerText;
+        tot = parseFloat(tot.replace(/[, ر س ]+/g, "").trim());
+        var sub = document.getElementById("sub").innerText;
+        sub = parseFloat(sub.replace(/[, ر س ]+/g, "").trim());
+        sub = sub + fines;
+
+        var tax = document.getElementById("tax").innerText;
+        tax = parseFloat(tax.replace(/[, ر س ]+/g, "").trim());
+        var totBefore = tot + fines;
+        console.log(fines, tot);
+        subtotalRow[0].setAttribute("id", "subtotal_row");
+        subtotalRow[1].setAttribute("id", "fines");
+        subtotalRow[2].setAttribute("id", "totals_row");
+
+        totalTd[0].setAttribute("colspan", "4");
+        totalTd[5].setAttribute("colspan", "7");
+        totalTd[10].setAttribute("colspan", "7");
+
+        totalTd[0].innerHTML = " المجموع";
+        totalTd[1].innerHTML = sub
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        totalTd[2].innerHTML = "";
+        totalTd[3].innerHTML = tax
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        totalTd[4].innerHTML = totBefore
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        totalTd[5].innerHTML = "الغرامات";
+        totalTd[9].innerHTML = fines
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        totalTd[10].innerHTML = "المجموع مع الضريبة بالريال السعودي";
+        totalTd[14].innerHTML = tot
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      try {
+        insertCol(6, " المبلغ شامل الضريبة", "total_after_th", "total_after");
+        totalAfterVat();
+        swap(3, 4, "listing_table");
+        swap(3, 5, "listing_table");
+
+        addTotalRow(3, 5);
+        addTotalValues();
+      } catch (error) {
+        console.log(error);
+      }
+      function AddSerials() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var SerTh = document.createElement("th");
+        SerTh.innerText = "م";
+        allRows[0].insertBefore(SerTh, allRows[0].cells[0]);
+        for (var i = 1; i < allRows.length - 3; i++) {
+          var SerTd = document.createElement("td");
+          SerTd.innerText = i;
+          allRows[i].insertBefore(SerTd, allRows[i].cells[0]);
+          allRows[i].cells[allRows[i].cells.length - 2].innerText = parseFloat(
+            allRows[i].cells[allRows[i].cells.length - 2].innerText.replace(
+              /,/g,
+              ""
+            )
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      try {
+        AddSerials();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

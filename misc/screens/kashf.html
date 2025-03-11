@@ -1,0 +1,25 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+  $(document).ready(function () {
+    if (window.location.href.split("/")[5] == "statement") {
+      console.log("here");
+      function downloadTableAsPDF() {
+        const table = document.querySelector(".invoice-inner");
+
+        html2pdf()
+          .set({
+            margin: 1,
+            filename: "table.pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+          })
+          .from(table)
+          .save();
+      }
+      setTimeout(() => {
+        downloadTableAsPDF();
+      }, 5000);
+    }
+  });
+</script>

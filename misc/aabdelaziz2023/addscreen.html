@@ -1,0 +1,70 @@
+<style>
+  .tax2 {
+    display: none !important;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      console.log("ssss");
+
+      function screenCode() {
+        $(".removeItem ");
+
+        $(document).on("input", ".item_col_4", function () {
+          let inputValue = $(this).val();
+          if (isNaN(inputValue) || inputValue < 0) {
+            $(this).val("0");
+          }
+        });
+        $(document).on("change", ".item_col_4 ", function () {
+          if ($(this).val() == "") {
+            $(this).val("0");
+          }
+          var totalRetention = 0;
+          $(".item_col_4 ").each(function () {
+            if ($(this).val() != "") {
+              totalRetention += parseFloat($(this).val().replace(/,/g, ""));
+            }
+          });
+          console.log(totalRetention);
+          $("#InvoiceAdjustmentLabel").val("مصاريف الشحن");
+          $("#InvoiceAdjustmentValue").val(totalRetention).trigger("change");
+        });
+
+        $(document).on("click", ".removeItem", function () {
+          $(".item_col_4 ").each(function () {
+            if ($(this).val() == "") {
+              $(this).val("0");
+            }
+            var totalRetention = 0;
+            $(".item_col_4 ").each(function () {
+              if ($(this).val() != "") {
+                totalRetention += parseFloat($(this).val().replace(/,/g, ""));
+              }
+            });
+            console.log(totalRetention);
+            $("#InvoiceAdjustmentLabel").val("مصاريف الشحن");
+            $("#InvoiceAdjustmentValue").val(totalRetention).trigger("change");
+          });
+        });
+      }
+      let InvoiceLayout = $("#InvoiceLayout").val();
+      if (InvoiceLayout == "6") {
+        screenCode();
+      }
+      $("#InvoiceLayout").on("change", function () {
+        let InvoiceLayout = $("#InvoiceLayout").val();
+        console.log("sssssssss");
+
+        if (InvoiceLayout == 6) {
+          setTimeout(() => {
+            console.log("sssssssss");
+
+            screenCode();
+          }, 250);
+        }
+      });
+    }, 250);
+  });
+</script>

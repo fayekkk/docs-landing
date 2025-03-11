@@ -1,0 +1,63 @@
+<style>
+  #header_data {
+    width: 100%;
+    direction: rtl;
+  }
+  #header_data td {
+    padding: 3px 4px;
+  }
+  #header_data td:nth-child(1) {
+    text-align: right;
+    width: 35%;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 2;
+  }
+  #header_data td:nth-child(2) {
+    width: 30%;
+    text-align: center;
+  }
+  #header_data td:nth-child(3) {
+    width: 35%;
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 2;
+  }
+  .invoice_title {
+    font-size: 21px;
+    font-weight: bold;
+  }
+</style>
+<div style="margin-top: -25px">
+  <div style="padding-top: 20px"></div>
+  <table id="header_data">
+    <tr>
+      <td>
+        نواف آل الشيخ 
+        <br />
+        الرقم الضريبي : 310522375500003
+        <br />
+
+        هاتف : 966541266668+
+        <br />
+
+        الرياض 12332
+      </td>
+      <td id="qr-code-img">
+        {%sa_qr_code_image%}
+        <br />
+        <span class="invoice_title"> {%invoice_title%}</span>
+      </td>
+      <td>
+        Nawaf Al Sheikh
+        <br />
+        Tax Number: 310522375500003
+        <br />
+        Phone: +966541266668
+        <br />
+        Riyadh 12332
+      </td>
+    </tr>
+  </table>
+</div>

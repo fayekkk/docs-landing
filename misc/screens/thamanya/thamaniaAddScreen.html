@@ -1,0 +1,664 @@
+<style>
+  .hidden-elem {
+    display: none !important;
+  }
+  .rtl-span {
+    display: inline-block;
+    direction: rtl;
+  }
+  .error-box span {
+    font-size: 12px;
+    padding: 4px 10px;
+    border: 1px solid rgba(224, 25, 49, 0.8);
+    background: rgba(224, 25, 49, 0.7);
+    color: #fff;
+    border-radius: 3px;
+  }
+  .error-box {
+    display: inline-block;
+    position: inherit;
+    margin-right: 20px;
+  }
+  .error-box:after {
+    border: 0;
+  }
+
+  #invoice_accounts368Value {
+    pointer-events: none;
+    background: #ffffe2;
+  }
+  #select2-acc5-container,
+  #select2-acc1-container,
+  #select2-acc2-container,
+  #select2-acc3-container,
+  #select2-acc430-container {
+    font-size: 14px !important;
+    text-align: center !important;
+  }
+</style>
+
+<script>
+  $(document).ready(function () {
+    // adding new button HTML
+    var newButton = `<div class="col-md-12 col-sm-12" style="margin-bottom: 25px;">
+            <div class="m-r-md d-inline-flex">
+              <a id="calcBtn" class="ajust-invoice btn-info" style="padding: 8px 15px !important; display: inline-block;">احسب ضمان الأعمال</a>
+            </div>
+            <div style="display: inline-block; max-width: 100px;">
+              <label class="ui-input-label l-input-label adjust-tab-input-label">النسبة</label>
+              <input type="number" style="height: 40px;" placeholder="0" class="number discount-tab-input-discount ui-input l-input form-x3" step="any" value="" id="InvoiceRetention">
+            </div>
+            <div class="error-box hidden">
+              <span class="empty-value hidden-elem rtl-span">قم بإدخال نسبة ضمان الأعمال أولاً</span>
+              <span class="exceed-limit hidden-elem rtl-span">لا يمكن أن تتخطى النسبة 100%</span>
+            </div>
+          </div>`;
+    var tab = $("#tab-1 .row");
+    tab.prepend(newButton);
+
+    // checking if retention is zero or NaN then adding the adjustment label as ضمان أعمال
+    if (
+      isNaN(parseFloat($("#InvoiceRetention").val())) ||
+      parseFloat($("#InvoiceRetention").val()) == 0
+    ) {
+      $("#InvoiceAdjustmentLabel").val("خصم ضمان أعمال");
+    }
+    if (isNaN(parseFloat($("#InvoiceRetention").val()))) {
+      $("#InvoiceRetention").val(0);
+    }
+    var tax = parseFloat(
+      $("#Tax2Row td:nth-child(3)").text().replace(/,/g, "").replace("$", "")
+    );
+    if (isNaN(tax)) {
+      tax = 0;
+    }
+    // calculating retention funtion
+    function calcRetention() {
+      var retentionValue = $("#InvoiceAdjustmentValue");
+      var total =
+        parseFloat(
+          $("#SubtotalValue").text().replace(/,/g, "").replace("$", "")
+        ) + tax;
+
+      var total = parseFloat(
+        $("#SubtotalValue").text().replace(/,/g, "").replace("$", "")
+      );
+      if (isNaN(total)) {
+        total = 0;
+      }
+      // calculating retention from subtotal
+      $("#InvoiceAdjustmentValue").val(
+        (parseFloat($("#InvoiceRetention").val() * 0.01) * total * -1).toFixed(
+          2
+        )
+      );
+      $("#InvoiceAdjustmentValue").change();
+
+      // getting retention value
+      function getRetPerc() {
+        let retPer = $("#InvoiceRetention").val();
+        return retPer;
+      }
+
+      // changing the adjustment label with the retention percentage
+      $("#InvoiceAdjustmentLabel").val(`خصم ضمان أعمال (${getRetPerc()}%)`);
+
+      // LOCAL STORAGE (saving new retention value)
+      localStorage.setItem("retention", $("#InvoiceRetention").val());
+    }
+
+    // changing التسوية to ضمان أعمال
+    let adjLbl = $(".discount-tab-input-label").eq(1);
+    if (adjLbl.text() == "التسوية") {
+      adjLbl.html(adjLbl.html().replace("التسوية", "خصم ضمان أعمال"));
+    }
+
+    setTimeout(function () {
+      // showing error box if retention was not entered after button click
+      $("#calcBtn").on("click", function () {
+        if (isNaN(parseFloat($("#InvoiceRetention").val()))) {
+          $(".error-box").removeClass("hidden-elem");
+          $(".empty-value").removeClass("hidden-elem");
+        } else {
+          $(".error-box").addClass("hidden-elem");
+          $(".empty-value").addClass("hidden-elem");
+        }
+        calcRetention();
+      });
+
+      // giving error message in case retention percentage exceeds 100%
+      $("#InvoiceRetention").on("input", function () {
+        if (parseFloat($("#InvoiceRetention").val()) > 100) {
+          $("#InvoiceRetention").val(100);
+          $(".error-box").removeClass("hidden-elem");
+          $(".exceed-limit").removeClass("hidden-elem");
+        } else {
+          $(".error-box").addClass("hidden-elem");
+          $(".exceed-limit").addClass("hidden-elem");
+        }
+      });
+    }, 500);
+
+    // LOCAL STORAGE (showing saved retention value)
+    var savedRet = localStorage.getItem("retention");
+    console.log(savedRet);
+    if (savedRet != 0) {
+      $("#InvoiceRetention").val(savedRet);
+    }
+
+    $("#InvoiceNo").attr("readonly", false);
+  });
+</script>
+
+<style>
+  span.percent-icon {
+    display: inline-block;
+    user-select: none;
+    color: #555555;
+    font-size: 20px;
+    margin-left: 10px;
+    background: #fff;
+    width: 25px;
+    padding: 0 5px;
+    text-align: center;
+    box-shadow: 0 0 3px 1px #ddd;
+    cursor: pointer;
+    transition: 0.2 ease-in-out;
+  }
+
+  span.percent-icon:hover {
+    background: #e9e9e9;
+  }
+  span.percent-icon:focus,
+  span.percent-icon:active {
+    box-shadow: 0 0 1px 1px #ddd;
+    background: #fff;
+  }
+
+  .percent-input {
+    background: #ffffde !important;
+    width: 50px;
+  }
+  .select_project label {
+    font-size: 18px;
+  }
+
+  .select_project {
+    padding: 15px;
+    margin-top: 7px;
+    background: #f6f9fc;
+    border: 1px solid #00b0ef;
+    position: relative;
+    zoom: 1;
+    overflow: hidden;
+    display: none;
+  }
+  #acc1,
+  #acc2,
+  #acc3,
+  #acc5,
+  #acc430 {
+    width: 250px;
+  }
+  div.project-info {
+    display: none;
+  }
+  table.project-info td {
+    padding: 3px;
+  }
+
+  table.project-info td.info-title {
+    font-weight: 700 !important;
+    width: 33%;
+  }
+  table.project-info {
+    width: 100%;
+  }
+
+  .readonly-field {
+    background-color: #eae8e8;
+  }
+
+  .form-group.project-info {
+    margin-top: 15px;
+  }
+
+  label[for="view_items"] {
+    font-size: 14px;
+    display: inline-block;
+    margin-bottom: 0;
+    padding: 0;
+  }
+
+  .form-group.view-items {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  input#view_items {
+    transform: scale(1.3);
+    margin: 0 10px;
+    cursor: pointer;
+  }
+
+  label[for="view_items"] {
+    cursor: pointer;
+  }
+</style>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"></script>
+
+<script>
+  let allInvoiceSubTotal = 0;
+  let allPaymentInvoices = 0;
+
+  function addPercentValues() {
+    let percent383Field = `<input  type="number"   class="percent-input" placeholder="0" id="account383_percent"><span class="percent-icon icon">%</span>`;
+    $("#invoice_accounts5Value").before(percent383Field);
+
+    let percent384Field = `<input  type="number"   class="percent-input" placeholder="0" id="account384_percent"><span class="percent-icon icon">%</span>`;
+    $("#invoice_accounts2Value").before(percent384Field);
+  }
+
+  function percentOnChange() {
+    $("#account384_percent").on("input change", function () {
+      let currentSubTotal = parseFloat(
+        $("#SubtotalValue").text().replace(/,/g, "")
+      );
+      $("#invoice_accounts2Value").val((currentSubTotal * $(this).val()) / 100);
+      $("#invoice_accounts2Value").trigger("change");
+      if ($(this).val() > 100) {
+        alert("لا يمكن تعيين نسبة بأعلى من 100%");
+        $(this).val(100).change();
+      }
+    });
+
+    $("#account383_percent").on("input change", function () {
+      let currentSubTotal = parseFloat(
+        $("#SubtotalValue").text().replace(/,/g, "")
+      );
+      $("#invoice_accounts5Value").val((currentSubTotal * $(this).val()) / 100);
+      $("#invoice_accounts5Value").trigger("change");
+      if ($(this).val() > 100) {
+        alert("لا يمكن تعيين نسبة بأعلى من 100%");
+        $(this).val(100).change();
+      }
+    });
+
+    $(".percent-icon").on("click", function () {
+      $(this).parent().find(".percent-input").trigger("change");
+    });
+  }
+
+  function createSearchableSelector(selectorId, defVal) {
+    const selector = document.createElement("select");
+
+    selector.setAttribute("id", selectorId);
+    selector.setAttribute("defVal", defVal);
+    // set Default accounts
+    switch (selectorId) {
+      case "acc1":
+        document
+          .getElementById(`invoice_accounts1Value`)
+          .setAttribute("name", `[][]]`);
+        document
+          .getElementById(`invoice_accounts1Label`)
+          .setAttribute("name", `[][][]`);
+        break;
+      case "acc2":
+        document
+          .getElementById(`invoice_accounts2Value`)
+          .setAttribute("name", `data[invoice_accounts][${defVal}][value]`);
+        document
+          .getElementById(`invoice_accounts2Label`)
+          .setAttribute("name", `data[invoice_accounts][${defVal}][label]`);
+        break;
+      case "acc3":
+        document
+          .getElementById(`invoice_accounts3Value`)
+          .setAttribute("name", `[][][]`);
+        document
+          .getElementById(`invoice_accounts3Label`)
+          .setAttribute("name", `[][][]`);
+        break;
+      case "acc5":
+        document
+          .getElementById(`invoice_accounts5Value`)
+          .setAttribute("name", `data[invoice_accounts][${defVal}][value]`);
+        document
+          .getElementById(`invoice_accounts5Label`)
+          .setAttribute("name", `data[invoice_accounts][${defVal}][label]`);
+        break;
+      case "acc430":
+        document
+          .getElementById(`invoice_accounts430Value`)
+          .setAttribute("name", `data[invoice_accounts][${defVal}][value]`);
+        document
+          .getElementById(`invoice_accounts430Label`)
+          .setAttribute("name", `data[invoice_accounts][${defVal}][label]`);
+        break;
+      default:
+    }
+    var options = [];
+    const optionElement = document.createElement("option");
+    optionElement.value = "-1";
+    optionElement.text = "select";
+    selector.appendChild(optionElement);
+    var reqlength = 0;
+    $.get(`https://waleed2006kassem.daftara.com/api2/journal_accounts`).then(
+      (reqoptions) => {
+        reqlength = reqoptions.pagination.total_results;
+        $.get(
+          `https://waleed2006kassem.daftara.com/api2/journal_accounts?limit=${reqlength}`
+        ).then((reqoptions) => {
+          options = reqoptions.data;
+          options.forEach((option) => {
+            const optionElement = document.createElement("option");
+            optionElement.value = option.JournalAccount.id;
+            optionElement.text = option.JournalAccount.name;
+            selector.appendChild(optionElement);
+          });
+        });
+      }
+    );
+
+    return selector;
+  }
+  function addlals(place, newID) {
+    let newSpan = document.createElement("");
+  }
+  function addEvents(selector, inputtoAccess, selectedVal) {
+    var thisInputName = [
+      document
+        .getElementById("invoice_accounts5Value")
+        .getAttribute("name")
+        .split("[")[2]
+        .split("]")[0],
+      document
+        .getElementById("invoice_accounts1Value")
+        .getAttribute("name")
+        .split("[")[2]
+        .split("]")[0],
+      document
+        .getElementById("invoice_accounts2Value")
+        .getAttribute("name")
+        .split("[")[2]
+        .split("]")[0],
+      document
+        .getElementById("invoice_accounts3Value")
+        .getAttribute("name")
+        .split("[")[2]
+        .split("]")[0],
+      document
+        .getElementById("invoice_accounts430Value")
+        .getAttribute("name")
+        .split("[")[2]
+        .split("]")[0],
+    ];
+    console.log(thisInputName);
+    if (thisInputName.includes(selectedVal)) {
+      alert("لا يمكن إختيار نفس الحساب فى حقلين مختلفين");
+    } else {
+      if (selector == "#acc1" || selector == "#acc3") {
+        // document.getElementById(`${selector}`).addEventListener("change", (e) => {
+        if (selectedVal != -1) {
+          document
+            .getElementById(inputtoAccess)
+            .setAttribute(
+              "name",
+              `data[invoice_accounts][${selectedVal}][value]`
+            );
+          let mtax1 = document
+            .getElementById("invoice_accounts3Value")
+            .getAttribute("name");
+          let mtax2 = document
+            .getElementById("invoice_accounts1Value")
+            .getAttribute("name");
+          console.log(mtax2);
+          console.log(mtax1);
+          console.log(selectedVal);
+          if (
+            (mtax1.indexOf("data") != -1 && selectedVal != -1) ||
+            (mtax2.indexOf("data") != -1 && selectedVal != -1)
+          ) {
+            document
+              .getElementById("invoice_accounts430Value")
+              .setAttribute("name", "[][][[]]]");
+            document.getElementById("invoice_accounts430Value").value = 0;
+            document.getElementById("invoice_accounts430Value").value = 0;
+            $("#invoice_accounts430Value").trigger("change");
+          } else {
+            document.getElementById("CustomModelField24").value =
+              document.getElementById("invoice_accounts1Value").value;
+            document.getElementById("CustomModelField25").value =
+              document.getElementById("invoice_accounts3Value").value;
+          }
+        } else {
+          document
+            .getElementById(inputtoAccess)
+            .setAttribute(
+              "name",
+              `data[invoice_accounts][${document
+                .querySelector(`#${selector}`)
+                .getAttribute("defVal")}][value]`
+            );
+        }
+        console.log(
+          document.getElementById(inputtoAccess).getAttribute("name")
+        );
+        // });
+      } else {
+        // document.getElementById(`${selector}`).addEventListener("change", (e) => {
+        if (selectedVal != -1) {
+          document
+            .getElementById(inputtoAccess)
+            .setAttribute(
+              "name",
+              `data[invoice_accounts][${selectedVal}][value]`
+            );
+        } else {
+          document
+            .getElementById(inputtoAccess)
+            .setAttribute(
+              "name",
+              `data[invoice_accounts][${document
+                .querySelector(`#${selector}`)
+                .getAttribute("defVal")}][value]`
+            );
+        }
+        console.log(
+          document.getElementById(inputtoAccess).getAttribute("name")
+        );
+        // });
+      }
+      // document.getElementById(`${selector}`).addEventListener("change", (e) => {
+      console.log(selector);
+      switch (selector) {
+        case "#acc1":
+          document
+            .getElementById(`invoice_accounts1Label`)
+            .setAttribute(
+              "name",
+              `data[invoice_accounts][${selectedVal}][label]`
+            );
+          break;
+        case "#acc2":
+          document
+            .getElementById(`invoice_accounts2Label`)
+            .setAttribute(
+              "name",
+              `data[invoice_accounts][${selectedVal}][label]`
+            );
+          break;
+        case "#acc3":
+          document
+            .getElementById(`invoice_accounts3Label`)
+            .setAttribute(
+              "name",
+              `data[invoice_accounts][${selectedVal}][label]`
+            );
+          break;
+        case "#acc5":
+          document
+            .getElementById(`invoice_accounts5Label`)
+            .setAttribute(
+              "name",
+              `data[invoice_accounts][${selectedVal}][label]`
+            );
+          break;
+        case "#acc430":
+          document
+            .getElementById(`invoice_accounts430Label`)
+            .setAttribute(
+              "name",
+              `data[invoice_accounts][${selectedVal}][label]`
+            );
+          break;
+        default:
+      }
+      // });
+    }
+  }
+  function createDummyFields() {
+    setTimeout(() => {
+      $("#invoice_accounts5Value").after(
+        createSearchableSelector("acc5", "430")
+      );
+      $("#invoice_accounts1Value").after(
+        createSearchableSelector("acc1", "520")
+      );
+      $("#invoice_accounts2Value").after(
+        createSearchableSelector("acc2", "230")
+      );
+      $("#invoice_accounts3Value").after(
+        createSearchableSelector("acc3", "330")
+      );
+      $("#invoice_accounts430Value").after(
+        createSearchableSelector("acc430", "320")
+      );
+    }, 220);
+  }
+
+  function selectFN(selector, selectedInput) {
+    setTimeout(() => {
+      $(`#${selector}`).select2();
+
+      $(`#${selector}`).on("select2:open", function (e) {
+        console.log("Dropdown opened!");
+      });
+
+      $(`#${selector}`).on("select2:select", function (e) {
+        console.log("Option selected:", e.params.data.id);
+        $("#acc1").trigger("change");
+        addEvents(`#${selector}`, selectedInput, e.params.data.id);
+      });
+    }, 400);
+  }
+  function calcTaxItems() {
+    $("#invoice_accounts5Value").on("input change", function () {
+      console.log($(this).val());
+      if (parseFloat($(this).val()) > 1) {
+        $(this).val(parseFloat($(this).val()) * -1);
+      }
+
+      $("#invoice_accounts1Value").val(parseFloat($(this).val() * 0.15));
+      $("#invoice_accounts1Value").trigger("change");
+      document.getElementById("CustomModelField24").value =
+        document.getElementById("invoice_accounts1Value").value;
+      document.getElementById("CustomModelField25").value =
+        document.getElementById("invoice_accounts3Value").value;
+    });
+
+    $("#invoice_accounts2Value").on("input change", function () {
+      if (parseFloat($(this).val()) > 1) {
+        $(this).val(parseFloat($(this).val()) * -1);
+      }
+
+      document.querySelectorAll("#invoice_accounts3Value")[0].value =
+        parseFloat($(this).val() * 0.15);
+      $("#invoice_accounts3Value").trigger("change");
+    });
+    $(document).on(
+      "change input",
+      "#invoice_accounts3Value,  #invoice_accounts5Value",
+      function () {
+        document.getElementById("CustomModelField24").value =
+          document.getElementById("invoice_accounts1Value").value;
+        document.getElementById("CustomModelField25").value =
+          document.getElementById("invoice_accounts3Value").value;
+        let account1 = isNaN(
+          parseFloat(
+            document.querySelectorAll("#invoice_accounts3Value")[0].value
+          )
+        )
+          ? 0
+          : parseFloat(
+              document.querySelectorAll("#invoice_accounts3Value")[0].value
+            );
+        let account0 = isNaN(
+          parseFloat(
+            document.querySelectorAll("#invoice_accounts1Value")[0].value
+          )
+        )
+          ? 0
+          : parseFloat(
+              document.querySelectorAll("#invoice_accounts1Value")[0].value
+            );
+        let totalVat = account1 + account0;
+        // $("#CustomModelField34").val($("#invoice_accounts3Value").val());
+        // $("#CustomModelField35").val($("#invoice_accounts5Value").val());
+
+        $("#invoice_accounts430Value").val(totalVat);
+      }
+    );
+  }
+
+  $(document).ready(() => {
+    createDummyFields();
+
+    calcTaxItems();
+    addPercentValues();
+
+    selectFN("acc5", "invoice_accounts5Value");
+    selectFN("acc1", "invoice_accounts1Value");
+    selectFN("acc2", "invoice_accounts2Value");
+    selectFN("acc3", "invoice_accounts3Value");
+    selectFN("acc430", "invoice_accounts430Value");
+
+    $("#select_project_id").select2({
+      resolve: "width",
+    });
+    $("#select_invoice_type").html($("#CustomModelField24").html());
+    $("#select_invoice_type").select2({
+      resolve: "width",
+    });
+
+    $("#select_invoice_type").on("change", function () {
+      $("#CustomModelField24").val($(this).val()).change();
+    });
+
+    setTimeout(() => {
+      let allTitleCustomFields = $(".field-row td:first-child input");
+      allTitleCustomFields.map((i, input) => {
+        $(input).attr("readonly", "readonly");
+        $(input).addClass("readonly-field");
+      });
+    }, 100);
+    $("#InvoiceLayout").on("change", () => {
+      setTimeout(() => {
+        let allTitleCustomFields = $(".field-row td:first-child input");
+        allTitleCustomFields.map((i, input) => {
+          $(input).attr("readonly", "readonly");
+          $(input).addClass("readonly-field");
+        });
+      }, 100);
+    });
+
+    percentOnChange();
+  });
+</script>

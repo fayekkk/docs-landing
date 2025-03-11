@@ -1,0 +1,941 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      /* background: #fff; */
+      color: #000;
+    }
+    .invoice-inner {
+      /* margin: 20px 0;
+        padding: 0 20px; */
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      margin-left: 25px !important;
+      margin-right: 50px !important;
+      padding-top: 15px !important;
+      padding-bottom: 0 !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    /* .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    } */
+    .invoice-address {
+      border-top: 3px double #000000;
+      margin: 35px 0;
+      padding-top: 25px;
+    }
+
+    bold_title {
+      font-weight: bold;
+    }
+
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: right;
+      padding: 6px 4px;
+    }
+
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+
+    .total-table td {
+      border-right: 1px solid #555555;
+    }
+
+    .total-row {
+      /* background-color: #e5e5e5; */
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+
+    /* .notes-block {
+      margin: 50px 0 0 0;
+    } */
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+
+    #business_info {
+      line-height: 1.4;
+    }
+
+    #listing_table th:last-child,
+    #listing_table td:last-child {
+      border-left: 1px solid #555555;
+    }
+
+    #label_subtotal {
+      width: 65px;
+    }
+
+    #label_field3,
+    #label_field4 {
+      width: 55px;
+    }
+
+    #items-list > table:nth-child(2) tr td:nth-child(1) {
+      width: 60%;
+    }
+
+    #listing_table th,
+    #listing_table td {
+      text-align: center;
+    }
+
+    #listing_table th:nth-child(2),
+    #listing_table td:nth-child(2) {
+      text-align: right;
+    }
+
+    /* th#label_field5,
+                        #listing_table td:nth-child(5) {
+                        display: none;
+                        } */
+    .qr-code img {
+      margin-top: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+    .listing-table:nth-child(2) td {
+      background-color: transparent !important;
+    }
+    #listing_table th:nth-child(6),
+    #listing_table td:nth-child(6) {
+      display: none;
+    }
+    .bg {
+      z-index: -90000;
+      position: absolute;
+      left: 0px;
+      background-image: url("https://osool-al-binaa.daftara.com/files/b4a3f547/logos/664c6ed279b61_blobid1716285135850.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 20cm 23.74cm;
+      width: 100%;
+      height: 23.74cm;
+    }
+    /* .bg {
+                z-index: -90000;
+                position: absolute;
+                left: 0px;
+                background-image: url("https://meras-ksa.daftra.com/files/9c0b6d38/logos/66092fae2d694_blobid1711878059162.png");
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: 100% 100%;
+                width: 99.5%;
+                margin-left: 0.25%;
+                height: 23.73cm;
+                } */
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #new_totals {
+      width: 80%;
+      margin: 25px 10% 0 10%;
+      border-left: 1px solid black;
+      border-top: 1px solid black;
+      font-size: 15px;
+      /* border-radius: 7px; */
+      text-align: center;
+      border-spacing: 0;
+    }
+    #new_totals td {
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+      padding: 2px;
+    }
+    #new_totals td:nth-child(1) {
+      width: 30%;
+    }
+    #new_totals td:nth-child(2) {
+      width: 30%;
+    }
+    #new_totals td:nth-child(3) {
+      width: 40%;
+    }
+    #listing_table th {
+      background-color: transparent !important;
+    }
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="bg" style="top: 0cm"></div>
+      <div class="invoice-inner">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <!-- <td align="right" valign="top">
+              <img
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                width="{%logo-width%}"
+                height="{%logo-height%}"
+              />
+            </td> -->
+            <td align="right" valign="top">
+              <div id="business_info" class="editable-area">
+                {%business_info%}
+              </div>
+            </td>
+            <td valign="top" align="left">
+              <p id="invoice_title" class="editable-area invoice-name">
+                {%invoice_title%}
+              </p>
+              <div class="qr-code">{%sa_qr_code_image%}<br /></div>
+            </td>
+          </tr>
+        </table>
+
+        <div class="invoice-address">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="50%" align="right" valign="top">
+                <table border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td valign="top" style="float: right">
+                      <strong id="field1" class="editable-area"
+                        >{%field1%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" valign="top">
+                      <div id="client_info" class="editable-area">
+                        {%client_info%}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr id="shipping_options" style="display: none">
+                    <td valign="top" style="float: right">
+                      <br /><strong id="label_ship" class="editable-area"
+                        >{%label_ship%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" valign="top">
+                      <br />
+                      <div id="ship_info" class="editable-area">
+                        {%ship_info%}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td width="50%" valign="top" align="left">
+                <table
+                  id="invoice_basics"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="left"
+                >
+                  <tr>
+                    <td align="left">
+                      <strong class="editable-area" id="label_invoice_no"
+                        >{%label_invoice_no%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" align="right">
+                      {%invoice_number%}
+                    </td>
+                  </tr>
+                  <tr {%refund_invoice_number_condition%}>
+                    <td align="right">
+                      <strong class="editable-area" id="refund_label_invoice_no"
+                        >{%refund_invoice_no_title%}</strong
+                      >
+                    </td>
+                    <td style="padding-left: 20px" align="left">
+                      {%refund_invoice_number%}
+                    </td>
+                  </tr>
+                  <!-- InvoiceDate -->
+                  <tr>
+                    <td align="left">
+                      <strong class="editable-area" id="label_date"
+                        >{%label_date%}</strong
+                      >
+                    </td>
+                    <td style="padding-right: 20px" align="right">
+                      {%invoice_date%}
+                    </td>
+                  </tr>
+                  <!-- /InvoiceDate -->
+                </table>
+                <custom_field
+                  id="custom_fields"
+                  style="clear: both"
+                  class="editable-area"
+                  border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  align="left"
+                >
+                  {%custom_fields%}
+                </custom_field>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div id="items-list">{%items_list%}</div>
+
+        <table id="new_totals">
+          <tbody>
+            <tr>
+              <td>الاجمالي</td>
+              <td>Amount</td>
+              <td class="val"></td>
+            </tr>
+            <tr>
+              <td>خصم دفعة مقدمة</td>
+              <td>Deduct.adva</td>
+              <td class="val">{%discount%}</td>
+            </tr>
+            <tr>
+              <td>الضرائب</td>
+              <td>VAT 15%</td>
+              <td class="val">{%tax-total%}</td>
+            </tr>
+            <tr>
+              <td>الصافي</td>
+              <td>Net Amount</td>
+              <td class="val"></td>
+            </tr>
+            <tr>
+              <td>ضمان حسن تنفيذ</td>
+              <td>Retention</td>
+              <td class="val">0</td>
+            </tr>
+            <tr>
+              <td>خصومات أخرى</td>
+              <td>Other Deductions</td>
+              <td class="val">0</td>
+            </tr>
+            <tr>
+              <td>صافى القيمة المستحقة</td>
+              <td>Net to pay</td>
+              <td class="val" id="invoice_total">{%invoice_total%}</td>
+            </tr>
+            <tr>
+              <td colspan="100%" id="ar_invoice_total_spelled"></td>
+            </tr>
+          </tbody>
+        </table>
+        <table
+          style="
+            width: 100%;
+            direction: ltr;
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            margin: 25px 0 0 0;
+          "
+        >
+          <tr>
+            <td style="width: 50%">المستلم</td>
+            <td style="width: 50%">البائع</td>
+          </tr>
+        </table>
+
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div style="display: none">
+        <div id="discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      var currency = "";
+      function detectCurrency() {
+        var unitPrice = document.querySelector(
+          "#listing_table tr td:nth-child(6)"
+        );
+        var price = unitPrice.innerText;
+        if (price.indexOf("ر.س") > -1) {
+          currency = " ر.س";
+        } else if (price.indexOf("SR") > -1) {
+          currency = " SR";
+        }
+      }
+
+      function hasDiscount() {
+        var discountValue = document
+          .getElementById("discount")
+          .innerText.replace(/[^\d]/g, "");
+        var itemDiscount = document
+          .getElementById("item-discount")
+          .innerText.replace(/[^\d]/g, "");
+        var hasInvoiceDiscount = false;
+        var hasItemDiscount = false;
+        if (parseFloat(itemDiscount) != 0) {
+          hasItemDiscount = true;
+        }
+
+        if (parseFloat(discountValue) != 0) {
+          hasInvoiceDiscount = true;
+        }
+
+        return {
+          invoiceDiscount: hasInvoiceDiscount,
+          itemDiscount: hasItemDiscount,
+        };
+      }
+      function isLabelUnitPriceAfterLabelQuantity() {
+        var ths = document.getElementsByTagName("th");
+        var label_unit_price, label_quantity;
+
+        for (var i = 0; i < ths.length; i++) {
+          if (ths[i].id == "label_unit_price") {
+            label_unit_price = ths[i];
+          } else if (ths[i].id == "label_quantity") {
+            label_quantity = ths[i];
+          }
+        }
+
+        if (label_unit_price && label_quantity) {
+          var currentElement = label_quantity;
+          while ((currentElement = currentElement.nextSibling)) {
+            if (currentElement == label_unit_price) {
+              return true;
+            }
+          }
+        }
+        return false;
+      }
+      function insertCol(index, colLabel, labelId, cellClass) {
+        var tbl = document.getElementById("listing_table");
+
+        for (i = 0; i < tbl.rows.length; i++) {
+          var newCell = tbl.rows[i].insertCell(index);
+          newCell.classList.add(cellClass);
+
+          //  newCell.innerText = parseFloat(tax[i].innerText.replace("元","").replace(/,/g, "")) + parseFloat(total[i].innerText.replace("元","").replace(/,/g, ""))
+        }
+        var firstCell = tbl.rows[0].cells[index];
+        firstCell.outerHTML = "<th id=" + labelId + ">" + colLabel + "</th>";
+        // firstCell.id = labelId
+        firstCell.style.cssText =
+          "border-top:1px solid #000;font-weight:bold;text-align:center;background:#e5e5e5";
+      }
+
+      function swap(in1, in2, table_id) {
+        var table = document.getElementById(table_id);
+        for (var i = 0, row; (row = table.rows[i]); i++) {
+          var temp = row.cells[in1].innerHTML;
+          row.cells[in1].innerHTML = row.cells[in2].innerHTML;
+          row.cells[in2].innerHTML = temp;
+        }
+      }
+      function calcSubtotalInc(price_quantity_place) {
+        var subTotal = document.querySelectorAll(
+          "#listing_table td:nth-child(6)"
+        );
+        var total = document.querySelectorAll("#listing_table td:nth-child(9)");
+        var price = document.querySelectorAll("#listing_table td:nth-child(3)");
+        if (!!price_quantity_place) {
+          price = document.querySelectorAll("#listing_table td:nth-child(4)");
+        }
+        var vatPercent = document.querySelectorAll(
+          "#listing_table td:nth-child(7)"
+        );
+
+        var discountTotal = parseFloat(
+          document
+            .getElementById("discount")
+            .innerText.replace("元", "")
+            .replace(/,/g, "")
+        );
+        var discountPercent = 0;
+        var sumSubtotal = 0;
+        var remaining = 1;
+        var vatCol = document.querySelectorAll(
+          "#listing_table td:nth-child(8)"
+        );
+
+        for (var i = 0; i < subTotal.length; i++) {
+          sumSubtotal += parseFloat(
+            subTotal[i].innerText
+              .replace("元", "")
+              .replace(/,/g, "")
+              .replace(/[^\d]/g, "")
+          );
+        }
+
+        if (discountTotal != 0) {
+          discountPercent = discountTotal / sumSubtotal;
+          remaining = 1 - discountPercent;
+        }
+
+        for (var i = 0; i < subTotal.length; i++) {
+          var newTotal = (
+            parseFloat(total[i].innerText.replace("元", "").replace(/,/g, "")) /
+            remaining
+          ).toFixed(2);
+
+          var hasTax = true;
+
+          var TaxPercentage = parseFloat(
+            vatPercent[i].innerText.replace("%", "")
+          );
+
+          if (!parseInt(TaxPercentage)) {
+            hasTax = false;
+          }
+
+          if (
+            newTotal ==
+            parseFloat(
+              subTotal[i].innerText.replace("元", "").replace(/,/g, "")
+            ).toFixed(2)
+          ) {
+            if (!!hasTax) {
+              price[i].innerText = (
+                parseFloat(
+                  price[i].innerText.replace("元", "").replace(/,/g, "")
+                ) /
+                ((100 + TaxPercentage) / 100)
+              ).toFixed(2);
+            }
+            subTotal[i].innerText = (
+              (parseFloat(
+                total[i].innerText.replace("元", "").replace(/,/g, "")
+              ) -
+                parseFloat(
+                  vatCol[i].innerText.replace("元", "").replace(/,/g, "")
+                )) /
+              remaining
+            ).toFixed(2);
+          }
+          console.log(newTotal);
+        }
+      }
+      function calcDisCol(price_quantity_place) {
+        var disCol = document.querySelectorAll(
+          "#listing_table td:nth-child(5)"
+        );
+        var subTotalCol = document.querySelectorAll(
+          "#listing_table td:nth-child(6)"
+        );
+        var totalWithVat = document.querySelectorAll(
+          "#listing_table td:nth-child(9)"
+        );
+        var vat = document.querySelectorAll("#listing_table td:nth-child(8)");
+        var qty = document.querySelectorAll("#listing_table td:nth-child(4)");
+        var price = document.querySelectorAll("#listing_table td:nth-child(3)");
+        if (!!price_quantity_place) {
+          qty = document.querySelectorAll("#listing_table td:nth-child(3)");
+          price = document.querySelectorAll("#listing_table td:nth-child(4)");
+        }
+        for (var i = 0; i < disCol.length; i++) {
+          var subtotal =
+            parseFloat(qty[i].innerText.replace("元", "").replace(/,/g, "")) *
+            parseFloat(price[i].innerText.replace("元", "").replace(/,/g, ""));
+          var total =
+            parseFloat(
+              totalWithVat[i].innerText.replace("元", "").replace(/,/g, "")
+            ) -
+            parseFloat(vat[i].innerText.replace("元", "").replace(/,/g, ""));
+          var discount = subtotal - total;
+          disCol[i].innerText = discount.toFixed(2);
+          // subTotalCol[i].innerText = (subtotal - discount).toFixed(2);
+        }
+      }
+      try {
+        detectCurrency();
+
+        var mainTable = document.getElementById("listing_table");
+        var colCount = mainTable.rows[0].cells;
+        var PriceQuantityPlace = isLabelUnitPriceAfterLabelQuantity();
+        if (colCount.length == 8) {
+          insertCol(7, " خصومات  ", "discount_th", "discounts");
+          swap(2, 5, "listing_table");
+          swap(3, 6, "listing_table");
+          swap(4, 8, "listing_table");
+          swap(5, 7, "listing_table");
+          swap(6, 7, "listing_table");
+          swap(4, 5, "listing_table");
+        } else {
+          swap(2, 5, "listing_table");
+          swap(3, 6, "listing_table");
+          swap(4, 8, "listing_table");
+          swap(5, 7, "listing_table");
+          swap(6, 7, "listing_table");
+          swap(4, 5, "listing_table");
+        }
+
+        var hasInvoiceDiscount = hasDiscount();
+        calcSubtotalInc(PriceQuantityPlace);
+        if (hasInvoiceDiscount.invoiceDiscount) {
+          console.log("has discount");
+          calcDisCol(PriceQuantityPlace);
+        }
+
+        if (
+          !hasInvoiceDiscount.invoiceDiscount &&
+          !hasInvoiceDiscount.itemDiscount
+        ) {
+          var mainTable = document.getElementById("listing_table");
+          for (var i = 0; i < mainTable.rows.length; i++) {
+            var tableCell = mainTable.rows[i].cells[4];
+            // tableCell.classList.add("hidden");
+            // tableCell.innerText = "0";
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      function swaplast() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          var cont = allRows[i].cells[2].innerHTML;
+          allRows[i].cells[2].innerHTML = allRows[i].cells[3].innerHTML;
+          allRows[i].cells[3].innerHTML = cont;
+        }
+      }
+      try {
+        swaplast();
+      } catch (error) {
+        console.log(error);
+      }
+      function numberToWordsArabic(number) {
+        var units = [
+          "",
+          "واحد",
+          "اثنان",
+          "ثلاثة",
+          "أربعة",
+          "خمسة",
+          "ستة",
+          "سبعة",
+          "ثمانية",
+          "تسعة",
+          "عشرة",
+          "أحد عشر",
+          "اثنا عشر",
+          "ثلاثة عشر",
+          "أربعة عشر",
+          "خمسة عشر",
+          "ستة عشر",
+          "سبعة عشر",
+          "ثمانية عشر",
+          "تسعة عشر",
+        ];
+
+        var tens = [
+          "",
+          "",
+          "عشرون",
+          "ثلاثون",
+          "أربعون",
+          "خمسون",
+          "ستون",
+          "سبعون",
+          "ثمانون",
+          "تسعون",
+        ];
+
+        var scales = [
+          "",
+          "ألف",
+          "مليون",
+          "مليار",
+          "تريليون",
+          "كوادريليون",
+          "كوينتليون",
+          "سكستليون",
+          "سبتليون",
+          "أوكتليون",
+          "نونليون",
+          "ديسليون",
+        ];
+
+        if (number === 0) {
+          return "صفر";
+        }
+
+        var words = "";
+
+        if (number < 0) {
+          words += "سالب ";
+          number = Math.abs(number);
+        }
+
+        var scaleIndex = 0;
+
+        while (number > 0) {
+          var triplet = number % 1000;
+          number = Math.floor(number / 1000);
+
+          if (triplet > 0) {
+            var tripletWords = "";
+
+            var hundreds = Math.floor(triplet / 100);
+            var tensAndUnits = triplet % 100;
+
+            if (hundreds > 0) {
+              if (hundreds == 1) {
+                tripletWords += " مئة";
+              } else if (hundreds == 2) {
+                tripletWords += " مائتان";
+              } else if (hundreds == 3) {
+                tripletWords += " ثلاثمائة  ";
+              } else if (hundreds == 4) {
+                tripletWords += " اربعمائة ";
+              } else if (hundreds == 5) {
+                tripletWords += " خمسمائة ";
+              } else if (hundreds == 6) {
+                tripletWords += " ستمائة ";
+              } else if (hundreds == 7) {
+                tripletWords += " سبعمائة ";
+              } else if (hundreds == 8) {
+                tripletWords += " ثمانمائة ";
+              } else if (hundreds == 9) {
+                tripletWords += " تسعمائة ";
+              }
+            }
+            if (tensAndUnits > 0) {
+              if (tripletWords !== "") {
+                tripletWords += " و";
+              }
+
+              if (tensAndUnits < 20) {
+                tripletWords += units[tensAndUnits];
+              } else {
+                var tensDigit = Math.floor(tensAndUnits / 10);
+                var unitsDigit = tensAndUnits % 10;
+
+                if (tensDigit > 0) {
+                  if (unitsDigit === 1) {
+                    tripletWords += units[unitsDigit] + " و";
+                  } else if (unitsDigit > 1) {
+                    tripletWords += units[unitsDigit] + " و";
+                  }
+
+                  tripletWords += tens[tensDigit];
+                }
+              }
+            }
+            if (scaleIndex > 0) {
+              if (triplet === 1) {
+                tripletWords += " " + scales[scaleIndex];
+              } else if (triplet >= 2 && triplet <= 10) {
+                tripletWords += " " + scales[scaleIndex] + "";
+              } else if (triplet > 10) {
+                tripletWords += " " + scales[scaleIndex];
+              }
+            }
+
+            if (words !== "") {
+              words = tripletWords + " و" + words;
+            } else {
+              words = tripletWords;
+            }
+          }
+
+          scaleIndex++;
+        }
+        return words;
+      }
+      function convertFN(num, maincurrency, floatCurr) {
+        var myIntNum = parseInt(num.split(".")[0]);
+        var myFloatNum = parseInt(num.split(".")[1]);
+        return (
+          numberToWordsArabic(myIntNum) +
+          " " +
+          maincurrency +
+          " و " +
+          numberToWordsArabic(myFloatNum) +
+          " " +
+          floatCurr +
+          " فقط"
+        );
+      }
+      try {
+        var myNum = String(
+          parseFloat(
+            document
+              .getElementById("invoice_total")
+              .innerText.replace("元", "")
+              .replace(/[\$,]/g, "")
+          ).toFixed(2)
+        );
+        document.getElementById("ar_invoice_total_spelled").innerText =
+          convertFN(myNum, " ريال ", "هلله");
+      } catch (error) {
+        console.log(error);
+      }
+      function hundleTotals() {
+        var allRows = document.querySelectorAll("#listing_table tbody tr");
+        varttlbefvat = 0;
+        for (var i = 0; i < allRows.length; i++) {
+          var subttl =
+            parseFloat(
+              allRows[i].cells[2].innerText.replace("元", "").replace(/,/g, "")
+            ) *
+            parseFloat(
+              allRows[i].cells[3].innerText.replace("元", "").replace(/,/g, "")
+            );
+          varttlbefvat = varttlbefvat + subttl;
+        }
+        document.querySelectorAll(".val")[0].innerText = varttlbefvat
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        var afterdis =
+          parseFloat(
+            document
+              .querySelectorAll(".val")[0]
+              .innerText.replace("元", "")
+              .replace(/,/g, "")
+          ) -
+          parseFloat(
+            document
+              .querySelectorAll(".val")[1]
+              .innerText.replace("元", "")
+              .replace(/,/g, "")
+          ) +
+          parseFloat(
+            document
+              .querySelectorAll(".val")[2]
+              .innerText.replace("元", "")
+              .replace(/,/g, "")
+          );
+        console.log(afterdis);
+        document.querySelectorAll(".val")[3].innerText = afterdis
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        var allttls = document.querySelectorAll(
+          ".listing-table:nth-child(2) tr"
+        );
+        for (var j = 0; j < allttls.length; j++) {
+          if (allttls[j].cells[1].innerText.indexOf("Retention") != -1) {
+            document.querySelectorAll(".val")[4].innerText = (
+              parseFloat(
+                allttls[j].cells[2].innerText
+                  .replace("元", "")
+                  .replace(/,/g, "")
+              ) * -1
+            )
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          } else if (
+            allttls[j].cells[1].innerText.indexOf("خصومات أخرى") != -1
+          ) {
+            document.querySelectorAll(".val")[5].innerText = (
+              parseFloat(
+                allttls[j].cells[2].innerText
+                  .replace("元", "")
+                  .replace(/,/g, "")
+              ) * -1
+            )
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          }
+        }
+        var allvals = document.querySelectorAll(".val");
+        for (var k = 0; k < allvals.length; k++) {
+          allvals[k].innerText = parseFloat(
+            allvals[k].innerText.replace("元", "").replace(/,/g, "")
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      try {
+        hundleTotals();
+      } catch (error) {
+        console.log(error);
+      }
+      function repeatBg() {
+        var invoiceHeight =
+          document.querySelector(".invoice-inner").offsetHeight;
+        var pageHeight = document.querySelector(".bg").offsetHeight;
+        var numPages = Math.ceil(invoiceHeight / pageHeight);
+        var bg = document.querySelector(".bg");
+        var topDis = parseFloat(bg.style.top.replace("cm", ""));
+        for (var i = 1; i < numPages; i++) {
+          var newBg = document.createElement("div");
+          newBg.setAttribute("class", "bg");
+          topDis = topDis + 23.97;
+          console.log(topDis);
+          newBg.style.top = topDis + "cm";
+          bg.parentNode.insertBefore(newBg, bg.nextSibling);
+        }
+      }
+      try {
+        // repeatBg();
+      } catch (e) {
+        console.log(e);
+      }
+    </script>
+  </body>
+</html>

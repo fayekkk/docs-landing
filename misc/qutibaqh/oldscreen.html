@@ -1,0 +1,154 @@
+<style>
+  .col-2 textarea::placeholder {
+    color: transparent !important;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      if ($("#InvoiceLayout").val() == 3) {
+        $("#label_unit_price").hide();
+        $(".unit-price").hide();
+      } else {
+        $("#label_unit_price").show();
+        $(".unit-price").show();
+      }
+      $("#InvoiceLayout").on("change", function () {
+        setTimeout(() => {
+          if ($("#InvoiceLayout").val() == 3) {
+            const $col2Textarea = $(".col-2 textarea");
+            $col2Textarea.attr("placeholder", "");
+            $("#label_unit_price").hide();
+            $(".unit-price").hide();
+          } else {
+            const $col2Textarea = $(".col-2 textarea");
+            $col2Textarea.attr("placeholder", "الوصف");
+            $("#label_unit_price").show();
+            $(".unit-price").show();
+          }
+        }, 500);
+      });
+      $("#AddItem").on("click", function () {
+        if ($("#InvoiceLayout").val() == 3) {
+          $("#label_unit_price").hide();
+          $(".unit-price").hide();
+        } else {
+          $("#label_unit_price").show();
+          $(".unit-price").show();
+        }
+      });
+      function hundelScreenCode() {
+        function hundlevals() {
+          setTimeout(() => {
+            $(".col-2 textarea").on(
+              "keypress",
+              ".col-2 textarea",
+              function (e) {
+                if (
+                  $(this)
+                    .closest("tr")
+                    .find(".item_name")
+                    .val()
+                    .toLowerCase() != "group"
+                ) {
+                  const key = e.key;
+                  if (!/^\d+$/.test(key)) {
+                    e.preventDefault();
+                  }
+                }
+              }
+            );
+            $(".col-3 textarea").on("keypress", function (e) {
+              const key = e.key;
+              if (!/^\d+$/.test(key)) {
+                e.preventDefault();
+              }
+            });
+
+            // cahnge event
+            function changeevent() {
+              const $table = $("#listing_table"); 
+              function debounce(func, wait) {
+                let timeout;
+                return function (...args) {
+                  const context = this;
+                  clearTimeout(timeout);
+                  timeout = setTimeout(() => func.apply(context, args), wait);
+                };
+              }
+              $table.on(
+                "change",
+                ".col-2 textarea, .col-3 textarea",
+                debounce(function () {
+                  const $row = $(this).closest("tr");
+                  const duration = $row.find(".col-2 textarea").val();
+                  const price = $row.find(".col-3 textarea").val();
+                  const unitPriceInput = $row.find(".unit-price input");
+                  unitPriceInput.val(duration * price).change();
+                }, 300)
+              );
+            }
+            changeevent();
+            $("#AddItem").on("click", function () {
+              changeevent();
+            });
+          }, 500);
+        }
+        if ($("#InvoiceLayout").val() == 3) {
+          hundlevals();
+          $(".item_name").on("change", function () {
+            hundlevals();
+          });
+          $("#AddItem").on("click", function () {
+            hundlevals();
+          });
+          function groupevent() {
+            $(".select-item textarea").on("input", function () {
+              var currentValue = $(this).val().toLowerCase();
+              if (currentValue == "group") {
+                // $(this).attr("readonly", true);
+                $(this).closest("tr").find(".col-3 textarea").val(0).change();
+                $(this)
+                  .closest("tr")
+                  .find(".col-3 textarea")
+                  .attr("disabled", true);
+                $(this).closest("tr").find(".Quantity input").val(0).change();
+                $(this)
+                  .closest("tr")
+                  .find(".Quantity input")
+                  .attr("disabled", true);
+                $(this).closest("tr").find(".unit-price input").val(0).change();
+                $(this)
+                  .closest("tr")
+                  .find(".unit-price input")
+                  .attr("disabled", true);
+                $("#AddItem").click();
+                $(this).closest("tr").find(".col-2 textarea").focus();
+              } else {
+                // $(this).attr("disabled", false);
+              }
+            });
+          }
+          groupevent();
+          $("#AddItem").on("click", function () {
+            groupevent();
+          });
+          $(".col-2 textarea").on("change", function () {
+            hundlevals();
+          });
+          $(".col-3 textarea").on("change", function () {
+            hundlevals();
+          });
+        }
+      }
+      if ($("#InvoiceLayout").val() == 3) {
+        hundelScreenCode();
+      }
+      $("#InvoiceLayout").on("change", function () {
+        if ($("#InvoiceLayout").val() == 3) {
+          hundelScreenCode();
+        }
+      });
+    }, 1000);
+  });
+</script>

@@ -1,0 +1,24 @@
+<script>
+  $(document).ready(function () {
+    function checkPOS() {
+      console.log(window.top.location.href);
+      console.log(window.top.location.href.includes("pos"));
+      if (window.top.location.href.includes("pos")) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    if (checkPOS()) {
+      console.log("here");
+      $("#ProductBlock > div.row.flex-row > div:nth-child(5)").hide();
+      $(
+        "#ProductBlock > div.input-fieldsx > div > div:nth-child(3) > table > tbody > tr:nth-child(1)"
+      ).hide();
+      $(
+        "#ProductBlock > div.input-fieldsx > div > div:nth-child(2) > table > tbody > tr:nth-child(3)"
+      ).hide();
+    }
+  });
+</script>

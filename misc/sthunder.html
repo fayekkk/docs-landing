@@ -1,0 +1,462 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: "Open Sans", sans-serif;
+      font-size: 12px;
+    }
+    body {
+      direction: ltr;
+      background: #ffffff;
+      text-align: left;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0;
+      padding: 20px 0;
+    }
+    #head {
+      width: 100%;
+      border-spacing: 0;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: left;
+      direction: ltr;
+    }
+    #head td {
+      padding: 5px 0;
+    }
+    #head tr:nth-child(2) td:nth-child(1) {
+      width: 25%;
+    }
+    #head tr:nth-child(2) td:nth-child(2) {
+      width: 75%;
+    }
+    /* inv_data styles*/
+    #inv_data {
+      width: 100%;
+      border-spacing: 0;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid #eef1f5;
+      margin-bottom: 15px;
+    }
+    #inv_data tr:nth-child(1) td {
+      text-align: center;
+      text-decoration: underline;
+      font-size: 13px;
+    }
+    #inv_data tr:nth-child(1) td:nth-child(1) {
+      border-right: 1px solid #eef1f5;
+    }
+    #inv_data tr:nth-child(1) td:nth-child(2) {
+      border-right: none !important;
+    }
+    #inv_data td {
+      padding: 4px 3px;
+      text-align: left;
+    }
+    #inv_data td:nth-child(2) {
+      border-right: 1px solid #eef1f5;
+    }
+    #inv_data tr:nth-child(2) td:nth-child(1) {
+      width: 15%;
+    }
+    #inv_data tr:nth-child(2) td:nth-child(2) {
+      width: 35%;
+    }
+    #inv_data tr:nth-child(2) td:nth-child(3) {
+      width: 15%;
+    }
+    #inv_data tr:nth-child(2) td:nth-child(4) {
+      width: 35%;
+    }
+    #listing_table {
+      width: 100%;
+      border-spacing: 0;
+      border-bottom: 1px solid #93979e;
+      border-right: 1px solid #93979e;
+    }
+    #listing_table th {
+      font-weight: 700;
+      font-weight: 13px;
+      background-color: #dee2e6;
+      border-top: 1px solid #93979e;
+      border-left: 1px solid #93979e;
+      border-bottom: none !important;
+      border-right: none !important;
+      text-align: center;
+      padding: 4px 5px;
+    }
+    #listing_table th:nth-child(4) {
+      text-align: right;
+    }
+    #listing_table td {
+      padding: 4px 5px;
+
+      font-weight: 100;
+      font-weight: 12px;
+      border-top: 1px solid #93979e;
+      border-left: 1px solid #93979e;
+      border-bottom: none !important;
+      border-right: none !important;
+      width: auto;
+    }
+    #listing_table td:nth-child(1) {
+      text-align: center;
+      /* width: 3.8%; */
+    }
+    #listing_table td:nth-child(2) {
+      text-align: center;
+      /* width: 12%; */
+    }
+    #listing_table td:nth-child(3) {
+      text-align: left;
+      /* width: 23%; */
+    }
+    #listing_table td:nth-child(4) {
+      text-align: right;
+      /* width: 18.3%; */
+    }
+    #listing_table td:nth-child(5) {
+      text-align: right;
+      /* width: 22.2%; */
+    }
+    #listing_table td:nth-child(6) {
+      text-align: right;
+      /* width: 20.5%; */
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #items-list div {
+      display: none;
+    }
+    /* new_totals styles */
+    #new_totals {
+      width: 100%;
+      text-align: right;
+      font-size: 14px;
+      font-weight: 700;
+      border-spacing: 0;
+    }
+    #new_totals td {
+      padding: 4px 5px;
+    }
+    #new_totals td:nth-child(1) {
+      border-bottom: 1px solid #fff;
+      border-left: 1px solid #fff;
+      /* width: 3.3%; */
+    }
+    #new_totals td:nth-child(2) {
+      /* width: 12%; */
+      border-bottom: 1px solid #fff;
+      border-left: 1px solid #fff;
+    }
+    #new_totals td:nth-child(3) {
+      /* width: 23%; */
+      border-bottom: 1px solid #fff;
+      border-left: 1px solid #fff;
+    }
+    #new_totals td:nth-child(4) {
+      /* width: 18%; */
+      border-bottom: 1px solid #fff;
+      border-left: 1px solid #fff;
+    }
+    #new_totals td:nth-child(5) {
+      /* width: 22%; */
+      border-bottom: 1px solid #93979e;
+      border-left: 1px solid #93979e;
+      background-color: #dee2e6;
+    }
+    #new_totals td:nth-child(6) {
+      /* width: 20.5%; */
+      border-bottom: 1px solid #93979e;
+      border-left: 1px solid #93979e;
+      border-right: 1px solid #93979e;
+      background-color: #dee2e6;
+    }
+    #spell {
+      width: 100%;
+      text-align: left;
+      font-size: 9px;
+      font-weight: 700;
+      border-spacing: 0;
+      margin: 15px 0;
+    }
+    #spell td:nth-child(1) {
+      font-size: 11px;
+    }
+    #spell td:nth-child(1) {
+      width: 40%;
+      text-decoration: underline;
+    }
+    #spell td {
+      padding: 5px 0;
+    }
+    /* payment styles */
+    #payment {
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      border-spacing: 0;
+      border-top: 1px solid #93979e;
+      border-right: 1px solid #93979e;
+    }
+    #payment tr:nth-child(1) td {
+      font-weight: 700;
+      width: 25%;
+      background-color: #dee2e6;
+    }
+    #payment td {
+      height: 15px;
+      padding: 4px 2px;
+      border-bottom: 1px solid #93979e;
+      border-left: 1px solid #93979e;
+    }
+    #qr-code {
+      text-align: right;
+    }
+    #qr-code img {
+      width: 120px;
+    }
+    #address br {
+      display: none;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+
+      <div class="invoice-inner">
+        <table id="head">
+          <tr>
+            <td style="text-align: left">
+              <img
+                style="width: 150px; margin: 10px 0"
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+              />
+            </td>
+            <td id="qr-code">{%qr_code_image%}</td>
+          </tr>
+          <tr>
+            <td>FACTURE N°</td>
+            <td>: {%invoice_no%}</td>
+          </tr>
+          <tr>
+            <td>DATE</td>
+            <td>: {%invoice_date%}</td>
+          </tr>
+        </table>
+
+        <table id="inv_data">
+          <tr>
+            <td colspan="2">INFORMATION</td>
+            <td colspan="2">DESTINATAIRE</td>
+          </tr>
+          <tr>
+            <td rowspan="5" style="vertical-align: top">Émis par</td>
+            <td rowspan="5" style="vertical-align: top">
+              : {%staff_member_name%}
+            </td>
+            <td>Code Client</td>
+            <td>: {%client_number%}</td>
+          </tr>
+          <tr>
+            <td>Nom client</td>
+            <td>: {%client_business_name%}</td>
+          </tr>
+          <tr>
+            <td>Adresse</td>
+            <td id="address">: {%client_full_address%}</td>
+          </tr>
+          <tr>
+            <td>Tel</td>
+            <td>: {%client_mobile%}</td>
+          </tr>
+          <tr>
+            <td>ICE</td>
+            <td>: {%client_bn2%}</td>
+          </tr>
+        </table>
+
+        <div id="items-list">{%items_list%}</div>
+        <table id="new_totals">
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>TOTAL HT</td>
+            <td>{%invoice_subtotal%}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>TOTAL TVA</td>
+            <td>{%tax-total%}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>TOTAL TTC</td>
+            <td>{%invoice_total%}</td>
+          </tr>
+        </table>
+        <table id="spell">
+          <tr>
+            <td>Arrêté la présente facture à la somme de :</td>
+            <td>{%spell%}</td>
+          </tr>
+        </table>
+        <table id="payment">
+          <tr>
+            <td>MODE DE RÈGLEMENT</td>
+            <td>MONTANT</td>
+            <td>DATE</td>
+            <td>N° PIÈCE</td>
+          </tr>
+          <tr>
+            <td>{%payment_method%}</td>
+            <td>{%amount%}</td>
+            <td>{%date%}</td>
+            <td>{%invoice_payment_No%}</td>
+          </tr>
+        </table>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <br />
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+
+    <script>
+      function totTableAdj() {
+        var totTableLen = document.querySelector(".listing-table:nth-child(2)")
+          .rows.length;
+        var fstTotCell = document.querySelector(
+          ".listing-table:nth-child(2) tr:first-child td:first-child"
+        );
+        var fstCol = document.querySelectorAll(
+          ".listing-table:nth-child(2) tr td:nth-child(1)"
+        );
+        var qr = document.querySelector(".qr-code").innerHTML;
+
+        for (var i = 0; i < totTableLen - 1; i++) {
+          fstCol[i + 1].outerHTML = "";
+        }
+
+        fstTotCell.rowSpan = totTableLen;
+        fstTotCell.innerHTML = qr;
+        fstTotCell.style.cssText = "text-align:left;";
+      }
+      function select(selectors) {
+        var elements = document.querySelectorAll(selectors);
+        return elements;
+      }
+      function addStyles(elements, addedClass) {
+        for (var i = 0; i < elements.length; i++) {
+          elements[i].classList.add(addedClass);
+        }
+      }
+
+      try {
+        var selectedForBack = select(
+          " #listing_table th, .listing-table:nth-child(2) tr:nth-child(1) td:nth-child(n+2)"
+        );
+        var AllBorders = select("#listing_table th, #listing_table td");
+        var evenRows = select("#listing_table tr:nth-child(even) td");
+        var oddRows = select("#listing_table tr:nth-child(odd) td");
+
+        addStyles(selectedForBack, "dynamic_background");
+        addStyles(selectedForBack, "dynamic_header_color");
+        addStyles(evenRows, "dynamic_even");
+        addStyles(oddRows, "dynamic_odd");
+        addStyles(AllBorders, "dynamic_border_color");
+
+        totTableAdj();
+      } catch (err) {}
+      function removeCurr() {
+        var allTotals = document.querySelectorAll("#new_totals td:last-child");
+        for (var i = 0; i < allTotals.length; i++) {
+          allTotals[i].innerText = parseFloat(
+            allTotals[i].innerText.replace(/\,/g, "")
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      try {
+        removeCurr();
+      } catch (error) {
+        console.log(error);
+      }
+      function detectWidth() {
+
+        document.querySelector(
+          "#new_totals tr:nth-child(2) td:last-child"
+        ).style.width =
+          parseFloat(
+            document.querySelector(
+              "#listing_table tbody tr:nth-child(1)  td:last-child"
+            ).offsetWidth
+          ) -
+          11 +
+          "px";
+        document.querySelector(
+          "#new_totals tr:nth-child(2) td:nth-last-child(2)"
+        ).style.width =
+          parseFloat(
+            document.querySelector(
+              "#listing_table tbody tr:nth-child(1)  td:nth-last-child(2)"
+            ).offsetWidth
+          ) -
+          11 +
+          "px";
+      }
+      try {
+        detectWidth();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

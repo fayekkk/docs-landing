@@ -460,6 +460,57 @@
           }
         }
       }
+      async function updateCustomFields(invId, formDataObj) {
+        console.log(invId);
+        console.log(formDataObj.data.le_custom_data_purchase_order.si);
+        console.log(formDataObj.data.le_custom_data_purchase_order.pn);
+
+        await fetch(
+          `/v2/api/entity/le_custom_data_purchase_order/list/1?filter[reference_id]=${invId}`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => {
+            return response.json().then(async (responses) => {
+              console.log("Successssssss:", responses);
+              if (responses.data.length > 0) {
+                await fetch(
+                  `/v2/api/entity/le_custom_data_purchase_order/${responses.data[0].id}/fields`,
+                  {
+                    method: "POST",
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                     
+                    },
+                    body: JSON.stringify({
+                      si: formDataObj.data.le_custom_data_purchase_order.si,
+                      pn: formDataObj.data.le_custom_data_purchase_order.pn
+                    }),
+                  }
+                )
+                  .then((response) => {
+                    return response.json().then(async (responses) => {
+                      console.log("Successssssss:", responses);
+                    });
+                  })
+                  .catch((error) => {
+                    console.error("Fetch error:", error);
+                    alert("An unexpected error occurred. Please try again.");
+                  });
+              }
+            });
+          })
+          .catch((error) => {
+            console.error("Fetch error:", error);
+            alert("An unexpected error occurred. Please try again.");
+          });
+      }
       console.log({ workOrderId: workOrderId });
       if (workOrderId) {
         document.getElementById("PurchaseOrderForm").onsubmit = async function (
@@ -522,6 +573,7 @@
               }
               return response.json().then(async (res) => {
                 console.log("Success:", res);
+                await updateCustomFields(res.id, formDataObj);
                 let JBody = {
                   account_type: "1",
                   entity_type: "purchases",
@@ -556,8 +608,9 @@
                     }
                     return response.json().then(async (responses) => {
                       console.log("Success:", responses);
+
                       await updateProjectData2(res.id);
-                        window.location.href = `/owner/purchase_invoices/view/${res.id}`;
+                      //   window.location.href = `/owner/purchase_invoices/view/${res.id}`;
                     });
                   })
                   .catch((error) => {

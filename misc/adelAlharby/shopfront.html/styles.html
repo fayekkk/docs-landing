@@ -1,0 +1,239 @@
+<style>
+  /* General Styles */
+  .mainform body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+  .mainform {
+    width: 60%;
+    margin: 60px 20%;
+    padding: 10px;
+  }
+  .mainform section {
+    margin-bottom: 70px;
+  }
+
+  .mainform h2 {
+    margin-top: 0;
+    width: 100%;
+    font-size: 22px;
+    text-align: center;
+    padding: 13px 0px;
+    background-color: #e5e5e5;
+  }
+
+  /* Flight Section Styles */
+  .mainform .flight-section,
+  .mainform .Nusuk-section,
+  .mainform .hotel-section,
+  .mainform .transportation-section,
+  .mainform .general-info-section,
+  .mainform .trip-details-section {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e5e5e5;
+    padding: 9px;
+    position: relative;
+  }
+
+  .mainform .flight-section > div,
+  .mainform .Nusuk-section > div,
+  .mainform .hotel-section > div,
+  .mainform .transportation-section > div,
+  .mainform .general-info-section > div,
+  .mainform .trip-details-section > div {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .mainform .flight-section label,
+  .mainform .Nusuk-sectionlabel,
+  .mainform .hotel-section label,
+  .mainform .transportation-section label,
+  .mainform .general-info-section label,
+  .mainform .trip-details-section label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .mainform .flight-section input,
+  .mainform .Nusuk-section input,
+  .mainform .hotel-section input,
+  .mainform .transportation-section input,
+  .mainform .general-info-section input,
+  .mainform .trip-details-section input,
+  .mainform select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .mainform .add-flight-section,
+  .mainform .add-Nusuk-section,
+  .mainform .add-hotel-section,
+  .mainform .add-transportation-section {
+    display: block;
+    margin-top: -20px;
+    padding: 8px 16px;
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 25px;
+  }
+
+  .mainform .add-flight-section:hover,
+  .mainform .add-Nusuk-section:hover,
+  .mainform .add-hotel-section:hover,
+  .mainform .add-transportation-section:hover {
+    background-color: #0056b3;
+  }
+  /* General Info Section Styles */
+  .mainform .general-info-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .mainform .general-info-section label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .mainform .general-info-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  /* Trip Details Section Styles */
+  .mainform .trip-details-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .mainform .trip-details-section label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .mainform .trip-details-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  .deleteThis {
+    position: absolute;
+    left: -4px;
+    top: 2px;
+    width: 31px;
+    height: 20px;
+    color: #ff7b7b;
+    cursor: pointer;
+  }
+  /* Styles for the h1 element */
+  #showAllTrips h1 {
+    font-family: Arial, sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  /* Styles for the table */
+  #showAllTrips #trip-table {
+    width: 75%;
+    margin: auto;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  /* Styles for the table header */
+  #showAllTrips #trip-table thead {
+    background-color: #f2f2f2;
+  }
+
+  #showAllTrips #trip-table th {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+  }
+
+  /* Styles for the table body */
+  #showAllTrips #trip-table tbody tr {
+    border-bottom: 1px solid #ddd;
+  }
+
+  #showAllTrips #trip-table tbody td {
+    padding: 10px;
+    text-align: center;
+  }
+
+  /* Styles for the table body on hover */
+  #showAllTrips #trip-table tbody tr:hover {
+    background-color: #f2f2f2;
+  }
+
+  #mainNav ul:nth-child(1) li:nth-child(1),
+  #mainNav ul:nth-child(1) li:nth-child(2) {
+    display: none;
+  }
+  #site-header
+    > div.container
+    > div
+    > div.col-lg-8.col.order-2.order-lg-5.pl-0.pl-lg-3
+    > div
+    > div {
+    display: none !important;
+  }
+  #site-header
+    > div.container
+    > div
+    > div.col-lg-8.col.order-2.order-lg-5.pl-0.pl-lg-3
+    > div
+    > button.cart-toggle-btn.btn-focus-shadow-0.btn.mr-2.mr-lg-0.p-0.py-lg-1.px-lg-2.py-xl-3.px-xl-5.fs-14.fs-xl-16.text-dark.text-hover-primary {
+    display: none !important;
+  }
+  #sendtrip {
+    background-color: #4caf50; /* Green */
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+
+  #sendtrip:hover {
+    background-color: #45a049; /* Darker green on hover */
+  }
+
+  #flyETA1 {
+    width: 100px;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+</style> 

@@ -1,0 +1,163 @@
+<style>
+  span.percent-icon {
+    display: inline-block;
+    user-select: none;
+    color: #555555;
+    font-size: 20px;
+    margin-left: 10px;
+    background: #fff;
+    width: 25px;
+    padding: 0 5px;
+    text-align: center;
+    box-shadow: 0 0 3px 1px #ddd;
+    cursor: pointer;
+    transition: 0.2 ease-in-out;
+  }
+
+  span.percent-icon:hover {
+    background: #e9e9e9;
+  }
+  span.percent-icon:focus,
+  span.percent-icon:active {
+    box-shadow: 0 0 1px 1px #ddd;
+    background: #fff;
+  }
+
+  .percent-input {
+    background: #ffffde !important;
+    width: 50px;
+  }
+  .select_project label {
+    font-size: 18px;
+  }
+
+  .select_project {
+    padding: 15px;
+    margin-top: 7px;
+    background: #f6f9fc;
+    border: 1px solid #00b0ef;
+    position: relative;
+    zoom: 1;
+    overflow: hidden;
+    display: none;
+  }
+  #acc1,
+  #acc2,
+  #acc3,
+  #acc5,
+  #acc430 {
+    width: 250px;
+  }
+  div.project-info {
+    display: none;
+  }
+  table.project-info td {
+    padding: 3px;
+  }
+
+  table.project-info td.info-title {
+    font-weight: 700 !important;
+    width: 33%;
+  }
+  table.project-info {
+    width: 100%;
+  }
+
+  .readonly-field {
+    background-color: #eae8e8;
+  }
+
+  .form-group.project-info {
+    margin-top: 15px;
+  }
+
+  label[for="view_items"] {
+    font-size: 14px;
+    display: inline-block;
+    margin-bottom: 0;
+    padding: 0;
+  }
+
+  .form-group.view-items {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  input#view_items {
+    transform: scale(1.3);
+    margin: 0 10px;
+    cursor: pointer;
+  }
+
+  label[for="view_items"] {
+    cursor: pointer;
+  }
+</style>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"></script>
+
+<script>
+  let allInvoiceSubTotal = 0;
+  let allPaymentInvoices = 0;
+  // 370  371  372  353
+  function addPercentValues() {
+    let percent370Field = `<input  type="number"   class="percent-input" placeholder="0" id="account370_percent"><span class="percent-icon icon">%</span>`;
+    $("#invoice_accounts370Value").before(percent370Field);
+
+    let percent371Field = `<input  type="number"   class="percent-input" placeholder="0" id="account371_percent"><span class="percent-icon icon">%</span>`;
+    $("#invoice_accounts371Value").before(percent371Field);
+
+    let percent353Field = `<input  type="number"   class="percent-input" placeholder="0" id="account353_percent"><span class="percent-icon icon">%</span>`;
+    // $("#invoice_accounts2Value").before(percent353Field);
+  }
+
+  function percentOnChange() {
+    $("#account370_percent").on("input change", function () {
+      let currentSubTotal = parseFloat(
+        $("#SubtotalValue").text().replace(/,/g, "")
+      );
+      $("#invoice_accounts370Value").val(
+        ((currentSubTotal * $(this).val()) / 100) * -1
+      );
+      $("#invoice_accounts370Value").trigger("change");
+      if ($(this).val() > 100) {
+        alert("لا يمكن تعيين نسبة بأعلى من 100%");
+        $(this).val(100).change();
+      }
+    });
+
+    $("#account371_percent").on("input change", function () {
+      let currentSubTotal = parseFloat(
+        $("#SubtotalValue").text().replace(/,/g, "")
+      );
+      $("#invoice_accounts371Value").val(
+        ((currentSubTotal * $(this).val()) / 100) * -1
+      );
+      $("#invoice_accounts353Value").val(
+        ((currentSubTotal * $(this).val()) / 100) * 0.15 * -1
+      );
+      $("#invoice_accounts371Value").trigger("change");
+      $("#invoice_accounts353Value").trigger("change");
+
+      if ($(this).val() > 100) {
+        alert("لا يمكن تعيين نسبة بأعلى من 100%");
+        $(this).val(100).change();
+      }
+    });
+  }
+
+  $(document).ready(() => {
+    document.getElementById("label_item_discount").innerText =
+      "خصومات وغرامات ";
+    document.querySelectorAll(".discount-tab-input-label")[0].innerText =
+      "Non-Performance Deduction	";
+    addPercentValues();
+
+    percentOnChange();
+  });
+</script>

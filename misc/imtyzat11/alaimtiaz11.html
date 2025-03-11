@@ -1,0 +1,136 @@
+<style>
+  #send_btn {
+    width: 180px;
+    height: 35px;
+    margin-left: 14px;
+    background-color: #dbe7f3;
+    border: none;
+    border-radius: 4px;
+  }
+</style>
+
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      document.querySelector(
+        ".top-actions"
+      ).innerHTML += `<div id="send_btn11" style='float:left'>
+          <button id="send_btn"> إرسال الفواتير </button>
+      </div>`;
+      $("#send_btn").on("click", async function () {
+        $("#send_btn").attr("disabled", true);
+        $("#send_btn").text("جارى الإرسال");
+
+        console.log("clicked");
+        let branch_id = USER.branch_id;
+        const res = await $.get(
+          `/api2/invoices?limit=200&filter[follow_up_status][is_null]=1&filter[branch_id]=${branch_id}`
+        );
+        console.log(res);
+        let invoices = res.data;
+        if (invoices.length > 0) {
+          console.log("starting");
+          const requests = [];
+          console.log(invoices);
+          for (let i = 0; i < invoices.length; i++) {
+            // console.log(invoices[i].Invoice);
+            if (invoices[i].Invoice.follow_up_status != 24) {
+              let invoiceId = invoices[i].Invoice.id;
+              console.log(invoiceId);
+              const response = await $.get(
+                `/v2/api/entity/work_order/list/1?filter[title]=${invoiceId}`
+              );
+              console.log(response);
+              if (response.data.length == 0) {
+                const today = new Date().toISOString().slice(0, 10);
+                const sendReq = async () => {
+                  let SendBody = {
+                    WorkOrder: {
+                      client_id: invoices[i].Invoice.client_id,
+                      number: "sending",
+                      title: invoiceId,
+                      start_date: today,
+                      description: invoices[i].Invoice.invoice_pdf_url,
+                      delivery_date: today,
+                      delivery_appointment_id: 0,
+                      follow_up_status_id: null,
+                      budget: 0,
+                      budget_currency: "SAR",
+                      status: "1=>Open",
+                      staff_id: [1],
+                    },
+                  };
+                  // order7007@gmail.com
+                  requests.push(
+                    fetch(`/api2/work_orders`, {
+                      method: "POST",
+                      headers: {
+                        apikey: "4170d7b084d160d3a1372ee2735581041c0d0fd8",
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify(SendBody),
+                    })
+                      .then((response) => response.json())
+                      .then(async (data) => {
+                        console.log(data);
+                        let req = [];
+                        req.push(
+                          fetch(`/v2/api/entity/invoice/${invoiceId}/fields`, {
+                            method: "POST",
+                            headers: {
+                              apikey:
+                                "4170d7b084d160d3a1372ee2735581041c0d0fd8",
+                              Accept: "application/json",
+                              "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                              follow_up_status: "24",
+                            }),
+                          })
+                            .then((response) => response.json())
+                            .then((data) => {
+                              console.log(data);
+                            })
+                            .catch((error) => {
+                              console.error(error);
+                            })
+                        );
+                        await Promise.all(req);
+                      })
+                      .catch((error) => {
+                        console.error(error);
+                      })
+                  );
+                };
+                await sendReq();
+              } else {
+                await fetch(`/v2/api/entity/invoice/${invoiceId}/fields`, {
+                  method: "POST",
+                  headers: {
+                    apikey: "4170d7b084d160d3a1372ee2735581041c0d0fd8",
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    follow_up_status: "24",
+                  }),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    console.log(data);
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              }
+            }
+          }
+          await Promise.all(requests);
+          $("#send_btn").attr("disabled", false);
+          $("#send_btn").text("تم الإنتهاء");
+        }
+      });
+    }, 250);
+  });
+</script>

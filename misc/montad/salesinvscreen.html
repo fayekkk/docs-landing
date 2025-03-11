@@ -1,0 +1,53 @@
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      function screenCode() {
+        var allInvoiceCustomFields = document.querySelectorAll(
+          "#InvoiceCustomFields .field-row"
+        );
+        let invDate = $("#InvoiceDate").val();
+        const gregorianDate = new Date(Date.parse(invDate));
+        
+        // Subtract one day from the Gregorian date
+        const previousGregorianDate = new Date(gregorianDate.getTime());
+        // Create an instance of Intl.DateTimeFormat with the appropriate options
+        const formatter = new Intl.DateTimeFormat("ar-EG-u-ca-islamic", {
+          timeZone: "Africa/Cairo",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+        // Format the previous Gregorian date to Hijri
+        const hijriDate = formatter.format(previousGregorianDate);
+        console.log(hijriDate);
+        let flag = 0;
+        for (let i = 0; i < allInvoiceCustomFields.length; i++) {
+          if (
+            allInvoiceCustomFields[i].cells[0].querySelector("input").value ==
+            "التاريخ الهجرى"
+          ) {
+            flag = 1;
+
+            allInvoiceCustomFields[i].cells[1].querySelector("input").value =
+              hijriDate;
+          }
+        }
+        if (flag == 0) {
+          $(".MoreFieldsListDropDown").click();
+          document.querySelector(
+            "#InvoiceCustomFields .field-row:last-child td:nth-child(1) input"
+          ).value = "التاريخ الهجرى";
+          document.querySelector(
+            "#InvoiceCustomFields .field-row:last-child td:nth-child(2) input"
+          ).value = hijriDate;
+        }
+      }
+      screenCode();
+      $(document).on("change", "#InvoiceLayout", function () {
+        setTimeout(() => {
+          screenCode();
+        }, 250);
+      });
+    }, 500);
+  });
+</script>

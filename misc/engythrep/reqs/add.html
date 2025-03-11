@@ -1,0 +1,414 @@
+<style>
+  .late_input {
+    overflow: hidden;
+    width: 113px;
+  }
+  .late1_input {
+    overflow: hidden;
+    width: 113px;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    async function updateProjectItem(
+      workOrderId,
+      invoiceNo,
+      itemvalues,
+      subval,
+      records,
+      itemName
+    ) {
+      let prevCostVal = isNaN(parseFloat(itemvalues.requisitions_spend))
+        ? 0
+        : parseFloat(itemvalues.requisitions_spend);
+      let ttlval = prevCostVal + subval;
+
+      const existingRecord = records.find(
+        (record) => record.recId == itemvalues.rec_id
+      );
+
+      if (existingRecord) {
+        ttlval = existingRecord.requisitions_spend;
+      }
+
+      try {
+        const response = await fetch(
+          `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${itemvalues.rec_id}/fields`,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ requisitions_spend: ttlval }),
+          }
+        );
+
+        if (!response.ok) {
+          const errorRes = await response.json();
+          throw new Error(
+            `Error ${response.status}: ${
+              errorRes.message || "An error occurred."
+            }`
+          );
+        }
+        const res = await response.json();
+        await postHistory(
+          invoiceNo,
+          itemvalues.rec_id,
+          itemName,
+          subval,
+          workOrderId
+        );
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+
+    async function postHistory(
+      invoiceNo,
+      itemId,
+      itemName,
+      ttlval,
+      workOrderId
+    ) {
+      const postBody = {
+        operations_type: "فاتورة مشتريات",
+        ref_type: "PurchInv",
+        op_date: new Date().toISOString().slice(0, 19).replace("T", " "),
+        operation_no: invoiceNo,
+        item_id: itemId,
+        project_item: itemName,
+        single_line_field: ttlval,
+        reference_id: workOrderId,
+      };
+      console.log({ postBody: postBody });
+
+      try {
+        const response = await fetch(`/v2/api/entity/le_OperationsLog`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(postBody),
+        });
+
+        if (!response.ok) {
+          const errorRes = await response.json();
+          throw new Error(
+            `Error ${response.status}: ${
+              errorRes.message || "An error occurred."
+            }`
+          );
+        }
+
+        await response.json(); // Handle response as needed
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+    async function updateProjectData2(invNo) {
+      //   async function updateProjectData2() {
+      const url = window.location.href;
+      const urlObj = new URL(url);
+      const workOrderId = urlObj.searchParams.get("work_order_id");
+      const invoiceNo = invNo;
+      console.log({ workOrderId: workOrderId, invoiceNo: invoiceNo });
+      let records = [];
+      const itemSelects = $(".itemSelect").toArray();
+      for (const itemSelect of itemSelects) {
+        const recId = $(itemSelect).val();
+        // if (window.location.href.indexOf("/requisitions/add/2") != -1) {
+        //       totalActualCost += actualSpendCost + totalSubCost;
+        //     } else if (
+        //       window.location.href.indexOf("/requisitions/add/1") != -1
+        //     ) {
+        //       totalActualCost += actualaddCost + totalSubCost;
+        //     }
+        if (
+          recId !== "إختر الخدمة" &&
+          window.location.href.indexOf("/requisitions/add/2") != -1
+        ) {
+          const selectedOption = $(itemSelect).find("option:selected");
+          const itemvalues = selectedOption[0].dataset;
+          const price = $(itemSelect)
+            .closest("tr")
+            .find(".unit-price input")
+            .val();
+          const qty = $(itemSelect).closest("tr").find(".Quantity input").val();
+          const priceVal = parseFloat(price) || 0;
+          const qtyVal = parseFloat(qty) || 0;
+          const subval = priceVal * qtyVal;
+
+          const existingRecordIndex = records.findIndex(
+            (record) => record.recId == itemvalues.rec_id
+          );
+          if (existingRecordIndex !== -1) {
+            records[existingRecordIndex].requisitions_spend += subval;
+          } else {
+            records.push({
+              recId: itemvalues.rec_id,
+              requisitions_spend:
+                (parseFloat(itemvalues.requisitions_spend) || 0) + subval,
+            });
+          }
+          await updateProjectItem(
+            workOrderId,
+            invoiceNo,
+            itemvalues,
+            subval,
+            records,
+            selectedOption[0].textContent
+          );
+        }
+      }
+    }
+    if (
+      window.location.href.indexOf("/requisitions/add") != -1 ||
+      window.location.href.indexOf("/requisitions/edit") != -1
+    ) {
+      $(".item-unit-price").attr("readonly", false);
+      const searchableSelector = () => {
+        let branshId = USER.branch_id;
+        const selector = document.createElement("select");
+        selector.style.width = "100%";
+        selector.setAttribute("class", "itemSelect");
+        const option = document.createElement("option");
+        option.textContent = "إختر الخدمة";
+        option.style.textAlign = "center";
+        selector.appendChild(option);
+        let url = window.location.href;
+        let urlObj = new URL(url);
+        let workOrderId = urlObj.searchParams.get("work_order_id");
+        // console.log(workOrderId);
+        $.get(`/v2/api/entity/le_workflow-type-entity-2/${workOrderId}/4`).then(
+          (response) => {
+            console.log({ response: response });
+
+            let options =
+              response["le_workflow-type-entity-2_custom_data"][
+                "le_custom_data_le_workflow-type-entity-2_le_custom_data_le_workflow-type-entity-2_project_items"
+              ];
+            console.log({ options: options });
+            options.forEach((optionText) => {
+              const option = document.createElement("option");
+              option.textContent = optionText.item_name;
+              option.dataset["purch_estimated_cost"] =
+                optionText.purch_estimated_cost;
+              option.dataset["expenses_estimated_cost"] =
+                optionText.expenses_estimated_cost;
+              option.dataset["rec_id"] = optionText.id;
+              option.dataset["requisitions_spend"] =
+                optionText.requisitions_spend;
+              option.dataset["expenses_actual_cost"] =
+                optionText.expenses_actual_cost;
+              option.dataset["requisitions_add"] = optionText.requisitions_add;
+              option.dataset["requisitions_spend"] =
+                optionText.requisitions_spend;
+              option.style.textAlign = "center";
+              selector.appendChild(option);
+            });
+          }
+        );
+
+        var allrows = document.querySelectorAll("#listing_table .itemRow ");
+        // console.log(allrows.length);
+        for (let i = 0; i < allrows.length; i++) {
+          if (!allrows[i].querySelector(".late_td select")) {
+            allrows[i].querySelector(".late_td").innerHTML = "";
+            allrows[i].querySelector(".late_td").appendChild(selector);
+          }
+        }
+        $(document).on(
+          "change",
+          ".item-unit-price, .item-qty, .itemSelect",
+          function () {
+            let closestTr = $(this).closest("tr");
+            let selectedValue = closestTr.find(".itemSelect").val();
+            let totalSubCost = 0;
+            let totalActualCost = 0;
+            // let requisitions_add =
+            //   parseFloat(
+            //     closestTr
+            //       .find(".itemSelect option:selected")
+            //       .data("requisitions_add")
+            //   ) || 0;
+
+            $(".itemRow").each(function () {
+              let row = $(this);
+              let rowSelectedValue = row.find(".itemSelect").val();
+              if (rowSelectedValue === selectedValue) {
+                let price = parseFloat(row.find(".item-unit-price").val()) || 0;
+                let qty = parseFloat(row.find(".item-qty").val()) || 0;
+                totalSubCost += price * qty;
+              }
+            });
+            let actualSpendCost =
+              parseFloat(
+                closestTr
+                  .find(".itemSelect option:selected")
+                  .data("requisitions_spend")
+              ) || 0;
+            let actualaddCost =
+              parseFloat(
+                closestTr
+                  .find(".itemSelect option:selected")
+                  .data("requisitions_add")
+              ) || 0;
+            //   add 1 spend 2
+            if (window.location.href.indexOf("/requisitions/add/2") != -1) {
+              totalActualCost += actualSpendCost + totalSubCost;
+            } else if (
+              window.location.href.indexOf("/requisitions/add/1") != -1
+            ) {
+              totalActualCost += actualaddCost + totalSubCost;
+            }
+            // console.log({ selectedValue, totalSubCost, totalActualCost });
+            // if (totalActualCost > estimatedCost) {
+            //   alert(
+            //     `إجمالى التكلفة أعلى من التكلفة التقديرية لهذا البند (${selectedValue})`
+            //   );
+            // }
+            console.log(`Total Actual Cost for : ${totalActualCost}`);
+          }
+        );
+      };
+
+      function createCol(prevTh, prevTd, colTitle, classTh, classTd, colInput) {
+        console.log("run");
+        console.log($(`#listing_table th.${classTh}`).length);
+
+        if ($(`#listing_table th.${classTh}`).length == 0) {
+          $(prevTh).before(`<th class='${classTh}'>${colTitle}</th>`);
+        }
+
+        // Append new TD with textarea to each row
+        $(`#listing_table tr`).each(function () {
+          if (!$(this).find(`td.${classTd}`).length) {
+            $(this)
+              .find(prevTd)
+              .before(
+                `<td class='${classTd}'><textarea class='${colInput} editable-input'></textarea></td>`
+              );
+          }
+        });
+        searchableSelector();
+      }
+      let url = window.location.href;
+      let urlObj = new URL(url);
+      let workOrderId = urlObj.searchParams.get("work_order_id");
+      console.log({ workOrderId: workOrderId });
+      if (workOrderId) {
+        createCol(
+          "#label_unit_price",
+          ".unit-price",
+          "إختار الخدمة  ",
+          "late_th",
+          "late_td",
+          "late_input"
+        );
+        $(".items-totals").find("td").eq(0).attr("colspan", "6");
+      }
+      //   createCol(
+      //     "#label_unit_price",
+      //     ".unit-price",
+      //     "الوحدة  ",
+      //     "late1_th",
+      //     "late1_td",
+      //     "late1_input"
+      //   );
+
+      $(document).on("click", "#AddItem", function (e) {
+        let url = window.location.href;
+        let urlObj = new URL(url);
+        let workOrderId = urlObj.searchParams.get("work_order_id");
+        console.log({ workOrderId: workOrderId });
+        if (workOrderId) {
+          setTimeout(() => {
+            $(".item-unit-price").attr("readonly", false);
+            createCol(
+              "#label_unit_price",
+              ".unit-price",
+              "تاريخ لإنتاج ",
+              "late_th",
+              "late_td",
+              "late_input"
+            );
+          }, 250);
+        }
+      });
+
+      if (workOrderId) {
+        document.getElementById("InvoiceForm").onsubmit = async function (e) {
+          e.preventDefault();
+
+          const formData = new FormData(e.target);
+          const formDataObj = {};
+          let isValid = true;
+          let errorMessage = "";
+          formData.forEach((value, key) => {
+            const keys = key.match(/[^\[\]]+/g);
+            let tempObj = formDataObj;
+            const inputElement = e.target.querySelector(`[name="${key}"]`);
+            if (
+              inputElement &&
+              inputElement.hasAttribute("required") &&
+              !value
+            ) {
+              isValid = false;
+              errorMessage += `${
+                inputElement.placeholder || key
+              } is required.\n`;
+            }
+            keys.forEach((k, i) => {
+              if (i === keys.length - 1) {
+                tempObj[k] = value;
+              } else {
+                if (!tempObj[k]) {
+                  tempObj[k] = {};
+                }
+                tempObj = tempObj[k];
+              }
+            });
+          });
+          if (!isValid) {
+            alert(errorMessage);
+            return;
+          }
+          console.log({ formDataObj: formDataObj });
+
+          await fetch(`/api2/purchase_invoices`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formDataObj.data),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                return response.json().then((errorRes) => {
+                  console.error("Error:", errorRes);
+                  alert(
+                    `Error ${response.status}: ${
+                      errorRes.message || "An error occurred."
+                    }`
+                  );
+                });
+              }
+              return response.json().then(async (res) => {
+                console.log("Success:", res);
+                await updateProjectData2(res.id);
+                window.location.href = `/owner/purchase_invoices/view/${res.id}`;
+              });
+            })
+            .catch((error) => {
+              console.error("Fetch error:", error);
+              alert("An unexpected error occurred. Please try again.");
+            });
+        };
+      }
+    }
+  });
+</script>

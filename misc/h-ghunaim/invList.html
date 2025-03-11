@@ -1,0 +1,317 @@
+<style>
+  .custom_hiden3 {
+    display: none;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(init, 200);
+
+    async function init() {
+      addInvoiceButton();
+      const staffs = await fetchstaffsData();
+      console.log({ staffs: staffs });
+      let currentstaff = USER.staff_id;
+      console.log({ currentstaff: currentstaff });
+
+      if (staffs.stafff.includes(parseInt(currentstaff)) || currentstaff == 0) {
+        $("#sendInv").removeClass("custom_hiden3");
+      }
+
+      setupInvoiceButtonClickHandler();
+    }
+
+    async function fetchstaffsData(invId) {
+      return fetchData(`/v2/api/entity/le_invoicepers/3/1`);
+    }
+    function addInvoiceButton() {
+      const newAction = `
+          <a class="btn btn-default btn-sm quick-action-btn custom_hiden3" id="sendInv" href="#">
+            إرسال الفواتير
+          </a>`;
+      $(".top-actions a:first").after(newAction);
+    }
+
+    function setupInvoiceButtonClickHandler() {
+      $("#sendInv").on("click", handleSendInvoiceClick);
+    }
+
+    function handleSendInvoiceClick() {
+      $("#sendInv").attr("disabled", true);
+      $("#sendInv").text(" جارى التحقق");
+      const invoiceIds = getSelectedInvoiceIds();
+      console.log(invoiceIds);
+
+      if (invoiceIds.length === 0) {
+        alert("يرجى إختيار فواتير");
+        $("#sendInv").attr("disabled", false);
+        $("#sendInv").text("إرسال الفواتير");
+
+        return;
+      }
+
+      // Create an array of promises for each invoice validation and creation
+      const invoicePromises = invoiceIds.map(validateInv);
+
+      // Wait for all invoices to be processed
+      Promise.all(invoicePromises)
+        .then(() => {
+          alert("تم إضافة جميع الفواتير بنجاح");
+          $("#sendInv").attr("disabled", false);
+          $("#sendInv").text("إرسال الفواتير");
+        })
+        .catch((error) => {
+          console.error("Error processing invoices:", error);
+        });
+    }
+
+    function getSelectedInvoiceIds() {
+      const ids = [];
+      $(".highlighted").each(function () {
+        ids.push($(this).find(".check-item").val());
+      });
+      return ids;
+    }
+
+    async function fetchInvData(invId) {
+      return fetchData(`/api2/invoices/${invId}`);
+    }
+
+    async function validateClient(clientCode) {
+      return fetchData(
+        `https://csppower.daftara.com/v2/api/entity/client/list/1?filter[client_number]=${clientCode}&&filter[branch_id][in][]=1`,
+
+        {
+          apikey: "1db7398925ab0eb21116a9e664b125be603b4328",
+        }
+      );
+    }
+    async function validateStaff(staffId) {
+      try {
+        const staffResponse = await fetchData(
+          `/v2/api/entity/staff/${staffId}`,
+          {}
+        );
+        if (
+          !staffResponse ||
+          !staffResponse.staff_custom_data ||
+          !staffResponse.staff_custom_data.refno
+        ) {
+          throw new Error("Staff refno not found");
+        }
+        const refno = staffResponse.staff_custom_data.refno;
+        const staffListResponse = await fetchData(
+          `https://csppower.daftara.com/v2/api/entity/staff/list/1?filter[staff_custom_data.refno]=${refno}&&filter[branch_id][in][]=1`,
+          {
+            apikey: "1db7398925ab0eb21116a9e664b125be603b4328",
+          }
+        );
+        return staffListResponse;
+      } catch (error) {
+        console.error("Error validating staff:", error);
+        throw error;
+      }
+    }
+
+    async function validateProducts(productCode) {
+      return fetchData(
+        `https://csppower.daftara.com/v2/api/entity/product/list/1?filter[product_code]=${productCode}&&filter[branch_id][in][]=1`,
+        {
+          apikey: "1db7398925ab0eb21116a9e664b125be603b4328",
+        }
+      );
+    }
+
+    async function fetchData(url, additionalHeaders = {}) {
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            ...additionalHeaders,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+      } catch (error) {
+        console.error("Error:", error);
+        return null;
+      }
+    }
+
+    async function validateInv(invId) {
+      const invData22 = await fetchInvData(invId);
+      const invData = invData22.data.Invoice;
+      console.log(invData);
+
+      if (!invData) return;
+      if (invData.follow_up_status == 4) {
+        alert(" يوجد فاتورة تم إرسالها مسبقاً   ");
+        $("#sendInv").text(" تم إرسال فاتورة مسبقاً ");
+        $("#sendInv").attr("disabled", false);
+        $("#sendInv").text("إرسال الفواتير");
+
+        return;
+      }
+      const clientCode = invData.Client.client_number;
+      const clients = await validateClient(clientCode);
+
+      if (!clients || clients.data.length === 0) {
+        return alert("العميل غير موجود");
+      }
+
+      const clientId = clients.data[0].id;
+      const itemsArr = await validateInvoiceItems(invData.InvoiceItem);
+
+      if (itemsArr.length === 0) return;
+      console.log({ clientId: clientId });
+
+      const body = await createInvoiceBody(invData, clientId, itemsArr);
+      console.log({ body: body });
+
+      await createInvoice(body, invId);
+    }
+
+    async function validateInvoiceItems(invItems) {
+      const itemsArr = [];
+      function hundlestores(storeId) {
+        if (storeId == "2") {
+          return "5";
+        } else if (storeId == "3") {
+          return "5";
+        } else if (storeId == "1") {
+          return "1";
+        } else {
+          return "";
+        }
+      }
+      for (const item of invItems) {
+        const product = await validateProducts(item.item);
+
+        if (!product || product.data.length === 0) {
+          alert("المنتج غير موجود");
+          $("#sendInv").attr("disabled", false);
+          $("#sendInv").text("إرسال الفواتير");
+          return [];
+        }
+
+        itemsArr.push({
+          product_id: product.data[0].id,
+          item: item.item,
+          description: item.description,
+          unit_price: item.unit_price,
+          quantity: item.quantity,
+          col_3: "",
+          col_4: "",
+          col_5: "",
+          tax1: item.tax1,
+          tax2: 0,
+          store_id: hundlestores(item.store_id),
+        });
+      }
+
+      return itemsArr;
+    }
+
+    async function createInvoiceBody(invData, clientId, itemsArr) {
+      let staffId = await validateStaff(invData.staff_id);
+      if (!staffId || staffId.data.length === 0) {
+        staffId = 0;
+      } else {
+        staffId = staffId.data[0].id;
+      }
+      return {
+        Invoice: {
+          subscription_id: "",
+          po_number: 26,
+          client_id: clientId,
+          client_email: "",
+          client_country_code: "SAR",
+          draft: "0",
+          follow_up_status: "4",
+          staff_id: staffId,
+          name: "",
+          is_offline: true,
+          currency_code: "SAR",
+          date: invData.date,
+          discount: invData.discount,
+          discount_amount: invData.discount_amount,
+          deposit: 0,
+          deposit_type: 0,
+          notes: "",
+          html_notes: "",
+          invoice_layout_id: 10,
+          estimate_id: 0,
+          shipping_options: "",
+          shipping_amount: null,
+          requisition_delivery_status: null,
+          pos_shift_id: null,
+          branch_id: 1,
+          shipping_options: invData.shipping_options,
+          shipping_amount: invData.shipping_amount,
+          shipping_option_id: invData.shipping_option_id,
+          shipping_tax_id: invData.shipping_tax_id,
+          // payment_status: invData.payment_status,
+          requisition_delivery_status: invData.requisition_delivery_status,
+        },
+        InvoiceItem: itemsArr,
+        InvoiceCustomField: [],
+        // Payment: invData.InvoicePayment.map((payment) => ({
+        //   payment_method: payment.payment_method,
+        //   amount: parseFloat(payment.amount),
+        //   transaction_id: payment.transaction_id || "N/A",
+        //   treasury_id: parseInt(payment.treasury_id),
+        //   date: payment.date,
+        //   staff_id: parseInt(payment.staff_id),
+        // })),
+      };
+    }
+
+    async function createInvoice(body, invId) {
+      try {
+        const response = await fetch(
+          `https://csppower.daftara.com/api2/invoices`,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              apikey: "1db7398925ab0eb21116a9e664b125be603b4328",
+            },
+            body: JSON.stringify(body),
+          }
+        );
+
+        const responseData = await response.json();
+        console.log("Invoice Created:", responseData);
+
+        await updateFollowUpStatus(invId);
+      } catch (error) {
+        console.error("Error creating invoice:", error);
+      }
+    }
+
+    async function updateFollowUpStatus(invId) {
+      try {
+        const response = await fetch(`/v2/api/entity/invoice/${invId}/fields`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ follow_up_status: 4 }),
+        });
+
+        const responseData = await response.json();
+        console.log("Follow-up status updated:", responseData);
+      } catch (error) {
+        console.error("Error updating follow-up status:", error);
+      }
+    }
+  });
+</script>

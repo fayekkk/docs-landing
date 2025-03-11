@@ -1,0 +1,43 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      // CustomModelField1 CustomModelField3 InvoiceAdjustmentLabel InvoiceAdjustmentValue
+      $("#InvoiceAdjustmentLabel").val("الإستقطاعات").change();
+      $("#InvoiceAdjustmentLabel").attr("disabled", true);
+      $("#CustomModelField1").on("change", function () {
+        let val1 = $("#CustomModelField1").val();
+        let val2 = $("#CustomModelField3").val();
+
+        if (val1 > 0) {
+        } else {
+          val1 = 0;
+        }
+        if (val2 > 0) {
+        } else {
+          val2 = 0;
+        }
+
+        $("#InvoiceAdjustmentValue")
+          .val((parseFloat(val1) + parseFloat(val2)) * -1)
+          .change();
+      });
+      $("#CustomModelField3").on("change", function () {
+        let val1 = $("#CustomModelField1").val();
+        let val2 = $("#CustomModelField3").val();
+
+        if (val1 > 0) {
+        } else {
+          val1 = 0;
+        }
+        if (val2 > 0) {
+        } else {
+          val2 = 0;
+        }
+
+        $("#InvoiceAdjustmentValue")
+          .val((parseFloat(val1) + parseFloat(val2)) * -1)
+          .change();
+      });
+    }, 250);
+  });
+</script>

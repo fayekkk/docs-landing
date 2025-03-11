@@ -1,0 +1,409 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      /* direction: ltr !important; */
+    }
+    body {
+      /* background: #ffffff; */
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      /* direction: rtl; */
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      /* background: #fff; */
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    #invdata {
+      width: 100%;
+      text-align: right;
+      direction: ltr !important;
+    }
+    #invdata tr:nth-child(1) td:nth-child(1) {
+      width: 50%;
+    }
+    #invdata tr:nth-child(1) td:nth-child(3) {
+      width: 25%;
+      font-size: 25px;
+      font-weight: bold;
+      text-align: left !important;
+      padding-left: 4px;
+    }
+    #invdata tr:nth-child(1) td:nth-child(2) {
+      width: 25%;
+      text-align: right !important;
+      vertical-align: bottom;
+    }
+    #invdata tr:nth-child(2) td {
+      vertical-align: top;
+    }
+    #billto {
+      width: 33%;
+      float: right;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #000;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      margin-top: 18px;
+      text-align: right;
+    }
+    #client_info {
+      direction: rtl !important;
+      width: 100%;
+      text-align: right;
+      font-weight: bold;
+      font-size: 15px;
+      margin: 15px 0;
+    }
+    #client_info tr:nth-child(1) td:nth-child(1) {
+      width: 25%;
+    }
+    #client_info tr:nth-child(1) td:nth-child(2) {
+      width: 25%;
+    }
+    #client_info tr:nth-child(1) td:nth-child(3) {
+      width: 25%;
+    }
+    #client_info tr:nth-child(1) td:nth-child(4) {
+      width: 25%;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #listing_table {
+      text-align: center !important;
+      font-size: 14px;
+      direction: ltr !important;
+    }
+    #listing_table th,
+    #listing_table td {
+      padding: 4px;
+      border-bottom: 1px solid #343433;
+      border-right: 1px solid #343433;
+      border-left: none !important;
+      border-top: none !important;
+    }
+    #listing_table th:last-child,
+    #listing_table td:last-child {
+      border-right: none !important;
+    }
+    #listing_table th {
+      background-color: #343433;
+      color: #fff;
+      border-right: none !important;
+    }
+    #listing_table th:nth-child(1) {
+      width: 20%;
+    }
+    #listing_table th:nth-child(2) {
+      width: 15%;
+    }
+    #listing_table th:nth-child(3) {
+      width: 35%;
+    }
+    #listing_table th:nth-child(4) {
+      width: 15%;
+    }
+    #listing_table th:nth-child(5) {
+      width: 15%;
+    }
+    #listing_table th:nth-child(6) {
+      width: 15%;
+    }
+    .firstRow td:nth-child(1) {
+      text-align: right !important;
+      vertical-align: text-top;
+    }
+    .firstRow td:nth-child(2) {
+      background-color: #c9b864;
+      color: #fff;
+    }
+    .secRow td:nth-child(1) {
+      background-color: #c9b864;
+      color: #fff;
+    }
+    .thRow td:nth-child(1) {
+      background-color: #343433;
+      color: #fff;
+    }
+    .thRow td:nth-child(2) {
+      background-color: #343433;
+      color: #fff;
+    }
+    #signs {
+      width: 100%;
+    }
+    #signs td:nth-child(1) {
+      width: 75%;
+    }
+    #signs td:nth-child(1) span {
+      display: inline-block;
+      float: left;
+      margin-left: 23px;
+      border-top: 1px solid;
+      padding-top: 10px;
+      width: 148px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: -28px;
+    }
+    #signs td:nth-child(2) {
+      width: 25%;
+    }
+    .bg {
+      z-index: -90000;
+      position: absolute;
+      left: 0px;
+      background-image: url("https://samaalqawas.daftra.com/files/255b8bd5/logos/6672ac2a9be15_blobid1718791208088.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      width: 100%;
+      height: 23cm;
+    }
+    #invoice_title span {
+      font-size: 38px !important;
+      display: inline-block;
+      margin-top: -20px;
+      width: 100%;
+    }
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <div class="bg" style="top: 0cm"></div>
+
+        <table id="invdata">
+          <tbody>
+            <tr>
+              <td rowspan="2"></td>
+              <td>{%invoice_no%} : رقم الفاتورة</td>
+              <td rowspan="2" id="invoice_title">
+                <span>{%invoice_title%}</span>
+              </td>
+            </tr>
+            <tr>
+              <td>{%invoice_date%} : التاريخ</td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="billto">معنونة إلى</div>
+        <table id="client_info" style="direction: rtl !important">
+          <tr>
+            <td>اسم العميل</td>
+            <td>العنوان</td>
+            <td>هاتف</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>{%client_business_name%}</td>
+            <td id="adresss">{%client_full_address%}</td>
+            <td>{%client_mobile%}</td>
+            <td></td>
+          </tr>
+        </table>
+
+        <div id="items-list">{%items_list%}</div>
+        <table id="signs">
+          <tbody>
+            <tr>
+              <td><span class="signspan">التوقيع</span></td>
+              <td>
+                <img
+                  src="https://samaalqawas.daftra.com/files/255b8bd5/logos/66729798c35ce_blobid1718785942232.png"
+                  alt=""
+                  title="sign.png"
+                  style="width: 100%"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function hunldeDiscount() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        if (allRows[0].cells.length == 5) {
+          var newTh = document.createElement("th");
+          newTh.classList.add("discountTh");
+          newTh.innerText = "  Discount ";
+          newTh.style.display = "none";
+          allRows[0].insertBefore(newTh, allRows[0].cells[4]);
+          for (var i = 1; i < allRows.length; i++) {
+            var newTd = document.createElement("td");
+            newTd.style.display = "none";
+            newTd.innerText = "0.00";
+            allRows[i].insertBefore(newTd, allRows[i].cells[4]);
+          }
+        }
+      }
+      try {
+        hunldeDiscount();
+      } catch (error) {
+        console.log(error);
+      }
+      function SwapAll() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          var band = allRows[i].cells[0].innerHTML;
+          var wasf = allRows[i].cells[1].innerHTML;
+          var price = allRows[i].cells[2].innerHTML;
+          var Qty = allRows[i].cells[3].innerHTML;
+          var discount = allRows[i].cells[4].innerHTML;
+          var ttl = allRows[i].cells[5].innerHTML;
+          allRows[i].cells[0].innerHTML = Qty;
+          allRows[i].cells[1].innerHTML = band;
+          allRows[i].cells[2].innerHTML = wasf;
+          allRows[i].cells[3].innerHTML = price;
+          allRows[i].cells[4].innerHTML = discount;
+          allRows[i].cells[5].innerHTML = ttl;
+        }
+      }
+      try {
+        SwapAll();
+      } catch (error) {
+        console.log(error);
+      }
+
+      function addthreerows() {
+        // first
+        var newTr1 = document.createElement("tr");
+        newTr1.setAttribute("class", "firstRow");
+        var newTr1td1 = document.createElement("td");
+        if (document.querySelectorAll(".discountTh").length > 0) {
+          newTr1td1.setAttribute("colspan", "3");
+        } else {
+          newTr1td1.setAttribute("colspan", "4");
+        }
+        newTr1td1.setAttribute("rowspan", "3");
+        newTr1td1.innerHTML = '{%invoice_notes%} : الملاحظات';
+        newTr1td1.style.textAlign = "right";
+        var newTr1td2 = document.createElement("td");
+        newTr1td2.innerText = "المبلغ";
+        var newTr1td3 = document.createElement("td");
+        newTr1td3.classList.add("removeCurr");
+        newTr1td3.innerText = "{%invoice_subtotal%}";
+        newTr1.appendChild(newTr1td1);
+        newTr1.appendChild(newTr1td2);
+        newTr1.appendChild(newTr1td3);
+        // second
+        var newTr2 = document.createElement("tr");
+        newTr2.setAttribute("class", "secRow");
+        var newTr1td2 = document.createElement("td");
+        newTr1td2.innerText = "الخصم";
+        var newTr1td3 = document.createElement("td");
+        newTr1td3.innerText = "{%discount%}";
+        newTr1td3.classList.add("removeCurr");
+        newTr2.appendChild(newTr1td2);
+        newTr2.appendChild(newTr1td3);
+        // third
+        var newTr3 = document.createElement("tr");
+        newTr3.setAttribute("class", "thRow");
+        var newTr1td2 = document.createElement("td");
+        newTr1td2.innerText = "المجموع";
+        var newTr1td3 = document.createElement("td");
+        newTr1td3.innerText = "{%invoice_total%}";
+        newTr1td3.classList.add("removeCurr");
+
+        newTr3.appendChild(newTr1td2);
+        newTr3.appendChild(newTr1td3);
+        var body = document.querySelector("#listing_table tbody");
+        body.appendChild(newTr1);
+        body.appendChild(newTr2);
+        body.appendChild(newTr3);
+      }
+      try {
+        addthreerows();
+      } catch (error) {
+        console.log(error);
+      }
+      function removeCurr() {
+        var allremoveCurr = document.querySelectorAll(".removeCurr");
+        for (var i = 0; i < allremoveCurr.length; i++) {
+          allremoveCurr[i].innerText = parseFloat(
+            allremoveCurr[i].innerText.replace(/,/g, "")
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      try {
+        removeCurr();
+      } catch (error) {
+        console.log(error);
+      }
+      function addNewRows() {
+        var selectedDiv = document.querySelector("#items-list");
+        while (selectedDiv.offsetHeight < 350) {
+          var i = document.querySelectorAll("#listing_table tbody tr").length;
+          const newTr = document.createElement("tr");
+          for (var j = 0; j < 6; j++) {
+            if (document.querySelectorAll(".discountTh").length > 0 && j == 0) {
+              var newTd = document.createElement("td");
+              newTd.style.height = "25px";
+              newTr.appendChild(newTd);
+              newTd.style.display = "none";
+            } else {
+              var newTd = document.createElement("td");
+              newTd.style.height = "25px";
+              newTr.appendChild(newTd);
+            }
+          }
+          document
+            .querySelector("#listing_table tbody")
+            .insertBefore(
+              newTr,
+              document.querySelector(
+                "#listing_table tbody tr:nth-last-child(3)"
+              )
+            );
+          i++;
+        }
+      }
+      try {
+        addNewRows();
+      } catch (error) {
+        console.log(error);
+      }
+      function repeatBg() {
+        var invoiceHeight =
+          document.querySelector(".invoice-inner").offsetHeight;
+        var pageHeight = document.querySelector(".bg").offsetHeight;
+        var numPages = Math.ceil(invoiceHeight / pageHeight);
+        var bg = document.querySelector(".bg");
+        var topDis = parseFloat(bg.style.top.replace("cm", ""));
+        for (var i = 1; i < numPages; i++) {
+          var newBg = document.createElement("div");
+          newBg.setAttribute("class", "bg");
+          topDis = topDis + 23;
+          console.log(topDis);
+          newBg.style.top = topDis + "cm";
+          bg.parentNode.insertBefore(newBg, bg.nextSibling);
+        }
+      }
+      try {  
+        repeatBg();
+      } catch (e) {
+        console.log(e);
+      }
+    </script>
+  </body>
+</html>

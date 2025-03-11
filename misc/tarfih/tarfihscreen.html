@@ -1,0 +1,220 @@
+<style>
+  .late_th,
+  .late_td {
+    display: table-cell;
+  }
+  .col-4 {
+    display: none !important;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      function hudleAll() {
+        if ($("#InvoiceLayout").val() == 3) {
+          const searchableSelector = () => {
+            var allrows = document.querySelectorAll("#listing_table tr");
+            console.log(allrows.length);
+          };
+
+          async function createCol(
+            prevTh,
+            prevTd,
+            colTitle,
+            classTh,
+            classTd,
+            colInput
+          ) {
+            var rowsNum = $("#listing_table tr").length;
+
+            if (
+              document.querySelectorAll("#listing_table tr:nth-child(1) th")
+                .length == 16
+            ) {
+              // Clone TH and attach change event listener
+              $(prevTh).after(
+                $("th.col-4")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-4", classTh)
+                  .replace("", colTitle)
+              );
+
+              $(prevTd).after(
+                $("td.col-4")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-4", classTd)
+                  .replace("item_col_4", colInput)
+              );
+            } else if (
+              !document.querySelector("#listing_table tr:last-child .late_td")
+            ) {
+              $(`#listing_table tr:last-child ${prevTd}`).after(
+                $("#listing_table tr:last-child td.col-4")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-4", classTd)
+                  .replace("item_col_4", colInput)
+              );
+            }
+
+            $("." + colInput).attr("placeholder", "");
+            $("." + colInput).attr("name", "");
+
+            searchableSelector();
+
+            document.querySelector(".late_th").innerText = " السعر  ";
+          }
+
+          // adding the columns when screen is loaded
+          createCol(
+            "th.col-4",
+            "td.col-4",
+            "إختيار العاملة ",
+            "late_th",
+            "late_td",
+            "late_input"
+          );
+
+          // adding the columns on add item click
+          $("#AddItem").on("click", () => {
+            createCol(
+              "th.col-4",
+              "td.col-4",
+              "إختيار العاملة ",
+              "late_th",
+              "late_td",
+              "late_input"
+            );
+            hudleAll();
+            hundlevals();
+          });
+        }
+
+        if ($("#InvoiceLayout").val() == 3) {
+          $(".unit-price").hide();
+          $("#label_unit_price").hide();
+          $(".late_th").show();
+          $(".late_td").show();
+        } else {
+          $(".late_th").hide();
+          $(".late_td").hide();
+          $(".unit-price").show();
+          $("#label_unit_price").show();
+        }
+        $(document).on("change", "#InvoiceLayout", function () {
+          if ($("#InvoiceLayout").val() == 3) {
+            $(".unit-price").hide();
+            $("#label_unit_price").hide();
+            $(".late_th").show();
+            $(".late_td").show();
+          } else {
+            $(".late_th").hide();
+            $(".late_td").hide();
+            $(".unit-price").show();
+            $("#label_unit_price").show();
+          }
+        });
+      }
+      hudleAll();
+
+      function hundlevals(check) {
+        setTimeout(() => {
+          var allrows = document.querySelectorAll("#listing_table tr");
+          for (let k = 1; k < allrows.length; k++) {
+            if (check == 2) {
+              if (allrows[k].querySelector(".unit-price input").value == "") {
+                allrows[k].querySelector(".late_td textarea").value = 0;
+              } else if (
+                allrows[k].querySelector(".col-3 textarea").value == "" &&
+                allrows[k].querySelector(".unit-price input").value != ""
+              ) {
+                allrows[k].querySelector(".late_td textarea").value =
+                  allrows[k].querySelector(".unit-price input").value;
+              } else if (
+                allrows[k].querySelector(".col-3 textarea").value != "" &&
+                allrows[k].querySelector(".unit-price input").value != ""
+              ) {
+                allrows[k].querySelector(".unit-price input").value =
+                  parseFloat(
+                    allrows[k].querySelector(".late_td textarea").value
+                  ) *
+                  parseFloat(allrows[k].querySelector(".col-3 textarea").value);
+
+                $(allrows[k].querySelector(".unit-price input")).trigger(
+                  "change"
+                );
+              }
+            } else if (check == 1) {
+              if (allrows[k].querySelector(".unit-price input").value == "") {
+                allrows[k].querySelector(".late_td textarea").value = 0;
+              } else if (
+                allrows[k].querySelector(".col-3 textarea").value == "" &&
+                allrows[k].querySelector(".unit-price input").value != ""
+              ) {
+                allrows[k].querySelector(".late_td textarea").value =
+                  allrows[k].querySelector(".unit-price input").value;
+              } else if (
+                allrows[k].querySelector(".col-3 textarea").value != "" &&
+                allrows[k].querySelector(".unit-price input").value != ""
+              ) {
+                allrows[k].querySelector(".late_td textarea").value =
+                  parseFloat(
+                    allrows[k].querySelector(".unit-price input").value
+                  ) /
+                  parseFloat(allrows[k].querySelector(".col-3 textarea").value);
+
+                allrows[k].querySelector(".unit-price input").value =
+                  parseFloat(
+                    allrows[k].querySelector(".late_td textarea").value
+                  ) *
+                  parseFloat(allrows[k].querySelector(".col-3 textarea").value);
+
+                $(allrows[k].querySelector(".unit-price input")).trigger(
+                  "change"
+                );
+              }
+            }
+            const numberArea = allrows[k].querySelector(".col-3 textarea");
+            numberArea.addEventListener("keypress", function (e) {
+              const key = e.key;
+              if (!/^\d+$/.test(key)) {
+                e.preventDefault();
+              }
+            });
+            const numberArea1 = allrows[k].querySelector(".late_td textarea");
+            numberArea1.addEventListener("keypress", function (e) {
+              const key = e.key;
+              if (!/^\d+$/.test(key)) {
+                e.preventDefault();
+              }
+            });
+            $(this).closest("tr").find("#PrepDays").val(0);
+          }
+        }, 500);
+      }
+
+      setTimeout(() => {
+        
+        hundlevals(1);
+        $(document).on("change", ".item_name", function () {
+          hundlevals(1);
+        });
+
+        $(document).on("change", ".late_td textarea", function () {
+          hundlevals(2);
+        });
+        $(document).on("change", ".col-3 textarea", function () {
+          hundlevals(2);
+        });
+      }, 500);
+    }, 1000);
+  });
+</script>

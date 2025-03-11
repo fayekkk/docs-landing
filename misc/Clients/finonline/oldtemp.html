@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #ffffff;
+      font-family: "Cairo", sans-serif !important;
+      font-size: 12px;
+      direction: rtl;
+      text-align: right;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #192d4b;
+    }
+    .invoice-inner {
+      margin: 0;
+      padding: 10px 0;
+    }
+    .listing-table th {
+      background-color: #1d5a78;
+      color: #fff;
+      border: none !important;
+      font-weight: bold;
+      text-align: right;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      border-bottom: 1px solid #e8e8e8 !important;
+      text-align: right;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    .listing-table th:first-child,
+    .listing-table td:first-child {
+      padding-right: 25px !important;
+    }
+    .listing-table th:last-child,
+    .listing-table td:last-child {
+      padding-left: 20px !important;
+    }
+    .totals td:nth-last-child(1),
+    .totals td:nth-last-child(2),
+    .totals td:nth-last-child(3) {
+      background-color: #e7e7eb;
+      border-bottom: 1px solid #d3d2d2;
+      padding: 3px 4px;
+      font-weight: 600;
+    }
+
+    .balance td {
+      background-color: #1d5a78 !important;
+      color: #fff;
+    }
+    .total-table td {
+      border-right: none !important;
+    }
+    .total-table td:last-child {
+      border-left: none !important;
+    }
+    .total-row {
+      background-color: #e8e8e8;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    strong_tag {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .notes-block {
+      margin: 50px 0 0 0;
+    }
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+    .qr-code img {
+      margin-top: 10px;
+    }
+    .info {
+      font-size: 11px;
+    }
+    .notes td {
+      padding: 3px;
+      border-top: 1px solid #e7e7eb;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table
+          width="100%"
+          border="0"
+          cellspacing="0"
+          cellpadding="0"
+          class="info"
+        >
+          <tr>
+            <td width="35%" valign="top" align="right">
+              <span style="font-size: 13px; font-weight: 600">
+                {%site_business_name%}
+              </span>
+              <br />
+              <span><strong> س. ت. </strong></span>1010475594
+              <br />
+              <strong>الرقم الضريبي </strong>
+              {%site_bn1%} <br />
+              <strong> {%site_address2%}</strong>
+            </td>
+            <td width="30%" valign="top" align="center">
+              <img
+                style="vertical-align: top; margin-bottom: 10px"
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                width="{%logo-width%}"
+                height="{%logo-height%}"
+              />
+            </td>
+            <td width="35%" valign="top" align="right">
+              <span
+                class="editable-area"
+                style="font-size: 13px; font-weight: 600"
+                >{%field1%} {%client_business_name%}</span
+              >
+              <br />
+              <div>
+                <strong> الرقم الضريبي </strong> <span>{%client_bn1%} </span>
+              </div>
+
+              <strong>{%label_date%} </strong>
+              {%invoice_date%}
+              <br />
+              <strong> {%label_invoice_no%}</strong>
+              {%invoice_no%}
+            </td>
+          </tr>
+        </table>
+        <div
+          id="invoice_title"
+          class="editable-area invoice-name"
+          style="
+            padding-top: 10px;
+            text-align: center;
+            font-size: 25px;
+            font-weight: 600;
+          "
+        >
+          {%invoice_title%}
+        </div>
+
+        <div id="items-list" style="padding-top: 15px; margin: 0 -35px">
+          {%items_list%}
+        </div>
+        <div style="padding-top: 25px; margin: 0 -35px">
+          <table
+            width="100%"
+            border="0"
+            cellspacing="0"
+            cellpadding="0"
+            class="totals"
+          >
+            <tr>
+              <td rowspan="6" width="60%" valign="middle" align="center">
+                <div class="qr-code">{%sa_qr_code_image%}<br /></div>
+              </td>
+              <td>المجموع</td>
+              <td align="left">Sub Total</td>
+              <td width="15%">{%invoice_subtotal%}</td>
+            </tr>
+            <tr>
+              <td>القيمة المضافة</td>
+              <td align="left">VAT (15%)</td>
+              <td>{%tax-total%}</td>
+            </tr>
+            <tr>
+              <td>الخصم</td>
+              <td align="left">Discount</td>
+              <td>{%discount%}</td>
+            </tr>
+            <tr>
+              <td>الإجمالي</td>
+              <td align="left">Total</td>
+              <td>{%invoice_total%}</td>
+            </tr>
+            <tr>
+              <td>المدفوع</td>
+              <td align="left">Payment</td>
+              <td>{%paid%}</td>
+            </tr>
+            <tr class="balance">
+              <td>المستحق</td>
+              <td align="left">Balance</td>
+              <td>{%unpaid%}</td>
+            </tr>
+          </table>
+        </div>
+        <div style="margin: 0 -35px">
+          <table
+            width="100%"
+            border="0"
+            cellspacing="0"
+            cellpadding="0"
+            class="notes"
+          >
+            <tr>
+              <td width="60%" rowspan="5" style="border-top: none"></td>
+              <td
+                colspan="2"
+                align="center"
+                style="font-weight: 600; background-color: #e7e7eb"
+              >
+                الشروط والأحكام Conditions & Terms
+              </td>
+            </tr>
+            <tr>
+              <td align="center" width="20%">{%Payment 1%}</td>
+              <td align="center" width="20%">Payment 1</td>
+            </tr>
+            <tr>
+              <td align="center">{%Payment 2%}</td>
+              <td align="center">Payment 2</td>
+            </tr>
+            <tr>
+              <td align="center">{%Payment 3%}</td>
+              <td align="center">Payment 3</td>
+            </tr>
+            <tr>
+              <td
+                colspan="2"
+                style="text-align: justify; padding: 4px 6px; border-top: none"
+              >
+                <div class="editable-area" id="footer">{%footer%}</div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+  </body>
+</html>
+<div style="margin: 0 -15px">
+  <!-- <img
+    src="https://systemswindow.daftra.com/files/4b928c3a/logos/63a818324a64a_blobid1671960625680.jpg"
+    alt=""
+    title="header ss.jpg"
+    width="100%"
+    height="auto"
+  /> -->
+</div>
+<div style="margin: 0 -15px">
+  <!-- <img
+      src="https://systemswindow.daftra.com/files/4b928c3a/logos/63a2b8c247672_blobid1671608512551.jpg"
+      alt=""
+      title="bank acounts.jpg"
+      width="50%"
+      height="auto"
+    />
+    <img
+      src="https://systemswindow.daftra.com/files/4b928c3a/logos/63a2b38615c4c_blobid1671607171971.jpg"
+      title="footer latest.jpg"
+      width="100%"
+      height="auto"
+      caption="false"
+    /> -->
+</div>
+
+<!-- 
+<div style="margin: 0 -15px">
+  <table width="100%">
+    <tr>
+      <td>
+        <img
+          src="https://systemswindow.daftra.com/files/4b928c3a/logos/63a2b8c247672_blobid1671608512551.jpg"
+          alt=""
+          title="bank acounts.jpg"
+          width="50%"
+          height="auto"
+        />
+      </td>
+      <td></td>
+    </tr>
+  </table>
+  <img
+    src="https://systemswindow.daftra.com/files/4b928c3a/logos/63a2b38615c4c_blobid1671607171971.jpg"
+    title="footer latest.jpg"
+    width="100%"
+    height="auto"
+    caption="false"
+  />
+</div> -->

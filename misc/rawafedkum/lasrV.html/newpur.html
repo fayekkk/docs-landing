@@ -1,0 +1,264 @@
+<style>
+  #hiddenInput {
+    display: none;
+  }
+
+  #qr_reader {
+    border: 1px solid #c3bebe;
+    margin: 7px;
+    padding: 7px 4px;
+    width: 336px;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      function extractLotAndExpiry(code) {
+        let lotNumber = "";
+        let expiryDate = "";
+        let skuCode = "";
+        const lastSixDigitsRegex = /(\d{6})$/;
+        const elevenCharRegex = /([a-zA-Z][\w]{8})(\d+)/;
+        const skuRegex = /^.{2}(\d{14})/;
+        const lastSixMatches = code.match(lastSixDigitsRegex);
+        const isDataable = code.substr(-8, 2) === "17";
+        const isDataable2 = code.length > 41;
+        if (lastSixMatches && isDataable && isDataable2) {
+          expiryDate = lastSixMatches[1];
+        }
+        const elevenCharMatches = code.match(elevenCharRegex);
+        if (elevenCharMatches) {
+          lotNumber = elevenCharMatches[1];
+        }
+        let formattedExpiry = "";
+        if (expiryDate) {
+          const year = "20" + expiryDate.substr(0, 2);
+          const month = expiryDate.substr(2, 2);
+          const day = expiryDate.substr(4, 2);
+          formattedExpiry = `${year}/${month}/${day}`;
+        }
+        const skuMatches = code.match(skuRegex);
+        if (skuMatches) {
+          skuCode = skuMatches[1];
+        }
+        return {
+          lotNumber: lotNumber,
+          expiryDate: formattedExpiry,
+          skuCode: skuCode,
+          code: code,
+        };
+      }
+      const NewInput = $("<input>");
+      NewInput.attr("id", "qr_reader");
+
+      const label = $("<label>");
+      label.attr("for", "qr_reader").text("Scan QR Code");
+
+      $(".invoice-items").before(label).before(NewInput);
+
+      let inputTimeout;
+
+      $("#qr_reader").on("input", function () {
+        clearTimeout(inputTimeout);
+
+        inputTimeout = setTimeout(() => {
+          console.log($(this).val());
+          if ($(this).val() !== "") {
+            var generalcodes = extractLotAndExpiry($(this).val());
+            addCodes(generalcodes);
+            $(this).val("").change();
+            $(this).focus();
+          }
+        }, 1000);
+      });
+
+      function addCodes(generatedCode) {
+        const popupHtml = ` <div class="popup-overlay" id="productPopup">
+        <div class="popup">
+          <h2>Add Product</h2>
+          <form id="productForm">
+            <label>
+              Product Name
+              <input type="text" id="productName" required />
+            </label>
+            <label>
+              Unit Price
+              <input type="number" id="unitPrice" required />
+            </label>
+            <button  id="SubmitionPopup" class="btn btn-success">Submit</button>
+            <button type="button" id="closePopup" class="btn btn-danger">Close</button>
+          </form>
+        </div>
+      </div>`;
+        $(".actions-btns").after(popupHtml);
+
+        fetch(
+          `/v2/api/entity/product/list/1?filter[barcode]=${generatedCode.skuCode}`,
+          {
+            method: "GET",
+            headers: {
+              apikey: "bceffccefa6ab4014732bb7093d284bc37794bf4",
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Response:", data);
+            if (data.data.length == 0) {
+              document.getElementById("productPopup").style.display = "flex";
+
+              // Handle form submission
+              $("#SubmitionPopup").on("click", function (e) {
+                e.preventDefault();
+                const productName = $("#productName").val();
+                const unitPrice = $("#unitPrice").val();
+                if (productName == "") {
+                  alert("Product name is required.");
+                  return;
+                }
+                if (unitPrice == "") {
+                  unitPrice = 0;
+                }
+                // Send product data to the API
+                fetch("/api2/products", {
+                  method: "POST",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    Product: {
+                      name: productName,
+                      description: "",
+                      unit_price: unitPrice,
+                      tracking_type: "lot_and_expiry_date",
+                      type: "1",
+                      track_stock: "1",
+                      barcode: generatedCode.skuCode,
+                    },
+                  }),
+                })
+                  .then((response) => response.json())
+                  .then((responseData) => {
+                    console.log(responseData);
+                    $("#closePopup").click();
+                    $("#qr_reader").val(generatedCode.code).trigger("input");
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              });
+
+              document.getElementById("closePopup").onclick = function () {
+                document.getElementById("productPopup").style.display = "none";
+                document.getElementById("productForm").reset(); // Reset the form
+              };
+            } else {
+              onReceiveBarCode(generatedCode.skuCode);
+
+              setTimeout(() => {
+                addClasses(generatedCode);
+              }, 700);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+        console.log(generatedCode);
+      }
+      function addClasses(barcodeToAdd) {
+        $(".item-id").each(function () {
+          const $itemId = $(this);
+          const $closestRow = $itemId.closest("tr");
+
+          // Check if the item ID input is not empty
+          if ($itemId.val()) {
+            const isAddedBefore = $closestRow.hasClass("addedbefore");
+
+            if (!isAddedBefore) {
+              // Add classes
+              $closestRow
+                .addClass("addedbefore")
+                .addClass("BAR_" + barcodeToAdd.skuCode);
+
+              // Set lot number
+              const $lotInput = $closestRow.find(".trackingInput input").eq(0);
+              $lotInput.val(barcodeToAdd.lotNumber).focus();
+
+              // Set expiry date
+              const $expiryInput = $closestRow
+                .find(".trackingInput input")
+                .eq(1);
+              $expiryInput.val(barcodeToAdd.expiryDate || "");
+
+              // Simulate enter event
+              setTimeout(() => {
+                triggerEnterEvent($closestRow, 0);
+                triggerEnterEvent($closestRow, 1);
+              }, 200);
+            }
+          }
+        });
+      }
+
+      // Helper function to trigger enter event
+      function triggerEnterEvent($row, index) {
+        const $input = $row
+          .find(".trackingInput input")
+          .find("input")
+          .eq(index);
+        $input.trigger(jQuery.Event("keydown", { which: 13, keyCode: 13 }));
+        $input.trigger(jQuery.Event("keyup", { which: 13, keyCode: 13 }));
+      }
+    }, 500);
+  });
+</script>
+<style>
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none; /* Initially hidden */
+    z-index: 999999;
+  }
+
+  .popup {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .popup h2 {
+    margin: 0 0 15px;
+  }
+
+  .popup label {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .popup input {
+    width: 100%;
+    margin-top: 5px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .popup button {
+    margin-top: 10px;
+    border: none;
+    padding: 12px;
+    width: 81px;
+  }
+</style>

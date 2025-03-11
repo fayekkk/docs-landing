@@ -1,0 +1,358 @@
+<style>
+  .container-status,
+  .container-confirmation,
+  .container-inv_id {
+    display: none;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    async function main() {
+      async function fetchProjectData() {
+        let projectId = parseInt(window.location.href.split("/")[8]);
+
+        try {
+          const response = await fetch(
+            `/v2/api/entity/le_workflow-type-entity-2/${projectId}/4`,
+            {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const data = await response.json();
+          console.log("Response:", data);
+          return data;
+        } catch (error) {
+          console.error("Error:", error);
+          return null;
+        }
+      }
+      const projectData = await fetchProjectData();
+
+      let exteaNo =
+        projectData["le_workflow-type-entity-2_related_le_deliveryrecipt"]
+          .length;
+      console.log(projectData);
+      // project_name1
+      $("#recipt_no").val(projectData.number + "-" + (exteaNo + 1));
+      $("#recipt_no").attr("style", "direction:ltr;");
+      $("#print_title").val(projectData.title);
+      $("#print_no").val(projectData.number);
+
+      if (projectData.client_id) {
+        let clientId = projectData.work_order_client.id;
+        let clientName = projectData.work_order_client.business_name;
+        let newOption = new Option(clientName, clientId);
+        $("#client_project1").append(newOption);
+        $("#client_project1").val(clientId).change();
+      }
+      function addSelectorsAfterInputs() {
+        console.log("addSelectorsAfterInputs");
+
+        $("[id$='--single_line_field']").each(function () {
+          const inputId = $(this).attr("id");
+          const selectId = inputId + "_select";
+          if ($("#" + selectId).length === 0) {
+            const $input = $(this);
+            let customData =
+              projectData["le_workflow-type-entity-2_custom_data"];
+            let projectItems =
+              customData[
+                "le_custom_data_le_workflow-type-entity-2_le_custom_data_le_workflow-type-entity-2_project_items"
+              ];
+            const data = projectItems;
+            const select = document.createElement("select");
+            select.id = selectId;
+            select.className = "extraction-select";
+            const defaultOption = document.createElement("option");
+            defaultOption.textContent = "من فضلك اختر";
+            defaultOption.value = -1;
+            // defaultOption.readonly = true;
+            defaultOption.selected = true;
+            select.appendChild(defaultOption);
+            data.forEach((item, index) => {
+              const option = document.createElement("option");
+
+              for (const [key, value] of Object.entries(item)) {
+                if (typeof value === "object" && value !== null) {
+                  for (const [nestedKey, nestedValue] of Object.entries(
+                    value
+                  )) {
+                    option.dataset[nestedKey] = nestedValue ?? "";
+                  }
+                } else {
+                  option.dataset[key] = value ?? "";
+                  //   console.log(key);
+                  //   console.log(value);
+                  if (key == "id") {
+                    option.dataset["item_idTosend"] = value;
+                  }
+                }
+
+                if (
+                  key ==
+                  "le_custom_data_le_workflow-type-entity-2_project_items_project_item_name"
+                ) {
+                  option.value = value.name;
+                  // option.value = value.item_name + "(" + value.id + ")";
+                  option.textContent = value.name;
+                }
+                if (
+                  key ==
+                  "le_custom_data_le_workflow-type-entity-2_project_items_taxes"
+                ) {
+                  option.setAttribute("data-tax_name", value.name);
+                  option.setAttribute("data-tax_id", value.id);
+                  option.setAttribute("data-tax_per", value.value);
+                }
+              }
+              select.appendChild(option);
+            });
+
+            $input.after(select);
+            const $select = $("#" + selectId);
+            $select.css({
+              width: $input.css("width"),
+              height: $input.css("height"),
+              padding: $input.css("padding"),
+              margin: $input.css("margin"),
+              border: $input.css("border"),
+              borderRadius: $input.css("border-radius"),
+              backgroundColor: $input.css("background-color"),
+              color: $input.css("color"),
+              fontSize: $input.css("font-size"),
+              fontFamily: $input.css("font-family"),
+            });
+            $input.hide();
+            $(document).on("change", `#${selectId}`, function () {
+              const currentValue = $(this).val();
+              const currentId = $(this).attr("id");
+
+              // Check if any other selector has the same value
+              const duplicate =
+                $(".extraction-select")
+                  .not(`#${currentId}`)
+                  .filter(function () {
+                    return $(this).val() === currentValue;
+                  }).length > 0;
+
+              if (duplicate && currentValue !== "-1") {
+                alert("تم إختيار هذا البند مسبقاً");
+                $(this).val(-1).change(); // Reset to default option
+              } else {
+                const selectedValue = $(this).val();
+                $input.val(selectedValue);
+                const selectedOption = $(this).find("option:selected");
+                //   create selevted iputs
+                let description2 = $(this)
+                  .closest("tr")
+                  .find("[id$='--description2']");
+                let innercolorinput = $(this)
+                  .closest("tr")
+                  .find("[id$='--innercolorinput']");
+                let covercolorinput = $(this)
+                  .closest("tr")
+                  .find("[id$='--covercolorinput']");
+                let innerpaperinput = $(this)
+                  .closest("tr")
+                  .find("[id$='--innerpaperinput']");
+                let coverpaperinput = $(this)
+                  .closest("tr")
+                  .find("[id$='--coverpaperinput']");
+                let covertypeinput = $(this)
+                  .closest("tr")
+                  .find("[id$='--covertypeinput']");
+                let no_of_copies = $(this)
+                  .closest("tr")
+                  .find("[id$='--no_of_copies']");
+                let numpering = $(this)
+                  .closest("tr")
+                  .find("[id$='--numpering']");
+                let language_type = $(this)
+                  .closest("tr")
+                  .find("[id$='--language_type']");
+                let ordersinput = $(this)
+                  .closest("tr")
+                  .find("[id$='--ordersinput']");
+                let quantity = $(this).closest("tr").find("[id$='--quantity']");
+                let taxes = $(this).closest("tr").find("[id$='--taxes']");
+                let ttl_price = $(this)
+                  .closest("tr")
+                  .find("[id$='--ttl_price']");
+                let process_percent = $(this)
+                  .closest("tr")
+                  .find("[id$='--process_percent']");
+                let curr_process_percent = $(this)
+                  .closest("tr")
+                  .find("[id$='--curr_process_percent']");
+                let size = $(this).closest("tr").find("[id$='--size']");
+                let remain_process_percent = $(this)
+                  .closest("tr")
+                  .find("[id$='--remain_process_percent']");
+                let item_ttl = $(this).closest("tr").find("[id$='--item_ttl']");
+
+                console.log({ dataset: selectedOption[0].dataset });
+                let itemvalues = selectedOption[0].dataset;
+                // taxes
+                var newOption = $("<option></option>")
+                  .text(itemvalues.tax_name)
+                  .val(itemvalues.tax_id);
+                taxes.append(newOption);
+                taxes.val(itemvalues.tax_id).trigger("change");
+                // desc
+                description2.val(itemvalues.description2);
+                description2.attr("readonly", "readonly");
+                // *************
+                innercolorinput.val(itemvalues.innercolorinput);
+                innercolorinput.attr("readonly", "readonly");
+                // *************
+                size.val(itemvalues.sizeinput);
+                size.attr("readonly", "readonly");
+                // *************
+                covercolorinput.val(itemvalues.covercolorinput);
+                covercolorinput.attr("readonly", "readonly");
+                // *************
+                innerpaperinput.val(itemvalues.innerpaperinput);
+                innerpaperinput.attr("readonly", "readonly");
+                // *************
+                coverpaperinput.val(itemvalues.coverpaperinput);
+                coverpaperinput.attr("readonly", "readonly");
+                // *************
+                covertypeinput.val(itemvalues.covertypeinput);
+                covertypeinput.attr("readonly", "readonly");
+                // *************
+                no_of_copies.val(itemvalues.no_of_copies);
+                no_of_copies.attr("readonly", "readonly");
+                // *************
+                numpering.val(itemvalues.numpering);
+                numpering.attr("readonly", "readonly");
+                // *************
+                language_type.val(itemvalues.language_type);
+                language_type.attr("readonly", "readonly");
+                // *************
+                ordersinput.val(itemvalues.ordersinput);
+                ordersinput.attr("readonly", "readonly");
+                // *************
+                quantity.val(itemvalues.quantity);
+                quantity.attr("readonly", "readonly");
+                // *************
+                ttl_price.val(itemvalues.ttl_price);
+                ttl_price.attr("readonly", "readonly");
+                // *************
+                process_percent.val(itemvalues.process_percent);
+                process_percent.attr("readonly", "readonly");
+                // *************
+                remain_process_percent.attr("readonly", "readonly");
+                // *************
+                // no_of_copies.val(itemvalues.no_of_copies);
+                item_ttl.attr("readonly", "readonly");
+              }
+            });
+          }
+          $(".extraction-select").select2({
+            selectOnClose: true,
+          });
+        });
+      }
+      addSelectorsAfterInputs();
+      function validate(prev, curr, remain, qty, price, ttl) {
+        $(document).on("input", curr, function () {
+          let qryVal = parseFloat($(this).closest("tr").find(qty).val());
+          let priceVal = parseFloat($(this).closest("tr").find(price).val());
+          let subttl =
+            parseFloat($(this).closest("tr").find(qty).val()) *
+            parseFloat($(this).closest("tr").find(price).val());
+          let currValue = $(this).val();
+          if (currValue == "") {
+            currValue = 0;
+          }
+          let prevprocess = $(this).closest("tr").find(prev).val();
+          if (prevprocess == "") {
+            prevprocess = 0;
+            $(prev).val(0);
+          }
+          $(this)
+            .closest("tr")
+            .find(remain)
+            .val(qryVal - (parseFloat(prevprocess) + parseFloat(currValue)));
+          $(this)
+            .closest("tr")
+            .find(ttl)
+            .val(priceVal * currValue)
+            .change();
+          if (qryVal - (parseFloat(prevprocess) + parseFloat(currValue)) < 0) {
+            $(this)
+              .val(qryVal - parseFloat(prevprocess))
+              .change();
+            $(this).closest("tr").find(remain).val(0).change();
+            $(this)
+              .closest("tr")
+              .find(ttl)
+              .val(priceVal * currValue)
+              .change();
+          }
+          //   hundlettls();
+        });
+      }
+      validate(
+        "[id$='--process_percent']",
+        "[id$='--curr_process_percent']",
+        "[id$='--remain_process_percent']",
+        "[id$='--quantity']",
+        "[id$='--ttl_price']",
+        "[id$='--item_ttl']"
+      );
+    }
+    main();
+    $(
+      "#le_deliveryrecipt > div.form-row > div.col-lg-12.col-md-12.col-xs-12 > div > div > div > div.card-body.p-0 > div > div > div > div > div > div.btn-group.add-row.dropdown > button"
+    ).on("click", function () {
+      setTimeout(() => {
+        main();
+      }, 150);
+    });
+    document.getElementById("le_deliveryrecipt").onsubmit = function (e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const formDataObj = {};
+      formData.forEach((value, key) => {
+        const keys = key.match(/[^\[\]]+/g);
+        let tempObj = formDataObj;
+        keys.forEach((k, i) => {
+          if (i === keys.length - 1) {
+            tempObj[k] = value;
+          } else {
+            if (!tempObj[k]) {
+              tempObj[k] = {};
+            }
+            tempObj = tempObj[k];
+          }
+        });
+      });
+      console.log(formDataObj);
+
+      fetch(`/v2/api/entity/le_deliveryrecipt`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formDataObj),
+      }).then((response) => {
+        response
+          .json()
+          .then((res) => {
+            console.log("Success:", res);
+            window.location.href = `/v2/owner/entity/le_deliveryrecipt/${res.id}/show#details`;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      });
+    };
+  });
+</script>

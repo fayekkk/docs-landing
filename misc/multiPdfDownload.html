@@ -1,0 +1,38 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script>
+  // كشوفات حساب العملاء
+  $(document).ready(function () {
+    setTimeout(async () => {
+      const pdfUrls = [
+        "/owner/clients/statement/1.pdf",
+        "/owner/clients/statement/2.pdf",
+      ];
+
+      // Create a new PDF document
+      const mergedPdf = await PDFLib.PDFDocument.create();
+
+      for (const url of pdfUrls) {
+        // Fetch the PDF and load it
+        const pdfBytes = await fetch(url).then((res) => res.arrayBuffer());
+        const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+
+        // Copy pages from the loaded PDF to the new PDF
+        const copiedPages = await mergedPdf.copyPages(
+          pdfDoc,
+          pdfDoc.getPageIndices()
+        );
+        copiedPages.forEach((page) => mergedPdf.addPage(page));
+      }
+      // Serialize the PDF document to bytes
+      const pdfDataUri = await mergedPdf.saveAsBase64({ dataUri: true });
+      console.log(pdfDataUri);
+
+      const link = document.createElement("a");
+      link.href = pdfDataUri;
+      link.download = "merged_statement.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }, 500);
+  });
+</script>

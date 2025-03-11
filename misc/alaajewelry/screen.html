@@ -1,0 +1,49 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      function main() {
+        $(document).on("change", ".item_col_3", function () {
+          let val = $(this).val();
+          console.log(val);
+          if (isNaN(parseFloat(val))) {
+            $(this).val("0");
+          } else {
+            let qty = $(this).closest("tr").find(".item-qty").val();
+            if (!qty) {
+              qty = 1;
+            }
+            let itemtax = $(this).closest("tr").find(".item-tax").val();
+            let unitprice = (val / qty).toFixed(4);
+            console.log({unitprice:unitprice});
+
+            if (itemtax == 1) {
+              let unitpricebefVat = (unitprice / 1.15).toFixed(4);
+              $(this)
+                .closest("tr")
+                .find(".item-unit-price")
+                .val(unitpricebefVat)
+                .trigger("change");
+            } else {
+              let unitpricebefVat = parseFloat(unitprice).toFixed(4);
+              $(this)
+                .closest("tr")
+                .find(".item-unit-price")
+                .val(unitpricebefVat)
+                .trigger("change");
+            }
+          }
+        });
+      }
+      let layout_id = $("#InvoiceLayout").val();
+      if (layout_id == 1) {
+        main();
+      }
+      $("#InvoiceLayout").on("change", function () {
+        let layout_id = $("#InvoiceLayout").val();
+        if (layout_id == 1) {
+          main();
+        }
+      });
+    }, 500);
+  });
+</script>

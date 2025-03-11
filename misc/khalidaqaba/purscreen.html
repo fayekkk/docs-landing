@@ -1,0 +1,32 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      function screenCode() {
+        if ($("#InvoiceLayout").val() == "25") {
+          console.log("here");
+          $(document).on("change", ".item_col_3", function () {
+            console.log("changed");
+            var serials = $(this).val().split("\n");
+            for (var i = 0; i < serials.length; i++) {
+              var $inputField = $(this)
+                .closest("tr")
+                .find(".trackingInput input");
+              $inputField.focus();
+              $inputField.val(serials[i]).change();
+              $inputField.trigger(
+                jQuery.Event("keydown", { which: 13, keyCode: 13 })
+              );
+              $inputField.trigger(
+                jQuery.Event("keyup", { which: 13, keyCode: 13 })
+              );
+            }
+          });
+        }
+      }
+      screenCode();
+      $("#InvoiceLayout").on("change", function () {
+        screenCode();
+      });
+    }, 400);
+  });
+</script>

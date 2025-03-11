@@ -1,0 +1,45 @@
+<script>
+  var currentDate = new Date().toISOString().slice(0, 10);
+  const newReq = {
+    client_id: null,
+    title: "Name",
+    sclient_idtart_date: currentDate,
+    description: "generalNotes",
+    status: 1,
+    created: currentDate,
+    modified: currentDate,
+    workflow_type_id: 1,
+    number: {
+      code: "1",
+      generated: "1",
+    },
+    budget: {
+      currency: "sar",
+    },
+    "le_workflow-type-entity-1_custom_data": {
+      payments: "100",
+    },
+    workflow_type: {
+      id: 1,
+      entity_key: "le_workflow-type-entity-1",
+    },
+  };
+  console.log(newReq);
+  console.log(JSON.stringify(newReq));
+  fetch("/v2/api/entity/le_workflow-type-entity-1", {
+    method: "POST",
+    headers: {
+      apikey: "7d1aee7e94309ea7035169a5a447e5ed32a6f6ce",
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newReq),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Response:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+</script>

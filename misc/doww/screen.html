@@ -1,0 +1,71 @@
+<script>
+  $(document).ready(function () {
+    if (window.location.href.indexOf("/requisitions/add") != -1) {
+      async function createCol(
+        prevTh,
+        prevTd,
+        colTitle,
+        classTh,
+        classTd,
+        colInput
+      ) {
+        var rowsNum = $("#listing_table tr").length;
+
+        if (
+          document.querySelectorAll("#listing_table tr:nth-child(1) .late_th")
+            .length == 0
+        ) {
+          // Clone TH and attach change event listener
+          $(prevTh).after(
+            $("th#label_unit_price")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("label_unit_price", classTh)
+              .replace("", colTitle)
+          );
+
+          $(prevTd).after(
+            $("td.unit-price")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("unit-price", classTd)
+              .replace("item_col_4", colInput)
+          );
+        } else if (
+          !document.querySelector("#listing_table tr:last-child .late_td")
+        ) {
+          $(`#listing_table tr:last-child ${prevTd}`).after(
+            $("#listing_table tr:last-child td.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTd)
+              .replace("item_col_4", colInput)
+          );
+        }
+
+        $("." + colInput).attr("placeholder", "");
+        $("." + colInput).attr("name", "");
+
+        // searchableSelector();
+
+        document.querySelector(".late_th").innerText = " رقم الكتالوج   ";
+      }
+
+      // adding the columns when screen is loaded
+      createCol(
+        "th.col-3",
+        "td.col-3",
+        "إختيار العاملة ",
+        "late_th",
+        "late_td",
+        "late_input"
+      );
+    }
+  });
+</script>

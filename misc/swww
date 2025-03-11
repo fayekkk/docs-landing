@@ -1,0 +1,92 @@
+      $(document).ready(function () {
+        function onchangeAction() {
+          var allrows = document.querySelectorAll("#listing_table tbody tr");
+          for (var i = 1; i < allrows.length; i++) {
+            var selectedRowCells = allrows[i].cells;
+            var selectedRowCell = selectedRowCells[3];
+            var editableInput = selectedRowCell.querySelector(".editable-input");
+            editableInput.addEventListener("change", function () {
+              changeTOTQTY();
+            });
+            var selectedRowCell = selectedRowCells[4];
+            var editableInput = selectedRowCell.querySelector(".editable-input");
+            editableInput.addEventListener("change", function () {
+              changeTOTQTY();
+            });
+            var selectedRowCell = selectedRowCells[5];
+            var editableInput = selectedRowCell.querySelector(".editable-input");
+            editableInput.addEventListener("change", function () {
+              changeTOTQTY();
+            });
+          }
+        }
+        function changeTOTQTY() {
+          var allrows = document.querySelectorAll("#listing_table tbody tr");
+          for (var i = 1; i < allrows.length; i++) {
+            var allrows = document.querySelectorAll("#listing_table tbody tr");
+            var selectedRowCells = allrows[i].cells;
+            var packagesNum = selectedRowCells[3];
+            var packagesNumVAlue = packagesNum.querySelector(".editable-input").value;
+            var peicesNum = selectedRowCells[4];
+            var peicesNumVal = peicesNum.querySelector(".editable-input").value;
+            var packageContain = selectedRowCells[5];
+            var packageContainVAlue =
+              packageContain.querySelector(".editable-input").value;
+            if (packagesNumVAlue == "") {
+              packagesNumVAlue = 0;
+            }
+            if (peicesNumVal == "") {
+              peicesNumVal = 0;
+            }
+            if (packageContainVAlue == "") {
+              packageContainVAlue = 0;
+            }
+            if (allrows[i].querySelector(".Quantity div") != null) {
+              document
+                .querySelectorAll("#listing_table tr")
+                [i].querySelector(".Quantity input:first-child").value =
+                parseInt(packagesNumVAlue) * parseInt(packageContainVAlue) +
+                parseInt(peicesNumVal);
+              document
+                .querySelectorAll("#listing_table tr")
+                [i].querySelector(".Quantity .item-qty").value =
+                parseInt(packagesNumVAlue) * parseInt(packageContainVAlue) +
+                parseInt(peicesNumVal);
+            } else {
+              document
+                .querySelectorAll("#listing_table tr")
+                [i].cells[8].querySelector(".editable-input").value =
+                parseInt(packagesNumVAlue) * parseInt(packageContainVAlue) +
+                parseInt(peicesNumVal);
+            }
+          }
+        }
+        try {
+          onchangeAction();
+          document
+            .querySelector(".btn-group-flex a")
+            .addEventListener("click", function () {
+              onchangeAction();
+            });
+            var oldTrCount = document.querySelectorAll(".movable").length;
+            document
+            .querySelector("#listing_table")
+            .addEventListener("DOMSubtreeModified", function (event) {
+              var newTrCount = document.querySelectorAll(".movable").length;
+              if (event.target.nodeName === "TR" && oldTrCount != newTrCount) {
+  
+                  onchangeAction();
+
+              }
+            });
+
+          /////////for edit only
+          var multiUnits = document.querySelectorAll(".multi_units");
+          for (var i = 0; i < multiUnits.length; i++) {
+            multiUnits[i].querySelectorAll("span")[1].classList.add("select-item");
+          }
+          ///////////////////////
+        } catch (e) {
+
+        }
+      });

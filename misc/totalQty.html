@@ -1,0 +1,113 @@
+<style>
+  .col-3 {
+    /* display: none !important; */
+  }
+</style>
+<script>
+  $(document).on("change", "#InvoiceLayout", function () {
+    let layout_id = $("#InvoiceLayout").val();
+    if (layout_id == "30") {
+      console.log("not that simple");
+
+      function createCol(prevTh, prevTd, colTitle, classTh, classTd, colInput) {
+        var rowsNum = $("#listing_table tr").length;
+
+        if (rowsNum == 2) {
+          // Clone TH and attach change event listener
+          $(prevTh).after(
+            $("th.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTh)
+              .replace("الوحدة <br> Unit", colTitle)
+          );
+
+          $(prevTd).after(
+            $("td.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTd)
+              .replace("item_col_3", colInput)
+          );
+        } else {
+          $(`#listing_table tr:last-child ${prevTd}`).after(
+            $("#listing_table tr:last-child td.col-3")
+              .clone()
+              .wrap("<p>")
+              .parent()
+              .html()
+              .replace("col-3", classTd)
+              .replace("item_col_3", colInput)
+          );
+        }
+
+        $("." + colInput).attr("placeholder", "");
+        $("." + colInput).attr("name", "");
+        $("#InvoiceLayout").triggerHandler("change", ["def"]);
+        var allrows = document.querySelectorAll("#listing_table tr");
+        for (let i = 1; i < allrows.length; i++) {
+          allrows[i]
+            .querySelector("td:nth-child(5) textarea")
+            .addEventListener("change", function () {
+              allrows[i].querySelector("td:nth-child(4) textarea").value =
+                allrows[i].querySelector("td:nth-child(5) textarea").value +
+                "///" +
+                allrows[i].querySelector("td:nth-child(6) textarea").value;
+            });
+
+          allrows[i]
+            .querySelector("td:nth-child(6) textarea")
+            .addEventListener("change", function () {
+              allrows[i].querySelector("td:nth-child(4) textarea").value =
+                allrows[i].querySelector("td:nth-child(5) textarea").value +
+                "///" +
+                allrows[i].querySelector("td:nth-child(6) textarea").value;
+            });
+        }
+      }
+
+      // adding the columns when screen is loaded
+      createCol(
+        "th.col-3",
+        "td.col-3",
+        "رقم الكتالوج",
+        "late_th",
+        "late_td",
+        "late_input"
+      );
+
+      createCol(
+        ".late_th",
+        ".late_td",
+        "رقم البند التجارى  ",
+        "loc_th",
+        "loc_td",
+        "loc_input"
+      );
+      // adding the columns on add item click
+      $("#AddItem").on("click", () => {
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "رقم الكتالوج",
+          "late_th",
+          "late_td",
+          "late_input"
+        );
+
+        createCol(
+          ".late_th",
+          ".late_td",
+          "رقم البند التجارى  ",
+          "loc_th",
+          "loc_td",
+          "loc_input"
+        );
+      });
+    }
+  });
+</script>

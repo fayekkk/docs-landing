@@ -1,0 +1,209 @@
+<style>
+  .container-le_workflow-type-entity-9_custom_data-create_ticket_staff,
+  .container-le_workflow-type-entity-9_custom_data-staff_group,
+  .container-le_workflow-type-entity-9_custom_data-group_admin,
+  .container-le_workflow-type-entity-9_custom_data-close_ticket_staff {
+    pointer-events: none;
+  }
+  #le_workflow-type-entity-9_custom_data-create_ticket_staff,
+  #le_workflow-type-entity-9
+    > div.form-row
+    > div.col-lg-12
+    > div.row
+    > div.col-lg-6.col-md-6.col-sm-6.container-le_workflow-type-entity-9_custom_data-staff_group
+    > div
+    > span,
+  #le_workflow-type-entity-9
+    > div.form-row
+    > div.col-lg-12
+    > div.row
+    > div.col-lg-6.col-md-6.col-sm-6.container-le_workflow-type-entity-9_custom_data-group_admin
+    > div
+    > span,
+  #le_workflow-type-entity-9
+    > div.form-row
+    > div.col-lg-12
+    > div.row
+    > div.col-lg-6.col-md-6.col-sm-6.container-le_workflow-type-entity-9_custom_data-close_ticket_staff
+    > div
+    > span {
+    background-color: #e6e6e6;
+  }
+</style>
+<script>
+  $(document).ready(() => {
+    const userId = USER.staff_id;
+
+    if (userId == 0) {
+      $("#le_workflow-type-entity-9_custom_data-create_ticket_staff").val(
+        "Owner"
+      );
+    } else {
+      $.get(`/api2/staff/${userId}`).then(function (data) {
+        const staffName = data.data.Staff.name;
+        console.log(staffName);
+        $("#le_workflow-type-entity-9_custom_data-create_ticket_staff").val(
+          staffName
+        );
+      });
+    }
+
+    // $("#le_workflow-type-entity-9_custom_data-create_ticket_staff").attr("disabled", true)
+
+    $(".container-le_workflow-type-entity-9_custom_data-hidden_inv_no").css(
+      "display",
+      "none"
+    );
+    let clientId = $("#client_id");
+    let invNo = $("#le_workflow-type-entity-9_custom_data-invoice_no");
+    $(document).on("change", "#client_id", function () {
+      $("#le_workflow-type-entity-9_custom_data-invoice_no").html(
+        '<option value="" selected="1" data-select2-id="2">من فضلك اختر</option>'
+      );
+      $.get(`/api2/invoices?client_id=${clientId.val()}&per_page=100`).then(
+        function (data) {
+          console.log(
+            `/api2/invoices?client_id=${clientId.val()}&per_page=100`
+          );
+          console.log(data);
+          const invoiceData = data.data;
+          for (i = 0; i < invoiceData.length; i++) {
+            console.log(invoiceData[i].Invoice.no);
+            invNo.append(
+              `<option value=${invoiceData[i].Invoice.no}>${invoiceData[i].Invoice.no}</option>`
+            );
+          }
+        }
+      );
+    });
+
+    $(document).on(
+      "change",
+      "#le_workflow-type-entity-9_custom_data-invoice_no",
+      function () {
+        $("#le_workflow-type-entity-9_custom_data-hidden_inv_no").val(
+          $("#le_workflow-type-entity-9_custom_data-invoice_no").val()
+        );
+      }
+    );
+
+    $("#le_workflow-type-entity-9_custom_data-ticket_open_notes").attr(
+      "required",
+      "required"
+    );
+    const reqSpan = document.createElement("span");
+    reqSpan.setAttribute("class", "required");
+    reqSpan.innerText = "*";
+    $("#le_workflow-type-entity-9_custom_data-ticket_open_notes").prepend(
+      reqSpan
+    );
+    $(
+      "#le_workflow-type-entity-9 > div.form-row > div.col-lg-12 > div.row > div.col-lg-12.col-md-12.col-sm-12.container-le_workflow-type-entity-9_custom_data-ticket_open_notes > div > label"
+    ).append(reqSpan);
+  });
+</script>
+<!--------------------------------- CREATING CLIENT APPOINTMENT ----------------------------------->
+<!-- <script>
+    $(document).ready(()=> {
+        async function postReq() {
+            console.log();
+            const clientId = $("#client_id").val()
+            const desc = $("#le_workflow-type-entity-9_custom_data-ticket_open_notes").val()
+            const ticketNo = $("#number-code").val()
+            var date = moment().format('YYYY-MM-DD')
+            var today = new Date();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            console.log(time.toString());
+                const appBody = {
+                    "ClientAppointment": {
+                        "item_id": clientId,
+                        "item_type": "1",
+                        "partner_id": clientId,
+                        "action_id": "104",
+                        "recurring": 0,
+                        "share_with_partner": 1,
+                        "body": ticketNo,
+                        "status": "1",
+                        "date": date,
+                        "start_time": time,
+                        "duration": "0:01",
+                        "choose_staff":1,
+                    }
+                }
+            
+                console.log(appBody);
+                const response = await fetch("/api2/client_appointments/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        // "apikey": apikey,
+                    },
+                    body: JSON.stringify(appBody)
+                });
+                const rez = await response.json()
+                console.log(rez);
+        }
+        
+        $(".ml-sm-2").on("click", function () {
+            postReq()
+        })
+    })
+    </script> -->
+<script>
+  $(document).ready(() => {
+    $("#le_workflow-type-entity-9_custom_data-technician_name").on(
+      "change",
+      function () {
+        $.get(
+          "/v2/api/entity/le_workflow-type-entity-3/list/1?per_page=60"
+        ).then(function (data) {
+          console.log(data);
+          const res = data.data;
+          console.log(res);
+          for (let i = 0; i < res.length; i++) {
+            const groupId = res[i].id;
+            const groupTitle = res[i].title;
+            const supervisor =
+              res[i]["le_workflow-type-entity-3_custom_data"].group_sup;
+            console.log(supervisor);
+            const empIds =
+              res[i]["le_workflow-type-entity-3_custom_data"].emp_ids;
+            console.log(empIds);
+            employees = empIds.split(",");
+            console.log(employees);
+            // var empName
+            for (let j = 0; j < employees.length; j++) {
+              console.log("Changed");
+              if (
+                $(
+                  "#le_workflow-type-entity-9_custom_data-technician_name"
+                ).val() == employees[j]
+              ) {
+                console.log("TEST");
+                $.get(
+                  `/v2/api/entity/staff/list/1?filter[id]=${supervisor}`
+                ).then(function (data) {
+                  // console.log(data)
+                  const empName = data.data[0].full_name;
+                  $(
+                    "#le_workflow-type-entity-9_custom_data-group_admin"
+                  ).append(`<option value="${supervisor}">${empName}</option>`);
+                  $("#le_workflow-type-entity-9_custom_data-group_admin")
+                    .val(supervisor)
+                    .change();
+                });
+                $("#le_workflow-type-entity-9_custom_data-staff_group").append(
+                  `<option value="${groupId}">${groupTitle}</option>`
+                );
+                $("#le_workflow-type-entity-9_custom_data-staff_group")
+                  .val(groupId)
+                  .change();
+              }
+            }
+          }
+        });
+      }
+    );
+  });
+</script>

@@ -1,0 +1,39 @@
+<style>
+  .barTable,.barTable * {
+    border: none !important;
+  }
+  #barcode_image {
+    width: 80%;
+    margin: 0 10%;
+  }
+</style>
+<div
+  id="barcode_template"
+  class="mceEditable"
+  readonly="readonly"
+  style="
+    padding: 0px 0px 0px 0px;
+    margin:0 auto;
+    background-color: #ffffff;
+    margin-bottom: 0;
+  "
+>
+  <table style="width: 100%; text-align: center" class="barTable">
+    <tbody>
+      <tr>
+        <td style="width: 3.1cm">
+          {%product_name%}<br />{%product_unit_price_with_tax%}
+        </td>
+
+        <td style="width: 1.4cm"></td>
+        <td style="width: 3.1cm">
+          {%product_barcode%} <br /><img
+            id="barcode_image"
+            src="https://daioptical55.daftra.com/img/dummy_barcode.jpg"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

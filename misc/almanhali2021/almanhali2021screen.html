@@ -1,0 +1,98 @@
+<style>
+  .col-2 textarea::placeholder {
+    color: transparent !important;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    function handleInvoiceLayout() {
+      const $invoiceLayout = $("#InvoiceLayout");
+
+      function toggleUnitPrice() {
+        const $labelUnitPrice = $("#label_unit_price");
+        const $unitPrice = $(".unit-price");
+        if ($invoiceLayout.val() === "4" || $invoiceLayout.val() === "6") {
+          $labelUnitPrice.hide();
+          $unitPrice.hide();
+        } else {
+          $labelUnitPrice.show();
+          $unitPrice.show();
+        }
+      }
+
+      toggleUnitPrice();
+      $invoiceLayout.on("change", toggleUnitPrice);
+      $("#AddItem").on("click", toggleUnitPrice);
+    }
+
+    function handleItemNameInput() {
+      const $table = $("#listing_table");
+      const $col2Textarea = $(".col-4 textarea");
+      const $col3Textarea = $(".col-3 textarea");
+
+      function preventNonDigitInput() {
+        $col2Textarea.on("keypress", function (e) {
+          if (!/^\d+$/.test(e.key)) {
+            e.preventDefault();
+          }
+        });
+
+        $col3Textarea.on("keypress", function (e) {
+          if (!/^\d+$/.test(e.key)) {
+            e.preventDefault();
+          }
+        });
+      }
+
+      function updateUnitPriceOnChange() {
+        $table.on(
+          "change",
+          ".col-4 textarea, .col-3 textarea",
+          debounce(function () {
+            const $row = $(this).closest("tr");
+            const duration = $row.find(".col-4 textarea").val();
+            const price = $row.find(".col-3 textarea").val();
+            const unitPriceInput = $row.find(".unit-price input");
+            unitPriceInput.val(duration * price).change();
+          }, 300)
+        );
+      }
+
+      function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+          const context = this;
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+      }
+
+      preventNonDigitInput();
+      updateUnitPriceOnChange();
+
+      $(".item_name").on("change", preventNonDigitInput);
+      $("#AddItem").on("click", function () {
+        preventNonDigitInput();
+        updateUnitPriceOnChange();
+      });
+    }
+
+    if (
+      $("#InvoiceLayout").val() === "4" ||
+      $("#InvoiceLayout").val() === "6"
+    ) {
+      handleInvoiceLayout();
+      handleItemNameInput();
+    }
+
+    $("#InvoiceLayout").on("change", function () {
+      if (
+        $("#InvoiceLayout").val() === "4" ||
+        $("#InvoiceLayout").val() === "6"
+      ) {
+        handleInvoiceLayout();
+        handleItemNameInput();
+      }
+    });
+  });
+</script>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Checkbox Example</title>
+    <style>
+      .percentage-checkbox {
+        display: block;
+        position: relative;
+        padding-right: 20px;
+        cursor: pointer;
+        font-size: 16px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        width: 143px;
+        float: right;
+      }
+
+      .percentage-checkbox input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+      }
+
+      .checkmark {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 20px;
+        width: 20px;
+        background-color: #eee;
+      }
+
+      .percentage-checkbox:hover input ~ .checkmark {
+        background-color: #ccc;
+      }
+
+      .percentage-checkbox input:checked ~ .checkmark {
+        background-color: #2196f3;
+      }
+
+      .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+      }
+
+      .percentage-checkbox input:checked ~ .checkmark:after {
+        display: block;
+      }
+
+      .percentage-checkbox .checkmark:after {
+        left: 6px;
+        top: 2px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <label class="percentage-checkbox">
+      إضافة النسبة للمسمى تلقائياً
+      <input type="checkbox" id="myCheckbox" />
+      <span class="checkmark"></span>
+    </label>
+
+    <script>
+      // Add event change handler
+      $("#myCheckbox").on("change", function () {
+        if (this.checked) {
+          console.log("Checkbox is checked");
+        } else {
+          console.log("Checkbox is unchecked");
+        }
+      });
+    </script>
+  </body>
+</html>

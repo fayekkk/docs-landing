@@ -1,0 +1,200 @@
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap");
+
+  * {
+    font: 12px Arial, Helvetica, sans-serif !important;
+  }
+  #header {
+    width: 100%;
+    border-spacing: 0;
+    text-align: center;
+    direction: ltr;
+    color: #394d70;
+    padding-top: 20px;
+
+  }
+  #header img {
+    width: 100%;
+  }
+  #header tr:nth-child(1) td:nth-child(1) {
+    width: 35%;
+  }
+  #header tr:nth-child(1) td:nth-child(2) img {
+    width: 50%;
+    border-radius: 50%;
+  }
+  #header tr:nth-child(1) td:nth-child(2) {
+    width: 30%;
+  }
+  #header tr:nth-child(1) td:nth-child(3) {
+    width: 35%;
+  }
+
+  /* Start of client_info styles */
+
+  #client_info {
+    width: 100%;
+    border-spacing: 0px;
+    direction: ltr;
+    color: #394d70;
+    margin-bottom: 10px;
+    border: 1px solid #394d70;
+    border-radius: 8px;
+    padding: 2px 0;
+    font-weight: bold;
+  }
+  #client_info td {
+    padding: 2px 5px;
+  }
+  #client_info tr:nth-child(1) td:nth-child(1) {
+    width: 25%;
+  }
+  #client_info tr:nth-child(1) td:nth-child(2) {
+    width: 50%;
+  }
+  #client_info tr:nth-child(1) td:nth-child(3) {
+    width: 25%;
+  }
+
+  #client_info td:nth-child(1) {
+    text-align: left;
+  }
+  #client_info td:nth-child(2) {
+    text-align: center;
+  }
+  #client_info td:nth-child(3) {
+    text-align: right;
+  }
+  /* start of inv_data data */
+  #inv_data {
+    padding: 2px 0;
+
+    width: 100%;
+    border-spacing: 0px;
+    direction: ltr;
+    color: #394d70;
+    margin-bottom: 10px;
+    border: 1px solid #394d70;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+  #inv_data td {
+    padding: 2px 5px;
+  }
+  #inv_data td:nth-child(1) {
+    width: 25%;
+    text-align: left;
+  }
+  #inv_data td:nth-child(2) {
+    width: 50%;
+    text-align: center;
+  }
+  #inv_data td:nth-child(3) {
+    width: 25%;
+    text-align: right;
+  }
+</style>
+<div style="height: 240px; margin-top: -30px;">
+  <table id="header">
+    <tbody>
+      <tr>
+        <td>
+          <img
+            src="https://s7ss7sss7.daftra.com/files/e9d0b2af/logos/6565b85cb4683_blobid1701165143856.png"
+            alt=""
+            title="safeer1.png"
+          />
+        </td>
+        <td rowspan="100%">{%site_logo%}</td>
+        <td>
+          <img
+            src="https://s7ss7sss7.daftra.com/files/e9d0b2af/logos/6565b8818646f_blobid1701165180601.png"
+            alt=""
+            title="safeer2.png"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>C.R:{%CR%}</td>
+        <td>س.ت:{%CR%}</td>
+      </tr>
+      <tr>
+        <td>VAT NO:{%site_bn1%}</td>
+        <td>الرقم الضريبى:{%site_bn1%}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div
+    id="invoice_title_1"
+    style="
+      text-align: center;
+      font-size: 25px !important;
+      font-weight: bold;
+      color: #ff0000;
+      zoom: 1;
+    "
+  >
+    {%invoice_title%}
+  </div>
+  <div style="width: 63%; display: inline-block; margin-right: 1%">
+    <table id="client_info">
+      <tbody>
+        <tr>
+          <td style="vertical-align: text-bottom; height: 31px">
+            Customer Name:
+          </td>
+          <td style="vertical-align: text-bottom">{%client_business_name%}</td>
+          <td style="vertical-align: text-bottom">:إسم العميل</td>
+        </tr>
+
+        <tr>
+          <td>Mobile No:</td>
+          <td>{%client_mobile%}</td>
+          <td>:رقم الجوال</td>
+        </tr>
+        <tr>
+          <td>VAT No:</td>
+          <td>{%client_bn1%}</td>
+          <td>:الرقم الضريبي</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="width: 35%; display: inline-block">
+    <table id="inv_data">
+      <tbody>
+        <tr>
+          <td style="text-align: left">Inv No:</td>
+          <td style="text-align: center">{%invoice_no%}</td>
+          <td style="text-align: right">:رقم الفاتورة</td>
+        </tr>
+        <tr>
+          <td>Date:</td>
+          <td>{%invoice_date%}</td>
+          <td>:التاريخ</td>
+        </tr>
+        <tr>
+          <td>Inv Type:</td>
+          <td id="invoice_title_2">QUOTATION</td>
+          <td>:نوع الفاتورة</td>
+        </tr>
+        <tr>
+          <td>P.O No:</td>
+          <td>{%PO%}</td>
+          <td>:أمر شراء</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>
+  try {
+    var oldTitle = document
+      .getElementById("invoice_title_1")
+      .innerText.split("//");
+    document.getElementById("invoice_title_1").innerText = oldTitle[0];
+    document.getElementById("invoice_title_2").innerText = oldTitle[1];
+  } catch (error) {}
+</script>

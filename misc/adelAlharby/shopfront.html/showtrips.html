@@ -1,0 +1,156 @@
+<div
+  style="
+    display: none;
+    padding: 20px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+  "
+  class="pleaseLogIn"
+>
+  يرجى تسجيل الدخول
+</div>
+<div id="showAllTrips">
+  <h1>All Trips</h1>
+  <table id="trip-table">
+    <thead>
+      <tr>
+        <th>Refrence Number</th>
+        <th>إسم الرحلة</th>
+        <th>تاريخ الرحلة</th>
+        <th>الوصف</th>
+        <th>الحالة</th>
+        <th>رقم الرحلة</th>
+        <th>الجنسية</th>
+        <th>صالة الوصول</th>
+        <th></th>
+        <th>عدد الباصات</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+<script>
+  // "le_workflow-type-entity-4_custom_data"
+  $(document).ready(function () {
+    if (USER.client_id == 0) {
+      $("#showAllTrips").hide();
+      $(".pleaseLogIn").show();
+    }
+    $("#mainNav ul:nth-child(1) li:nth-child(3) ").hide();
+
+    function appendTripData(tripData) {
+      var tbody = $("#trip-table tbody");
+      tbody.empty();
+
+      $.each(tripData, function (index, trip) {
+        var row = $("<tr>");
+        // 2268
+        row.on("click", function () {
+          window.location.href = `https://durobalhijrah.daftara.com/client/workflows/view/${trip.id}#`;
+        });
+        row.append($("<td>").text(trip.number));
+        row.append($("<td>").text(trip.title));
+        row.append($("<td>").text(trip.start_date));
+        row.append($("<td>").text(trip.description));
+        row.append(
+          $("<td>").text(
+            trip.follow_up_status_id == 35 ? "تم المراجعة" : "تحت المراجعة"
+          )
+        );
+        row.append(
+          $("<td>").text(
+            trip["le_workflow-type-entity-4_custom_data"].trip_number
+          )
+        );
+        row.append(
+          $("<td>").text(
+            trip["le_workflow-type-entity-4_custom_data"].nationality
+          )
+        );
+        row.append(
+          $("<td>").text(
+            trip["le_workflow-type-entity-4_custom_data"].arrive_name
+          )
+        );
+        row.append(
+          $("<td>").text(
+            trip["le_workflow-type-entity-4_custom_data"].passengers_numbers1
+          )
+        );
+        row.append(
+          $("<td>").text(
+            trip["le_workflow-type-entity-4_custom_data"].bus_number1
+          )
+        );
+        tbody.append(row);
+      });
+    }
+    // addRoutes
+    const newLi = document.createElement("li");
+
+    const newLink = document.createElement("a");
+
+    newLink.textContent = "إضافة رحلة  ";
+    newLink.href = "/contents/process_content/add_trips";
+    newLi.classList.add("nav-item");
+    newLi.classList.add("dropdown");
+    newLink.classList.add("nav-link");
+    newLink.classList.add("fs-xl-16");
+    newLi.appendChild(newLink);
+    const mainNavList = document.querySelector("#mainNav > ul:first-child");
+    mainNavList.appendChild(newLi);
+
+    let clientID = USER.client_id;
+
+    fetch(
+      `/v2/api/entity/le_workflow-type-entity-4/list/1?per_page=200&filter[client_id]=${clientID}`,
+      {
+        method: "GET",
+        headers: {
+          apikey: "bceffccefa6ab4014732bb7093d284bc37794bf4",
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Response:", data);
+        getworkflowdata(data.data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    var alltripsdata = [];
+    function getworkflowdata(alltrips) {
+      if (alltrips.length > 0) {
+        async function fetchAllTrips() {
+          for (let i = 0; i < alltrips.length; i++) {
+            try {
+              const response = await fetch(
+                `/v2/api/entity/le_workflow-type-entity-4/${alltrips[i].id}/2`,
+                {
+                  method: "GET",
+                  headers: {
+                    apikey: "bceffccefa6ab4014732bb7093d284bc37794bf4",
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                }
+              );
+              const data = await response.json();
+              console.log("Response:", data);
+              alltripsdata.push(data);
+            } catch (error) {
+              console.error("Error:", error);
+            }
+          }
+          appendTripData(alltripsdata);
+        }
+
+        fetchAllTrips();
+      }
+    }
+  });
+</script>

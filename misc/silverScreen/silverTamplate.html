@@ -1,0 +1,1877 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style>
+    #main1 tbody td,
+    #main2 tbody td,
+    #main3 tbody td,
+    header td {
+      padding: 3px;
+    }
+    #Client1 tr:first-child td:last-child,
+    #Client2 tr:first-child td:last-child,
+    #bank1 tr:first-child td:first-child,
+    #bank1 tr:first-child td:nth-child(2),
+    #bank2 tr:first-child td:first-child,
+    #bank2 tr:first-child td:nth-child(2),
+    #client_signs tr:first-child td:first-child,
+    #client_signs tr:first-child td:last-child,
+    #client_signs tr:first-child td:nth-child(2),
+    #client_signs tr:nth-child(3) td:last-child,
+    #main1 thead th:last-child,
+    #main2 thead th:last-child,
+    #main3 thead th:last-child,
+    #new_totals th:first-child,
+    #signs tr:first-child td:first-child,
+    #signs tr:first-child td:last-child,
+    #signs tr:first-child td:nth-child(2),
+    #signs tr:nth-child(3) td:last-child {
+      border-right: 1px solid #fff;
+    }
+    #Client1,
+    #Client2,
+    #header,
+    #main1,
+    #main2,
+    #main3,
+    #new_totals,
+    #payterms {
+      width: 100%;
+      border-spacing: 0;
+    }
+    #main1 tbody td,
+    #main2 tbody td,
+    #main3 tbody td,
+    #reasons tr:nth-child(2) td,
+    .graybg,
+    .head_bordered {
+      border-left: 1px solid #000;
+      border-bottom: 1px solid #000;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: 0 0;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 0;
+    }
+    .colorInverse {
+      background-color: #000;
+      color: #fff;
+    }
+    #main1 td:last-child,
+    #main1 td:nth-last-child(6),
+    #main2 td:last-child,
+    #main2 td:nth-last-child(6),
+    #main3 td:last-child,
+    #main3 td:nth-last-child(6),
+    .graybg,
+    .subtotals td:last-child,
+    .subtotals td:nth-last-child(2),
+    .subtotals td:nth-last-child(3),
+    .subtotals td:nth-last-child(4),
+    .subtotals td:nth-last-child(5),
+    .subtotals td:nth-last-child(6),
+    .subtotals td:nth-last-child(7) {
+      background-color: #e5e5e5;
+    }
+    .head_bordered {
+      border-right: 1px solid #000;
+    }
+    #Client1,
+    #Client2,
+    #header {
+      direction: ltr;
+      text-align: center;
+    }
+    #Site_data,
+    .subs2 {
+      text-align: left;
+    }
+    header tr:first-child td:nth-child(1) {
+      width: 10%;
+    }
+    header tr:first-child td:nth-child(1) img {
+      width: 100%;
+    }
+    header tr:first-child td:nth-child(2) {
+      width: 23%;
+    }
+    header tr:first-child td:nth-child(3),
+    header tr:first-child td:nth-child(4) {
+      width: 33%;
+    }
+    #Client1 td:first-child {
+      width: 20.5%;
+    }
+    #Client1 td:nth-child(2) {
+      width: 17.6%;
+    }
+    #Client1 td:nth-child(3) {
+      width: 15.5%;
+    }
+    #Client1 td:nth-child(4) {
+      width: 24%;
+    }
+    #Client1 td:nth-child(5) {
+      width: 12%;
+    }
+    #Client1 td,
+    #Client2 td,
+    #bank1 td,
+    #bank2 td,
+    #client_signs td,
+    #new_totals td,
+    #payterms td,
+    #signs td {
+      padding: 4px;
+    }
+    #Client2 td:first-child,
+    #Client2 td:nth-child(2),
+    #Client2 td:nth-child(3),
+    #Client2 td:nth-child(4) {
+      width: 25%;
+    }
+    #Client1 tr:first-child td,
+    #Client2 tr:first-child td,
+    #new_totals th {
+      border-left: 1px solid #fff;
+    }
+    #c_address br,
+    #main2 br {
+      display: none;
+    }
+    #main1 tbody td:nth-child(6),
+    #main2 tbody td:nth-child(5),
+    #main3 tbody td:nth-child(6),
+    .listing-table {
+      display: none !important;
+    }
+    .subs1,
+    .subs2 {
+      display: inline-block;
+      background-color: #d9d9d9;
+      float: left;
+      border-right: 1px solid #000;
+    }
+    #main1 {
+      margin-top: 15px;
+    }
+    #main1,
+    #main2,
+    #main3 {
+      margin-bottom: 25px;
+      border-right: 1px solid #000;
+    }
+    #main1 caption,
+    #main2 caption,
+    #main3 caption {
+      text-align: center;
+      background-color: #000;
+      color: #fff;
+      font-size: 15px;
+      border: 1px solid #fff;
+    }
+    #main1 thead th,
+    #main2 thead th,
+    #main3 thead th {
+      background-color: #000;
+      color: #fff;
+      padding: 3px;
+      border-right: 1px solid #fff;
+    }
+    .subs2 {
+      padding-left: 5px;
+    }
+    #main2 .subtotals td:nth-child(5),
+    #main2 .subtotals td:nth-child(6),
+    #main2 .subtotals td:nth-child(7),
+    .subtotals td:nth-child(2),
+    .subtotals td:nth-child(3),
+    .subtotals td:nth-child(4) {
+      border-left: none !important;
+    }
+    .PPLSubTd,
+    .subsTd {
+      background-color: #fff !important;
+    }
+    #new_totals {
+      direction: rtl;
+    }
+    #new_totals th:first-child {
+      border-bottom: 1px solid #fff;
+    }
+    #payterms {
+      text-align: center;
+    }
+    #payterms .paysHead {
+      text-align: center;
+      background-color: #000;
+      color: #fff;
+    }
+    #payterms .paytr td:first-child {
+      border-top: 1px solid #fff;
+      width: 30%;
+      background-color: #000;
+      color: #fff;
+    }
+    #payterms .paytr td:nth-child(2) {
+      width: 30%;
+      background-color: #e5e5e5;
+      border-right: 1px solid #000;
+      border-top: 1px solid #000;
+    }
+    #payterms .paytr td:nth-child(3) {
+      width: 40%;
+      text-align: center;
+      background-color: #e5e5e5;
+      border-right: 1px solid #000;
+      border-top: 1px solid #000;
+    }
+    #payterms tr:last-child td {
+      border-bottom: 1px solid #000;
+    }
+    #ar_invoice_total_spelled,
+    #en_invoice_total_spelled {
+      text-align: center;
+      padding: 6px;
+      font-weight: 700;
+    }
+    #bank1,
+    #bank2,
+    #client_signs,
+    #signs {
+      text-align: center;
+      width: 100%;
+      border-spacing: 0;
+      margin-bottom: 15px;
+    }
+    #bank1 tr:first-child td,
+    #bank2 tr:first-child td {
+      background-color: #000;
+      color: #fff;
+      font-weight: 700;
+    }
+    #bank1 tr:nth-child(2) td:nth-child(2),
+    #bank1 tr:nth-child(2) td:nth-child(3),
+    #bank2 tr:nth-child(2) td:nth-child(2),
+    #bank2 tr:nth-child(2) td:nth-child(3),
+    #client_signs tr:nth-child(2) td:nth-child(2),
+    #client_signs tr:nth-child(2) td:nth-child(3),
+    #client_signs tr:nth-child(3) td:nth-child(2),
+    #client_signs tr:nth-child(3) td:nth-child(3),
+    #client_signs tr:nth-child(4) td:nth-child(2),
+    #client_signs tr:nth-child(4) td:nth-child(3),
+    #signs tr:nth-child(2) td:nth-child(2),
+    #signs tr:nth-child(2) td:nth-child(3),
+    #signs tr:nth-child(3) td:nth-child(2),
+    #signs tr:nth-child(3) td:nth-child(3),
+    #signs tr:nth-child(4) td:nth-child(2),
+    #signs tr:nth-child(4) td:nth-child(3) {
+      border-right: 1px solid #000;
+      border-bottom: 1px solid #000;
+      width: 33%;
+    }
+    #bank1 tr:nth-child(2) td:first-child,
+    #bank2 tr:nth-child(2) td:first-child,
+    #client_signs tr:nth-child(2) td:first-child,
+    #client_signs tr:nth-child(3) td:first-child,
+    #client_signs tr:nth-child(4) td:first-child,
+    #signs tr:nth-child(2) td:first-child,
+    #signs tr:nth-child(3) td:first-child,
+    #signs tr:nth-child(4) td:first-child {
+      border-left: 1px solid #000;
+      border-bottom: 1px solid #000;
+      border-right: 1px solid #000;
+      width: 33%;
+    }
+    #bank2 {
+      margin-bottom: 10px;
+    }
+    #client_signs tr:first-child td,
+    #client_signs tr:nth-child(3) td,
+    #signs tr:first-child td,
+    #signs tr:nth-child(3) td {
+      background-color: #000;
+      color: #fff;
+      font-weight: 700;
+      border-left: 1px solid #fff;
+    }
+    #reasons {
+      width: 50%;
+      margin: 0 auto;
+      border-spacing: 0;
+      text-align: center;
+    }
+    #reasons tr:first-child td {
+      background-color: #000;
+      color: #fff;
+      padding: 5px;
+    }
+    #reasons tr:nth-child(2) td {
+      padding: 5px;
+      border-right: 1px solid #000;
+    }
+    #alignleft,
+    .subsTd {
+      text-align: left !important;
+    }
+    #main1 td,
+    #main1 th,
+    #main2 td,
+    #main2 th,
+    #main3 td,
+    #main3 th {
+      text-align: center !important;
+    }
+    .emptrownsigns td {
+      height: 120px;
+    }
+    #footer * {
+      page-break-inside: avoid !important;
+    }
+    #footer table {
+      background-color: #e5e5e5;
+      vertical-align: top;
+    }
+
+    #footer table td {
+      background-color: #e5e5e5;
+      vertical-align: top;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <!-- ***************************  Header  *************************** -->
+
+        <table id="header">
+          <tbody>
+            <tr>
+              <td rowspan="100%">{%site_logo%}</td>
+              <td rowspan="100%" id="Site_data">
+                SILVER SCREEN EST.<br />
+                مؤسسة شاشة فضية للانتاج الإعلامي المرئي والمسموع
+                <br />
+                C.R. No.:1010672806:رقم سجل تجارى
+                <br />
+                VAT No.:{%site_bn1%}:رقم الضريبة
+                <br />
+                CERT No.:150786:رقم الترخيص اعلامى
+                <br />
+                ADDRESS : 2285081,RIYADH,11323 : عنوان
+                <br />
+                PHONE : {%site_mobile%}: الهاتف
+                <br />
+                WWW.SILVERSCREEN.COM.CO
+              </td>
+              <td rowspan="100%">{%sa_qr_code_image%}</td>
+              <td style="height: 30px"></td>
+            </tr>
+            <tr>
+              <td class="colorInverse" id="invoice_title1">
+                {%invoice_title%}
+              </td>
+            </tr>
+            <tr>
+              <td class="head_bordered" id="invoice_title">{%invoice_no%}</td>
+            </tr>
+            <tr>
+              <td class="colorInverse">{%label_date%}</td>
+            </tr>
+            <tr>
+              <td class="head_bordered">{%invoice_date%}</td>
+            </tr>
+            <tr>
+              <td style="height: 15px"></td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- ***************************  Header  *************************** -->
+        <!-- ***************************  Client  *************************** -->
+        <table id="Client1">
+          <tr>
+            <td class="colorInverse">Clients Name - اسم العميل</td>
+            <td class="colorInverse">Mobile - موبايل</td>
+            <td class="colorInverse">Email - الايميل</td>
+            <td class="colorInverse">Client Entity Name - اسم كيان العميل</td>
+            <td class="colorInverse">Client VAT No.- رقم الضريبي للعميل</td>
+          </tr>
+          <tr>
+            <td class="head_bordered">{%Client Name%}</td>
+            <td class="head_bordered">{%Client Mobile%}</td>
+            <td class="head_bordered">{%Client Email%}</td>
+            <td class="head_bordered">{%client_business_name%}</td>
+            <td class="head_bordered">{%client_bn1%}</td>
+          </tr>
+        </table>
+        <table id="Client2">
+          <tr>
+            <td class="colorInverse">Project Name - اسم المشروع</td>
+            <td class="colorInverse" id="ProjName">
+              Quotation Expiry Date - انتهاء صلاحية التسعيرة
+            </td>
+            <td class="colorInverse">Client Address - عنوان العميل</td>
+            <td class="colorInverse">
+              Client C.R. No. - رقم السجل التجاري للعميل
+            </td>
+          </tr>
+          <tr>
+            <td class="head_bordered">{%Project Name%}</td>
+            <td class="head_bordered" id="ProjNameval">{%due_date%}</td>
+            <td class="head_bordered" id="c_address">
+              {%client_full_address%}
+            </td>
+            <td class="head_bordered">{%le_custom_data_client_cr_num_%}</td>
+          </tr>
+        </table>
+        <div id="AddCurrencyCode" style="display: none">
+          {%invoice_currency_code%}
+        </div>
+        <div id="items-list">{%items_list%}</div>
+        <div id="tables_container"></div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <table id="new_totals">
+          <thead>
+            <th class="colorInverse" colspan="2">
+              الإجمالي مع الضريبة <br />
+              Total With VAT
+            </th>
+            <th class="colorInverse" colspan="3">
+              قيمة الضريبة <br />
+              VAT Amount
+            </th>
+            <th class="colorInverse" colspan="2" id="discount1">
+              إجمالي الخصم <br />
+              Total Discount
+            </th>
+            <th class="colorInverse" colspan="2">
+              الإجمالي قبل الضريبة <br />
+              Total Without VAT
+            </th>
+          </thead>
+          <tbody>
+            <tr>
+              <td
+                colspan="2"
+                class="colorInverse removeCurr"
+                style="text-align: center; width: 12.5%"
+                id="invoice_total"
+              >
+                {%invoice_total%}
+              </td>
+              <td
+                colspan="2"
+                class="graybg removeCurr"
+                style="text-align: center; width: 8%"
+              >
+                {%tax-total%}
+              </td>
+              <td class="graybg" style="text-align: center; width: 8%">15%</td>
+              <td
+                colspan="2"
+                class="graybg removeCurr"
+                style="text-align: center; width: 12.5%"
+                id="discount"
+              >
+                {%discount%}/{%item-discount-total%}
+              </td>
+              <td
+                colspan="2"
+                class="graybg removeCurr"
+                style="text-align: center; width: 12.5%"
+              >
+                {%invoice_subtotal%}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="ar_invoice_total_spelled"></div>
+        <div id="en_invoice_total_spelled"></div>
+        <div id="payvals" style="display: none">{%payment Terms%}</div>
+        <div id="paylbls" style="display: none">{%payment Terms labels%}</div>
+        <table id="payterms"></table>
+        <table id="reasons">
+          <tr>
+            <td>Reason - السبب</td>
+          </tr>
+          <tr>
+            <td>{%custom_reason_field_2%}</td>
+          </tr>
+        </table>
+        <div style="text-align: center; padding: 7px 0">
+          Payment to be made direct to our Account as per below details - يتم
+          الدفع مباشرة إلى حسابنا وفقًا للتفاصيل التالية
+        </div>
+        <table id="bank1">
+          <tr>
+            <td>Account Name - اسم الحساب</td>
+            <td>Name of Bank - اسم البنك</td>
+            <td>Bank Branch - فرع البنك</td>
+          </tr>
+          <tr>
+            <td>{%Account Name%}</td>
+            <td>{%Name of Bank%}</td>
+            <td>{%Bank Branch%}</td>
+          </tr>
+        </table>
+        <table id="bank2">
+          <tr>
+            <td>Account Number - رقم الحساب البنكي</td>
+            <td>IBAN - الايبان</td>
+            <td>Swift Code - رقم السويفت</td>
+          </tr>
+          <tr>
+            <td>{%Account Number%}</td>
+            <td>{%IBAN%}</td>
+            <td>{%Swift Code%}</td>
+          </tr>
+        </table>
+        <table style="width: 100%">
+          <tr>
+            <td style="width: 50%; text-align: left; padding: 4px 0">
+              Please Sign, Scan and Send by Email as a form of acceptance of
+              this offer.
+            </td>
+            <td style="width: 50%; text-align: right; padding: 4px 0">
+              يرجى التوقيع والمسح الضوئي والإرسال عبر البريد الإلكتروني كشكل من
+              أشكال قبول هذا العرض.
+            </td>
+          </tr>
+        </table>
+        <table id="signs">
+          <tr>
+            <td>Name - الاسم</td>
+            <td>Job Title - مسمى الوظيفي</td>
+            <td>Entity Name - اسم الكيان</td>
+          </tr>
+          <tr>
+            <td>Abdulaziz Kabalan</td>
+            <td>Executive Director</td>
+            <td>Silver Screen Est.</td>
+          </tr>
+          <tr>
+            <td>Date of Signature - تاريخ التوقيع</td>
+            <td>Signature - التوقيع</td>
+            <td>Stamp - الختم</td>
+          </tr>
+          <tr>
+            <td>{%invoice_date%}</td>
+            <td>
+              <img
+                src="https://silverscreen.daftra.com/files/24dfe1ac/logos/65a7a19528cec_blobid1705484691909.png"
+                alt=""
+                title="Picture2.png"
+                style="width: 100px"
+                id="img2"
+              />
+            </td>
+            <td>
+              <img
+                src="https://silverscreen.daftra.com/files/24dfe1ac/logos/65a7a189e0360_blobid1705484680409.png"
+                alt=""
+                title="Picture1.png"
+                style="width: 100px"
+                id="img1"
+              />
+            </td>
+          </tr>
+        </table>
+        <div id="Inc" style="display: none">{%Inc%}</div>
+        <table id="client_signs">
+          <tr>
+            <td>Signee name- اسم الموقع</td>
+            <td>Signee Job Title - مسمى الوظيفي للموقع</td>
+            <td>Client Entity Name - اسم كيان العميل</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>{%client_business_name%}</td>
+          </tr>
+          <tr>
+            <td>Client Date of Signature - تاريخ توقيع العميل</td>
+            <td>Client Signature - توقيع العميل</td>
+            <td>Client Stamp - ختم العميل</td>
+          </tr>
+          <tr class="emptrownsigns">
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function hunldeDiscount() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        if (allRows[0].cells.length == 8) {
+          var newTh = document.createElement("th");
+
+          newTh.innerText = "نسبة الخصم Discount Percentage";
+          allRows[0].insertBefore(newTh, allRows[0].cells[7]);
+          for (var i = 1; i < allRows.length; i++) {
+            var newTd = document.createElement("td");
+            newTd.innerText = "0.00";
+            allRows[i].insertBefore(newTd, allRows[i].cells[7]);
+          }
+        }
+      }
+      try {
+        hunldeDiscount();
+      } catch (error) {
+        console.log(error);
+      }
+      function AddSerials() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var SerTh = document.createElement("th");
+        SerTh.innerText = "#";
+        allRows[0].insertBefore(SerTh, allRows[0].cells[0]);
+        for (var i = 1; i < allRows.length; i++) {
+          if (allRows[i].cells[7].innerText.trim("") == "") {
+            allRows[i].cells[7].innerText = "0%";
+          }
+          if (allRows[i].cells[2].innerText.replace(/%/g, "").trim("") == "") {
+            allRows[i].cells[2].innerText = "0%";
+          }
+          var SerTd = document.createElement("td");
+          SerTd.innerText = i;
+          allRows[i].insertBefore(SerTd, allRows[i].cells[0]);
+        }
+      }
+      try {
+        AddSerials();
+      } catch (error) {
+        console.log(error);
+      }
+      // ****************************** AddDiscountamount *************************************
+      function AddDiscountamount() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var newTh = document.createElement("th");
+        newTh.innerText = "discAmount";
+        allRows[0].insertBefore(newTh, allRows[0].cells[0]);
+        for (var i = 1; i < allRows.length; i++) {
+          var newTd = document.createElement("td");
+          newTd.innerText = (
+            (parseFloat(allRows[i].cells[6].innerText.replace(/,/g, "")) *
+              parseFloat(allRows[i].cells[7].innerText.replace(/,/g, "")) *
+              parseFloat(allRows[i].cells[8].innerText.replace(/%/g, ""))) /
+            100
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          allRows[i].insertBefore(newTd, allRows[i].cells[0]);
+        }
+      }
+      try {
+        AddDiscountamount();
+      } catch (error) {
+        console.log(error);
+      }
+      // ****************************** AddVATAmount *************************************
+      function AddVATAmount() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var newTh = document.createElement("th");
+        newTh.innerText = "VATAMOUNT";
+        allRows[0].insertBefore(newTh, allRows[0].cells[0]);
+        for (var i = 1; i < allRows.length; i++) {
+          var newTd = document.createElement("td");
+          newTd.innerText = (
+            (parseFloat(allRows[i].cells[4].innerText.replace(/%/g, "")) /
+              100) *
+            parseFloat(allRows[i].cells[10].innerText.replace(/,/g, ""))
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          allRows[i].insertBefore(newTd, allRows[i].cells[0]);
+        }
+      }
+      try {
+        AddVATAmount();
+      } catch (error) {
+        console.log(error);
+      }
+      // ****************************** Swap *************************************
+      function SwapAll() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          var VatAmount = allRows[i].cells[0].innerText;
+          var discAmount = allRows[i].cells[1].innerText;
+          var Serial = allRows[i].cells[2].innerText;
+          var Item = allRows[i].cells[3].innerText;
+          var Scale = allRows[i].cells[4].innerText;
+          var VATPER = allRows[i].cells[5].innerText;
+          var pricing = allRows[i].cells[6].innerText;
+          var Total = allRows[i].cells[7].innerText;
+          var price = allRows[i].cells[8].innerText;
+          var Qty = allRows[i].cells[9].innerText;
+          var Discount = allRows[i].cells[10].innerText;
+          var subtotal = allRows[i].cells[11].innerText;
+          allRows[i].cells[0].innerText = Serial;
+          allRows[i].cells[1].innerText = Item;
+          allRows[i].cells[2].innerText = price;
+          allRows[i].cells[3].innerText = Qty;
+          allRows[i].cells[4].innerText = Scale;
+          allRows[i].cells[5].innerText = pricing;
+          allRows[i].cells[6].innerText = subtotal;
+          allRows[i].cells[7].innerText = Discount;
+          allRows[i].cells[8].innerText = discAmount;
+          allRows[i].cells[9].innerText = VATPER;
+          allRows[i].cells[10].innerText = VatAmount;
+          allRows[i].cells[11].innerText = Total;
+        }
+      }
+      try {
+        SwapAll();
+      } catch (error) {
+        console.log(error);
+      }
+      // ****************************** Updatesubtotal *************************************
+
+      function Updatesubtotal() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 1; i < allRows.length; i++) {
+          allRows[i].cells[6].innerText = (
+            parseFloat(allRows[i].cells[2].innerText.replace(/,/g, "")) *
+            parseFloat(allRows[i].cells[3].innerText.replace(/,/g, ""))
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      try {
+        Updatesubtotal();
+      } catch (error) {
+        console.log(error);
+      }
+
+      // ****************************** AddCurrencyCode *************************************
+      function AddCurrencyCode() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+
+        var currCode = document
+          .getElementById("AddCurrencyCode")
+          .innerText.trim("");
+        for (var i = 1; i < allRows.length; i++) {
+          allRows[i].cells[2].innerText =
+            currCode +
+            " " +
+            parseFloat(allRows[i].cells[2].innerText.replace(/,/g, ""))
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          allRows[i].cells[2].style.wordSpacing = "0px";
+          // ************
+          allRows[i].cells[6].innerText =
+            currCode +
+            " " +
+            parseFloat(allRows[i].cells[6].innerText.replace(/,/g, ""))
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          allRows[i].cells[6].style.wordSpacing = "0px";
+          // ************
+          allRows[i].cells[8].innerText =
+            currCode +
+            " " +
+            parseFloat(allRows[i].cells[8].innerText.replace(/,/g, ""))
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          allRows[i].cells[8].style.wordSpacing = "0px";
+          // ************
+          allRows[i].cells[10].innerText =
+            currCode +
+            " " +
+            parseFloat(allRows[i].cells[10].innerText.replace(/,/g, ""))
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          allRows[i].cells[10].style.wordSpacing = "0px";
+          // ************
+          allRows[i].cells[11].innerText =
+            currCode +
+            " " +
+            parseFloat(allRows[i].cells[11].innerText.replace(/,/g, ""))
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          allRows[i].cells[11].style.wordSpacing = "0px";
+        }
+      }
+      try {
+        AddCurrencyCode();
+      } catch (error) {
+        console.log(error);
+      }
+      // ****************************** HundleSubs *************************************
+
+      function HundleSubs() {
+        var currCode = document
+          .getElementById("AddCurrencyCode")
+          .innerText.trim("");
+
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var TotWithoutVat = 0;
+        var TotDisc = 0;
+        var TotVAT = 0;
+        var TotWithVat = 0;
+        var totPPL = 0;
+
+        for (var i = 1; i < allRows.length; i++) {
+          TotWithoutVat =
+            TotWithoutVat +
+            parseFloat(
+              allRows[i].cells[6].innerText.replace("SAR", "").replace(/,/g, "")
+            );
+          // ************
+          TotDisc =
+            TotDisc +
+            parseFloat(
+              allRows[i].cells[8].innerText.replace("SAR", "").replace(/,/g, "")
+            );
+
+          // ************
+
+          if (allRows[i].cells[5].innerText.split("/*/").length > 1) {
+            totPPL =
+              totPPL +
+              parseFloat(
+                allRows[i].cells[5].innerText
+                  .split("/*/")[2]
+                  .replace("SAR", "")
+                  .replace(/,/g, "")
+              );
+          }
+          // ************
+          TotVAT =
+            TotVAT +
+            parseFloat(
+              allRows[i].cells[10].innerText
+                .replace("SAR", "")
+                .replace(/,/g, "")
+            );
+          // ************
+          TotWithVat =
+            TotWithVat +
+            parseFloat(
+              allRows[i].cells[11].innerText
+                .replace("SAR", "")
+                .replace(/,/g, "")
+            );
+          // ************
+          if (allRows[i].cells[1].innerText.trim("") == "Main 1") {
+            var newTd = document.createElement("td");
+            newTd.innerText = "Main 1" + "///" + allRows[i].cells[4].innerText;
+            newTd.setAttribute("colspan", "100%");
+            allRows[i].innerHTML = "";
+            allRows[i].appendChild(newTd);
+          }
+          if (allRows[i].cells.length > 1) {
+            if (
+              allRows[i].cells[1].innerText.trim("") == "Sub" ||
+              allRows[i].cells[1].innerText.trim("") == "PPL Sub" ||
+              allRows[i].cells[1].innerText.trim("") == "Main 2" ||
+              allRows[i].cells[1].innerText.trim("") == "Main 3" ||
+              i == allRows.length - 1
+            ) {
+              if (i != allRows.length - 1) {
+                var newTd = document.createElement("td");
+                if (allRows[i].cells[1].innerText.trim("") == "Main 2") {
+                  newTd.innerText =
+                    "Main 2" + "///" + allRows[i].cells[4].innerText;
+                } else if (allRows[i].cells[1].innerText.trim("") == "Main 3") {
+                  newTd.innerText =
+                    "Main 3" + "///" + allRows[i].cells[4].innerText;
+                } else if (allRows[i].cells[1].innerText.trim("") == "Sub") {
+                  newTd.style.padding = "0";
+                  newTd.style.textAlign = "left !important";
+                  newTd.setAttribute("class", "subsTd");
+                  newTd.innerHTML =
+                    "<span style='text-align:center !important;' class='subs1'></span>" +
+                    "<span style='text-align:left ' class='subs2'>" +
+                    allRows[i].cells[4].innerText +
+                    "</span";
+                } else if (
+                  allRows[i].cells[1].innerText.trim("") == "PPL Sub"
+                ) {
+                  newTd.style.padding = "0";
+                  newTd.style.textAlign = "left";
+                  newTd.setAttribute("class", "PPLSubTd");
+                  newTd.innerHTML =
+                    "<span class='subs1'></span>" +
+                    "<span class='subs2'>" +
+                    allRows[i].cells[4].innerText +
+                    "</span";
+                }
+                newTd.setAttribute("colspan", "100%");
+                allRows[i].innerHTML = "";
+                allRows[i].appendChild(newTd);
+              }
+
+              if (
+                !(
+                  allRows[i].cells.length == 1 &&
+                  allRows[i - 1].cells.length == 1
+                )
+              ) {
+                var newTr = document.createElement("tr");
+                for (var k = 0; k < 12; k++) {
+                  var newTd = document.createElement("td");
+                  if (k == 1) {
+                    newTd.innerText = totPPL;
+                  } else if (k == 3) {
+                    continue;
+                  } else if (k == 4) {
+                    newTd.setAttribute("colspan", "2");
+                    newTd.innerText = "Subtotal :";
+                    newTd.setAttribute(
+                      "style",
+                      "border-left: 1px solid black !important"
+                    );
+                  } else if (k == 5) {
+                    newTd.style.wordSpacing = "0px";
+
+                    newTd.innerText =
+                      currCode +
+                      " " +
+                      TotWithoutVat.toFixed(2).replace(
+                        /\B(?=(\d{3})+(?!\d))/g,
+                        ","
+                      );
+                  } else if (k == 8) {
+                    newTd.innerText =
+                      currCode +
+                      " " +
+                      TotDisc.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                  } else if (k == 10) {
+                    newTd.innerText =
+                      currCode +
+                      " " +
+                      TotVAT.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                  } else if (k == 11) {
+                    newTd.innerText =
+                      currCode +
+                      " " +
+                      TotWithVat.toFixed(2).replace(
+                        /\B(?=(\d{3})+(?!\d))/g,
+                        ","
+                      );
+                  } else if (k == 0) {
+                    newTd.setAttribute("class", "removeSerials");
+                  }
+
+                  newTr.appendChild(newTd);
+                }
+                if (i != allRows.length - 1) {
+                  document
+                    .querySelector("#listing_table tbody")
+                    .insertBefore(newTr, allRows[i]);
+                } else {
+                  document
+                    .querySelector("#listing_table tbody")
+                    .appendChild(newTr);
+                }
+                TotWithoutVat = 0;
+                TotDisc = 0;
+                TotVAT = 0;
+                TotWithVat = 0;
+                totPPL = 0;
+              }
+            }
+          }
+        }
+      }
+      try {
+        HundleSubs();
+      } catch (error) {
+        console.log(error);
+      }
+      function rearrangeSer() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var counter = 1;
+        for (var i = 0; i < allRows.length; i++) {
+          if (allRows[i].cells.length == 1) {
+            counter = 1;
+          } else {
+            allRows[i].cells[0].innerText = counter;
+            counter = counter + 1;
+          }
+        }
+        var removeSerials = document.querySelectorAll(".removeSerials");
+        for (var j = 0; j < removeSerials.length; j++) {
+          removeSerials[j].innerText = "";
+          removeSerials[j].parentElement.setAttribute("class", "subtotals");
+        }
+      }
+      try {
+        rearrangeSer();
+      } catch (error) {
+        console.log(error);
+      }
+      // ****************************** HundleListingTable *************************************
+      function HundleListingTable() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var main1 = [];
+        var main2 = [];
+        var main3 = [];
+
+        var myarr = [];
+        for (var i = allRows.length - 1; i > 0; i--) {
+          myarr.push(allRows[i]);
+
+          if (
+            allRows[i].cells[0].innerText.trim("").split("///")[0] == "Main 1"
+          ) {
+            allRows[i].cells[0].innerText = allRows[i].cells[0].innerText
+              .trim("")
+              .split("///")[1];
+            main1 = myarr;
+            myarr = [];
+          } else if (
+            allRows[i].cells[0].innerText.trim("").split("///")[0] == "Main 2"
+          ) {
+            allRows[i].cells[0].innerText = allRows[i].cells[0].innerText
+              .trim("")
+              .split("///")[1];
+
+            main2 = myarr;
+            myarr = [];
+          } else if (
+            allRows[i].cells[0].innerText.trim("").split("///")[0] == "Main 3"
+          ) {
+            allRows[i].cells[0].innerText = allRows[i].cells[0].innerText
+              .trim("")
+              .split("///")[1];
+            main3 = myarr;
+            myarr = [];
+          }
+        }
+
+        main1.reverse();
+        main2.reverse();
+        main3.reverse();
+        var main1Headers = [
+          "#",
+          "البند <br> Item",
+          "سعر الوحدة <br> Unit Price",
+          "الكمية <br>Quantity",
+          "المقياس <br>Scale",
+          "الإجمالي قبل الضريبة <br>Total Without VAT",
+          "نسبة الخصم <br> Discount Percentage",
+          "المبلغ المخصوم <br> Amount Discounted",
+          "نسبة الضريبة <br> VAT Amount",
+          "قيمة الضريبة   <br> VAT Amount ",
+          "الإجمالي مع الضريبة   <br> Total With VAT  ",
+        ];
+        var main2Headers = [
+          "#",
+          "البند <br> Item",
+          "سعر الوحدة <br> Unit Price",
+          "الكمية <br> Quantity",
+          " سعر أيام التحضير <br> Prep Days Price ",
+          "أيام التحضير <br> Prep Days",
+          "أيام التصوير <br> Shooting Days",
+          "الإجمالي قبل الضريبة <br>Total Without VAT",
+          "نسبة الخصم <br> Discount Percentage",
+          "المبلغ المخصوم <br> Amount Discounted",
+          "نسبة الضريبة <br> VAT Amount",
+          "قيمة الضريبة   <br> VAT Amount ",
+          "الإجمالي مع الضريبة  <br> Total With VAT  ",
+        ];
+        function tableCreator(Rows, Headers, tblId) {
+          var tbl = document.createElement("table");
+          tbl.setAttribute("id", tblId);
+          if (Rows.length == 0) {
+            tbl.style.display = "none";
+          }
+
+          var tblcaption = document.createElement("caption");
+          if (Rows.length > 0) {
+            tblcaption.innerText = Rows[0].cells[0].innerText;
+          } else {
+            tblcaption.innerText = "No Caption";
+          }
+          var tblThead = document.createElement("thead");
+          var tblTheadTR = document.createElement("tr");
+          for (var j = 0; j < Headers.length; j++) {
+            var newTh = document.createElement("th");
+            newTh.innerHTML = Headers[j];
+            tblTheadTR.appendChild(newTh);
+          }
+          tblThead.appendChild(tblTheadTR);
+          var tblTbody = document.createElement("tbody");
+          if (Rows.length > 0) {
+            for (var k = 1; k < Rows.length; k++) {
+              tblTbody.appendChild(Rows[k]);
+            }
+          }
+          tbl.appendChild(tblcaption);
+          tbl.appendChild(tblThead);
+          tbl.appendChild(tblTbody);
+          document.getElementById("tables_container").appendChild(tbl);
+        }
+        tableCreator(main1, main1Headers, "main1");
+        tableCreator(main2, main2Headers, "main2");
+        tableCreator(main3, main1Headers, "main3");
+      }
+      try {
+        HundleListingTable();
+      } catch (error) {
+        console.log(error);
+      }
+      // ****************************** HundleMain2 *************************************
+      function HundleMain2() {
+        var allRows = document.querySelectorAll("#main2 tbody tr");
+        for (var i = 0; i < allRows.length; i++) {
+          if (allRows[i].cells.length > 1) {
+            var newTd1 = document.createElement("td");
+            allRows[i].insertBefore(newTd1, allRows[i].cells[2]);
+            var newTd2 = document.createElement("td");
+            allRows[i].insertBefore(newTd2, allRows[i].cells[2]);
+            var data;
+            if (
+              allRows[i].cells[7].innerText.trim("").split("/*/").length != 1
+            ) {
+              data = allRows[i].cells[7].innerText.trim("").split("/*/");
+            } else {
+              data = ["0", "0", "0", "0", "0"];
+            }
+            if (!allRows[i].classList.contains("subtotals")) {
+              allRows[i].cells[2].innerText = data[0];
+              allRows[i].cells[7].innerText = data[1];
+              allRows[i].cells[3].innerText = data[2];
+              allRows[i].cells[5].innerText = data[3];
+              allRows[i].cells[6].innerText = data[4];
+            }
+          }
+        }
+      }
+      try {
+        HundleMain2();
+      } catch (error) {
+        console.log(error);
+      }
+      function hundleAlpha(tbl) {
+        var alphabets = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+        var allsubs1 = document.querySelectorAll("#" + tbl + " .subs1");
+        for (var i = 0; i < allsubs1.length; i++) {
+          allsubs1[i].innerText = alphabets[i];
+        }
+      }
+      try {
+        hundleAlpha("main1");
+        hundleAlpha("main2");
+        hundleAlpha("main3");
+      } catch (error) {
+        console.log(error);
+      }
+      // ****************************** HundleMain2 *************************************
+      function hundleMain2Subs() {
+        var allmain2subs = document.querySelectorAll("#main2 .subtotals");
+        for (var i = 0; i < allmain2subs.length; i++) {
+          allmain2subs[i].cells[0].innerText = "";
+
+          allmain2subs[i].cells[3].innerHTML =
+            "<span style='display:none;'>" +
+            allmain2subs[i].cells[1].innerText +
+            "</span>";
+          allmain2subs[i].cells[2].innerHTML =
+            "<span style='display:none;'>" + "TTL PPL" + "</span>";
+          allmain2subs[i].cells[1].innerText = "";
+          allmain2subs[i].cells[5].innerText = "";
+          allmain2subs[i].cells[5].setAttribute("colspan", "1");
+          allmain2subs[i].cells[7].innerText =
+            allmain2subs[i].cells[6].innerText;
+          allmain2subs[i].cells[6].innerText = "Subtotal :";
+
+          allmain2subs[i].cells[6].setAttribute(
+            "style",
+            "border-left:1px solid black !important; background-color:#e5e5e5"
+          );
+
+          allmain2subs[i].cells[6].setAttribute("colspan", "2");
+        }
+      }
+      try {
+        hundleMain2Subs();
+      } catch (error) {
+        console.log(error);
+      }
+      function hundleMain1and3Subs() {
+        var allmain1subs = document.querySelectorAll("#main1 .subtotals");
+        for (var i = 0; i < allmain1subs.length; i++) {
+          allmain1subs[i].cells[1].innerText = "";
+        }
+        var allmain3subs = document.querySelectorAll("#main3 .subtotals");
+        for (var i = 0; i < allmain3subs.length; i++) {
+          allmain3subs[i].cells[1].innerText = "";
+        }
+      }
+      try {
+        hundleMain1and3Subs();
+      } catch (error) {
+        console.log(error);
+      }
+      function totDis() {
+        var totdiscell = document.getElementById("discount");
+        totdiscell.innerText =
+          parseFloat(totdiscell.innerText.split("/")[0].replace(/,/g, "")) +
+          parseFloat(totdiscell.innerText.split("/")[1].replace(/,/g, ""));
+        if (totdiscell.innerText == 0) {
+          document.getElementById("discount").style.display = "none";
+          document.getElementById("discount1").style.display = "none";
+        }
+      }
+      try {
+        totDis();
+      } catch (error) {
+        console.log(error);
+      }
+      /* *************************************************************************/
+      function numberToWordsArabic(number) {
+        var units = [
+          "",
+          "واحد",
+          "اثنان",
+          "ثلاثة",
+          "أربعة",
+          "خمسة",
+          "ستة",
+          "سبعة",
+          "ثمانية",
+          "تسعة",
+          "عشرة",
+          "أحد عشر",
+          "اثنا عشر",
+          "ثلاثة عشر",
+          "أربعة عشر",
+          "خمسة عشر",
+          "ستة عشر",
+          "سبعة عشر",
+          "ثمانية عشر",
+          "تسعة عشر",
+        ];
+
+        var tens = [
+          "",
+          "",
+          "عشرون",
+          "ثلاثون",
+          "أربعون",
+          "خمسون",
+          "ستون",
+          "سبعون",
+          "ثمانون",
+          "تسعون",
+        ];
+
+        var scales = [
+          "",
+          "ألف",
+          "مليون",
+          "مليار",
+          "تريليون",
+          "كوادريليون",
+          "كوينتليون",
+          "سكستليون",
+          "سبتليون",
+          "أوكتليون",
+          "نونليون",
+          "ديسليون",
+        ];
+
+        if (number === 0) {
+          return "صفر";
+        }
+
+        var words = "";
+
+        if (number < 0) {
+          words += "سالب ";
+          number = Math.abs(number);
+        }
+
+        var scaleIndex = 0;
+
+        while (number > 0) {
+          var triplet = number % 1000;
+          number = Math.floor(number / 1000);
+
+          if (triplet > 0) {
+            var tripletWords = "";
+
+            var hundreds = Math.floor(triplet / 100);
+            var tensAndUnits = triplet % 100;
+
+            if (hundreds > 0) {
+              if (hundreds == 1) {
+                tripletWords += " مئة";
+              } else if (hundreds == 2) {
+                tripletWords += " مائتان";
+              } else if (hundreds == 3) {
+                tripletWords += " ثلاثمائة  ";
+              } else if (hundreds == 4) {
+                tripletWords += " اربعمائة ";
+              } else if (hundreds == 5) {
+                tripletWords += " خمسمائة ";
+              } else if (hundreds == 6) {
+                tripletWords += " ستمائة ";
+              } else if (hundreds == 7) {
+                tripletWords += " سبعمائة ";
+              } else if (hundreds == 8) {
+                tripletWords += " ثمانمائة ";
+              } else if (hundreds == 9) {
+                tripletWords += " تسعمائة ";
+              }
+            }
+            if (tensAndUnits > 0) {
+              if (tripletWords !== "") {
+                tripletWords += " و";
+              }
+
+              if (tensAndUnits < 20) {
+                tripletWords += units[tensAndUnits];
+              } else {
+                var tensDigit = Math.floor(tensAndUnits / 10);
+                var unitsDigit = tensAndUnits % 10;
+
+                if (tensDigit > 0) {
+                  if (unitsDigit === 1) {
+                    tripletWords += units[unitsDigit] + " و";
+                  } else if (unitsDigit > 1) {
+                    tripletWords += units[unitsDigit] + " و";
+                  }
+
+                  tripletWords += tens[tensDigit];
+                }
+              }
+            }
+            if (scaleIndex > 0) {
+              if (triplet === 1) {
+                tripletWords += " " + scales[scaleIndex];
+              } else if (triplet >= 2 && triplet <= 10) {
+                tripletWords += " " + scales[scaleIndex] + "";
+              } else if (triplet > 10) {
+                tripletWords += " " + scales[scaleIndex];
+              }
+            }
+
+            if (words !== "") {
+              words = tripletWords + " و" + words;
+            } else {
+              words = tripletWords;
+            }
+          }
+
+          scaleIndex++;
+        }
+        return words;
+      }
+      function convertFN(num, maincurrency, floatCurr) {
+        var myIntNum = parseInt(num.split(".")[0]);
+        var myFloatNum = parseInt(num.split(".")[1]);
+        return (
+          "# " +
+          numberToWordsArabic(myIntNum) +
+          " " +
+          maincurrency +
+          " و " +
+          numberToWordsArabic(myFloatNum) +
+          " " +
+          floatCurr +
+          " فقط" +
+          "#"
+        );
+      }
+      try {
+        var myNum = String(
+          parseFloat(
+            document
+              .getElementById("invoice_total")
+              .innerText.replace(/[\$,]/g, "")
+          ).toFixed(2)
+        );
+        document.getElementById("ar_invoice_total_spelled").innerText =
+          convertFN(myNum, "ريال", "هلله");
+      } catch (error) {
+        console.log(error);
+      }
+      //******************************************************************************
+
+      var ones = [
+        "",
+        "One",
+        "Two",
+        "Three",
+        "Four",
+        "Five",
+        "Six",
+        "Seven",
+        "Eight",
+        "Nine",
+      ];
+      var tens = [
+        "",
+        "",
+        "Twenty",
+        "Thirty",
+        "Fourty",
+        "Fifty",
+        "Sixty",
+        "Seventy",
+        "Eighty",
+        "Ninety",
+      ];
+      var teens = [
+        "Ten",
+        "Eleven",
+        "Twelve",
+        "Thirteen",
+        "Fourteen",
+        "Fifteen",
+        "Sixteen",
+        "Seventeen",
+        "Eighteen",
+        "Nineteen",
+      ];
+
+      function convert_billions(num) {
+        if (num >= 1000000000) {
+          return (
+            convert_billions(Math.floor(num / 1000000000)) +
+            " Billion " +
+            convert_millions(num % 1000000000)
+          );
+        } else {
+          return convert_millions(num);
+        }
+      }
+      function convert_millions(num) {
+        if (num >= 1000000) {
+          return (
+            convert_millions(Math.floor(num / 1000000)) +
+            " Million " +
+            convert_thousands(num % 1000000)
+          );
+        } else {
+          return convert_thousands(num);
+        }
+      }
+
+      function convert_thousands(num) {
+        if (num >= 1000) {
+          return (
+            convert_hundreds(Math.floor(num / 1000)) +
+            " Thousand " +
+            convert_hundreds(num % 1000)
+          );
+        } else {
+          return convert_hundreds(num);
+        }
+      }
+
+      function convert_hundreds(num) {
+        if (num > 99) {
+          return (
+            ones[Math.floor(num / 100)] + " Hundred " + convert_tens(num % 100)
+          );
+        } else {
+          return convert_tens(num);
+        }
+      }
+
+      function convert_tens(num) {
+        if (num < 10) return ones[num];
+        else if (num >= 10 && num < 20) return teens[num - 10];
+        else {
+          return tens[Math.floor(num / 10)] + " " + ones[num % 10];
+        }
+      }
+
+      function convert(num) {
+        if (num == 0) return "Zero";
+        else return convert_billions(num);
+      }
+      function convertFNEn(num, maincurrency, floatCurr) {
+        var myIntNum = parseInt(num.split(".")[0]);
+        var myFloatNum = parseInt(num.split(".")[1]);
+        return (
+          "# " +
+          convert(myIntNum) +
+          " " +
+          maincurrency +
+          " And " +
+          convert(myFloatNum) +
+          " " +
+          floatCurr +
+          " Only#"
+        );
+      }
+
+      try {
+        var myNum = String(
+          parseFloat(
+            document
+              .getElementById("invoice_total")
+              .innerText.replace(/[\$,]/g, "")
+          ).toFixed(2)
+        );
+        document.getElementById("en_invoice_total_spelled").innerText =
+          convertFNEn(myNum, "SAR", "Halalah ");
+      } catch (error) {
+        console.log(error);
+      }
+      function addPayments() {
+        var paymentstbl = document.getElementById("payterms");
+        var payvals = document.getElementById("payvals").innerText.split("/");
+        var paylbls = document.getElementById("paylbls").innerText.split("///");
+        var newTr = document.createElement("tr");
+        var newTd = document.createElement("td");
+        newTd.setAttribute("class", "paysHead");
+        newTd.setAttribute("colspan", "100%");
+        newTd.innerText = "Payment Terms - شروط الدفع";
+        newTr.appendChild(newTd);
+        paymentstbl.appendChild(newTr);
+        var InnTotal = document.getElementById("invoice_total");
+        for (var i = 0; i < payvals.length; i++) {
+          var newTr = document.createElement("tr");
+          newTr.setAttribute("class", "paytr");
+          var newTd1 = document.createElement("td");
+
+          newTd1.innerHTML = paylbls[i];
+          newTr.appendChild(newTd1);
+          var newTd2 = document.createElement("td");
+          newTd2.innerHTML = payvals[i];
+          newTr.appendChild(newTd2);
+
+          var newTd4 = document.createElement("td");
+          newTd4.innerHTML =
+            " SAR " +
+            (
+              parseFloat(InnTotal.innerText.replace(/[\$,]/g, "")) *
+              (parseFloat(payvals[i].replace(/[\%,]/g, "")) / 100)
+            )
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          newTr.appendChild(newTd4);
+          paymentstbl.appendChild(newTr);
+        }
+      }
+      try {
+        addPayments();
+      } catch (error) {
+        console.log(error);
+      }
+      function hideImgOnDraft() {
+        var InvTitle = document.getElementById("invoice_title");
+        if (InvTitle.innerText.toLowerCase().indexOf("draft") != -1) {
+          document.getElementById("img1").style.display = "none";
+          document.getElementById("img2").style.display = "none";
+        }
+      }
+      try {
+        hideImgOnDraft();
+      } catch (error) {
+        console.log(error);
+      }
+      function switchReasonsandpay() {
+        var invTitle = document.getElementById("invoice_title1");
+        if (invTitle.innerText.trim("") == "VAT INVOICE - فاتورة ضريبية") {
+          document.getElementById("payterms").style.display = "none";
+          document.getElementById("client_signs").style.display = "none";
+        }
+        if (invTitle.innerText.trim("") == "Quotation - عرض سعر") {
+          document.getElementById("reasons").style.display = "none";
+        }
+      }
+      try {
+        switchReasonsandpay();
+      } catch (error) {
+        console.log(error);
+      }
+      function hundleMain2TTlPPL() {
+        var flag = 0;
+        var allRows = document.querySelectorAll("#main2 tr");
+        var allppl = 0;
+        for (var i = 0; i < allRows.length; i++) {
+          if (allRows[i].cells[0].classList.contains("PPLSubTd")) {
+            flag = 1;
+          }
+
+          if (allRows[i].classList.contains("subtotals")) {
+            if (flag == 1) {
+              allRows[i].cells[2].querySelector("span").style.display = "block";
+              allRows[i].cells[3].querySelector("span").style.display = "block";
+              allppl =
+                allppl +
+                parseFloat(allRows[i].cells[3].querySelector("span").innerText);
+            }
+            flag = 0;
+          }
+        }
+        var newTR = document.createElement("tr");
+        newTR.setAttribute("class", " ttlppls");
+        var newTD1 = document.createElement("td");
+        newTD1.setAttribute("colspan", " 2");
+        newTD1.style.textAlign = "center";
+        newTD1.innerText = "Total people";
+        var newTD2 = document.createElement("td");
+        newTD2.setAttribute("colspan", " 11");
+        newTD2.setAttribute(
+          "style",
+          "text-align:left !important;background-color:#fff;padding-left:15px"
+        );
+        newTD2.innerText = allppl;
+        newTR.appendChild(newTD1);
+        newTR.appendChild(newTD2);
+        document.querySelector("#main2 tbody").appendChild(newTR);
+      }
+      try {
+        hundleMain2TTlPPL();
+      } catch (error) {
+        console.log(error);
+      }
+      function removeCurr() {
+        var allcurr = document.querySelectorAll(".removeCurr");
+        for (var i = 0; i < allcurr.length; i++) {
+          allcurr[i].innerText =
+            allcurr[i].innerText.replace(/SR/g, "") + "SAR";
+        }
+      }
+      try {
+        removeCurr();
+      } catch (error) {
+        console.log(error);
+      }
+      function handleestInv() {
+        if (
+          document.getElementById("invoice_title1").innerText.trim() ==
+          "VAT INVOICE - فاتورة ضريبية"
+        ) {
+          document.getElementById("ProjName").innerText =
+            "Proj No. - رقم المشروع  ";
+          document.getElementById("ProjNameval").innerText =
+            "{%Project Number%} ";
+        }
+      }
+      try {
+        handleestInv();
+      } catch (error) {
+        console.log(error);
+      }
+      function hunlesubswidth(tblID) {
+        var allRows = document.querySelectorAll(tblID + " tr");
+        for (var i = 0; i < allRows.length; i++) {
+          if (
+            allRows[i].cells[0].classList.contains("subsTd") ||
+            allRows[i].cells[0].classList.contains("PPLSubTd")
+          ) {
+            allRows[i + 1].cells[0].width = "15px";
+            allRows[i + 1].cells[1].width = "145px";
+            allRows[i + 1].cells[2].width = "58px";
+            allRows[i + 1].cells[3].width = "55px";
+            allRows[i].querySelector(".subs1").style.width = "21px";
+            allRows[i].querySelector(".subs2").style.width = "273px";
+          }
+        }
+      }
+      try {
+        hunlesubswidth("#main1");
+        hunlesubswidth("#main2");
+        hunlesubswidth("#main3");
+      } catch (error) {}
+      function AddCurrencyCodess() {
+        var allRows = document.querySelectorAll("#main2 tbody tr");
+        var AddCurrencyCode =
+          document.querySelector("#AddCurrencyCode").innerText;
+        for (var i = 0; i < allRows.length; i++) {
+          if (
+            !allRows[i].classList.contains("ttlppls") &&
+            !allRows[i].classList.contains("subtotals") &&
+            !allRows[i].cells[0].classList.contains("subsTd") &&
+            !allRows[i].cells[0].classList.contains("PPLSubTd")
+          ) {
+            allRows[i].cells[2].innerText =
+              AddCurrencyCode +
+              parseFloat(allRows[i].cells[2].innerText.replace(/,/g, ""))
+                .toFixed(2)
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            allRows[i].cells[5].innerText =
+              AddCurrencyCode +
+              parseFloat(allRows[i].cells[5].innerText.replace(/,/g, ""))
+                .toFixed(2)
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          }
+        }
+      }
+      try {
+        AddCurrencyCodess();
+      } catch (error) {
+        console.log(error);
+      }
+      function hundlemain1discount(selector) {
+        var flag = 0;
+        var allRows = document.querySelectorAll(selector);
+        for (var i = 1; i < allRows.length; i++) {
+          if (
+            !allRows[i].classList.contains("subtotals") &&
+            !allRows[i].cells[0].classList.contains("PPLSubTd") &&
+            !allRows[i].cells[0].classList.contains("subsTd") &&
+            !allRows[i].classList.contains("ttlppls")
+          ) {
+            if (parseFloat(allRows[i].cells[7].innerText.trim()) != 0) {
+              flag = 1;
+            }
+          }
+        }
+
+        if (flag == 0) {
+          allRows[0].cells[6].style.display = "none";
+          allRows[0].cells[7].style.display = "none";
+          for (var j = 1; j < allRows.length; j++) {
+            if (allRows[j].classList.contains("subtotals")) {
+              allRows[j].cells[6].style.display = "none";
+              allRows[j].cells[7].style.display = "none";
+            } else if (
+              allRows[j].cells[0].classList.contains("PPLSubTd") ||
+              allRows[j].cells[0].classList.contains("subsTd")
+            ) {
+              continue;
+            } else {
+              allRows[j].cells[7].style.display = "none";
+              allRows[j].cells[8].style.display = "none";
+            }
+          }
+        }
+      }
+      try {
+        hundlemain1discount("#main1 tr");
+        hundlemain1discount("#main3 tr");
+      } catch (error) {
+        console.log(error);
+      }
+      function hundlemain2discount() {
+        var flag = 0;
+        var allRows = document.querySelectorAll("#main2 tr");
+        for (var i = 1; i < allRows.length; i++) {
+          if (
+            !allRows[i].classList.contains("subtotals") &&
+            !allRows[i].cells[0].classList.contains("PPLSubTd") &&
+            !allRows[i].cells[0].classList.contains("subsTd") &&
+            !allRows[i].classList.contains("ttlppls")
+          ) {
+            if (parseFloat(allRows[i].cells[9].innerText.trim()) != 0) {
+              flag = 1;
+            }
+          }
+        }
+
+        if (flag == 0) {
+          allRows[0].cells[8].style.display = "none";
+          allRows[0].cells[9].style.display = "none";
+          for (var j = 1; j < allRows.length; j++) {
+            if (allRows[j].classList.contains("subtotals")) {
+              allRows[j].cells[8].style.display = "none";
+              allRows[j].cells[9].style.display = "none";
+            } else if (
+              allRows[j].cells[0].classList.contains("PPLSubTd") ||
+              allRows[j].cells[0].classList.contains("subsTd")
+            ) {
+              continue;
+            } else if (allRows[j].classList.contains("ttlppls")) {
+              allRows[j].cells[1].setAttribute("colspan", "9");
+            } else {
+              allRows[j].cells[9].style.display = "none";
+              allRows[j].cells[10].style.display = "none";
+            }
+          }
+        }
+      }
+      try {
+        hundlemain2discount();
+      } catch (error) {
+        console.log(error);
+      }
+      function tryInc() {
+        var inc = document.getElementById("Inc").innerText.trim();
+        function incvalsmain1and3(selector) {
+          var allRows = document.querySelectorAll(selector);
+          for (var i = 1; i < allRows.length; i++) {
+            if (
+              !allRows[i].classList.contains("subtotals") &&
+              !allRows[i].cells[0].classList.contains("PPLSubTd") &&
+              !allRows[i].cells[0].classList.contains("subsTd") &&
+              !allRows[i].classList.contains("ttlppls")
+            ) {
+              if (inc == 2) {
+                allRows[i].cells[2].innerText = "Included";
+                allRows[i].cells[6].innerText = "Included";
+                allRows[i].cells[7].innerText = "Included";
+                allRows[i].cells[8].innerText = "Included";
+                allRows[i].cells[9].innerText = "Included";
+                allRows[i].cells[10].innerText = "Included";
+                allRows[i].cells[11].innerText = "Included";
+              }
+            }
+          }
+        }
+        function incvalsmain2() {
+          var allRows = document.querySelectorAll("#main2 tr");
+          for (var i = 1; i < allRows.length; i++) {
+            if (
+              !allRows[i].classList.contains("subtotals") &&
+              !allRows[i].cells[0].classList.contains("PPLSubTd") &&
+              !allRows[i].cells[0].classList.contains("subsTd") &&
+              !allRows[i].classList.contains("ttlppls")
+            ) {
+              if (inc == 2) {
+                allRows[i].cells[2].innerText = "Included";
+                allRows[i].cells[5].innerText = "Included";
+                allRows[i].cells[8].innerText = "Included";
+                allRows[i].cells[9].innerText = "Included";
+                allRows[i].cells[10].innerText = "Included";
+                allRows[i].cells[11].innerText = "Included";
+                allRows[i].cells[12].innerText = "Included";
+                allRows[i].cells[13].innerText = "Included";
+              }
+            }
+          }
+        }
+        incvalsmain1and3("#main1 tr");
+        incvalsmain1and3("#main3 tr");
+        incvalsmain2();
+      }
+      try {
+        tryInc();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

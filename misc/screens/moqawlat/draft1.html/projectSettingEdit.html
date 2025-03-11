@@ -1,0 +1,21 @@
+<script>
+  $(document).ready(() => {
+    if ($("#projects_management_status").is(":checked")) {
+      $(".container-extra_confirmation_perm").show();
+      $(".container-convert_to_inv_perm").show();
+    } else {
+      $(".container-extra_confirmation_perm").hide();
+      $(".container-convert_to_inv_perm").hide();
+    }
+    $("#projects_management_status").on("click", async function (e) {
+      if ($(this).is(":checked")) {
+        $(".container-extra_confirmation_perm").slideDown("fast");
+        $(".container-convert_to_inv_perm").slideDown("fast");
+      } else {
+        $(".container-extra_confirmation_perm").slideUp("fast");
+        $(".container-convert_to_inv_perm").slideUp("fast");
+      }
+    });
+    $('.container-convert_to_inv_perm')
+  });
+</script>

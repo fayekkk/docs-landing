@@ -1,0 +1,75 @@
+<script>
+  function AddPriceAfterDescount() {
+    var allRows = document.querySelectorAll("#listing_table tr");
+    var serTh = document.createElement("th");
+    serTh.setAttribute("colspan", "2");
+    serTh.innerHTML =
+      "<span style='display:inline-block;height:18px; width:100%; border-bottom:1px solid black;pad'> سعر الوحدة UnitPrice</span>" +
+      " <span style='display:inline-block;height:57px; width:49%;border-right:1px solid black;'> Before Disc't<br>قبل الخصم </span>" +
+      "<span style='display:inline-block;height:57px; width:49%;'>After Disc't<br>بعد الخصم </span>";
+    allRows[0].cells[2].parentElement.removeChild(allRows[0].cells[5]);
+    if (allRows[1].cells.length == 9) {
+      // without discount
+      allRows[0].insertBefore(serTh, allRows[0].cells[5]);
+      function arrayIncludes(array, element) {
+        for (var i = 0; i < array.length; i++) {
+          if (array[i] === element) {
+            return true;
+          }
+        }
+        return false;
+      }
+      for (var i = 1; i < allRows.length; i++) {
+        var serTd = document.createElement("td");
+        serTd.innerText = parseFloat(allRows[i].cells[5].innerText).toFixed(2);
+        allRows[i].insertBefore(serTd, allRows[i].cells[6]);
+      }
+    } else {
+      // with discount
+      allRows[0].insertBefore(serTh, allRows[0].cells[5]);
+
+      function arrayIncludes(array, element) {
+        for (var i = 0; i < array.length; i++) {
+          if (array[i] === element) {
+            return true;
+          }
+        }
+        return false;
+      }
+      for (var i = 1; i < allRows.length; i++) {
+        var serTd = document.createElement("td");
+        if (allRows[i].cells[6].innerText.trim() == "") {
+          serTd.innerText = allRows[i].cells[5].innerText;
+          allRows[i].insertBefore(serTd, allRows[i].cells[7]);
+        } else if (
+          arrayIncludes(allRows[i].cells[6].innerText.split(""), "%")
+        ) {
+          serTd.innerText = (
+            parseFloat(allRows[i].cells[5].innerText.replace(/,/g, "")) -
+            (parseFloat(allRows[i].cells[5].innerText.replace(/,/g, "")) *
+              parseFloat(allRows[i].cells[6].innerText)) /
+              100
+          )
+            .toFixed(2)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          allRows[i].insertBefore(serTd, allRows[i].cells[7]);
+        } else {
+          serTd.innerText = (
+            parseFloat(allRows[i].cells[5].innerText.replace(/,/g, "")) -
+            parseFloat(allRows[i].cells[6].innerText.replace(/,/g, ""))
+          )
+            .toFixed(2)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          allRows[i].insertBefore(serTd, allRows[i].cells[7]);
+        }
+      }
+    }
+  }
+  try {
+    AddPriceAfterDescount();
+  } catch (error) {
+    console.log(error);
+  }
+</script>

@@ -1,0 +1,720 @@
+<style>
+  .extraction-select {
+    display: block;
+  }
+  .container-status,
+  .container-inv_id,
+  .container-refund_inv_id {
+    display: none;
+    pointer-events: none;
+  }
+  [class$="--taxper"] {
+    display: none;
+  }
+  [class$="--curr_ta3lya_per1"] {
+    display: none;
+  }
+  [class$="--prev_ta3lya_per1"] {
+    display: none;
+  }
+  [class$="--remain_ta3lya_per1"] {
+    display: none;
+  }
+  [class$="--ta3lyattlqty1"] {
+    display: none;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    $("#subtotalafterdiscount").attr("readonly", "readonly");
+    $("#ttldiscount").attr("readonly", "readonly");
+    $("#ttlbefdiscount").attr("readonly", "readonly");
+    $("#ttlsubs").attr("readonly", "readonly");
+    $("#ttlaftersubs").attr("readonly", "readonly");
+    $("#totaltaxex").attr("readonly", "readonly");
+
+    $(document).on("click", ".add-row button", function () {
+      console.log("clicked");
+      var lastRow = $(".collection-rows-container:first tr:last");
+      // Find the input within the last row
+      var inputInLastRow = lastRow.find(".extraction-select");
+      $(inputInLastRow).select2({
+        selectOnClose: true,
+      });
+    });
+    setTimeout(() => {
+      // subbition
+      $("#extraction_id").attr("readonly", true);
+      $("#extraction_id").val(location.pathname.split("/")[6]);
+      document.getElementById("le_clientextraction").onsubmit = function (e) {
+        e.preventDefault();
+        $("input:disabled").prop("disabled", false);
+        const formData = new FormData(e.target);
+        const formDataObj = {};
+        formData.forEach((value, key) => {
+          // Split the key on the square brackets
+          const keys = key.match(/[^\[\]]+/g);
+          let tempObj = formDataObj;
+
+          // Loop through the keys to build the nested structure
+          keys.forEach((k, i) => {
+            // If we're at the last key, set the value
+            if (i === keys.length - 1) {
+              tempObj[k] = value;
+            } else {
+              // If the key doesn't exist, create an empty object
+              if (!tempObj[k]) {
+                tempObj[k] = {};
+              }
+              tempObj = tempObj[k];
+            }
+          });
+        });
+        console.log(formDataObj);
+        // uptadeprojectdata(formDataObj);
+        fetch(`/v2/api/entity/le_clientextraction`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formDataObj),
+        }).then((response) => {
+          response
+            .json()
+            .then((res) => {
+              console.log("Success:", res);
+              uptadeprojectdata(formDataObj, res.id);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
+      };
+   
+      function parsetoarray(returnedData) {
+        let parsedData;
+        try {
+          parsedData = JSON.parse(returnedData);
+        } catch (e) {
+          parsedData = returnedData;
+        }
+        let dataArray;
+        if (Array.isArray(parsedData)) {
+          dataArray = parsedData;
+        } else if (typeof parsedData === "object" && parsedData !== null) {
+          dataArray = Object.values(parsedData);
+        } else {
+          dataArray = [parsedData];
+        }
+        return dataArray;
+      }
+      function uptadeprojectdata(formDataObjtosend, extraId) {
+        // select all selectors and think Fucking better
+        // extraction-select
+        let counter = 0;
+        $(".extraction-select").each(function () {
+          const selectedOption = $(this).find("option:selected");
+          // curr_ta3lya_per current_process1  prev_process1 prev_ta3lya_per
+          console.log(formDataObjtosend);
+          let formDataObjtosendArr = parsetoarray(
+            formDataObjtosend[
+              "le_clientextraction_le_clientextraction_extraction_items11"
+            ]
+          );
+          let prev_ta3lya_per = 0;
+          let curr_ta3lya_per = 0;
+          let current_process1 = 0;
+          let prev_process1 = 0;
+          if (formDataObjtosendArr[counter].prev_ta3lya_per1) {
+            prev_ta3lya_per = formDataObjtosendArr[counter].prev_ta3lya_per1;
+          }
+          if (formDataObjtosendArr[counter].curr_ta3lya_per1) {
+            curr_ta3lya_per = formDataObjtosendArr[counter].curr_ta3lya_per1;
+          }
+          if (formDataObjtosendArr[counter].current_process11) {
+            current_process1 = formDataObjtosendArr[counter].current_process11;
+          }
+          if (formDataObjtosendArr[counter].prev_process11) {
+            prev_process1 = formDataObjtosendArr[counter].prev_process11;
+          }
+          let newProcess =
+            parseFloat(current_process1) + parseFloat(prev_process1);
+          console.log({ curr_ta3lya_per: curr_ta3lya_per });
+          console.log({ prev_ta3lya_per: prev_ta3lya_per });
+
+          let newTa3lyaProcess =
+            parseFloat(curr_ta3lya_per) + parseFloat(prev_ta3lya_per);
+          console.log({ newProcess: newProcess });
+          console.log({ newTa3lyaProcess: newTa3lyaProcess });
+
+          let itemId = selectedOption.attr("data-item_id-tosend");
+          if (itemId) {
+            fetch(
+              `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${itemId}/fields`,
+              {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  ta3lya_percent: newTa3lyaProcess,
+                  process_percent: newProcess,
+                }),
+              }
+            ).then((response) => {
+              response
+                .json()
+                .then((res) => {
+                  console.log("Success:", res);
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            });
+          }
+          counter++;
+        });
+
+        window.location.href = `/v2/owner/entity/le_clientextraction/${extraId}/show#details`;
+      }
+
+      async function fetchProjectData() {
+        let projectId = parseInt(window.location.href.split("/")[8]);
+
+        try {
+          const response = await fetch(
+            `/v2/api/entity/le_workflow-type-entity-2/${projectId}/4`,
+            {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const data = await response.json();
+          console.log("Response:", data);
+          return data;
+        } catch (error) {
+          console.error("Error:", error);
+          return null;
+        }
+      }
+
+      async function main() {
+        const projectData = await fetchProjectData();
+        console.log(projectData);
+
+        if (projectData) {
+          // project_name1
+          $("#project_name1").val(projectData.title);
+          $("#project_no").val(projectData.number);
+
+          if (projectData.client_id) {
+            let clientId = projectData.work_order_client.id;
+            let clientName = projectData.work_order_client.business_name;
+            let newOption = new Option(clientName, clientId);
+            $("#client_project1").append(newOption);
+            $("#client_project1").val(clientId).change();
+          }
+          if (projectData.number) {
+            $("#single_line_field1").val(projectData.number).change();
+          }
+          //   extraction
+
+          function addSelectorsAfterInputs() {
+            $("[id$='--extraction_item11']").each(function () {
+              const inputId = $(this).attr("id");
+              const selectId = inputId + "_select";
+              if ($("#" + selectId).length === 0) {
+                const $input = $(this);
+
+                let customData =
+                  projectData["le_workflow-type-entity-2_custom_data"];
+                let projectItems =
+                  customData[
+                    "le_custom_data_le_workflow-type-entity-2_le_custom_data_le_workflow-type-entity-2_project_items"
+                  ];
+                const data = projectItems;
+
+                const select = document.createElement("select");
+                select.id = selectId;
+                select.className = "extraction-select";
+
+                const defaultOption = document.createElement("option");
+                defaultOption.textContent = "من فضلك اختر";
+                defaultOption.value = -1;
+                // defaultOption.disabled = true;
+                defaultOption.selected = true;
+                select.appendChild(defaultOption);
+
+                data.forEach((item, index) => {
+                  const option = document.createElement("option");
+
+                  for (const [key, value] of Object.entries(item)) {
+                    if (typeof value === "object" && value !== null) {
+                      for (const [nestedKey, nestedValue] of Object.entries(
+                        value
+                      )) {
+                        option.dataset[nestedKey] = nestedValue ?? "";
+                      }
+                    } else {
+                      option.dataset[key] = value ?? "";
+                      console.log(key);
+                      console.log(value);
+                      if (key == "id") {
+                        option.dataset["item_idTosend"] = value;
+                      }
+                    }
+
+                    if (
+                      key ==
+                      "le_custom_data_le_workflow-type-entity-2_project_items_project_item_name"
+                    ) {
+                      option.value = value.item_name;
+                      // option.value = value.item_name + "(" + value.id + ")";
+                      option.textContent = value.item_name;
+                    }
+                    if (
+                      key ==
+                      "le_custom_data_le_workflow-type-entity-2_project_items_taxes"
+                    ) {
+                      option.setAttribute("data-tax_name", value.name);
+                      option.setAttribute("data-tax_id", value.id);
+                      option.setAttribute("data-tax_per", value.value);
+                    }
+                  }
+
+                  select.appendChild(option);
+                });
+
+                $input.after(select);
+                const $select = $("#" + selectId);
+                $select.css({
+                  width: $input.css("width"),
+                  height: $input.css("height"),
+                  padding: $input.css("padding"),
+                  margin: $input.css("margin"),
+                  border: $input.css("border"),
+                  borderRadius: $input.css("border-radius"),
+                  backgroundColor: $input.css("background-color"),
+                  color: $input.css("color"),
+                  fontSize: $input.css("font-size"),
+                  fontFamily: $input.css("font-family"),
+                });
+                $input.hide();
+                $(document).on("change", `#${selectId}`, function () {
+                  const currentValue = $(this).val();
+                  const currentId = $(this).attr("id");
+
+                  // Check if any other selector has the same value
+                  const duplicate =
+                    $(".extraction-select")
+                      .not(`#${currentId}`)
+                      .filter(function () {
+                        return $(this).val() === currentValue;
+                      }).length > 0;
+
+                  if (duplicate && currentValue !== "-1") {
+                    alert("تم إختيار هذا البند مسبقاً");
+                    $(this).val(-1).change(); // Reset to default option
+                  } else {
+                    const selectedValue = $(this).val();
+                    $input.val(selectedValue);
+                    const selectedOption = $(this).find("option:selected");
+                    //   create selevted iputs
+                    let unitInput = $(this)
+                      .closest("tr")
+                      .find("[id$='--unit11']");
+                    let item_number1 = $(this)
+                      .closest("tr")
+                      .find("[id$='--item_number11']");
+                    let price1 = $(this)
+                      .closest("tr")
+                      .find("[id$='--price11']");
+                    let ttlqty1 = $(this)
+                      .closest("tr")
+                      .find("[id$='--ttlqty11']");
+                    let current_process1 = $(this)
+                      .closest("tr")
+                      .find("[id$='--current_process11']");
+                    let prev_process1 = $(this)
+                      .closest("tr")
+                      .find("[id$='--prev_process11']");
+                    let remain_process1 = $(this)
+                      .closest("tr")
+                      .find("[id$='--remain_process11']");
+                    let ta3lyattlqty = $(this)
+                      .closest("tr")
+                      .find("[id$='--ta3lyattlqty1']");
+                    let prev_ta3lya_per = $(this)
+                      .closest("tr")
+                      .find("[id$='--prev_ta3lya_per1']");
+                    let curr_ta3lya_per = $(this)
+                      .closest("tr")
+                      .find("[id$='--curr_ta3lya_per1']");
+                    let remain_ta3lya_per = $(this)
+                      .closest("tr")
+                      .find("[id$='--remain_ta3lya_per1']");
+                    let taxes = $(this).closest("tr").find("[id$='--taxes']");
+
+                    // Hide Ta3lyas
+                    // taxes.val(itemvalues.item_number_in_contract);
+                    taxes.attr("disabled", "disabled");
+                    // data-taxes
+                    console.log(selectedOption[0].dataset);
+                    let itemvalues = selectedOption[0].dataset;
+                    var newOption = $("<option></option>")
+                      .text(itemvalues.tax_name)
+                      .val(itemvalues.tax_id);
+                    taxes.append(newOption);
+                    taxes.val(itemvalues.tax_id).trigger("change");
+                    unitInput.val(itemvalues.unit);
+                    unitInput.attr("disabled", "disabled");
+                    item_number1.val(itemvalues.item_number_in_contract);
+                    item_number1.attr("disabled", "disabled");
+                    ttlqty1.val(itemvalues.quantity);
+                    ttlqty1.attr("disabled", "disabled");
+                    price1.val(itemvalues.ttl_price);
+                    price1.attr("disabled", "disabled");
+                    prev_process1.val(itemvalues.process_percent);
+                    prev_process1.attr("disabled", "disabled");
+                    ta3lyattlqty.val(itemvalues.ta3lya);
+                    ta3lyattlqty.attr("disabled", "disabled");
+                    prev_ta3lya_per.val(itemvalues.ta3lya_percent);
+                    prev_ta3lya_per.attr("disabled", "disabled");
+                    remain_ta3lya_per.attr("disabled", "disabled");
+                    $(this)
+                      .closest("tr")
+                      .find("[id$='--taxper']")
+                      .val(itemvalues.tax_per);
+                    // curr_ta3lya_per.attr("disabled", "disabled");
+                    if (itemvalues.process_percent) {
+                      remain_process1.val(
+                        100 - parseFloat(itemvalues.process_percent)
+                      );
+                    } else {
+                      remain_process1.val("0");
+                    }
+                    remain_process1.attr("disabled", "disabled");
+                    //   curr_ta3lya_per.val(itemvalues);
+                    //   current_process1.val(itemvalues);
+                  }
+                });
+              }
+              $(".extraction-select").select2({
+                selectOnClose: true,
+              });
+            });
+          }
+
+          // add change event on current process change
+          function validate(prev, curr, remain) {
+            // "[id$='--current_process1']"  "[id$='--remain_process1']" "[id$='--prev_process1']"
+            $(document).on("input", curr, function () {
+              let currValue = $(this).val();
+              if (currValue == "") {
+                currValue = 0;
+              }
+              let prevprocess = $(this).closest("tr").find(prev).val();
+              if (prevprocess == "") {
+                prevprocess = 0;
+              }
+              $(this)
+                .closest("tr")
+                .find(remain)
+                .val(100 - (parseFloat(prevprocess) + parseFloat(currValue)));
+              if (100 - (parseFloat(prevprocess) + parseFloat(currValue)) < 0) {
+                $(this)
+                  .val(100 - parseFloat(prevprocess))
+                  .change();
+                $(this).closest("tr").find(remain).val(0).change();
+              }
+              hundlettls();
+            });
+          }
+          validate(
+            "[id$='--prev_process11']",
+            "[id$='--current_process11']",
+            "[id$='--remain_process11']"
+          );
+          //   Validate the ta3lya
+          validate(
+            "[id$='--prev_ta3lya_per1']",
+            "[id$='--curr_ta3lya_per1']",
+            "[id$='--remain_ta3lya_per1']"
+          );
+          // Function to add new input fields dynamically
+          function addNewInput() {
+            const existingInputs = $("[id$='--extraction_item11']");
+            const newIndex = existingInputs.length;
+            const newInputId = `le_clientextraction_le_clientextraction_extraction_items1-${newIndex}--extraction_item1`;
+            const newInput = `<input type="text" id="${newInputId}" class="extraction-input" placeholder="Enter text" />`;
+
+            $("#inputContainer").append(newInput);
+            addSelectorsAfterInputs();
+          }
+
+          addSelectorsAfterInputs();
+
+          $(
+            "#le_clientextraction > div.form-row > div.col-lg-12.col-md-12.col-xs-12 > div > div > div > div.card-body.p-0 > div > div > div > div > div > div.btn-group.add-row.dropdown > button"
+          ).on("click", addNewInput);
+        } else {
+          // window.location.reload();
+        }
+      }
+      main();
+      function adddisabed() {
+        console.log("click3");
+
+        $("[id$='--sub_val']").each(function () {
+          console.log($(this).closest("tr").find("[id$='--calc_type']"));
+
+          if (
+            $(this).closest("tr").find("[id$='--calc_type']").val() ==
+            "نسبة مئوية %"
+          ) {
+            $(this)
+              .closest("tr")
+              .find("[id$='--discountvalue']")
+              .attr("disabled", false);
+            $(this)
+              .closest("tr")
+              .find("[id$='--sub_val']")
+              .attr("disabled", true);
+          } else {
+            $(this)
+              .closest("tr")
+              .find("[id$='--discountvalue']")
+              .attr("disabled", true);
+            $(this)
+              .closest("tr")
+              .find("[id$='--sub_val']")
+              .attr("disabled", false);
+          }
+        });
+        $("[id$='--calc_type']").on("change", function () {
+          if ($(this).val() == "نسبة مئوية %") {
+            $(this)
+              .closest("tr")
+              .find("[id$='--discountvalue']")
+              .attr("disabled", false);
+            $(this)
+              .closest("tr")
+              .find("[id$='--sub_val']")
+              .attr("disabled", true);
+          } else {
+            $(this)
+              .closest("tr")
+              .find("[id$='--discountvalue']")
+              .attr("disabled", true);
+            $(this)
+              .closest("tr")
+              .find("[id$='--sub_val']")
+              .attr("disabled", false);
+          }
+        });
+      }
+
+      function getsubtotal() {
+        let total = 0;
+        let ttltaxes = 0;
+        $("[id$='--current_process11']").each(function () {
+          let current_process11 = $(this).val() ? $(this).val() : 0;
+          let price11 = $($(this).closest("tr").find("[id$='--price11']")).val()
+            ? $($(this).closest("tr").find("[id$='--price11']")).val()
+            : 0;
+          let ttlqty11 = $(
+            $(this).closest("tr").find("[id$='--ttlqty11']")
+          ).val()
+            ? $($(this).closest("tr").find("[id$='--ttlqty11']")).val()
+            : 0;
+          let curr_ta3lya_per1 = $(
+            $(this).closest("tr").find("[id$='--curr_ta3lya_per1']").val()
+          )
+            ? $($(this).closest("tr").find("[id$='--curr_ta3lya_per1']")).val()
+            : 0;
+          let ta3lyattlqty1 = $(
+            $(this).closest("tr").find("[id$='--ta3lyattlqty1']")
+          ).val()
+            ? $($(this).closest("tr").find("[id$='--ta3lyattlqty1']")).val()
+            : 0;
+          let tax = $(this).closest("tr").find("[id$='--taxper']").val()
+            ? $(this).closest("tr").find("[id$='--taxper']").val()
+            : 0;
+          console.log(tax);
+
+          currtotal =
+            price11 * (current_process11 / 100) * ttlqty11 +
+            price11 * (curr_ta3lya_per1 / 100) * ta3lyattlqty1;
+          total += currtotal;
+
+          // ****************************************************************
+          let disType = $("#discountvalue").val();
+          let discVal = 0;
+          if ($("#dicsountvalue2").val() != "") {
+            discVal = $("#dicsountvalue2").val();
+          }
+          let ttldiscounts = 0;
+          if (disType == "مبلغ") {
+            ttldiscounts = discVal / $("[id$='--current_process11']").length;
+          } else if (disType == "نسبة مئوية") {
+            ttldiscounts = (parseFloat(discVal) / 100) * currtotal;
+          } else {
+            ttldiscounts = 0;
+          }
+          // ****************************************************************
+          console.log({ currtotal: currtotal });
+          console.log({ ttldiscounts: ttldiscounts });
+          console.log({ tax: tax });
+
+          ttltaxes += (currtotal - ttldiscounts) * (tax / 100);
+        });
+        console.log(total);
+        console.log(ttltaxes);
+
+        return { total: total, ttltaxes: ttltaxes };
+      }
+
+      function hundlesubs() {
+        adddisabed();
+        // $("[id$='--sub_account']").on("change", function () {
+        $(document).on("change", "[id$='--sub_account'] ", function () {
+          let selectedOption = $(this).val();
+          const selectedOptions = $("[id$='--sub_account']")
+            .not(this)
+            .map(function () {
+              return $(this).val();
+            })
+            .get();
+          if (
+            selectedOptions.includes(selectedOption) &&
+            selectedOption !== "-1"
+          ) {
+            alert("لا يمكن إختيار نفس الحساب مرتين ");
+            $(this).val("-1").change();
+          }
+          const selectedOptiontext = $(this).find("option:selected");
+          console.log(selectedOptiontext.text());
+          $(this)
+            .closest("tr")
+            .find("[id$='--sub_label']")
+            .val(selectedOptiontext.text());
+        });
+        //    change events of percent or value
+        $(document).on("change", "[id$='--discountvalue'] ", function () {
+          let discVal = $(this).val();
+          if (!$(this).closest("tr").find("[id$='--sub_account']").val()) {
+            alert("يرجى إختيار حساب");
+            $(this).val(0);
+          } else if (discVal < 100) {
+            // let subttlVAL = getsubtotal().total;
+            let subttlVAL = $("#subtotalafterdiscount").val()
+              ? $("#subtotalafterdiscount").val()
+              : 0;
+            console.log(subttlVAL);
+            $(this)
+              .closest("tr")
+              .find("[id$='--sub_val']")
+              .val(subttlVAL * (discVal / 100) * -1);
+            hundlettls();
+          } else if (subttlVAL == 0) {
+            $(this).val(0);
+            hundlettls();
+            $(this).closest("tr").find("[id$='--sub_val']").val(0);
+          } else {
+            alert("لا يمكن أن يكون الخصم أكبر من %100");
+            $(this).val(0);
+            hundlettls();
+          }
+        });
+        $(document).on("change", "[id$='--sub_val'] ", function () {
+          let discVal = $(this).val();
+          let subttlVAL = $("#subtotalafterdiscount").val()
+            ? $("#subtotalafterdiscount").val()
+            : 0;
+          // let subttlVAL = getsubtotal().total;
+          if (!$(this).closest("tr").find("[id$='--sub_account']").val()) {
+            alert("يرجى إختيار حساب");
+            $(this).val(0);
+            hundlettls();
+          } else if (subttlVAL > 0) {
+            console.log(subttlVAL);
+            $(this)
+              .closest("tr")
+              .find("[id$='--discountvalue']")
+              .val(100 * (discVal / subttlVAL) * -1);
+            hundlettls();
+          } else if (subttlVAL == 0) {
+            $(this).val(0);
+            hundlettls();
+            $(this).closest("tr").find("[id$='--discountvalue']").val(0);
+          } else if (
+            $(this).closest("tr").find("[id$='--discountvalue']").val() > 100
+          ) {
+            alert("لا يمكن أن يكون الخصم أكبر من %100");
+            $(this).closest("tr").find("[id$='--discountvalue']").val(100);
+            $(this).val(subttlVAL);
+            hundlettls();
+          }
+        });
+        $("#dicsountvalue2").on("change", function () {
+          hundlettls();
+        });
+      }
+      // /////////////////////////////////////////////
+      hundlesubs();
+      function hundlettls() {
+        var subtotal = getsubtotal().total;
+        $("#ttlbefdiscount").val(subtotal);
+        // ****************************************************************
+        let disType = $("#discountvalue").val();
+        let discVal = 0;
+        if ($("#dicsountvalue2").val() != "") {
+          discVal = $("#dicsountvalue2").val();
+        }
+        var ttldisc = 0;
+        if (disType == "مبلغ") {
+          $("#ttldiscount").val(discVal);
+        } else if (disType == "نسبة مئوية") {
+          $("#ttldiscount").val((parseFloat(discVal) / 100) * subtotal);
+        } else {
+          $("#ttldiscount").val(0);
+        }
+        // ****************************************************************
+        $("#subtotalafterdiscount").val(
+          $("#ttlbefdiscount").val() - $("#ttldiscount").val()
+        );
+        $("#totaltaxex").val(getsubtotal().ttltaxes);
+        var ttlsubs = 0;
+        var allsubs = $("[id$='--sub_val']");
+        allsubs.each(function () {
+          if ($(this).val() != "") {
+            ttlsubs += parseFloat($(this).val());
+          }
+        });
+        $("#ttlsubs").val(ttlsubs);
+        $("#ttlaftersubs").val(
+          parseFloat($("#subtotalafterdiscount").val()) +
+            parseFloat($("#ttlsubs").val()) +
+            parseFloat($("#totaltaxex").val())
+        );
+      }
+
+      setTimeout(() => {
+        $(
+          '[data-izam1-forms1-form-rows-add-btn="le_clientextraction_le_clientextraction_subs"]'
+        ).on("click", function () {
+          console.log("click1");
+          setTimeout(() => {
+            adddisabed();
+          }, 250);
+        });
+      }, 500);
+    }, 400);
+  });
+</script>

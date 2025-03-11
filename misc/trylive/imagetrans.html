@@ -1,0 +1,49 @@
+<input type="file" id="fileInput" accept=".jfif,.jpg,.jpeg" />
+<button id="convertButton">Convert and Download</button>
+
+<script>
+  document
+    .getElementById("convertButton")
+    .addEventListener("click", function () {
+      const fileInput = document.getElementById("fileInput");
+      const file = fileInput.files[0];
+
+      if (file) {
+        // Check if it's a JFIF file
+        if (file.name.toLowerCase().endsWith(".jfif")) {
+          // Read the file
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            // Create a new Blob with JPEG mime type
+            const blob = new Blob([e.target.result], { type: "image/jpeg" });
+
+            // Create a new File with .jpg extension
+            const jpgFile = new File(
+              [blob],
+              file.name.replace(".jfif", ".jpg"),
+              {
+                type: "image/jpeg",
+                lastModified: new Date().getTime(),
+              }
+            );
+            // document.getElementById("fileInput").value = jpgFile;
+
+            // Create a download link
+            const downloadLink = document.createElement("a");
+            downloadLink.href = URL.createObjectURL(jpgFile);
+            downloadLink.download = jpgFile.name;
+
+            // Trigger download
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+          };
+          reader.readAsArrayBuffer(file);
+        } else {
+          alert("Please select a JFIF file.");
+        }
+      } else {
+        alert("Please select a file first.");
+      }
+    });
+</script>

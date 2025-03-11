@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <select></select>
+
+    <!-- 
+
+  <style>
+        input.multi_units_price.editable-input {
+            width: 70px;
+        }
+        
+        input.unit-quantity.editable-input {
+            width: 70px;
+        }
+        
+        
+        .item-wrap {
+            width: 170px;
+        }
+.units_div input {width:60px}
+select#InvoiceItem0DiscountType, .form-x3 {
+    width: 40px;
+}
+
+.col-5 {width:75px !important}
+.col-5 textarea {border: 0 !Important}
+.col-2 {width: 320px;}
+.col-3, .col-4 {width: 50px;}
+input.editable-input {    width: 70px !important;}
+.units_div input {width:40px !important}
+
+#InvoiceDiscount, #InvoiceDeposit {
+    width: 100px !important;
+}
+
+
+        </style>
+
+<script>
+        $(document).ready(function () {
+        function onchangeAction() {
+          var allrows = document.querySelectorAll("#listing_table tbody tr");
+          for (var i = 1; i < allrows.length; i++) {
+            var selectedRowCells = allrows[i].cells;
+            var selectedRowCell = selectedRowCells[3];
+            var editableInput = selectedRowCell.querySelector(".editable-input");
+            editableInput.addEventListener("change", function () {
+              changeTOTQTY();
+            });
+            var selectedRowCell = selectedRowCells[4];
+            var editableInput = selectedRowCell.querySelector(".editable-input");
+            editableInput.addEventListener("change", function () {
+              changeTOTQTY();
+            });
+            var selectedRowCell = selectedRowCells[5];
+            var editableInput = selectedRowCell.querySelector(".editable-input");
+            editableInput.addEventListener("change", function () {
+              changeTOTQTY();
+            });
+          }
+        }
+        function changeTOTQTY() {
+          var allrows = document.querySelectorAll("#listing_table tbody tr");
+          for (var i = 1; i < allrows.length; i++) {
+            var allrows = document.querySelectorAll("#listing_table tbody tr");
+            var selectedRowCells = allrows[i].cells;
+            var packagesNum = selectedRowCells[3];
+            var packagesNumVAlue = packagesNum.querySelector(".editable-input").value;
+            var peicesNum = selectedRowCells[4];
+            var peicesNumVal = peicesNum.querySelector(".editable-input").value;
+            var packageContain = selectedRowCells[5];
+            var packageContainVAlue =
+              packageContain.querySelector(".editable-input").value;
+            if (packagesNumVAlue == "") {
+              packagesNumVAlue = 0;
+            }
+            if (peicesNumVal == "") {
+              peicesNumVal = 0;
+            }
+            if (packageContainVAlue == "") {
+              packageContainVAlue = 0;
+            }
+            if (allrows[i].querySelector(".Quantity div") != null) {
+              document
+                .querySelectorAll("#listing_table tr")
+                [i].querySelector(".Quantity input:first-child").value =
+                parseInt(packagesNumVAlue) * parseInt(packageContainVAlue) +
+                parseInt(peicesNumVal);
+              document
+                .querySelectorAll("#listing_table tr")
+                [i].querySelector(".Quantity .item-qty").value =
+                parseInt(packagesNumVAlue) * parseInt(packageContainVAlue) +
+                parseInt(peicesNumVal);
+            } else {
+              document
+                .querySelectorAll("#listing_table tr")
+                [i].cells[8].querySelector(".editable-input").value =
+                parseInt(packagesNumVAlue) * parseInt(packageContainVAlue) +
+                parseInt(peicesNumVal);
+            }
+          }
+        }
+        try {
+          onchangeAction();
+          document
+            .querySelector(".btn-group-flex a")
+            .addEventListener("click", function () {
+              onchangeAction();
+            });
+            var oldTrCount = document.querySelectorAll(".movable").length;
+            document
+            .querySelector("#listing_table")
+            .addEventListener("DOMSubtreeModified", function (event) {
+              var newTrCount = document.querySelectorAll(".movable").length;
+              if (event.target.nodeName === "TR" && oldTrCount != newTrCount) {
+  
+                  onchangeAction();
+
+              }
+            });
+
+          /////////for edit only
+    //      var multiUnits = document.querySelectorAll(".multi_units");
+    //      for (var i = 0; i < multiUnits.length; i++) {
+     //       multiUnits[i].querySelectorAll("span")[1].classList.add("select-item");
+     //     }
+          ///////////////////////
+        } catch (e) {
+
+        }
+      });
+
+
+		</script>
+
+ -->
+    <!-- <script>
+      var allRows = document.querySelectorAll("#listing_table tr");
+      var allspecialtd = document.querySelectorAll("#listing_table tr td:nth-child(4)");
+      for (let i = 0; i < allspecialtd.length; i++) {
+        allspecialtd[i].innerHTML =
+          document.querySelectorAll("#listing_table tr td")[3].innerHTML +
+          "<select name='special_label' id='special_label'><option value='1'>true</option><option value='2'>false</option></select>";
+        allspecialtd[i]
+          .querySelectorAll("#special_label")[0]
+          .addEventListener("change", function () {
+            allspecialtd[i].value =
+              allspecialtd[i].querySelectorAll("#special_label")[0].value;
+            document.querySelectorAll(
+              "#listing_table tr td textarea"
+            )[2].style.display = "none";
+            if (allspecialtd[i].querySelectorAll("#special_label")[0].value == 1) {
+            
+              for (let j = 1; j < allRows.length; j++) {
+                var allRowTds = allRows[i].querySelectorAll("td");
+                if (j == 2 || j == 3) {
+                  continue;
+                } else {
+                  allRowTds[j].style.display = "none";
+                }
+              }
+            } else {
+              for (let k = 0; k < allRowTds.length; k++) {
+                allRowTds[k].style.display = "block";
+              }
+            }
+          });
+      }
+    </script> -->
+
+    <!-- ALL Pages:
+code_*
+jouranl Report:
+code_Reports_owner_journal_transactions
+Any other Report: 
+code_Reports_owner_report
+Client: 
+code_Clients_owner_add
+code_Clients_owner_edit
+code_Clients_owner_view
+Invoice: 
+code_Invoices_owner_add 
+code_Invoices_owner_edit
+code_Products_owner_add
+code_Products_owner_edit
+Estimate:
+code_Invoices_owner_add_estimate
+code_Invoices_owner_edit_estimate
+Index: code_Invoices_owner_estimates
+refund & credit note
+code_Invoices_owner_add_refund
+code_Invoices_owner_edit_refund
+code_Invoices_owner_add_creditnote
+code_Invoices_owner_edit_creditnote
+Payments
+code_InvoicePayments_owner_edit
+code_Invoices_owner_add_payment
+WorkOrders
+code_WorkOrders_owner_add
+code_WorkOrders_owner_edit
+code_WorkOrders_owner_workflow_view
+PurchaseInvoice
+code_PurchaseOrders_owner_add
+code_PurchaseOrders_owner_edit
+Expenses /Incomes:
+code_Expenses_owner_add 
+code_Expenses_owner_edit
+code_Incomes_owner_add 
+code_Incomes_owner_edit
+Appointments
+code_ClientAppointments_owner_add
+WorkFlow View:
+code_WorkOrders_owner_workflow_view
+Requisitions
+code_Requisitions_owner_add
+code_Requisitions_owner_edit
+Bookings:
+code_Bookings_owner_view
+Reports List :
+code_Reports_owner_list
+code_Reports_report_owner_warehouse_stock_balance
+Reports View:
+code_Reports_owner_report
+Notes & Attachment Screen:
+code_Posts_owner_post
+V2 URLS:
+owner_entity_le_workflow-type-entity-3_create
+POS
+pos_global_js (edited) 
+Plugin: 82
+"
+window.addEventListener("message", (event)=>{
+  console.log(event.data)
+  },false)
+"
+GET all Products IN POS : "/get_all_products.php?store_id={store_id} -->
+  </body>
+</html>

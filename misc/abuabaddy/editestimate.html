@@ -1,0 +1,14 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      let invLayout = $("#InvoiceLayout").val();
+      if (invLayout == "4") {
+        $("#label_description").hide();
+        $(".col-2").hide();
+      } else {
+        $("#label_description").show();
+        $(".col-2").show();
+      }
+    });
+  }, 500);
+</script>

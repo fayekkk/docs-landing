@@ -1,0 +1,30 @@
+<style>
+  #label_quantity,
+  .Quantity {
+    display: none;
+  }
+  #label_description {
+    width: 30% !important;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      $(document).on("change", ".col-3 textarea ,.col-4 textarea", function () {
+        let inputValue = $(this).val();
+        let days = $(this).closest("tr").find(".col-3 textarea").val();
+        let qty = $(this).closest("tr").find(".col-4 textarea").val();
+        console.log(isNaN(qty * days));
+        if (isNaN(qty * days) || inputValue < 0) {
+          $(this).val("0");
+        } else {
+          $(this)
+            .closest("tr")
+            .find(".item-qty")
+            .val(qty * days)
+            .change();
+        }
+      });
+    }, 250);
+  });
+</script>

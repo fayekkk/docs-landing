@@ -1,0 +1,207 @@
+<style>
+  .day-view-entry-list td:nth-child(1) {
+    width: 30% !important;
+  }
+  .store-header td {
+    background-color: #e5e5e5;
+    background-color: #e5e5e5;
+    font-weight: 900;
+    font-size: 13px;
+  }
+  .selectTd {
+    width: 90px !important;
+  }
+  .day-view-entry td {
+    border-right: 1px solid #b7b7b7;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(function () {
+      $.get("/v2/api/entity/store/list/1")
+        .done(function (storeResponse) {
+          if (!storeResponse || !Array.isArray(storeResponse.data)) {
+            console.error("Invalid store data format or missing 'data' array.");
+            return;
+          }
+
+          var stores = storeResponse.data;
+          var counter = 0;
+          var failedProducts = [];
+
+          $(".day-view-entry").each(function () {
+            var entry = $(this);
+            var checkboxValue = entry.find(".check-item").val();
+            var retryCount = 0;
+            var maxRetries = 3;
+
+            function fetchProduct() {
+              $.get(`/v2/api/entity/product/${checkboxValue}`)
+                .done(function (productResponse) {
+                  var productStore =
+                    productResponse.product_store_stock_balances;
+                  var balanceMap = {};
+
+                  if (Array.isArray(productStore)) {
+                    productStore.forEach(function (balanceInfo) {
+                      balanceMap[balanceInfo.store_id] = balanceInfo.balance;
+                    });
+                  } else {
+                    console.error(
+                      "Invalid product store stock balances format."
+                    );
+                  }
+                  var $headerRow = $("<tr class='store-header'></tr>");
+                  var $storeCell = $("<td>");
+                  $storeCell.text("المنتج");
+                  $headerRow.append($storeCell);
+                  for (let i = stores.length - 1; i >= 0; i--) {
+                    var storeName = stores[i].name;
+                    var $storeCell = $("<td></td>").text(storeName);
+                    $headerRow.append($storeCell);
+                  }
+                  var $storeCell = $("<td>");
+                  $storeCell.text("الإجمالى");
+                  $headerRow.append($storeCell);
+                  var $storeCell = $("<td>");
+                  $storeCell.text("السعر");
+                  $headerRow.append($storeCell);
+                  var $storeCell = $("<td>");
+                  $headerRow.append($storeCell);
+                  if (counter == 0) {
+                    $(
+                      "#MultiSelectForm > div > ul > li:nth-child(1) > table"
+                    ).prepend($headerRow);
+                  }
+                  counter++;
+                  entry.find("table tr").each(function () {
+                    var $tr = $(this);
+                    if (!$tr.hasClass("store-header")) {
+                      var $firstTd = $tr.find("td:first");
+
+                      for (let i = 0; i < stores.length; i++) {
+                        var $selectTd = $tr.find(`td.selectTd-${i}`);
+                        if ($selectTd.length === 0) {
+                          $selectTd = $("<td></td>").addClass(
+                            `selectTd selectTd-${i}`
+                          );
+                          $firstTd.after($selectTd);
+                        }
+                        var store = stores[i];
+                        var balance = balanceMap[store.id] || 0;
+
+                        $selectTd.html(balance);
+                      }
+                    }
+                  });
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                  console.error(
+                    "Failed to fetch product data:",
+                    textStatus,
+                    errorThrown
+                  );
+
+                  entry.find("table tr").each(function () {
+                    var $tr = $(this);
+                    if (!$tr.hasClass("store-header")) {
+                      for (let i = 0; i < stores.length; i++) {
+                        var $selectTd = $tr.find(`td.selectTd-${i}`);
+                        if ($selectTd.length === 0) {
+                          $selectTd = $("<td></td>").addClass(
+                            `selectTd selectTd-${i}`
+                          );
+                          $tr.find("td:first").after($selectTd);
+                        }
+
+                        $selectTd.html("");
+                      }
+                    }
+                  });
+
+                  failedProducts.push({ checkboxValue, entry, retryCount });
+                });
+            }
+
+            fetchProduct();
+          });
+
+          var maxRetries = 2;
+          var retryDelay = 1500;
+
+          function retryFailedProducts() {
+            if (failedProducts.length === 0) {
+              if (failedProducts.length > 0) {
+                alert(
+                  "Some products failed to load: " +
+                    failedProducts.map((p) => p.checkboxValue).join(", ")
+                );
+              }
+              return;
+            }
+
+            var currentFailures = [...failedProducts];
+            failedProducts.length = 0;
+
+            currentFailures.forEach(function (failedProduct) {
+              if (failedProduct.retryCount < maxRetries) {
+                failedProduct.retryCount++;
+
+                setTimeout(function () {
+                  $.get(`/v2/api/entity/product/${failedProduct.checkboxValue}`)
+                    .done(function (productResponse) {
+                      var productStore =
+                        productResponse.product_store_stock_balances;
+                      var balanceMap = {};
+
+                      if (Array.isArray(productStore)) {
+                        productStore.forEach(function (balanceInfo) {
+                          balanceMap[balanceInfo.store_id] =
+                            balanceInfo.balance;
+                        });
+                      } else {
+                        console.error(
+                          "Invalid product store stock balances format."
+                        );
+                      }
+
+                      var entry = failedProduct.entry;
+                      entry.find("table tr").each(function () {
+                        var $tr = $(this);
+                        if (!$tr.hasClass("store-header")) {
+                          for (let i = 0; i < stores.length; i++) {
+                            var $selectTd = $tr.find(`td.selectTd-${i}`);
+                            if ($selectTd.length === 0) {
+                              $selectTd = $("<td></td>").addClass(
+                                `selectTd selectTd-${i}`
+                              );
+                              $tr.find("td:first").after($selectTd);
+                            }
+
+                            var store = stores[i];
+                            var balance = balanceMap[store.id] || 0;
+
+                            $selectTd.html(balance);
+                          }
+                        }
+                      });
+                    })
+                    .fail(function () {
+                      failedProducts.push(failedProduct);
+                    });
+                }, retryDelay);
+              } else {
+                alert(
+                  "Some products failed to load: " + failedProduct.checkboxValue
+                );
+              }
+            });
+          }
+          setTimeout(retryFailedProducts, 2000);
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+          console.error("Failed to fetch store list:", textStatus, errorThrown);
+        });
+    }, 500);
+  });
+</script>

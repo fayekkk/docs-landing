@@ -1,0 +1,226 @@
+<style>
+  .itemSelect {
+    width: 32%;
+  }
+  .itemLabel {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+</style>
+
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      const searchableSelector = () => {
+        const label = document.createElement("label");
+        label.textContent = "إختر الخدمة"; // Label text
+        label.classList.add("itemLabel");
+
+        const selector = document.createElement("select");
+        selector.classList.add("itemSelect");
+        const defaultOption = document.createElement("option");
+        defaultOption.textContent = "إختر الخدمة";
+        defaultOption.style.textAlign = "center";
+        selector.appendChild(defaultOption);
+
+        const url = window.location.href;
+        const urlObj = new URL(url);
+        const workOrderId = urlObj.searchParams.get("work_order_id");
+
+        $.get(`/v2/api/entity/le_workflow-type-entity-2/${workOrderId}/4`).then(
+          (response) => {
+            const options =
+              response["le_workflow-type-entity-2_custom_data"][
+                "le_custom_data_le_workflow-type-entity-2_le_custom_data_le_workflow-type-entity-2_project_items"
+              ];
+
+            options.forEach((optionText) => {
+              const option = document.createElement("option");
+              option.textContent = optionText.item_name;
+              option.dataset.purch_estimated_cost =
+                optionText.purch_estimated_cost;
+              option.dataset.expenses_estimated_cost =
+                optionText.expenses_estimated_cost;
+              option.dataset.rec_id = optionText.id;
+              option.dataset.purch_actual_cost = optionText.purch_actual_cost;
+              option.dataset.expenses_actual_cost =
+                optionText.expenses_actual_cost;
+              option.dataset.incomes_cost = optionText.incomes_cost;
+              option.style.textAlign = "center";
+              selector.appendChild(option);
+            });
+
+            // Append the label and selector to the specified div
+            const targetDiv = $(
+              "#form-panel > div > div:nth-child(3) > div:nth-child(4)"
+            );
+            const newDiv = $("<div>");
+            newDiv.append(label);
+            newDiv.append(selector);
+            targetDiv.after(newDiv);
+          }
+        );
+      };
+      async function updateProjectItem(workOrderId, invoiceNo, subval) {
+        const selectedOption = $(".itemSelect").find("option:selected");
+        if ($(".itemSelect").val() == "إختر الخدمة") {
+          return;
+        }
+        const itemvalues = selectedOption[0].dataset;
+        let prevVal = parseFloat(itemvalues.incomes_cost) || 0;
+        let currVal = parseFloat($("#ExpenseAmount").val()) || 0;
+        let newVal = prevVal + currVal;
+        try {
+          const response = await fetch(
+            `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${itemvalues.rec_id}/fields`,
+            {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ expenses_actual_cost: newVal }),
+            }
+          );
+          if (!response.ok) {
+            const errorRes = await response.json();
+            throw new Error(
+              `Error ${response.status}: ${
+                errorRes.message || "An error occurred."
+              }`
+            );
+          }
+          const res = await response.json();
+          await postHistory(
+            res.id,
+            itemvalues.rec_id,
+            selectedOption[0].textContent,
+            subval
+          );
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+      async function postHistory(invoiceNo, itemId, itemName, ttlval) {
+        const postBody = {
+          operations_type: "سند قبض",
+          op_date: new Date().toISOString().slice(0, 19).replace("T", " "),
+          operation_no: invoiceNo,
+          item_id: itemId,
+          project_item: itemName,
+          single_line_field: ttlval,
+          reference_id: workOrderId,
+        };
+        console.log({ postBody: postBody });
+        try {
+          const response = await fetch(`/v2/api/entity/le_OperationsLog`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(postBody),
+          });
+          if (!response.ok) {
+            const errorRes = await response.json();
+            throw new Error(
+              `Error ${response.status}: ${
+                errorRes.message || "An error occurred."
+              }`
+            );
+          }
+          await response.json();
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+
+      const url = window.location.href;
+      const urlObj = new URL(url);
+      const workOrderId = urlObj.searchParams.get("work_order_id");
+      async function updateProjectData2(invNo) {
+        const url = window.location.href;
+        const urlObj = new URL(url);
+        const workOrderId = urlObj.searchParams.get("work_order_id");
+        const invoiceNo = invNo;
+        let subval = parseFloat($("#ExpenseAmount").val()) || 0;
+        await updateProjectItem(workOrderId, invoiceNo, subval);
+      }
+
+      if (workOrderId ) {
+        searchableSelector();
+        document.getElementById("ExpenseForm").onsubmit = async function (e) {
+          e.preventDefault();
+          console.log("yesss");
+          //   await updateProjectData2();
+          //   await updateProjectData2(res.invoice_number);
+          const formData = new FormData(e.target);
+          const formDataObj = {};
+          let isValid = true;
+          let errorMessage = "";
+          formData.forEach((value, key) => {
+            const keys = key.match(/[^\[\]]+/g);
+            let tempObj = formDataObj;
+            const inputElement = e.target.querySelector(`[name="${key}"]`);
+            if (
+              inputElement &&
+              inputElement.hasAttribute("required") &&
+              !value
+            ) {
+              isValid = false;
+              errorMessage += `${
+                inputElement.placeholder || key
+              } is required.\n`;
+            }
+            keys.forEach((k, i) => {
+              if (i === keys.length - 1) {
+                tempObj[k] = value;
+              } else {
+                if (!tempObj[k]) {
+                  tempObj[k] = {};
+                }
+                tempObj = tempObj[k];
+              }
+            });
+          });
+          if (!isValid) {
+            alert(errorMessage);
+            return;
+          }
+          console.log({ formDataObj: formDataObj });
+          await fetch(`/api2/incomes`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formDataObj.data),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                return response.json().then((errorRes) => {
+                  console.error("Error:", errorRes);
+                  alert(
+                    `Error ${response.status}: ${
+                      errorRes.message || "An error occurred."
+                    }`
+                  );
+                });
+              }
+              return response.json().then(async (res) => {
+                console.log("Success:", res);
+                await updateProjectData2(res.id);
+                // await updateProjectData2(res.expense_number);
+                window.location.href = `/owner/expenses/view/${res.id}`;
+              });
+            })
+            .catch((error) => {
+              console.error("Fetch error:", error);
+              alert("An unexpected error occurred. Please try again.");
+            });
+        };
+      }
+    }, 1000);
+  });
+</script>

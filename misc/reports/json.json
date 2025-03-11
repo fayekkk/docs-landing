@@ -1,0 +1,270 @@
+{
+  "modelName": "Invoice",
+  "title": "تقرير مبيعات بالحقول الاضافية - خاص",
+  "table": "invoices i",
+  "custom_table": "invoices",
+  "alias": "i",
+
+  "fields": {
+    "invoice_no": {
+      "query": "i.no invoice_no",
+      "type": ""
+    },
+
+    "invoice_date": {
+      "query": "i.date invoice_date",
+      "type": ""
+    },
+    "client_name": {
+      "query": "i.client_business_name AS client_name",
+      "type": ""
+    },
+    "product_id": {
+      "query": "ii.product_id  AS product_id",
+      "type": ""
+    },
+    "product_name": {
+      "query": "ii.item AS product_name",
+      "type": ""
+    },
+    "product_brand": {
+      "query": "p.brand AS product_brand",
+      "type": ""
+    },
+    "staff_name": {
+      "query": "sf.name AS staff_name",
+      "type": ""
+    },
+    "sales_name": {
+      "query": "ss.name AS sales_name",
+      "type": ""
+    },
+    "stock_balance": {
+      "query": "p.stock_balance AS stock_balance",
+      "type": ""
+    },
+    "price": {
+      "query": "ii.unit_price AS price",
+      "type": "PRICE"
+    },
+    "qty": {
+      "query": "ii.quantity AS qty",
+      "type": ""
+    },
+    "subtotal": {
+      "query": "ii.subtotal AS subtotal",
+      "type": "PRICE"
+    },
+    "paid": {
+      "query": "ROUND(i.summary_paid/i.summary_total * ii.subtotal , 2)  AS paid",
+      "type": "PRICE"
+    },
+    "unpaid": {
+      "query": "ROUND(i.summary_unpaid/i.summary_total * ii.subtotal , 2)  AS unpaid",
+      "type": "PRICE"
+    },
+
+    "currency_code": {
+      "query": "i.currency_code"
+    }
+  },
+  "currency": {
+    "field": "currency_code",
+    "filter_field": "i.currency_code",
+    "convert_fields": ["total"]
+  },
+
+  "display_fields": {
+    "invoice_no": " رقم الفاتورة",
+    "invoice_date": " التاريخ",
+    "client_name": " اسم العميل",
+    "product_id": "المعرف",
+    "product_name": "اسم المنتج",
+    "product_brand": "الماركة",
+    "staff_name": "الموظف",
+    "sales_name": "مسئول المبيعات",
+    "stock_balance": "المخزون",
+    "price": "السعر",
+    "qty": "الكمية",
+    "subtotal": "المجموع",
+    "paid": "المدفوع",
+    "unpaid": "الباقى"
+  },
+
+  "allow_removed": false,
+  "removed_text": "[REMOVED]",
+  "group_fields": {
+    "subtotal": "SUM",
+    "paid": "SUM",
+    "unpaid": "SUM"
+  },
+  "total_fields": {
+    "subtotal": "SUM",
+    "paid": "SUM",
+    "unpaid": "SUM"
+  },
+  "filters": {
+    "product_id": {
+      "type": "select",
+      "input": {
+        "multiple": "multiple",
+        "label": "المنتج",
+        "name": "product_id",
+        "data-live-search": true,
+        "class": "form-control input-select",
+        "div": "form-group col-md-3",
+        "dynamic_options": {
+          "model": "Product",
+          "conditions": [],
+          "fields": ["Product.id", "Product.name"]
+        }
+      },
+      "condition": "ii.product_id IN ($product_id)"
+    },
+
+    "from_date": {
+      "type": "date",
+      "input": {
+        "name": "from_date",
+        "type": "text",
+        "label": "التاريخ من",
+        "class": "form-control ",
+        "div": "form-group col-md-3"
+      },
+      "condition": "DATE(ip.date) >= '$from_date'"
+    },
+    "to_date": {
+      "type": "date",
+      "input": {
+        "name": "to_date",
+        "type": "text",
+        "label": "التاريخ إلى",
+        "class": "form-control ",
+        "div": "form-group col-md-3"
+      },
+      "condition": "DATE(ip.date)  <= '$to_date' "
+    },
+    "product_brand": {
+      "type": "text",
+      "input": {
+        "name": "product_brand",
+        "type": "text",
+        "label": "الماركة",
+        "class": "form-control",
+        "div": "col-md-3"
+      },
+      "condition": "p.brand = '$product_brand'"
+    },
+
+    "sales_name": {
+      "type": "select",
+      "input": {
+        "multiple": "multiple",
+        "label": " مسؤول المبيعات",
+        "name": "sales_name",
+        "data-live-search": true,
+        "class": "form-control input-select",
+        "div": "form-group col-md-3",
+        "dynamic_options": {
+          "model": "staffs",
+          "conditions": [],
+          "fields": ["staffs.id", "staffs.name"]
+        }
+      },
+      "condition": "ss.id IN ($sales_name)"
+    },
+    "category": {
+      "type": "select",
+      "input": {
+        "multiple": "multiple",
+        "label": "التصنيف",
+        "name": "category",
+        "data-live-search": true,
+        "class": "form-control input-select",
+        "div": "form-group col-md-3",
+        "dynamic_options": {
+          "model": "categories",
+          "conditions": [],
+          "fields": ["categories.id", "categories.name"]
+        }
+      },
+      "condition": "c.id IN ($category)"
+    },
+    "staff_name": {
+      "type": "select",
+      "input": {
+        "multiple": "multiple",
+        "label": "الموظف",
+        "name": "staff name",
+        "data-live-search": true,
+        "class": "form-control input-select",
+        "div": "form-group col-md-3",
+        "dynamic_options": {
+          "model": "staffs",
+          "conditions": [],
+          "fields": ["staffs.id", "staffs.name"]
+        }
+      },
+      "condition": "sf.id IN ($staff_name)"
+    },
+    "client_id": {
+      "type": "element",
+      "element": {
+        "name": "advanced_client",
+        "options": {
+          "multiple": "multiple",
+          "label": "العميل",
+          "width": "100%",
+          "input_name": "client_id",
+          "class": "form-control input-select",
+          "div": "form-group col-md-3",
+          "selected_client_id": "$_GET[client_id]"
+        }
+      },
+      "condition": "i.client_id IN ($client_id) "
+    },
+    "store": {
+      "type": "select",
+      "input": {
+        "multiple": "multiple",
+        "label": "store name",
+        "name": "store name",
+        "data-live-search": true,
+        "class": "form-control input-select",
+        "div": "form-group col-md-3",
+        "dynamic_options": {
+          "model": "stores",
+          "conditions": [],
+          "fields": ["store.id", "store.name"]
+        }
+      },
+      "condition": "s.id IN ($store)"
+    }
+  },
+  "joins": [
+    "LEFT JOIN invoice_items AS ii ON ii.invoice_id = i.id",
+    "LEFT JOIN products AS p ON p.id = ii.product_id",
+    "LEFT JOIN staffs AS sf ON sf.id = i.staff_id",
+    "LEFT JOIN invoice_payments AS ip ON ip.invoice_id = i.id",
+    "LEFT JOIN staffs AS ss ON ss.id = i.sales_person_id",
+    "LEFT JOIN items_categories AS ic ON ic.item_id = ii.product_id",
+    "LEFT JOIN categories AS c ON c.id = ic.category_id",
+    "LEFT JOIN stores AS s ON s.id = i.store_id"
+  ],
+
+  "conditions": ["i.type NOT IN (3)", "i.draft <> 1"],
+  "group_by": {
+    "Yearly": "DATE_FORMAT(DATE(ip.date),'%Y')",
+    "Monthly": "CONCAT(YEAR(DATE(ip.date)), \"-\", LPAD(MONTH(DATE(ip.date)), 2, 0))",
+    "Weekly": "DATE_ADD(DATE(ip.date), INTERVAL (0 - WEEKDAY(DATE(ip.date))) DAY)",
+    "Daily": "DATE(ip.date)",
+    "item": "ii.item",
+    "client": "i.client_business_name"
+  },
+  "has_summary": true,
+  "order_by": {
+    "Date Descending": "i.date DESC",
+    "Date Ascending": "i.date ASC"
+  },
+  "default_group_by": "i.id"
+}

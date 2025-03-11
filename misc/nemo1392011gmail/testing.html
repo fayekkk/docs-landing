@@ -1,0 +1,60 @@
+<script>
+  function changeActions() {
+    function throttle(func, limit) {
+      let lastFunc;
+      let lastRan;
+      return function (...args) {
+        const context = this;
+        if (!lastRan) {
+          func.apply(context, args);
+          lastRan = Date.now();
+        } else {
+          clearTimeout(lastFunc);
+          lastFunc = setTimeout(() => {
+            if (Date.now() - lastRan >= limit) {
+              func.apply(context, args);
+              lastRan = Date.now();
+            }
+          }, limit - (Date.now() - lastRan));
+        }
+      };
+    }
+
+    const handleChange = function () {
+      var $closestTr = $(this).closest("tr");
+      // Select all relevant textareas in the specified classes
+      var $lateTextareas = $closestTr.find(
+        ".late_td textarea, .late1_td textarea, .late2_td textarea, .late3_td textarea"
+      );
+      var $col3Textarea = $closestTr.find(".item-description");
+
+      // Create the object with values from the product fields
+      var object = {};
+      let updateNeeded = false;
+
+      $lateTextareas.each(function (index) {
+        const value = $(this).val();
+        if (object[`lateValue${index + 1}`] !== value) {
+          object[`lateValue${index + 1}`] = value;
+          updateNeeded = true; 
+        }
+      });
+
+      if (updateNeeded) {
+        console.log(object);
+        $col3Textarea.val(JSON.stringify(object));
+      }
+    };
+
+    $(document).on("change", ".item_name", throttle(handleChange, 250));
+
+    $(document).on(
+      "change",
+      ".late_td textarea, .late1_td textarea, .late2_td textarea, .late3_td textarea",
+      throttle(handleChange, 250)
+    );
+  }
+
+  // Call the function to initialize
+  changeActions();
+</script>

@@ -1,0 +1,68 @@
+<table>
+  <tbody>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+<!--%  if($Data['requisition']['notes']){  %-->
+<table class="tmp-footer" border="1" style="width: 100%; height: 95.3038px">
+  <colgroup>
+    <col style="width: 50.007%" />
+    <col style="width: 50.007%" />
+  </colgroup>
+  <tbody>
+    <tr style="height: 95.3038px">
+      <td style="height: 95.3038px">
+        <h5>
+          <span style="color: rgb(32, 33, 36)"
+            ><strong
+              ><span style="font-size: 18px">معلومات أخرى</span></strong
+            ></span
+          >
+        </h5>
+        <label class="tmp-footer-note-label">الملاحظات</label>
+        <p class="tmp-footer-note-value">
+          <span class="mce-inline-non-editable-area mce-inline-placeholder"
+            >{{Data.requisition.notes}}</span
+          >
+        </p>
+      </td>
+      <td style="height: 95.3038px"></td>
+    </tr>
+  </tbody>
+</table>
+<!--%  }  %-->
+<style>
+  .tmp-footer {
+    border: 0;
+    border-top: 1px solid #202124;
+    margin-top: 18px;
+    direction: rtl;
+    text-align: right;
+  }
+  .tmp-footer td {
+    border: 0;
+    padding: 0;
+    color: #202124;
+    padding-top: 22px;
+  }
+  .tmp-footer td .tmp-footer-note-label {
+    margin-bottom: 8px;
+    display: block;
+    color: #6a6e82;
+    font-weight: 400;
+    font-size: 14px;
+  }
+  .tmp-footer td .tmp-footer-note-value {
+    margin-bottom: 0;
+    color: #202124;
+    font-weight: 400;
+    font-size: 14px;
+  }
+</style>

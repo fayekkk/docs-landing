@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Map with Current Location</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    />
+
+    <!-- Leaflet.Control.Search CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/leaflet-control-geocoder/dist/Control.Geocoder.css"
+    />
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+
+    <!-- Leaflet.Control.Search JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <!-- Leaflet.Control.Search JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-search/dist/leaflet-search.min.js"></script>
+    <style>
+      #map {
+        height: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <button id="updateLocations">Log Current Location</button>
+
+    <script>
+      let locations = [
+        {
+          map_location:
+            '{"lat": "30.0777472", "long": "31.0214656", "zoom": "14", "address": "Unnamed Road, Kerdasa, Giza Governorate 3650121, Egypt", "title": "Location 1"}',
+        },
+        // {
+        //   map_location:
+        //     '{"lat": "40.730610", "long": "-73.935242", "zoom": "14", "address": "New York, NY, USA", "title": "Location 2"}',
+        // },
+        // Add more locations here
+      ];
+
+      const map = L.map("map", {
+        maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)),
+        maxZoom: 150,
+        minZoom: 2.39,
+      }).setView([0, 0], 2);
+
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      // Add the Leaflet.Control.Search plugin
+      L.Control.geocoder().addTo(map);
+
+      // Function to get and log the user's current location
+      function logCurrentLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const lat = position.coords.latitude;
+              const lng = position.coords.longitude;
+
+              // Log the current location
+              console.log("Current Location: ", {
+                lat: lat,
+                long: lng,
+              });
+
+              // Optionally, set the map view to the user's current location
+              map.setView([lat, lng], 14);
+
+              // Add a marker for the user's current location (optional)
+              L.marker([lat, lng])
+                .addTo(map)
+                .bindPopup("You are here")
+                .openPopup();
+            },
+            (error) => {
+              console.error("Error getting location: ", error);
+            }
+          );
+        } else {
+          console.error("Geolocation is not supported by this browser.");
+        }
+      }
+
+      // Add event listener for the "Log Current Location" button
+      document
+        .getElementById("updateLocations")
+        .addEventListener("click", logCurrentLocation);
+
+      // Add draggable markers for each location
+      const markers = locations.map((location) => {
+        const locationData = JSON.parse(location.map_location);
+        const marker = L.marker(
+          [parseFloat(locationData.lat), parseFloat(locationData.long)],
+          {
+            title: locationData.title,
+            riseOnHover: true,
+            draggable: true, // Make the marker draggable
+          }
+        )
+          .addTo(map)
+          .bindTooltip(locationData.title, {
+            permanent: true,
+            className: "leaflet-tooltip",
+            offset: [0, -20],
+          });
+
+        // Add event listener for the 'dragend' event
+        marker.on("dragend", () => {
+          const position = marker.getLatLng();
+          location.map_location = JSON.stringify({
+            lat: position.lat,
+            long: position.lng,
+            zoom: map.getZoom(),
+            address: "", // Update this with a geocoding service if needed
+            title: locationData.title,
+          });
+          console.log("Updated location:", location);
+        });
+
+        return marker;
+      });
+
+      // Add event listener for the "Update Locations" button
+      document
+        .getElementById("updateLocations")
+        .addEventListener("click", () => {
+          console.log("Updated locations:", locations);
+        });
+      // New Code
+    </script>
+    <script>
+      // Function to calculate the distance between two points using the Haversine formula
+      function haversineDistance(coords1, coords2) {
+        const R = 6371; // Radius of the Earth in kilometers
+        const lat1 = coords1.lat * (Math.PI / 180);
+        const lat2 = coords2.lat * (Math.PI / 180);
+        const dLat = (coords2.lat - coords1.lat) * (Math.PI / 180);
+        const dLon = (coords2.long - coords1.long) * (Math.PI / 180);
+
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(lat1) *
+            Math.cos(lat2) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return R * c; // Distance in kilometers
+      }
+
+      // Sample locations
+      const location1 = {
+        map_location:
+          '{"lat": "30.0777472", "long": "31.0214656", "zoom": "14", "address": "Unnamed Road, Kerdasa, Giza Governorate 3650121, Egypt", "title": "Location 1"}',
+      };
+
+      const location2 = {
+        map_location:
+          '{"lat": "30.0837475", "long": "31.0224658", "zoom": "14", "address": "Another Location, Giza, Egypt", "title": "Location 2"}',
+      };
+
+      // Parse the locations
+      const loc1 = JSON.parse(location1.map_location);
+      const loc2 = JSON.parse(location2.map_location);
+
+      // Calculate the distance
+      const distance = haversineDistance(
+        { lat: parseFloat(loc1.lat), long: parseFloat(loc1.long) },
+        { lat: parseFloat(loc2.lat), long: parseFloat(loc2.long) }
+      );
+
+      // Check if the distance is 5 km or less
+      if (distance <= 5) {
+        console.log(
+          `The distance between the locations is ${distance.toFixed(
+            2
+          )} km, which is 5 km or less.`
+        );
+      } else {
+        console.log(
+          `The distance between the locations is ${distance.toFixed(
+            2
+          )} km, which is greater than 5 km.`
+        );
+      }
+    </script>
+  </body>
+</html>

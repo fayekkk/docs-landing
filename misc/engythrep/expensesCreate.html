@@ -1,0 +1,274 @@
+<style>
+  .itemSelect {
+    width: 32%;
+  }
+  .itemLabel {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+</style>
+
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      const searchableSelector = () => {
+        const label = document.createElement("label");
+        label.textContent = "إختر الخدمة"; // Label text
+        label.classList.add("itemLabel");
+
+        const selector = document.createElement("select");
+        selector.classList.add("itemSelect");
+        const defaultOption = document.createElement("option");
+        defaultOption.textContent = "إختر الخدمة";
+        defaultOption.style.textAlign = "center";
+        selector.appendChild(defaultOption);
+
+        const url = window.location.href;
+        const urlObj = new URL(url);
+        const workOrderId = urlObj.searchParams.get("work_order_id");
+
+        $.get(`/v2/api/entity/le_workflow-type-entity-2/${workOrderId}/4`).then(
+          (response) => {
+            const options =
+              response["le_workflow-type-entity-2_custom_data"][
+                "le_custom_data_le_workflow-type-entity-2_le_custom_data_le_workflow-type-entity-2_project_items"
+              ];
+
+            options.forEach((optionText) => {
+              const option = document.createElement("option");
+              option.textContent = optionText.item_name;
+              option.dataset.purch_estimated_cost =
+                optionText.purch_estimated_cost;
+              option.dataset.expenses_estimated_cost =
+                optionText.expenses_estimated_cost;
+              option.dataset.rec_id = optionText.id;
+              option.dataset.purch_actual_cost = optionText.purch_actual_cost;
+              option.dataset.expenses_actual_cost =
+                optionText.expenses_actual_cost;
+              option.dataset.incomes_cost = optionText.incomes_cost;
+              option.style.textAlign = "center";
+              selector.appendChild(option);
+            });
+
+            // Append the label and selector to the specified div
+            const targetDiv = $(
+              "#form-panel > div > div:nth-child(3) > div:nth-child(4)"
+            );
+            const newDiv = $("<div>");
+            newDiv.append(label);
+            newDiv.append(selector);
+            targetDiv.after(newDiv);
+            $(document).on(
+              "change",
+              ".itemSelect , #ExpenseAmount",
+              function (e) {
+                let expenseVal = $(".itemSelect").val();
+                let expenseAmount = $("#ExpenseAmount").val();
+                if (expenseVal != "إختر الخدمة") {
+                  const selectedOption =
+                    $(".itemSelect").find("option:selected");
+                  const itemvalues = selectedOption[0].dataset;
+                  let estimatedAmount = itemvalues.expenses_estimated_cost;
+                  console.log(expenseAmount);
+                  console.log(estimatedAmount);
+                  if (parseFloat(expenseAmount) > parseFloat(estimatedAmount)) {
+                    if (window.location.href.indexOf("expense") != -1) {
+                      alert("المبلغ المدخل أكبر من المبلغ المتوقع للمصروفات");
+                    }
+                  }
+                }
+              }
+            );
+          }
+        );
+      };
+      async function updateProjectItem(workOrderId, invoiceNo, subval) {
+        const selectedOption = $(".itemSelect").find("option:selected");
+        if ($(".itemSelect").val() == "إختر الخدمة") {
+          return;
+        }
+        const itemvalues = selectedOption[0].dataset;
+        let prevVal = parseFloat(itemvalues.expenses_actual_cost) || 0;
+        if (window.location.href.indexOf("incomes") != -1) {
+          prevVal = parseFloat(itemvalues.incomes_cost) || 0;
+        }
+        let currVal = parseFloat($("#ExpenseAmount").val()) || 0;
+        let newVal = prevVal + currVal;
+        let body = { expenses_actual_cost: newVal };
+        if (window.location.href.indexOf("incomes") != -1) {
+          body = { incomes_cost: newVal };
+        }
+        try {
+          const response = await fetch(
+            `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${itemvalues.rec_id}/fields`,
+            {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(body),
+            }
+          );
+          if (!response.ok) {
+            const errorRes = await response.json();
+            throw new Error(
+              `Error ${response.status}: ${
+                errorRes.message || "An error occurred."
+              }`
+            );
+          }
+          const res = await response.json();
+          await postHistory(
+            res.id,
+            itemvalues.rec_id,
+            selectedOption[0].textContent,
+            subval
+          );
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+      async function postHistory(invoiceNo, itemId, itemName, ttlval) {
+        let postBody = {
+          operations_type: "مصروف",
+          ref_type: "expense",
+          op_date: new Date().toISOString().slice(0, 19).replace("T", " "),
+          operation_no: invoiceNo,
+          item_id: itemId,
+          project_item: itemName,
+          single_line_field: ttlval,
+          reference_id: workOrderId,
+        };
+        if (window.location.href.indexOf("incomes") != -1) {
+          postBody = {
+            operations_type: "سند قبض ",
+            ref_type: "income",
+            op_date: new Date().toISOString().slice(0, 19).replace("T", " "),
+            operation_no: invoiceNo,
+            item_id: itemId,
+            project_item: itemName,
+            single_line_field: ttlval,
+            reference_id: workOrderId,
+          };
+        }
+        console.log({ postBody: postBody });
+        try {
+          const response = await fetch(`/v2/api/entity/le_OperationsLog`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(postBody),
+          });
+          if (!response.ok) {
+            const errorRes = await response.json();
+            throw new Error(
+              `Error ${response.status}: ${
+                errorRes.message || "An error occurred."
+              }`
+            );
+          }
+          await response.json();
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+
+      const url = window.location.href;
+      const urlObj = new URL(url);
+      const workOrderId = urlObj.searchParams.get("work_order_id");
+      async function updateProjectData2(invNo) {
+        const url = window.location.href;
+        const urlObj = new URL(url);
+        const workOrderId = urlObj.searchParams.get("work_order_id");
+        const invoiceNo = invNo;
+        let subval = parseFloat($("#ExpenseAmount").val()) || 0;
+        await updateProjectItem(workOrderId, invoiceNo, subval);
+      }
+
+      if (workOrderId) {
+        searchableSelector();
+        document.getElementById("ExpenseForm").onsubmit = async function (e) {
+          e.preventDefault();
+          console.log("yesss");
+
+          const formData = new FormData(e.target);
+          const formDataObj = {};
+          let isValid = true;
+          let errorMessage = "";
+          formData.forEach((value, key) => {
+            const keys = key.match(/[^\[\]]+/g);
+            let tempObj = formDataObj;
+            const inputElement = e.target.querySelector(`[name="${key}"]`);
+            if (
+              inputElement &&
+              inputElement.hasAttribute("required") &&
+              !value
+            ) {
+              isValid = false;
+              errorMessage += `${
+                inputElement.placeholder || key
+              } is required.\n`;
+            }
+            keys.forEach((k, i) => {
+              if (i === keys.length - 1) {
+                tempObj[k] = value;
+              } else {
+                if (!tempObj[k]) {
+                  tempObj[k] = {};
+                }
+                tempObj = tempObj[k];
+              }
+            });
+          });
+          if (!isValid) {
+            alert(errorMessage);
+            return;
+          }
+          console.log({ formDataObj: formDataObj });
+          let url = `/api2/incomes`;
+          if (window.location.href.indexOf("expenses") != -1) {
+            url = `/api2/expenses`;
+          }
+          await fetch(`${url}`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formDataObj.data),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                return response.json().then((errorRes) => {
+                  console.error("Error:", errorRes);
+                  alert(
+                    `Error ${response.status}: ${
+                      errorRes.message || "An error occurred."
+                    }`
+                  );
+                });
+              }
+              return response.json().then(async (res) => {
+                console.log("Success:", res);
+                await updateProjectData2(res.id);
+                // await updateProjectData2(res.expense_number);
+                if (window.location.href.indexOf("expense") != -1) {
+                  window.location.href = `/owner/expenses/view/${res.id}`;
+                } else {
+                  window.location.href = `/owner/incomes/view/${res.id}`;
+                }
+              });
+            })
+            .catch((error) => {
+              console.error("Fetch error:", error);
+              alert("An unexpected error occurred. Please try again.");
+            });
+        };
+      }
+    }, 1000);
+  });
+</script>

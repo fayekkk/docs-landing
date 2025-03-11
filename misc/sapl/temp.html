@@ -1,0 +1,312 @@
+<div id="mainCon">
+  <style>
+    * {
+      direction: ltr !important;
+      text-align: left !important;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      white-space: normal;
+      font-size: 12px !important;
+    }
+    td {
+      padding: 4px !important;
+    }
+    .bg-colered {
+      background-color: #e5e5e5;
+      font-weight: bold !important;
+    }
+    .noright {
+      border-right: none !important;
+    }
+    .noleft {
+      border-left: none !important;
+    }
+    .notop {
+      border-top: none !important;
+    }
+    .nobottom {
+      border-bottom: none !important;
+    }
+    .rightbr {
+      border-right: 1px solid #000 !important;
+    }
+    .leftbr {
+      border-left: 1px solid #000 !important;
+    }
+    .bottombr {
+      border-bottom: 1px solid #000 !important;
+    }
+    .topbr {
+      border-top: 1px solid #000 !important;
+    }
+    .boldtext {
+      font-weight: bold;
+    }
+    .npborders {
+      border: none;
+    }
+    .tbl1,
+    .customtable {
+      width: 100%;
+      border: none !important;
+      border-spacing: 0;
+    }
+    .alignCenter {
+      text-align: center !important;
+    }
+  </style>
+  <table class="tbl1">
+    <tbody>
+      <tr>
+        <td style="width: 20%" class="bg-colered leftbr bottombr topbr noright">
+          LAND Waybill No
+        </td>
+        <td colspan="2" class="rightbr bottombr topbr noleft">
+          {{Data.le_workflow-type-entity-2.number}}
+        </td>
+        <td
+          colspan="2"
+          rowspan="4"
+          class="boldtext topbr bottombr rightbr leftbr"
+        >
+          LAND Waybill
+        </td>
+      </tr>
+      <tr>
+        <td class="noright nobottom notop leftbr">Pick Up Date and Time</td>
+        <td class="npborders" style="width: 15%">
+          {{Data.le_workflow-type-entity-2.start_date}}
+        </td>
+        <td class="npborders" style="width: 15%"></td>
+      </tr>
+      <tr>
+        <td class="noright nobottom notop leftbr">Driver Name</td>
+        <td class="npborders"></td>
+        <td class="npborders"></td>
+      </tr>
+      <tr>
+        <td class="noright nobottom notop leftbr">Printed By</td>
+        <td class="npborders"></td>
+        <td class="npborders"></td>
+      </tr>
+
+      <tr>
+        <td colspan="2" class="leftbr bg-colered npborders topbr rightbr">
+          Customer's Name and Address
+        </td>
+        <td class="bg-colered npborders topbr rightbr alignCenter">
+          Account Number
+        </td>
+        <td colspan="2" class="bg-colered npborders leftbr bottombr rightbr">
+          CARRIER
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="leftbr npborders">
+          {{Data.le_workflow-type-entity-2.work_order_client.business_name}}
+        </td>
+        <td class="npborders bottombr leftbr rightbr alignCenter"></td>
+        <td class="npborders leftbr" style="width: 20%">
+          Driver Id & Phone No
+        </td>
+        <td class="npborders" style="width: 30%"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="npborders leftbr">
+          {{Data.le_workflow-type-entity-2.work_order_client.address1}}
+        </td>
+        <td class="npborders"></td>
+        <td class="npborders leftbr">Vehicle Id</td>
+        <td class="npborders"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="npborders leftbr"></td>
+        <td class="npborders"></td>
+        <td class="npborders leftbr">Truck Type</td>
+        <td class="npborders"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="npborders leftbr"></td>
+        <td class="npborders"></td>
+        <td class="npborders leftbr">Source</td>
+        <td class="npborders"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="bg-colered npborders leftbr topbr">
+          Shipper's Name and Address
+        </td>
+        <td class="bg-colered npborders topbr rightbr alignCenter leftbr">
+          Account Number
+        </td>
+        <td class="npborders leftbr">NAQL Ref</td>
+        <td class="npborders"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="npborders leftbr"></td>
+        <td class="npborders bottombr rightbr alignCenter leftbr"></td>
+        <td
+          colspan="2"
+          class="bg-colered npborders leftbr bottombr rightbr topbr"
+        >
+          ROUTING
+        </td>
+        <td class="npborders"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="npborders leftbr"></td>
+        <td class="npborders"></td>
+        <td class="npborders leftbr">Origin</td>
+        <td class="npborders"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="npborders leftbr"></td>
+        <td class="npborders"></td>
+        <td class="npborders leftbr">Destination</td>
+        <td class="npborders"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="npborders leftbr"></td>
+        <td class="npborders"></td>
+        <td class="npborders leftbr">Return /Next to</td>
+        <td class="npborders"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="bg-colered npborders leftbr topbr">
+          Consignee's Name and Address
+        </td>
+        <td class="bg-colered npborders topbr rightbr alignCenter leftbr">
+          Account Number
+        </td>
+        <td
+          colspan="2"
+          class="bg-colered npborders leftbr bottombr rightbr topbr"
+        >
+          HANDLING INFORMATION
+        </td>
+        <td class="npborders"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="npborders leftbr"></td>
+        <td class="npborders bottombr rightbr alignCenter leftbr"></td>
+        <td class="npborders leftbr">Special handling</td>
+        <td class="npborders"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="npborders leftbr"></td>
+        <td class="npborders"></td>
+        <td class="npborders leftbr">Container No</td>
+        <td class="npborders"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="npborders leftbr"></td>
+        <td class="npborders"></td>
+        <td class="npborders leftbr">No Of Packages</td>
+        <td class="npborders"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="npborders leftbr"></td>
+        <td class="npborders"></td>
+        <td class="npborders leftbr">Gross Wight</td>
+        <td class="npborders"></td>
+      </tr>
+      <tr>
+        <td colspan="100%" class="bg-colered npborders leftbr topbr bottombr">
+          NATURE AND QUANTITY OF GOODS
+        </td>
+      </tr>
+      <tr>
+        <td
+          colspan="100%"
+          class="npborders leftbr topbr bottombr"
+          style="height: 25px !important"
+        ></td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="customtable">
+    <tbody>
+      <tr>
+        <td
+          colspan="2"
+          class="bg-colered leftbr rightbr topbr bottombr npborders"
+        >
+          SHIPMENT REFERENCE INFORMATION
+        </td>
+        <td
+          style="width: 25%"
+          colspan="2"
+          class="bg-colered leftbr rightbr topbr bottombr npborders"
+        >
+          CHARGES DECLARATION
+        </td>
+      </tr>
+      <tr>
+        <td style="width: 20%" class="npborders leftbr">Bill Of Loding No</td>
+        <td style="width: 30%" class="npborders"></td>
+        <td style="width: 20%" class="npborders leftbr rightbr">
+          Shipping charges
+        </td>
+        <td style="width: 30%" class="npborders rightbr"></td>
+      </tr>
+      <tr>
+        <td class="npborders leftbr">Customer Ref No</td>
+        <td class="npborders"></td>
+        <td class="npborders leftbr rightbr">Other Charges</td>
+        <td class="npborders rightbr"></td>
+      </tr>
+      <tr>
+        <td class="npborders leftbr">Shipper Name</td>
+        <td class="npborders"></td>
+        <td class="npborders leftbr rightbr">Currency</td>
+        <td class="npborders rightbr"></td>
+      </tr>
+      <tr>
+        <td class="npborders leftbr">Consignee Name</td>
+        <td class="npborders"></td>
+        <td class="npborders leftbr rightbr">Payment Mode</td>
+        <td class="npborders rightbr"></td>
+      </tr>
+      <tr>
+        <td class="npborders leftbr bg-colered topbr bottombr">
+          Shipper Name:
+        </td>
+        <td class="npborders topbr bottombr">:</td>
+        <td class="npborders leftbr bg-colered topbr bottombr">
+          Recipient Name
+        </td>
+        <td class="npborders topbr bottombr rightbr">:</td>
+      </tr>
+      <tr>
+        <td class="npborders leftbr bg-colered topbr bottombr">Date & Time</td>
+        <td class="npborders topbr bottombr">:</td>
+        <td class="npborders leftbr bg-colered topbr bottombr">Date & Time</td>
+        <td class="npborders topbr bottombr rightbr">:</td>
+      </tr>
+      <tr>
+        <td
+          class="npborders leftbr bg-colered topbr bottombr"
+          style="padding: 25px 0 !important"
+        >
+          Signature
+        </td>
+        <td class="npborders topbr bottombr">:</td>
+        <td
+          class="npborders leftbr bg-colered topbr bottombr"
+          style="padding: 25px 0 !important"
+        >
+          Signature
+        </td>
+        <td class="npborders topbr bottombr rightbr">:</td>
+      </tr>
+      <tr>
+        <td
+          colspan="100%"
+          class="npborders rightbr leftbr topbr bottombr"
+          style="height: 50px; vertical-align: baseline"
+        >
+          Remarks: -
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,487 @@
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap");
+  .temp-container {
+    font-family: "Tajawal", sans-serif;
+  }
+  .head {
+    margin: 20px 0;
+  }
+  .business-info-tbl {
+    margin: 0 0 20px 0;
+    border: none !important;
+    table-layout: fixed;
+  }
+  .business-info-tbl tr td {
+    text-align: right;
+    border: 1px solid black;
+    padding: 2px;
+    font-weight: bold;
+    vertical-align: top;
+  }
+  .exctraction-tbl tr td {
+    border: 1px solid black;
+  }
+  .exctraction-tbl tr td:first-child,
+  .exctraction-tbl tr td:nth-child(3),
+  .exctraction-tbl tr td:nth-child(5) {
+    background-color: #e5e5e5;
+    color: black;
+    font-weight: bold;
+    width: 10%;
+    font-size: 12px;
+  }
+  .exctraction-tbl tr td:nth-child(2),
+  .exctraction-tbl tr td:nth-child(4),
+  .exctraction-tbl tr td:nth-child(6) {
+    font-weight: bold;
+    font-size: 12px;
+  }
+  .items-tbl tr th {
+    background-color: #e5e5e5;
+    font-weight: bold;
+    color: black;
+    border: 1px solid black;
+    text-align: center;
+    font-size: 11px;
+    word-break: break-word;
+  }
+  .items-tbl tr td {
+    border: 1px solid black;
+    text-align: center;
+    font-size: 11px;
+    word-break: break-word;
+  }
+  .items-tbl tr td:first-child,
+  .items-tbl tr th:first-child {
+    text-align: right;
+  }
+  .items-tbl tr th:nth-child(2) {
+    width: 15%;
+  }
+  .items-tbl tr th:nth-last-child(1),
+  .items-tbl tr th:nth-last-child(2),
+  .items-tbl tr th:nth-last-child(3) {
+    width: 8%;
+  }
+  .items-tbl tr th:nth-child(3),
+  .items-tbl tr th:nth-child(4) {
+    width: 6%;
+  }
+  h3 {
+    margin: 0;
+  }
+  .totals-tbl {
+    border: none !important;
+    float: left;
+    margin-top: 10px;
+  }
+  .totals-tbl tr td {
+    border: 1px solid black;
+    font-size: 12px;
+    color: black;
+    font-weight: bold;
+  }
+  .total-label {
+    background-color: #e5e5e5;
+  }
+  .title {
+    text-align: center;
+  }
+  .logo {
+    width: 100px;
+  }
+  .items-tbl tr th:nth-child(1) {
+    width: 10%;
+  }
+  .items-tbl tr th:nth-child(2) {
+    width: 15%;
+  }
+</style>
+<div class="temp-container">
+  <div class="head">
+    <table
+      class="business-info-tbl"
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      style="width: 100%"
+    >
+      <tbody>
+        <tr>
+          <td>{{__system.business.name}}</td>
+          <td rowspan="2" style="text-align: center">
+            <h3>مستخلص أعمال</h3>
+          </td>
+          <td rowspan="2" style="text-align: left; vertical-align: top">
+            <img class="logo" src="{{__system.business.site_logo}}" alt="" />
+          </td>
+        </tr>
+        <tr>
+          <td>{{__system.business.address1}} {{__system.business.address2}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <table
+      class="exctraction-tbl"
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      style="width: 100%"
+    >
+      <tbody>
+        <tr>
+          <td>رقم المشروع:</td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{Data.le_clientextraction.project_name1}}</span
+            >
+          </td>
+          <td>اسم المشروع:</td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{Data.le_clientextraction.project_no}}</span
+            >
+          </td>
+          <td>العميل:</td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{Data.le_clientextraction.le_clientextraction_client_project1.business_name}}</span
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>رقم المستخلص:</td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{Data.le_clientextraction.extraction_no1}}</span
+            >&nbsp;
+          </td>
+          <td><span>حالة الإعتماد</span></td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{Data.le_clientextraction.confirmation_status}}</span
+            >&nbsp;
+          </td>
+          <td>عن الفترة إلى:</td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{Data.le_clientextraction.project_duedate1}}</span
+            >&nbsp;
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="body">
+    <table
+      class="mce-inline-non-editable-area mce-hide-table-options items-tbl"
+      border="1"
+      cellpadding="0"
+      cellspacing="0"
+      style="width: 100%"
+    >
+      <thead>
+        <tr>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+              >رقم البند بالمقايسة</span
+            >
+          </th>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+              >البند</span
+            >
+          </th>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+              >الوحدة</span
+            >
+          </th>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+              >السعر</span
+            >
+          </th>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+              >الكمية الإجمالية</span
+            >
+          </th>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+              >نسبة الإنجاز الحالية</span
+            >
+          </th>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+              >نسبة الإنجاز السابقة</span
+            >
+          </th>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+              >نسبة الإنجاز المتبقية</span
+            >
+          </th>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+              >كمية التعلية</span
+            >
+          </th>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+              >نسبة الإنجاز الحالية من التعلية</span
+            >
+          </th>
+          <th class="specoalclass">
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+              >نسبة الإنجاز السابقة من التعلية</span
+            >
+          </th>
+          <th>
+            <span
+              class="mce-inline-editable-area mce-inline-editable-area-persistent"
+              >نسبة الإنجاز المتبقة من التعلية</span
+            >
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <!--% foreach({{Data.le_clientextraction.le_clientextraction_le_clientextraction_extraction_items11}} as {{le_clientextraction_le_clientextraction_extraction_items11_row}}) { %-->
+        <tr>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_clientextraction_le_clientextraction_extraction_items11_row.item_number11}}</span
+            >
+          </td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_clientextraction_le_clientextraction_extraction_items11_row.extraction_item11}}</span
+            >
+          </td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_clientextraction_le_clientextraction_extraction_items11_row.unit11}}</span
+            >
+          </td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_clientextraction_le_clientextraction_extraction_items11_row.price11}}</span
+            >
+          </td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_clientextraction_le_clientextraction_extraction_items11_row.ttlqty11}}</span
+            >
+          </td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_clientextraction_le_clientextraction_extraction_items11_row.current_process11}}</span
+            >
+          </td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_clientextraction_le_clientextraction_extraction_items11_row.prev_process11}}</span
+            >
+          </td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_clientextraction_le_clientextraction_extraction_items11_row.remain_process11}}</span
+            >
+          </td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_clientextraction_le_clientextraction_extraction_items11_row.ta3lyattlqty1}}</span
+            >
+          </td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_clientextraction_le_clientextraction_extraction_items11_row.curr_ta3lya_per1}}</span
+            >
+          </td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_clientextraction_le_clientextraction_extraction_items11_row.prev_ta3lya_per1}}</span
+            >
+          </td>
+          <td>
+            <span class="mce-inline-non-editable-area mce-inline-placeholder"
+              >{{le_clientextraction_le_clientextraction_extraction_items11_row.remain_ta3lya_per1}}</span
+            >
+          </td>
+        </tr>
+        <!--% } %-->
+      </tbody>
+    </table>
+    <table
+      class="totals-tbl"
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      style="width: 50%"
+    >
+      <tbody>
+        <tr>
+          <td class="total-label" style="width: 60%">ما سبق صرفه</td>
+          <td class="total-received removeCurr"></td>
+        </tr>
+        <tr>
+          <td class="total-label" style="width: 60%">إجمالي المستحق صرفه</td>
+          <td class="total-due removeCurr">
+            {{Data.le_clientextraction.ttlbefdiscount}}
+          </td>
+        </tr>
+        <tr>
+          <td class="total-label" style="width: 60%">إجمالى الخصومات</td>
+          <td class="removeCurr">{{Data.le_clientextraction.ttldiscount}}</td>
+        </tr>
+
+        <tr>
+          <td class="total-label" style="width: 60%">الإجمالى بعد الخصم</td>
+          <td class="removeCurr">
+            {{Data.le_clientextraction.subtotalafterdiscount}}
+          </td>
+        </tr>
+        <tr>
+          <td class="total-label" style="width: 60%">إجمالى الضريبة</td>
+          <td class="removeCurr">{{Data.le_clientextraction.totaltaxex}}</td>
+        </tr>
+        <!--% foreach({{Data.le_clientextraction.le_clientextraction_le_clientextraction_subs}} as {{le_clientextraction_le_clientextraction_subs_row}}) { %-->
+        <tr>
+          <td class="total-label" style="width: 60%">
+            {{le_clientextraction_le_clientextraction_subs_row.sub_label}} (
+            {{le_clientextraction_le_clientextraction_subs_row.discountvalue}} %
+            )
+          </td>
+          <td class="subsValues">
+            {{le_clientextraction_le_clientextraction_subs_row.sub_val}}
+          </td>
+        </tr>
+        <!--% } %-->
+        <tr>
+          <td class="total-label" style="width: 60%">المستحق صرفه</td>
+          <td class="totalAmount">{{Data.le_clientextraction.ttlaftersubs}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<p>
+  <script>
+    function addTotals() {
+      var totDue = document.querySelector(".total-due");
+      var totReceived = document.querySelector(".total-received");
+      var totAmount = document.querySelector(".total-amount");
+      var allRows = document.querySelectorAll(".items-tbl tbody tr");
+      var subttl = 0;
+      var prevsubttl = 0;
+      for (var i = 0; i < allRows.length; i++) {
+        //    3*4*(5/100) + 3*8*(9/100)
+        //    3*4*(6/100) + 3*8*(10/100)
+        for (var j = 3; j <= 11; j++) {
+          if (allRows[i].cells[j].innerText.trim() === "") {
+            allRows[i].cells[j].innerText = "0";
+          }
+        }
+        var price = parseFloat(allRows[i].cells[3].innerText.replace(/,/g, ""));
+        var qty = parseFloat(allRows[i].cells[4].innerText.replace(/,/g, ""));
+        var currentprocess = parseFloat(
+          allRows[i].cells[5].innerText.replace(/,/g, "")
+        );
+        var prevprocess = parseFloat(
+          allRows[i].cells[6].innerText.replace(/,/g, "")
+        );
+        // ****************************************************************
+        var ta3lyaqty = parseFloat(
+          allRows[i].cells[8].innerText.replace(/,/g, "")
+        );
+        var currTa3lyaPer = parseFloat(
+          allRows[i].cells[9].innerText.replace(/,/g, "")
+        );
+        var prevTa3lyaPer = parseFloat(
+          allRows[i].cells[10].innerText.replace(/,/g, "")
+        );
+        // ****************************************************************
+        var subttl =
+          subttl +
+          price * qty * (currentprocess / 100) +
+          ta3lyaqty * price * (currTa3lyaPer / 100);
+
+        var prevsubttl =
+          prevsubttl +
+          price * ta3lyaqty * (currTa3lyaPer / 100) +
+          ta3lyaqty * price * (prevTa3lyaPer / 100);
+      }
+      //   total-received total-due
+      document.querySelector(".total-received").innerText = prevsubttl;
+      // document.querySelector(".total-due").innerText = subttl;
+    }
+    try {
+      addTotals();
+    } catch (error) {
+      console.log(error);
+    }
+    function updatesubsValues() {
+      var subValues = document.querySelectorAll(".subsValues");
+      for (var i = 0; i < subValues.length; i++) {
+        var number = subValues[i].innerText;
+        if (number.trim() == "" || parseFloat(number) == 0) {
+          subValues[i].innerText = "0";
+          subValues[i].parentElement.style.display = "none";
+        }
+        subValues[i].innerText = Math.round(parseFloat(number));
+        subValues[i].innerText = parseFloat(
+          subValues[i].innerText.replace(/,/g, "")
+        )
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+    }
+    try {
+      updatesubsValues();
+    } catch (error) {
+      console.log(error);
+    }
+    function removeCurr() {
+      var curr = document.querySelectorAll(".removeCurr");
+      for (var i = 0; i < curr.length; i++) {
+        curr[i].innerText = parseFloat(curr[i].innerText.replace(/,/g, ""))
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+    }
+    try {
+      removeCurr();
+    } catch (error) {
+      console.log(error);
+    }
+    function getttlAfterDeductions() {
+      var subttl = parseFloat(
+        document.querySelector(".total-due").innerText.replace(/,/g, "")
+      );
+      var allsubsValues = document.querySelectorAll(".subsValues");
+      for (var i = 0; i < allsubsValues.length; i++) {
+        subttl =
+          subttl + parseFloat(allsubsValues[i].innerText.replace(/,/g, ""));
+      }
+      document.querySelector(".totalAmount").innerText = subttl
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    try {
+      // getttlAfterDeductions();
+    } catch (error) {
+      console.log(error);
+    }
+  </script>
+</p>

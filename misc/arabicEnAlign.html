@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Alignment</title>
+    <style>
+      .text-container {
+        width: 80%;
+        margin: 20px auto;
+        font-family: Arial, sans-serif;
+      }
+      .arabic {
+        text-align: right;
+        direction: rtl;
+      }
+      .english {
+        text-align: left;
+        direction: ltr;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="text-container" id="textContainer"></div>
+
+    <script>
+      function alignText(inputText) {
+        var lines = inputText.split("<br>");
+        var container = document.getElementById("textContainer");
+
+        container.innerHTML = "";
+
+        for (var i = 0; i < lines.length; i++) {
+          var line = lines[i].trim();
+          var div = document.createElement("div");
+
+          if (/[ء-ي]/.test(line)) {
+            div.className = "arabic";
+          } else {
+            div.className = "english";
+          }
+          div.textContent = line;
+          container.appendChild(div);
+        }
+      }
+
+      var text =
+        ".This is an English line.<br>هذه جملة عربية.<br>Another English line.<br>خط آخر باللغة العربية.";
+      alignText(text);
+    </script>
+  </body>
+</html>

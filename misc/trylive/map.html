@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Map of Locations</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <style>
+      #map {
+        height: 500px;
+        width: 100%;
+      }
+
+      .leaflet-tooltip {
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid #ccc;
+        color: #333;
+        font-size: 14px;
+        padding: 5px 10px;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <button id="updateLocations">Update Locations</button>
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    />
+
+    <!-- Leaflet.Control.Search CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/leaflet-control-geocoder/dist/Control.Geocoder.css"
+    />
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+
+    <!-- Leaflet.Control.Search JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <!-- Leaflet.Control.Search JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-search/dist/leaflet-search.min.js"></script>
+    <script>
+      // Assuming you have an array of location data
+      let locations = [
+        {
+          map_location:
+            '{"lat": "30.081024", "long": "31.0214656", "zoom": "14", "address": "Unnamed Road, Kerdasa, Giza Governorate 3650121, Egypt", "title": "Location 1"}',
+        },
+        {
+          map_location:
+            '{"lat": "40.730610", "long": "-73.935242", "zoom": "14", "address": "New York, NY, USA", "title": "Location 2"}',
+        },
+        // Add more locations here
+      ];
+
+      const map = L.map("map", {
+        maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)),
+        maxZoom: 150,
+        minZoom: 2.39,
+      }).setView([0, 0], 2);
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      // Add the Leaflet.Control.Search plugin
+      L.Control.geocoder().addTo(map);
+
+      // Add draggable markers for each location
+      const markers = locations.map((location) => {
+        const locationData = JSON.parse(location.map_location);
+        const marker = L.marker(
+          [parseFloat(locationData.lat), parseFloat(locationData.long)],
+          {
+            title: locationData.title,
+            riseOnHover: true,
+            draggable: true, // Make the marker draggable
+          }
+        )
+          .addTo(map)
+          .bindTooltip(locationData.title, {
+            permanent: true,
+            className: "leaflet-tooltip",
+            offset: [0, -20],
+          });
+
+        // Add event listener for the 'dragend' event
+        marker.on("dragend", () => {
+          const position = marker.getLatLng();
+          location.map_location = JSON.stringify({
+            lat: position.lat,
+            long: position.lng,
+            zoom: map.getZoom(),
+            address: "", // You'll need to update this manually or with a geocoding service
+            title: locationData.title,
+          });
+          console.log("Updated location:", location);
+        });
+
+        return marker;
+      });
+
+      // Add event listener for the "Update Locations" button
+      document
+        .getElementById("updateLocations")
+        .addEventListener("click", () => {
+          console.log("Updated locations:", locations);
+        });
+    </script>
+  </body>
+</html>

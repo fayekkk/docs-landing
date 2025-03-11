@@ -1,0 +1,40 @@
+<style>
+    #header_data {
+      width: 100%;
+      direction: rtl;
+      margin-bottom: -25px;
+    }
+    #header_data tr:nth-child(1) td {
+      height: 4.7cm;
+    }
+    #header_data tr:nth-child(3) td {
+      height: 1.5cm;
+    }
+    #header_data tr:nth-child(1) td:nth-child(1) {
+      width: 25%;
+    }
+    #header_data tr:nth-child(1) td:nth-child(2) {
+      width: 25%;
+    }
+    #header_data tr:nth-child(1) td:nth-child(3) {
+      width: 35%;
+    }
+    #header_data tr:nth-child(1) td:nth-child(4) {
+      width: 15%;
+    }
+  </style>
+  <table id="header_data">
+    <tr>
+      <td colspan="100%"></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>{%invoice_date%}</td>
+      <td></td>
+      <td>{%invoice_no%}</td>
+    </tr>
+    <tr>
+        <td colspan="100%"></td>
+    </tr>
+  </table>
+  

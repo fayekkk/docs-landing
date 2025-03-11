@@ -1,0 +1,158 @@
+<style>
+  #new_head {
+    width: 100%;
+    text-align: right;
+  }
+  #new_head td:nth-child(1) {
+    text-align: right;
+    width: 40%;
+  }
+  #new_head td:nth-child(2) {
+    text-align: center;
+    width: 20%;
+    vertical-align: bottom;
+    font-size: 16px;
+  }
+  #new_head td:nth-child(3) {
+    text-align: left;
+    width: 40%;
+    vertical-align: baseline;
+  }
+  #new_head img {
+    width: 100px;
+    float: left;
+  }
+  #inv_data {
+    width: 100%;
+    border-spacing: 0;
+  }
+  #inv_data img {
+    width: 80%;
+    margin: 0 10%;
+    text-align: center;
+  }
+  #subInvData {
+    width: 100%;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-spacing: 0;
+  }
+  #subInvData td {
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    padding: 3px;
+  }
+</style>
+
+<div style="margin-top: -25px">
+    <div style="padding-top: 25px;"></div>
+  <body style="border: 0; margin: 0" onload="subst()">
+    <table id="new_head">
+      <tbody>
+        <tr>
+          <td>
+            <h4>{%site_business_name%}</h4>
+            السعودية - الرياض - حى العزيزية - 7500 شارع مدين
+
+            <br />
+            الرمز البريدى 14511
+            <br />
+            السجل التجارى 1010745176
+            <br />
+            {%site_address1%}
+            <br />
+            رقم التسجيل الضريبي {%site_bn1%}
+          </td>
+          <td>
+            <h2>
+              {%invoice_title%}
+              <br />
+              {%invoice_number%}
+            </h2>
+          </td>
+          <td>{%site_logo%}</td>
+        </tr>
+      </tbody>
+    </table>
+    <table id="inv_data">
+      <tbody>
+        <tr>
+          <td
+            style="
+              width: 40%;
+              border: 1px solid #000;
+              text-align: right;
+              padding-right: 3px;
+              vertical-align: baseline;
+            "
+          >
+            إسم العميل
+            <br />
+            <h4>{%client_business_name%}</h4>
+            <br />
+            رقم التسجيل الضريبي {%client_bn1%}
+            <br />
+            رقم الجوال {%client_mobile%}
+            <br />
+            العنوان {%client_address%}
+          </td>
+          <td style="width: 20%">{%sa_qr_code_image%}</td>
+          <td style="width: 40%">
+            <table id="subInvData">
+              <tbody>
+                <tr>
+                  <td>تاريخ الفاتورة</td>
+                  <td>{%invoice_date%}</td>
+                </tr>
+                <tr>
+                  <td>الصفحة</td>
+                  <td style="text-align: right">
+                    صفحة <span class="page"></span> من
+                    <span class="topage"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>أمر المبيعات</td>
+                  <td>{%sales order%}</td>
+                </tr>
+                <tr>
+                  <td>مسئول المبيعات</td>
+                  <td>{%sales_person%}</td>
+                </tr>
+                <tr>
+                  <td>جوال البائع</td>
+                  <td>{%staff_member_mobile%}</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</div>
+<script>
+  function subst() {
+    // Decoding the invoice page url to detect page number
+    var vars = {};
+    var x = document.location.search.substring(1).split("&");
+    for (var i in x) {
+      var z = x[i].split("=", 2);
+      vars[z[0]] = unescape(z[1]);
+    }
+    // Adding Pagination Text
+    var x = [
+      "frompage",
+      "topage",
+      "page",
+      "webpage",
+      "section",
+      "subsection",
+      "subsubsection",
+    ];
+    for (var i in x) {
+      var y = document.getElementsByClassName(x[i]);
+      for (var j = 0; j < y.length; ++j) y[j].textContent = vars[x[i]];
+    }
+  }
+</script>

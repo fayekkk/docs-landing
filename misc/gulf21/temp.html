@@ -1,0 +1,603 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      font-weight: bold !important;
+    }
+
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+
+    #header {
+      width: 100%;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    #header td:nth-child(1) {
+      /* padding: 3px; */
+      width: 35%;
+      text-align: right;
+    }
+    #header td:nth-child(2) {
+      /* padding: 3px; */
+      width: 30%;
+      text-align: center;
+    }
+    #header td:nth-child(3) {
+      /* padding: 3px; */
+      width: 35%;
+      text-align: left;
+    }
+    .qr-codeImg img {
+      width: 80%;
+      margin: 0 10%;
+      border: 1px solid #a5a5a5;
+      padding: 7px;
+      margin-top: -80px;
+    }
+    #client_data {
+      width: 100%;
+      border-spacing: 0;
+      border: 1px solid #a5a5a5;
+      border-bottom: none;
+    }
+    #client_data td {
+      border-bottom: 1px solid #a5a5a5;
+      padding: 2px;
+    }
+    #client_data td:nth-child(1) {
+      width: 35%;
+      text-align: right;
+    }
+    #client_data td:nth-child(2) {
+      width: 30%;
+      text-align: center;
+    }
+    #client_data td:nth-child(3) {
+      width: 35%;
+      text-align: left;
+      direction: ltr;
+    }
+    #inv_data {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #a5a5a5;
+      margin: 10px 0;
+    }
+    #inv_data td:nth-child(1) {
+      width: 50%;
+      padding: 2px;
+      text-align: right;
+    }
+    #inv_data td:nth-child(2) {
+      width: 50%;
+      padding: 2px;
+      text-align: left;
+    }
+    #customs {
+      width: 100%;
+      border-spacing: 0;
+      border: 1px solid #a5a5a5;
+      border-bottom: none;
+      margin-bottom: 15px;
+      /* padding: 2px; */
+      font-size: 11px;
+    }
+    #customs td {
+      border-bottom: 1px solid #a5a5a5;
+      padding: 2px;
+    }
+    /* .widths td {
+      width: 11%;
+    } */
+    #customs td:nth-child(1) {
+      text-align: right;
+    }
+    #customs td:nth-child(2) {
+      text-align: center;
+    }
+    #customs td:nth-child(3) {
+      text-align: left;
+    }
+    .widths td:nth-child(1) {
+      width: 11%;
+      text-align: right;
+    }
+    .widths td:nth-child(2) {
+      width: 11%;
+      text-align: center;
+    }
+    .widths td:nth-child(3) {
+      width: 9%;
+      text-align: left;
+    }
+    .widths td:nth-child(4) {
+      width: 11%;
+      text-align: right;
+    }
+    .widths td:nth-child(5) {
+      width: 9%;
+      text-align: center;
+    }
+    .widths td:nth-child(6) {
+      text-align: left;
+      width: 11%;
+    }
+    .widths td:nth-child(7) {
+      width: 11%;
+      text-align: right;
+    }
+    .widths td:nth-child(8) {
+      width: 11%;
+      text-align: center;
+    }
+    .widths td:nth-child(9) {
+      width: 15%;
+      text-align: left;
+    }
+    #new_totals {
+      width: 100%;
+      border-spacing: 0;
+      border-left: 1px solid #a5a5a5;
+      border-top: 1px solid #a5a5a5;
+      margin-top: 30px;
+    }
+    #new_totals td {
+      text-align: center;
+      padding: 4px;
+      border-right: 1px solid #a5a5a5;
+      border-bottom: 1px solid #a5a5a5;
+    }
+    #new_totals td:nth-child(1) {
+      width: 40%;
+    }
+    #new_totals td:nth-child(2) {
+      width: 40%;
+    }
+    #new_totals td:nth-child(3) {
+      width: 20%;
+    }
+    #listing_table {
+      width: 100%;
+      text-align: center !important;
+    }
+    #listing_table th {
+      background-color: transparent !important;
+    }
+    #listing_table th:nth-child(1) {
+      width: 17%;
+    }
+    #listing_table th:nth-child(2) {
+      width: 17%;
+    }
+    #listing_table th:nth-child(3) {
+      width: 10%;
+    }
+    #listing_table th:nth-child(4) {
+      width: 17%;
+    }
+    #listing_table th:nth-child(5) {
+      width: 17%;
+    }
+    #listing_table th:nth-child(6) {
+      width: 17%;
+    }
+    #listing_table th:nth-child(7) {
+      width: 5%;
+    }
+    #listing_table {
+      direction: rtl;
+      width: 100%;
+      border-spacing: 0;
+      text-align: center !important;
+      font-size: 12px;
+      border: 1px solid #a5a5a5;
+      border-bottom: transparent !important;
+      border-left: transparent !important;
+    }
+    #listing_table th,
+    #listing_table td {
+      border-left: 1px solid #a5a5a5;
+      border-bottom: 1px solid #a5a5a5;
+      border-top: none !important;
+      border-right: none !important;
+      padding: 3px;
+    }
+    #listing_table thead tr:nth-child(2) th:last-child,
+    #listing_table td:last-child {
+      border-right: none !important;
+    }
+    #listing_table tr:nth-child(1) th {
+      /* background-color: #a5a5a5; */
+      border-top: none !important;
+      border-right: none !important;
+      border-bottom: 1px solid #a5a5a5;
+    }
+    .total-table:nth-child(2) {
+      display: none !important;
+    }
+    .leftalign {
+      text-align: left !important;
+    }
+
+    #listing_table th:nth-child(8),
+    #listing_table td:nth-child(8),
+    #listing_table th:nth-child(9),
+    #listing_table td:nth-child(9) {
+      display: none;
+    }
+    #listing_table img {
+      width: 12px;
+    }
+    .site_logoImg img {
+      width: 70%;
+      margin: 0 15%;
+      /* margin-top: -20px; */
+    }
+    .invoice_titles {
+      font-size: 18px !important;
+    }
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table id="header">
+          <tbody>
+            <tr>
+              <td>مؤسسة الخليج الدولى غير للتخليص الجمركى</td>
+              <td rowspan="100%" class="site_logoImg">
+                <img
+                  src="https://gulf21.daftra.com/files/4d22d12f/logos/673c4ac366de0_blobid1732004545105.png"
+                />
+                <!-- <br /> -->
+                <br />
+                <span class="invoice_titles"> {%invoice_title%} </span>
+                <!-- <br /> -->
+                <br />
+                الرقم الضريبى 300946692100003
+              </td>
+              <td class="leftalign">
+                Gulf International Customer Clearance EST
+              </td>
+            </tr>
+            <tr>
+              <td>السجل التجارى : 3450172637</td>
+              <td class="leftalign">C.R. 3450172637</td>
+            </tr>
+            <tr>
+              <td>
+                العنوان : المملكة العربية السعودية
+                <br />
+                عـرعــر - الحديثـــة - حالـة عمـار
+              </td>
+              <td class="leftalign">
+                Saudi Arabia <br />
+                Arar
+              </td>
+            </tr>
+            <tr>
+              <td>الرمز البريدى : 77112</td>
+              <td class="leftalign">Post Office : 77112</td>
+            </tr>
+            <tr>
+              <td style="direction: ltr">+جوال : 966507193315</td>
+              <td class="leftalign">Phone : +966507193315</td>
+            </tr>
+          </tbody>
+        </table>
+        <table style="width: 100%; margin: 10px 0">
+          <tbody>
+            <tr>
+              <td style="width: 25%" class="qr-codeImg">
+                {%sa_qr_code_image%}
+              </td>
+              <td style="width: 2%"></td>
+              <td style="width: 73%">
+                <table id="client_data">
+                  <tbody>
+                    <tr>
+                      <td>معلومات العميل:</td>
+                      <td></td>
+                      <td>Client Information:</td>
+                    </tr>
+                    <tr>
+                      <td>الإسم</td>
+                      <td>{%client_business_name%}</td>
+                      <td>Name</td>
+                    </tr>
+                    <tr>
+                      <td>رقم المبنى</td>
+                      <td>{%le_custom_data_client_balding_no%}</td>
+                      <td>Bulding No</td>
+                    </tr>
+                    <tr>
+                      <td>إسم الشارع</td>
+                      <td>{%client_address%}</td>
+                      <td>Street Name</td>
+                    </tr>
+                    <tr>
+                      <td>الحي</td>
+                      <td>{%client_state%}</td>
+                      <td>District</td>
+                    </tr>
+                    <tr>
+                      <td>المدينة</td>
+                      <td>{%client_city%}</td>
+                      <td>City</td>
+                    </tr>
+                    <tr>
+                      <td>البلد</td>
+                      <td>{%client_country%}</td>
+                      <td>Country</td>
+                    </tr>
+                    <tr>
+                      <td>الرمز البريدى</td>
+                      <td>{%client_bn2%}</td>
+                      <td>Post Office</td>
+                    </tr>
+                    <tr>
+                      <td>رقم تسجيل ضريبة القيمة المضافة</td>
+                      <td>{%client_bn1%}</td>
+                      <td>VAT Number</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="inv_data">
+          <tbody>
+            <tr>
+              <td>رقم الفاتورة:{%invoice_no%}</td>
+              <td>Invoice Number:{%invoice_no%}</td>
+            </tr>
+            <tr>
+              <td>تاريخ إصدار الفاتورة:{%invoice_date%}</td>
+              <td>Invoice Issue Date:{%invoice_date%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="customs">
+          <tbody>
+            <tr>
+              <td>طريق الدفع</td>
+              <td colspan="7">{%custom_طريقة_الدفع_field_12%}</td>
+              <td>Mode of Payments</td>
+            </tr>
+            <tr>
+              <td>فرع</td>
+              <td colspan="7">{%custom_الفرع_field_13%}</td>
+              <td>Branch</td>
+            </tr>
+            <tr>
+              <td>رقم البوليصة</td>
+              <td colspan="7">{%custom_رقم_البوليصة_field_14%}</td>
+              <td>Policy No</td>
+            </tr>
+            <tr class="widths">
+              <td>نوع البيان</td>
+              <td>{%custom_نوع_البيان_field_16%}</td>
+              <td>Bayan type</td>
+              <td>عدد السيارات</td>
+              <td>{%custom_عدد_السيارات_field_17%}</td>
+              <td>No of Cars</td>
+              <td>عدد الحاويات</td>
+              <td>{%custom_عدد_الحاويات_field_18%}</td>
+              <td>No of Containers</td>
+            </tr>
+            <tr>
+              <td>نوع البضاعة</td>
+              <td colspan="7">{%custom_نوع_البضاعة_field_19%}</td>
+              <td>Kinds of goods</td>
+            </tr>
+            <tr>
+              <td>رقم البيان</td>
+              <td colspan="7">{%custom_رقم_البيان_field_20%}</td>
+              <td>Bayan No</td>
+            </tr>
+            <tr>
+              <td>تاريخ البيان</td>
+              <td colspan="7">{%custom_تاريخ_البيان_field_21%}</td>
+              <td>Bayan Date</td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="items-list">{%items_list%}</div>
+        <table id="new_totals">
+          <tbody>
+            <tr>
+              <td>الإجمالى (غير شامل ضريبة القيمة المضافة)</td>
+              <td>Total Invoice Excluding VAT</td>
+              <td class="removeCurr">{%invoice_subtotal%}</td>
+            </tr>
+            <tr>
+              <td>الخصم</td>
+              <td>Discount</td>
+              <td class="removeCurr" id="discounts">
+                <!-- {%discount%} // {%item-discount-total%} -->
+              </td>
+            </tr>
+            <tr>
+              <td>مجموع ضريبة القيمة المضافة (15%)</td>
+              <td style="direction: ltr">Total VAT (15%)</td>
+              <td class="removeCurr">{%tax-total%}</td>
+            </tr>
+            <tr>
+              <td>الإجمالى الخاضع للضريبة</td>
+              <td>Total Taxable Amount</td>
+              <td class="removeCurr">{%invoice_total%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div> -->
+      </div>
+      <div style="display: none">
+        <div id="discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function hundleTotals() {
+        document.getElementById("discounts").innerText =
+          parseFloat(
+            document.getElementById("discount").innerText.replace(/,/g, "")
+          ) +
+          parseFloat(
+            document.getElementById("item-discount").innerText.replace(/,/g, "")
+          );
+      }
+      try {
+        hundleTotals();
+      } catch (error) {
+        console.log(error);
+      }
+      function removeCurr() {
+        var AllremoveCurr = document.querySelectorAll(".removeCurr");
+        for (var i = 0; i < AllremoveCurr.length; i++) {
+          AllremoveCurr[i].innerText =
+            parseFloat(AllremoveCurr[i].innerText.replace(/,/g, ""))
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " ر.س ";
+        }
+      }
+      try {
+        removeCurr();
+      } catch (error) {
+        console.log(error);
+      }
+      //   6
+
+      function addDiscountColumn() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        if (allRows[0].cells.length == 7) {
+          var newTh = document.createElement("th");
+          newTh.innerHTML = " Discount <br>الخصم   (بالريال السعودى)";
+
+          allRows[0].insertBefore(newTh, allRows[0].cells[6]);
+          for (var i = 1; i < allRows.length; i++) {
+            var newTd = document.createElement("td");
+            newTd.innerText = "0.00";
+            allRows[i].insertBefore(newTd, allRows[i].cells[6]);
+          }
+        }
+      }
+      try {
+        addDiscountColumn();
+      } catch (error) {
+        console.log(error);
+      }
+
+      //  5 price 7 disc 8 subtotal
+      function addpricebefDisc() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var newTh = document.createElement("th");
+        newTh.innerHTML =
+          "Total Amount <br>المجموع قبل الخصم (بالريال السعودى)";
+        allRows[0].insertBefore(newTh, allRows[0].cells[4]);
+        for (var i = 1; i < allRows.length; i++) {
+          var newTd = document.createElement("td");
+          if (allRows[i].cells[4].innerText.trim() == "") {
+            allRows[i].cells[4].innerText = "0";
+          }
+          if (allRows[i].cells[5].innerText.trim() == "") {
+            allRows[i].cells[5].innerText = "0";
+          }
+          newTd.innerText =
+            parseFloat(allRows[i].cells[4].innerText.replace(/,/g, "")) *
+            parseFloat(allRows[i].cells[5].innerText.replace(/,/g, ""));
+          allRows[i].insertBefore(newTd, allRows[i].cells[4]);
+        }
+      }
+      try {
+        addpricebefDisc();
+      } catch (error) {
+        console.log(error);
+      }
+      function addIcon() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 1; i < allRows.length; i++) {
+          if (parseFloat(allRows[i].cells[3].innerText) != "0") {
+            allRows[i].cells[3].innerHTML =
+              '<img src="https://gulf21.daftra.com/files/4d22d12f/logos/673b54d1a6b74_blobid1731941583812.png">';
+          } else {
+            allRows[i].cells[3].innerHTML = "";
+          }
+        }
+      }
+      try {
+        addIcon();
+      } catch (error) {
+        console.log(error);
+      }
+      function reSwapAll() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          var Item = allRows[i].cells[0].innerHTML;
+          var Description = allRows[i].cells[1].innerHTML;
+          var receipt = allRows[i].cells[2].innerHTML;
+          var vat = allRows[i].cells[3].innerHTML;
+          var befdisc = allRows[i].cells[4].innerHTML;
+          var price = allRows[i].cells[5].innerHTML;
+          var qty = allRows[i].cells[6].innerHTML;
+          var disc = allRows[i].cells[7].innerHTML;
+          var afterdisc = allRows[i].cells[8].innerHTML;
+          allRows[i].cells[0].innerHTML = Item;
+          allRows[i].cells[1].innerHTML = Description;
+          allRows[i].cells[2].innerHTML = receipt;
+          allRows[i].cells[3].innerHTML = befdisc;
+          allRows[i].cells[4].innerHTML = disc;
+          allRows[i].cells[5].innerHTML = afterdisc;
+          allRows[i].cells[6].innerHTML = vat;
+          allRows[i].cells[7].innerHTML = price;
+          allRows[i].cells[8].innerHTML = qty;
+        }
+      }
+      try {
+        reSwapAll();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

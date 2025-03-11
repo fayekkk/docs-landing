@@ -1,0 +1,95 @@
+<style>
+  #newhead {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+  }
+  #newhead td:nth-child(1) {
+    width: 40%;
+  }
+  #newhead td:nth-child(2) {
+    width: 20%;
+  }
+  #newhead td:nth-child(2) img {
+    width: 100%;
+  }
+  #newhead td:nth-child(3) {
+    width: 40%;
+  }
+  #newhead tr:nth-child(1) td {
+    font-size: 14px;
+    direction: ltr;
+  }
+  #newhead td:nth-child(1) {
+    text-align: right;
+  }
+  #newhead td:nth-child(2) {
+    text-align: left;
+  }
+
+  .invoice_title {
+    width: 100%;
+    text-align: center;
+    border-spacing: 0;
+  }
+  .invoice_title tr:nth-child(1) td:nth-child(1),
+  .invoice_title tr:nth-child(1) td:nth-child(3) {
+    width: 37%;
+    border-bottom: 1px solid #000;
+    height: 25px;
+  }
+
+  .invoice_title tr:nth-child(1) td:nth-child(2) {
+    padding: 5px 8px;
+    font-weight: bold;
+    width: 24%;
+    font-size: 15px;
+    border: 1px solid black;
+    border-radius: 6px;
+  }
+</style>
+<div style="margin-top: -25px">
+  <div style="padding-top: 20px"></div>
+  <table id="newhead">
+    <tbody>
+      <tr>
+        <td><h3>شركة شموخ المتحدة للصناعة</h3></td>
+        <td rowspan="100%">{%site_logo%}</td>
+        <td><h3>Al-Shomoukh United Manufacturing Company</h3></td>
+      </tr>
+      <tr>
+        <td>الرياض - حى المونسيه - شارع البلقاء</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>س.ت {%site_bn2%}</td>
+        <td>C.R. {%site_bn2%}</td>
+      </tr>
+      <tr>
+        <td>الجوال {%site_mobile%}</td>
+        <td>Mobile : {%site_mobile%}</td>
+      </tr>
+      <tr>
+        <td>هاتف كنب : {%site_telephone%}</td>
+        <td>Telephone : {%site_mobile%}</td>
+      </tr>
+      <tr>
+        <td>الرقم الضريبى {%site_bn1%}</td>
+        <td>VAT No: {%site_bn1%}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="invoice_title">
+    <tbody>
+      <tr>
+        <td></td>
+        <td rowspan="2" class="invoice_titletd">{%invoice_title%}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

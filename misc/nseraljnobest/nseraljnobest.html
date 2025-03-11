@@ -1,0 +1,400 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 25px 0;
+    }
+    .invoice-address {
+      border-top: 3px double #000000;
+      margin: 35px 0;
+      padding-top: 25px;
+    }
+    bold_title {
+      font-weight: bold;
+    }
+    big_title {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .bussines-name {
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .invoice-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .listing-table th {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+      text-align: left;
+      padding: 6px 4px;
+    }
+    .listing-table td {
+      border-bottom: 1px solid #555555;
+      text-align: left;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+    .total-table td {
+      border-left: 1px solid #555555;
+    }
+    .total-row {
+      background-color: #e5e5e5;
+      border-bottom: 1px solid #555555;
+      border-top: 1px solid #555555;
+      font-weight: bold;
+    }
+    .row-items {
+      margin: 5px 0;
+      display: block;
+    }
+    /* .notes-block {
+      margin: 50px 0 0 0;
+    } */
+
+    tr,
+    td,
+    th {
+      page-break-inside: avoid !important;
+    }
+    #business_info {
+      line-height: 1.4;
+    }
+    #listing_table th:last-child,
+    #listing_table td:last-child {
+      border-left: 1px solid #555555;
+    }
+    #label_subtotal {
+      width: 65px;
+    }
+    #label_field3,
+    #label_field4 {
+      width: 55px;
+    }
+    #items-list > table:nth-child(2) tr td:nth-child(1) {
+      width: 60%;
+    }
+    #listing_table th,
+    #listing_table td {
+      text-align: center;
+    }
+
+    .invoice-inner {
+      margin: 0 25px;
+    }
+
+    .qr-code img {
+      margin-top: 10px;
+    }
+    #inv_data {
+      width: 100%;
+      text-align: right;
+      font-size: 12px;
+      direction: rtl;
+      /* margin-top: -15px; */
+    }
+    #inv_data td {
+      padding: 4px 0;
+    }
+    #inv_data tr:nth-child(2) td:nth-child(1) {
+      width: 9.7%;
+    }
+    #inv_data tr:nth-child(2) td:nth-child(2) {
+      width: 30.8%;
+    }
+    #inv_data tr:nth-child(2) td:nth-child(3) {
+      width: 12.9%;
+    }
+    #inv_data tr:nth-child(2) td:nth-child(4) {
+      width: 5.9%;
+    }
+    #inv_data tr:nth-child(2) td:nth-child(5) {
+      width: 5.4%;
+    }
+    #inv_data tr:nth-child(2) td:nth-child(6) {
+      width: 35.1%;
+    }
+    #inv_data tr:nth-child(1) {
+      text-align: center;
+    }
+    #client_info {
+      width: 100%;
+      font-size: 14px;
+      direction: rtl;
+      /* margin: 20px 0; */
+    }
+    #client_info td {
+      text-align: right;
+      padding: 8px 0 12px 0;
+    }
+    #client_info td:nth-child(1) {
+      width: 33.8%;
+    }
+    #client_info td:nth-child(2) {
+      width: 42.7%;
+    }
+    #client_info td:nth-child(3) {
+      width: 23.3%;
+    }
+    #listing_table th:nth-child(1) {
+      width: 6.9%;
+    }
+    #listing_table th:nth-child(2) {
+      width: 19.3%;
+    }
+    #listing_table th:nth-child(3) {
+      width: 34.5%;
+    }
+    #listing_table th:nth-child(4) {
+      width: 6.6%;
+    }
+    #listing_table th:nth-child(5) {
+      width: 8.2%;
+    }
+    #listing_table th:nth-child(6) {
+      width: 11.6%;
+    }
+    #listing_table th:nth-child(7) {
+      width: 12.1%;
+    }
+    #listing_table {
+      width: 100%;
+      border-right: none;
+      border-bottom: none;
+      border-left: none;
+      text-align: center !important;
+      /* margin-top: -50px; */
+    }
+    #listing_table th {
+      border-top: 1px solid black;
+      padding: 2px;
+      font-size: 11px;
+      text-align: center;
+      border-bottom: 1px solid black;
+      border-left: 1px solid black;
+      border-right: none;
+      background-color: #fff;
+    }
+    #listing_table td {
+      padding: 2px;
+      font-size: 13px;
+      text-align: center;
+      border-bottom: 1px solid black;
+      border-left: 1px solid black;
+      border-top: none;
+      border-right: none;
+    }
+    #listing_table th:last-child,
+    #listing_table td:last-child {
+      border-right: 1px solid black;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <table id="inv_data">
+          <tr>
+            <td>التاريخ</td>
+            <td>: {%invoice_date%}</td>
+            <td style="text-align: center" id="invoice_title">
+              {%invoice_title%}
+            </td>
+            <td style="text-align: center">{%Payment Method%}</td>
+            <td>رقم</td>
+            <td>{%invoice_no%}</td>
+          </tr>
+        </table>
+        <table id="client_info">
+          <tbody>
+            <tr>
+              <td>{%client_business_name%}</td>
+              <td>
+                الرقم الضريبي
+                <br />
+                {%client_bn1%}
+              </td>
+              <td>رقم الحساب {%client_number%}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div id="items-list">{%items_list%}</div>
+        <div style="text-align: left; padding-left: 35%">
+          *** لا شيء يتبع ***
+        </div>
+
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div style="display: none">
+          <div id="discount">{%discount%}</div>
+          <div id="item-discount">{%item-discount-total%}</div>
+        </div>
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function hasDiscount() {
+        var discountValue = document.getElementById("discount").innerText;
+        var itemDiscount = document.getElementById("item-discount").innerText;
+        var hasInvoiceDiscount;
+        var hasItemDiscount;
+        if (parseFloat(itemDiscount) != 0) {
+          hasInvoiceDiscount = true;
+        } else {
+          hasInvoiceDiscount = false;
+        }
+
+        if (parseFloat(discountValue) != 0) {
+          hasItemDiscount = true;
+        } else {
+          hasItemDiscount = false;
+        }
+
+        return {
+          invoiceDiscount: hasInvoiceDiscount,
+          itemDiscount: hasItemDiscount,
+        };
+      }
+
+      function insertCol(index, colLabel, labelId, cellClass) {
+        var tbl = document.getElementById("listing_table");
+
+        for (i = 0; i < tbl.rows.length; i++) {
+          var newCell = tbl.rows[i].insertCell(index);
+          newCell.classList.add(cellClass);
+
+          //  newCell.innerText = parseFloat(tax[i].innerText.replace(/,/g, "")) + parseFloat(total[i].innerText.replace(/,/g, ""))
+        }
+        var firstCell = tbl.rows[0].cells[index];
+        firstCell.outerHTML = "<th id=" + labelId + ">" + colLabel + "</th>";
+        // firstCell.id = labelId
+        firstCell.style.cssText =
+          "border-top:1px solid #000;font-weight:bold;text-align:center;background:#e5e5e5";
+      }
+
+      function calcDisCol() {
+        var disCol = document.querySelectorAll(
+          "#listing_table td:nth-child(5)"
+        );
+        var subTotalCol = document.querySelectorAll(
+          "#listing_table td:nth-child(6)"
+        );
+        var totalWithVat = document.querySelectorAll(
+          "#listing_table td:nth-child(9)"
+        );
+        var vat = document.querySelectorAll("#listing_table td:nth-child(8)");
+        var qty = document.querySelectorAll("#listing_table td:nth-child(4)");
+        var price = document.querySelectorAll("#listing_table td:nth-child(3)");
+        for (var i = 0; i < disCol.length; i++) {
+          var subtotal =
+            parseFloat(qty[i].innerText.replace(/,/g, "")) *
+            parseFloat(price[i].innerText.replace(/,/g, ""));
+          var total =
+            parseFloat(totalWithVat[i].innerText.replace(/,/g, "")) -
+            parseFloat(vat[i].innerText.replace(/,/g, ""));
+          var discount = subtotal - total;
+          disCol[i].innerText = discount.toFixed(2);
+          subTotalCol[i].innerText = (subtotal - discount).toFixed(2);
+        }
+      }
+      try {
+        var mainTable = document.getElementById("listing_table");
+        var colCount = mainTable.rows[0].cells;
+
+        if (colCount.length == 8) {
+          insertCol(7, " خصومات  ", "discount_th", "discounts");
+        } else {
+        }
+
+        var hasInvoiceDiscount = hasDiscount();
+        calcSubtotalInc();
+        if (hasInvoiceDiscount.invoiceDiscount) {
+          console.log("has discount");
+          calcDisCol();
+        }
+
+        if (
+          !hasInvoiceDiscount.invoiceDiscount &&
+          !hasInvoiceDiscount.itemDiscount
+        ) {
+          var mainTable = document.getElementById("listing_table");
+          for (var i = 0; i < mainTable.rows.length; i++) {
+            var tableCell = mainTable.rows[i].cells[4];
+            tableCell.classList.add("hidden");
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      function addnewThead() {
+        var newTr = document.createElement("tr");
+        var newTh = document.createElement("th");
+        newTh.setAttribute("colspan", "100%");
+        newTh.setAttribute("style", "border:1px solid !important;height:150px");
+        newTr.appendChild(newTh);
+        var allthead = document.querySelectorAll("#listing_table thead");
+        for (var i = 0; i < allthead.length; i++) {
+          allthead[i].insertBefore(newTr, allthead[i].querySelector("tr"));
+        }
+      }
+      try {
+        // addnewThead();
+      } catch (error) {
+        console.log(error);
+      }
+      function hudleest() {
+        var invoicetitle =
+          document.getElementById("invoice_title").innerText.trim() ==
+          "Estimate";
+        if (invoicetitle) {
+          document.getElementById("inv_data").style.marginTop = "-50px";
+        }
+      }
+      try {
+        // hudleest();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

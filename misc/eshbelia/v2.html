@@ -1,0 +1,715 @@
+<style>
+  <!--
+      #listing_table th:nth-child(4),
+        #listing_table td:nth-child(4) {
+          display: none;
+        }
+      -->
+</style>
+<div
+  id="barcode_template"
+  class="mceEditable"
+  readonly="readonly"
+  style="
+    padding: 0px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    width: 793.701px;
+    height: 1122.52px;
+    overflow: auto;
+    text-align: right;
+  "
+>
+  <br />
+  <table
+    width="750"
+    border="4"
+    style="border-color: black; margin-left: auto; margin-right: auto"
+  >
+    <tbody>
+      <tr style="height: 58px">
+        <td style="width: 257.328px; height: 58px; text-align: left">
+          <p style="text-align: right">
+            <span
+              style="
+                font-size: 12pt;
+                font-family: 'times new roman', times, serif;
+              "
+              ><strong>قصر إشبيليا للاحتفالات&nbsp;</strong>
+            </span>
+          </p>
+          <p style="text-align: right">
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >حي الشفاء, حائل, المملكة العربية السعودية&nbsp;
+              </strong></span
+            >
+          </p>
+          <p style="text-align: right">
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong>س.ت:3350020897</strong>
+            </span>
+          </p>
+          <p style="text-align: center">
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong>&nbsp;</strong>
+            </span>
+          </p>
+        </td>
+        <td style="width: 257.328px; height: 58px; text-align: center">
+          <span style="font-family: 'times new roman', times, serif"
+            ><img
+              src="https://eshbelia.daftra.com/files/97ac6572/bookings/677837e45d3b6_blobid1735931874110.jpg"
+              alt=""
+              title="لقطة شاشة_3-1-2025_182846.jpeg"
+              width="87"
+              height="138"
+              style="display: block; margin-left: auto; margin-right: auto"
+          /></span>
+        </td>
+        <td style="width: 257.344px; height: 58px">
+          <p style="text-align: right">
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >التاريخ: <span class="mceNonEditable">{%current_date%}</span>
+              </strong></span
+            >
+          </p>
+          <p style="text-align: right">
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >رقم العقد:
+                <span class="mceNonEditable">{%appointments_id%}</span>
+              </strong></span
+            >
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table
+    width="750"
+    style="
+      border-color: black;
+      height: 913px;
+      margin-left: auto;
+      margin-right: auto;
+    "
+    border="4"
+  >
+    <tbody>
+      <tr style="height: 568px">
+        <td style="width: 784px; height: 568px; text-align: right">
+          <p style="text-align: center">
+            <span
+              style="
+                font-size: 22pt;
+                font-family: 'times new roman', times, serif;
+              "
+              ><strong><u>عقد</u></strong>
+            </span>
+          </p>
+          <p>
+            <span
+              style="
+                font-size: 14pt;
+                font-family: 'times new roman', times, serif;
+              "
+              ><strong
+                ><span style="font-size: 12pt"
+                  >تم بحمد الله الاتفاق بين كل من الطرف الأول:&nbsp; &nbsp;قصر
+                  إشبيليا للاحتفالات
+                </span></strong
+              ></span
+            >
+          </p>
+          <p>
+            <span
+              style="
+                font-family: 'times new roman', times, serif;
+                font-size: 15pt;
+              "
+              ><strong
+                >الطرف الثاني:&nbsp;&nbsp;<span class="mceNonEditable"
+                  >{%partner_name%}
+                </span></strong
+              ></span
+            >
+          </p>
+          <p>
+            <span
+              style="
+                font-size: 12pt;
+                font-family: 'times new roman', times, serif;
+              "
+              ><strong
+                >رقم الهوية:&nbsp;
+                <span class="mceNonEditable">{%partner_national_id%}</span
+                >&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp;جوال:&nbsp;
+                <span class="mceNonEditable">{%partner_mobile%}</span>
+              </strong></span
+            >
+          </p>
+          <p>
+            <span
+              style="
+                font-size: 14pt;
+                font-family: 'times new roman', times, serif;
+              "
+              ><strong></strong
+            ></span>
+          </p>
+          <p>
+            <span
+              style="
+                font-family: 'times new roman', times, serif;
+                font-size: 12pt;
+              "
+              ><strong>على الآتي</strong><strong>:</strong>
+            </span>
+          </p>
+          <p>
+            <span
+              style="
+                font-size: 13pt;
+                font-family: 'times new roman', times, serif;
+              "
+              ><strong
+                >اولاً: إستأجر الطرف الثاني من الطرف الأول قصر إشبيليا
+                للاحتفالات:<span class="mceNonEditable"
+                  >{%booking_services%}
+                </span></strong
+              ></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                ><span style="font-size: 13pt"
+                  ><span class="mceNonEditable">{%appointments_body%}</span> ,
+                  <span id="newDates"></span> الموافق:&nbsp;
+                  <span class="mceNonEditable" id="inv_date"
+                    >{%appointments_start_date%}</span
+                  ></span
+                >&nbsp;</strong
+              ></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >ثانياً: يلتزم المستأجر بدفع كامل المبلغ قبل خمسة وأربعون يوماً
+                من تاريخ الزواج وإلا أصبح العقد لاغياً ولا يحق المطالبة بأي شيء
+                مهما كانت الأسباب.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >ثالثاً: بعد الساعة 1 صباحاً تحسب كل ساعة بـ ١٠٠٠ ريال مع إبلاغ
+                إدارة القاعة مقدما تحديد ساعات الزيادة.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >رابعاً: استلام القاعة من قبل المستأجر&nbsp;الساعة 3 عصرا وليس
+                له الحق قبل ذلك نهائيا.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >خامساً: عدم استخدام القصر لغير الغرض الذي تم استئجاره.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >سادساً: يمنع منعاً باتاً إقامة حفلات غنائية أو العرضة أو
+                السامري مهما كانت الأسباب.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >سابعا: يمنع منعاً باتاً إقامة ندوات أو إلقاء خطب ترحيبية ويمنع
+                توزيع أي أوراق أو ملصقات أو أشرطة تسجيل ذات صيغة إعلانية أو
+                إعلامية أيا كان محتواها.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >ثامناً: يمنع اختلاط الرجال بالنساء مهما كانت الأسباب.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >تاسعاً: يمنع التصوير إطلاقاً داخل صلات النساء.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >عاشراً: يمنع استخدام مكبرات الصوت خارج القصر وللقصر الحق في
+                إبلاغ الجهات المختصة بذلك
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >الحادي&nbsp;عشر: إن القاعة تحت مسؤولية المستأجر ويتحمل أي ضرر
+                أو تخريب في الصالات الداخلية والخارجية.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >الثاني عشر: للجهات المختصة الحق في إلغاء الزواج ويتحمل المستأجر
+                المسؤولية.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >الثالث عشر: لا يحق للمستأجر استرجاع العربون نهائيا، وفي حالة
+                إلغاء الزواج قبل 45 يوم او اقل من تاريخ الزواج، يلزم المستأجر
+                بدفع كامل المبلغ المتفق عليه.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >الرابع عشر: يعتبر هذا العقد لحفل زواج واحد فقط.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >الخامس عشر: يمنع منعا باتا حمل السلاح وإطلاقه المرخص والغير
+                مرخص والألعاب النارية.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >السادس عشر: إبراء للذمة ولحفظ النعمة، للقصر الحق في التصرف
+                بالأنعام الموجودة بعد الساعة الثانية صباحا.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >السابع عشر: القصر غير مسؤول عن الأشياء المفقودة.
+              </strong></span
+            >
+          </p>
+          <p>
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >الثامن عشر: يفسخ العقد عند الإخلاء بأي من الشروط المذكورة اعلاه
+                ولا يحق للمستأجر الرجوع لإدارة القصر بمطالبة مالية او
+                نحوه.</strong
+              ></span
+            >
+          </p>
+          <p style="text-align: center">
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >ــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ</strong
+              ></span
+            >
+          </p>
+          <p style="text-align: right">
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >توقيع العميل:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;الختم</strong
+              ></span
+            >
+          </p>
+          <p style="text-align: right">
+            <span style="font-family: 'times new roman', times, serif"
+              ><strong
+                >للاستفسارات: جوال:<span class="mceNonEditable"
+                  >{%site_mobile%}</span
+                >
+                / ايميل:&nbsp;<span class="mceNonEditable"
+                  >{%site_business_email%}</span
+                ></strong
+              ></span
+            >
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="text-align: center">
+    <span style="font-family: 'times new roman', times, serif"
+      ><strong></strong
+    ></span>
+  </p>
+  <p>
+    <span style="font-family: 'times new roman', times, serif">&nbsp;</span>
+  </p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+  <style>
+    <!--
+        #listing_table th:nth-child(4),
+          #listing_table td:nth-child(4) {
+            display: none;
+          }
+        -->
+  </style>
+  <p></p>
+</div>
+<p>
+  <script>
+    // <![CDATA[
+    try {
+      var olddateString = document.getElementById("inv_date").innerText;
+      var dateString =
+        olddateString.split("/")[1] +
+        "/" +
+        olddateString.split("/")[0] +
+        "/" +
+        olddateString.split("/")[2];
+      var date = new Date(Date.parse(dateString));
+      var nextDay = date.getDay() + 1;
+      console.log(date.getDay());
+
+      console.log(nextDay);
+
+      var days = [
+        "الأحد",
+        "الإثنين",
+        "الثلاثاء",
+        "الأربعاء",
+        "الخميس",
+        "الجمعة",
+        "السبت",
+        "الأحد",
+      ];
+
+      document.getElementById("newDates").innerText =
+        days[date.getDay()] + " ليلة " + days[nextDay];
+    } catch (error) {
+      console.log(error);
+    }
+    // ]]>
+  </script>
+</p>

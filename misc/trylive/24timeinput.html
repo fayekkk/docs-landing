@@ -1,0 +1,136 @@
+<!-- <!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>24-Hour Time Input</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body style="font-family: Arial, sans-serif; margin: 20px">
+    <label for="timeInput">اختر الوقت:</label>
+    <input
+      type="text"
+      id="timeInput"
+      placeholder="HH:MM"
+      value="00:00"
+      style="
+        width: 100px;
+        padding: 5px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      "
+    />
+
+    <script>
+      $(document).ready(function () {
+        $("#timeInput")
+          .on("focus", function () {
+            $(this).val(""); // Clear the value when focused
+          })
+          .on("input", function () {
+            let input = $(this)
+              .val()
+              .replace(/[^0-9]/g, ""); // Allow only numbers
+            if (input.length > 4) {
+              input = input.substring(0, 4); // Limit to 4 digits
+            }
+
+            // Format the input
+            if (input.length >= 2) {
+              const hours = input.substring(0, 2);
+              const minutes = input.substring(2, 4) || "00"; // Default to '00' if minutes are not entered
+              const formattedHours = String(
+                Math.min(Math.max(hours, 0), 23)
+              ).padStart(2, "0"); // Clip hours to 00-23
+              const formattedMinutes = String(
+                Math.min(Math.max(minutes, 0), 59)
+              ).padStart(2, "0"); // Clip minutes to 00-59
+              $(this).val(`${formattedHours}:${formattedMinutes}`);
+            } else if (input.length === 1) {
+              $(this).val(`${input.padStart(2, "0")}:00`); // If only 1 digit, show it as HH:00
+            } else {
+              $(this).val("00:00"); // Reset to default if empty
+            }
+          })
+          .trigger("input"); // Trigger input on page load to set default value
+      });
+    </script>
+  </body>
+</html> -->
+<!-- <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.js"></script>
+<input type="text" id="timeInput" />
+
+<script>
+  $(document).ready(function () {
+    $("#timeInput").timepicker({
+      timeFormat: "HH:mm", // 24-hour format
+      interval: 15, // 15-minute intervals
+      minTime: "00:00",
+      maxTime: "23:59",
+      defaultTime: "00:00",
+      startTime: "00:00",
+      dynamic: false,
+      dropdown: true,
+      scrollbar: true,
+    });
+  });
+</script> -->
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>24-Hour Time Input with Flatpickr</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  </head>
+  <body style="font-family: Arial, sans-serif; margin: 20px">
+    <label for="timeInput">اختر الوقت:</label>
+    <input type="text" id="timeInput" placeholder="HH:MM" />
+
+    <script>
+      flatpickr("#timeInput", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        defaultHour: 0,
+        defaultMinute: 0,
+        minuteIncrement: 1,
+        time_24hr: true,
+      });
+    </script>
+  </body>
+</html>
+<!-- <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
+<div class="input-group bootstrap-timepicker">
+  <input id="timeInput" type="text" class="form-control" />
+  <div class="input-group-append">
+    <button class="btn btn-outline-secondary" type="button">
+      <i class="fa fa-clock"></i>
+    </button>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $("#timeInput").timepicker({
+      showMeridian: false, // 24-hour format
+      defaultTime: "00:00",
+      minuteStep: 1,
+    });
+  });
+</script> -->

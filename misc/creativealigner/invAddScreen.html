@@ -1,0 +1,34 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      function addDiscountPer() {
+        $("#InvoiceClientId").on("change", function () {
+          console.log($(this).val());
+          if ($(this).val()) {
+            fetch(`/v2/api/entity/client/${$(this).val()}/1`, {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data);
+                console.log(data.client_custom_data.disc);
+                if (data.client_custom_data.disc) {
+                  $("#InvoiceDiscount")
+                    .val(data.client_custom_data.disc)
+                    .change();
+                }
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          }
+        });
+      }
+      addDiscountPer();
+    }, 400);
+  });
+</script>

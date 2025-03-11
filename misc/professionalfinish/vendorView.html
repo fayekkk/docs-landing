@@ -1,0 +1,268 @@
+<script>
+  $(document).ready(function () {
+    async function fetchStafftData() {
+      try {
+        const response = await fetch(
+          `/v2/api/entity/staff/${USER.staff_id}/1`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const data = await response.json();
+        console.log("Response:", data);
+        return data;
+      } catch (error) {
+        console.error("Error:", error);
+        return null;
+      }
+    }
+
+    let extraId = parseInt(window.location.href.split("/")[7]);
+
+    fetch(`/v2/api/entity/le_vendorextraction/${extraId}/1`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) =>
+        response.json().then(async (res) => {
+          console.log(res);
+          var role;
+          if (USER.staff_id != 0) {
+            const staffData = await fetchStafftData();
+            role = staffData.role_id;
+          }
+          const firstConfirmationRole = 21;
+          const secondConfirmationRole = 19;
+          const invoicingRole = 1;
+
+          if (USER.staff_id != 0) {
+            if (!res.invoicing_status) {
+              if (role == invoicingRole) {
+                if (res.manager_confirm && res.manager_confirm2) {
+                  $("#details > div > div.p-3").prepend(
+                    `<button type="button" id="add-inv" class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">تحويل إلى فاتورة <i class="list-icon mdi mdi-receipt" style="font-size: 25px;"></i> </button>`
+                  );
+                } else {
+                  $("#details > div > div.p-3").prepend(
+                    `<button type="button" class="btn btn-success" disabled="disabled"  style="border-radius: 3px; margin: 5px 0 10px;">لم يتم الإعتماد   </button>`
+                  );
+                }
+              } else if (role == firstConfirmationRole) {
+                if (!res.manager_confirm) {
+                  $("#details > div > div.p-3").prepend(
+                    `<button type="button" id="confirm-ext" class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">  إعتماد المرحلة الأولى  </button>`
+                  );
+                } else {
+                  $("#details > div > div.p-3").prepend(
+                    `<button type="button" disabled="disabled"  class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">  تم  إعتماد المرحلة الأولى   </button>`
+                  );
+                }
+              } else if (role == secondConfirmationRole) {
+                if (!res.manager_confirm) {
+                  $("#details > div > div.p-3").prepend(
+                    `<button type="button" disabled="disabled"  class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">  لم يتم إعتماد المرحلة الأولى   </button>`
+                  );
+                } else if (!res.manager_confirm2) {
+                  $("#details > div > div.p-3").prepend(
+                    `<button type="button" id="confirm-ext2" class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">  إعتماد المرحلة الثانية  </button>`
+                  );
+                } else {
+                  $("#details > div > div.p-3").prepend(
+                    `<button type="button" disabled="disabled"  class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">  تم  إعتماد المرحلة الثانية   </button>`
+                  );
+                }
+              }
+            } else {
+              $("#details > div > div.p-3").prepend(
+                `<button type="button" disabled="disabled"  class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">تم الفوترة   <i class="list-icon mdi mdi-receipt" style="font-size: 25px;"></i> </button>`
+              );
+            }
+          } else {
+            // for admin
+            if (!res.invoicing_status) {
+              if (res.manager_confirm && res.manager_confirm2) {
+                $("#details > div > div.p-3").prepend(
+                  `<button type="button" id="add-inv" class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">تحويل إلى فاتورة <i class="list-icon mdi mdi-receipt" style="font-size: 25px;"></i> </button>`
+                );
+              } else if (!res.manager_confirm) {
+                $("#details > div > div.p-3").prepend(
+                  `<button type="button" id="confirm-ext" class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">  إعتماد المرحلة الأولى  </button>`
+                );
+              } else {
+                $("#details > div > div.p-3").prepend(
+                  `<button type="button" id="confirm-ext2" class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">  إعتماد المرحلة الثانية  </button>`
+                );
+              }
+            } else {
+              $("#details > div > div.p-3").prepend(
+                `<button type="button" disabled="disabled"  class="btn btn-success" style="border-radius: 3px; margin: 5px 0 10px;">تم الفوترة   <i class="list-icon mdi mdi-receipt" style="font-size: 25px;"></i> </button>`
+              );
+            }
+          }
+
+          //   add events
+          console.log({ resssss: res });
+          $(document).on("click", "#add-inv", function (e) {
+            e.preventDefault();
+            console.log("click1");
+            function getinvoiceTotal(items) {
+              let total = 0;
+              if (items.length > 0) {
+                for (let i = 0; i < items.length; i++) {
+                  const price = parseFloat(items[i].price1) || 0;
+                  const qty = parseFloat(items[i].ttlqty1) || 0;
+                  const currentProcess =
+                    parseFloat(items[i].current_process1) || 0;
+                  const taQty = parseFloat(items[i].ta3lyattlqty) || 0;
+                  const taCurrent = parseFloat(items[i].curr_ta3lya_per) || 0;
+
+                  total +=
+                    price * qty * (currentProcess / 100) +
+                    price * taQty * (taCurrent / 100);
+
+                  console.log(total);
+                }
+              }
+              return total;
+            }
+
+            let extraTotal = getinvoiceTotal(
+              res.le_vendorextraction_le_vendorextraction_extraction_items1
+            );
+
+            function getCurrentDate() {
+              const today = new Date();
+              const year = today.getFullYear();
+              const month = String(today.getMonth() + 1).padStart(2, "0");
+              const day = String(today.getDate()).padStart(2, "0");
+
+              return `${year}-${month}-${day}`;
+            }
+
+            let dataaaa = {
+              PurchaseOrder: {
+                supplier_id: parseInt(res.vendor_project1),
+                currency_code: "SAR",
+                date: "2024-10-01",
+                draft: 1,
+                is_offline: true,
+                work_order_id: JSON.stringify(res.reference_id),
+              },
+              PurchaseOrderItem: [
+                {
+                  org_name: "",
+                  item: res.extraction_no
+                    ? res.extraction_no
+                    : "" + "مسلخلص أعميل رقم  ",
+                  description: "",
+                  unit_price: extraTotal,
+                  quantity: 1,
+                  tax1: 0,
+                  tax2: 0,
+                },
+              ],
+            };
+            console.log(dataaaa);
+            console.log(JSON.stringify(dataaaa));
+
+            fetch(`/api2/purchase_invoices?send=draft`, {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(dataaaa),
+            })
+              .then((res) => res.json())
+              .then((Invresponse) => {
+                console.log({ Invresponse: Invresponse });
+                fetch(`/v2/api/entity/le_vendorextraction/${extraId}/fields`, {
+                  method: "POST",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    invoicing_status: "تم الفوترة",
+                  }),
+                }).then((response) => {
+                  response
+                    .json()
+                    .then((res) => {
+                      console.log("Success:", res);
+                      window.location.href = `/owner/purchase_invoices/edit/${Invresponse.id}`;
+                    })
+                    .catch((error) => {
+                      console.error("Error:", error);
+                    });
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+          $(document).on("click", "#confirm-ext", function (e) {
+            e.preventDefault();
+            console.log("click2");
+            fetch(`/v2/api/entity/le_vendorextraction/${extraId}/fields`, {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                confirmation: USER.staff_id,
+                manager_confirm: "تم الإعتماد",
+              }),
+            }).then((response) => {
+              response
+                .json()
+                .then((res) => {
+                  console.log("Success:", res);
+                  window.location.reload();
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            });
+          });
+          $(document).on("click", "#confirm-ext2", function (e) {
+            e.preventDefault();
+            console.log("click2");
+            fetch(`/v2/api/entity/le_vendorextraction/${extraId}/fields`, {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                confirmation_2: USER.staff_id,
+                manager_confirm2: "تم الإعتماد",
+              }),
+            }).then((response) => {
+              response
+                .json()
+                .then((res) => {
+                  console.log("Success:", res);
+                  window.location.reload();
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            });
+          });
+        })
+      )
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+</script>

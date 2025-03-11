@@ -1,0 +1,494 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    #Inv_data {
+      width: 100%;
+      border-spacing: 0;
+      text-align: center;
+      direction: rtl;
+      margin-top: 15px;
+    }
+    #Inv_data td {
+      text-align: right;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    #Inv_data img {
+      width: 80%;
+      margin: 0 7;
+    }
+    #Inv_data tr:nth-child(1) td:nth-child(1) {
+      width: 12%;
+    }
+    #Inv_data tr:nth-child(1) td:nth-child(2) {
+      width: 30%;
+    }
+    #Inv_data tr:nth-child(1) td:nth-child(3) {
+      width: 38%;
+    }
+    #Inv_data tr:nth-child(1) td:nth-child(4) {
+      width: 20%;
+    }
+    #invoice_title {
+      vertical-align: top;
+      font-size: 18px !important;
+      font-weight: bold !important;
+    }
+    #adresss br {
+      display: none;
+    }
+    #listing_table {
+      font-size: 11px !important;
+      text-align: center !important;
+      border-left: none !important;
+      border-bottom: none !important;
+      border-top: none !important;
+      border-right: 1px solid black !important;
+    }
+    #listing_table th {
+      background-color: #e5e5e5 !important;
+    }
+    #listing_table th {
+      border-left: 1px solid black !important;
+      border-bottom: 1px solid black !important;
+      border-top: 1px solid black !important;
+      border-right: none !important;
+      padding: 2px;
+    }
+    #listing_table td {
+      border-left: 1px solid black !important;
+      border-bottom: 1px solid black !important;
+      border-top: none !important;
+      border-right: none !important;
+      padding: 2px;
+    }
+    #listing_table th:nth-child(1) {
+      width: 4%;
+    }
+    #listing_table th:nth-child(2) {
+      width: 21%;
+    }
+    #listing_table th:nth-child(3) {
+      width: 7%;
+    }
+    #listing_table th:nth-child(4) {
+      width: 7%;
+    }
+    #listing_table th:nth-child(5) {
+      width: 7%;
+    }
+    #listing_table th:nth-child(6) {
+      width: 7%;
+    }
+    #listing_table th:nth-child(7) {
+      width: 7%;
+    }
+    #listing_table th:nth-child(8) {
+      width: 7%;
+    }
+    #listing_table th:nth-child(9) {
+      width: 7%;
+    }
+    #listing_table th:nth-child(10) {
+      width: 7%;
+    }
+    #listing_table th:nth-child(11) {
+      width: 9%;
+    }
+
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #new_totals {
+      width: 100%;
+      border-spacing: 0;
+      text-align: right;
+      direction: rtl;
+      font-size: 14px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+    #new_totals td:nth-child(1) {
+      padding: 2px;
+      width: 15%;
+      border-right: 1px solid #e5e5e5;
+      border-left: 1px solid #e5e5e5;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    #new_totals tr:nth-child(1) td:nth-child(1) {
+      padding: 2px;
+      width: 15%;
+      border-top: 1px solid #e5e5e5;
+    }
+    #new_totals tr:nth-last-child(2) td:nth-child(1) {
+      padding: 2px;
+      width: 15%;
+      border-right: none !important;
+      border-left: none !important;
+      border-bottom: none !important;
+    }
+    #new_totals tr:last-child td:nth-child(1) {
+      padding: 2px;
+      width: 15%;
+      border-right: none !important;
+      border-left: none !important;
+      border-bottom: none !important;
+    }
+    #new_totals td:nth-child(2) {
+      padding: 2px;
+      width: 60%;
+    }
+    #new_totals td:nth-child(3) {
+      padding: 2px;
+      width: 25%;
+      text-align: center !important;
+    }
+    #signs {
+      width: 100%;
+      border-spacing: 0;
+      text-align: center;
+      direction: rtl;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    #signs td:nth-child(1) {
+      width: 50%;
+    }
+    #signs td:nth-child(2) {
+      width: 50%;
+    }
+    #bank_data {
+      width: 100%;
+      border-spacing: 0;
+      text-align: center;
+      direction: rtl;
+      font-size: 14px;
+      font-weight: bold;
+      margin: 15px 0;
+      border-top: 1px solid black;
+      border-right: 1px solid black;
+    }
+    #bank_data td {
+      border-bottom: 1px solid black;
+      border-left: 1px solid black;
+      padding: 2px;
+    }
+    #bank_data td:nth-child(1) {
+      width: 20%;
+    }
+    #bank_data td:nth-child(2) {
+      width: 40%;
+    }
+    #bank_data td:nth-child(3) {
+      width: 40%;
+    }
+  </style>
+
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+      <div class="invoice-inner">
+        <div id="header">
+          <img
+            src="https://mrasytybt.daftra.com/files/cb8b4eab/logos/663cd668842ef_blobid1715263077782.png"
+            alt=""
+            title="marasyheader.png"
+            style="width: 100%"
+          />
+        </div>
+        <table id="Inv_data">
+          <tbody>
+            <tr>
+              <td>رقم الفاتورة</td>
+              <td>{%invoice_no%}</td>
+              <td rowspan="100%" id="invoice_title">{%invoice_title%}</td>
+              <td rowspan="100%">{%sa_qr_code_image%}</td>
+            </tr>
+            <tr>
+              <td>تاريخ الفاتورة</td>
+              <td>{%invoice_date%}</td>
+            </tr>
+            <tr>
+              <td>إسم العميل</td>
+              <td>{%client_business_name%}</td>
+            </tr>
+            <tr>
+              <td>العنوان</td>
+              <td id="adresss">{%client_full_address%}</td>
+            </tr>
+            <tr>
+              <td>الرقم الضريبى</td>
+              <td>{%client_bn1%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="items-list">{%items_list%}</div>
+        <table id="new_totals">
+          <tbody>
+            <tr>
+              <td id="disc_ttl"></td>
+              <td>خصم</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="removecurr">{%invoice_subtotal%}</td>
+              <td>الإجمالى الخاضع للضريبة ( بإستثناء ضريبة القيمة المضافة)</td>
+              <td>
+                إجمالى كمية الزجاج :
+                <span id="glass_Qty_ttl"></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="removecurr">{%tax-total%}</td>
+              <td>ضريبة القيمة المضافة</td>
+              <td>
+                إجمالى عدد القطع :
+                <span id="glass_peaces_total"></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="removecurr">{%invoice_total%}</td>
+              <td>إجمالي المبلغ المستحق (شامل ضريبة القيمة المضافة )</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>{%invoice_total_spelled%}</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>الرصيد الحالي= {%invoice_advanced_client_balance%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="bank_data">
+          <tr>
+            <td>مصرف الراجحي</td>
+            <td>رقم الحساب : 198000010006086144182</td>
+            <td>رقم الآيبان : SA1380000198608016144182</td>
+          </tr>
+        </table>
+        <table id="signs">
+          <tr>
+            <td>البائع : {%staff_member_name%}</td>
+            <td>توقيع المستلم</td>
+          </tr>
+        </table>
+        <!-- <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div> -->
+      </div>
+      <div style="display: none">
+        <div id="discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+      </div>
+
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function addSerials() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var newTh = document.createElement("th");
+        newTh.innerText = "#";
+        allRows[0].insertBefore(newTh, allRows[0].cells[0]);
+        for (var i = 1; i < allRows.length; i++) {
+          var newTd = document.createElement("td");
+          newTd.innerText = i;
+          allRows[i].insertBefore(
+            newTd,
+            allRows[i].querySelector("td:nth-child(1)")
+          );
+        }
+      }
+      try {
+        addSerials();
+      } catch (error) {
+        console.log(error);
+      }
+
+      function addDiscCol() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        if (allRows[0].cells.length == 9) {
+          var newTh = document.createElement("th");
+          newTh.innerText = "خصم";
+          newTh.style.display = "none !important";
+          allRows[0].insertBefore(newTh, allRows[0].cells[8]);
+          for (var i = 1; i < allRows.length; i++) {
+            var newTd = document.createElement("td");
+            newTd.style.display = "none !important";
+            newTd.innerText = "0";
+            allRows[i].insertBefore(newTd, allRows[i].cells[8]);
+          }
+        }
+      }
+      try {
+        addDiscCol();
+      } catch (error) {
+        console.log(error);
+      }
+
+      function addTtlafterVat() {
+        var allRows = document.querySelectorAll("#listing_table tr");
+        var newTh = document.createElement("th");
+        newTh.innerText = "المجموع (شامل ضريبة القيمة المضافة )";
+        allRows[0].appendChild(newTh);
+
+        for (var i = 1; i < allRows.length; i++) {
+          var newTd = document.createElement("td");
+          newTd.innerText = (
+            parseFloat(allRows[i].cells[5].innerText.replace(/,/g, "")) +
+            parseFloat(allRows[i].cells[9].innerText.replace(/,/g, ""))
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          allRows[i].appendChild(newTd);
+        }
+      }
+      try {
+        addTtlafterVat();
+      } catch (error) {
+        console.log(error);
+      }
+      function swapAll() {
+        var allRows = document.querySelectorAll(" #listing_table tr");
+        for (var i = 0; i < allRows.length; i++) {
+          var vatval = allRows[i].cells[5].innerHTML;
+          var Price = allRows[i].cells[6].innerHTML;
+          var Qty = allRows[i].cells[7].innerHTML;
+          var disc = allRows[i].cells[8].innerHTML;
+          var subttl = allRows[i].cells[9].innerHTML;
+          var ttl = allRows[i].cells[10].innerHTML;
+          allRows[i].cells[5].innerHTML = Qty;
+          allRows[i].cells[6].innerHTML = Price;
+          allRows[i].cells[7].innerHTML = subttl;
+          allRows[i].cells[8].innerHTML = disc;
+          allRows[i].cells[9].innerHTML = vatval;
+          allRows[i].cells[10].innerHTML = ttl;
+        }
+      }
+      try {
+        swapAll();
+      } catch (error) {
+        console.log(error);
+      }
+      function removecurr() {
+        var allremovecurr = document.querySelectorAll(".removecurr");
+        for (var i = 0; i < allremovecurr.length; i++) {
+          allremovecurr[i].innerText =
+            parseFloat(allremovecurr[i].innerText.replace(/,/g, ""))
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " SAR ";
+          allremovecurr[i].style.direction = "ltr";
+        }
+      }
+      try {
+        removecurr();
+      } catch (error) {
+        console.log(error);
+      }
+      function hundleTtls() {
+        var allRows = document.querySelectorAll("#listing_table tbody tr");
+        var glass_peaces_total = 0;
+        var glass_Qty_ttl = 0;
+
+        for (var i = 0; i < allRows.length; i++) {
+          glass_peaces_total =
+            glass_peaces_total +
+            parseFloat(allRows[i].cells[4].innerText.replace(/,/g, ""));
+          glass_Qty_ttl =
+            glass_Qty_ttl +
+            parseFloat(allRows[i].cells[5].innerText.replace(/,/g, ""));
+          allRows[i].cells[9].innerText = parseFloat(
+            allRows[i].cells[9].innerText.replace(/,/g, "")
+          )
+            .toFixed(3)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        document.getElementById("glass_peaces_total").innerText =
+          glass_peaces_total.toFixed(3).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        document.getElementById("glass_Qty_ttl").innerText = glass_Qty_ttl
+          .toFixed(3)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+      try {
+        hundleTtls();
+      } catch (error) {
+        console.log(error);
+      }
+      function getttlDisc() {
+        var itemdiscount = parseFloat(
+          document.getElementById("item-discount").innerText.replace(/,/g, "")
+        );
+        var discount = parseFloat(
+          document.getElementById("discount").innerText.replace(/,/g, "")
+        );
+
+        var allTtlRows = document.querySelectorAll(
+          ".listing-table:nth-child(2) tr"
+        );
+        var retenVal = 0;
+        for (var i = 0; i < allTtlRows.length; i++) {
+          if (allTtlRows[i].cells[1].innerText.trim() == "خصم التسوية") {
+            retenVal = parseFloat(
+              allTtlRows[i].cells[2].innerText.replace(/,/g, "")
+            );
+            if (retenVal < 0) {
+              retenVal = retenVal * -1;
+            }
+          }
+        }
+        document.getElementById("disc_ttl").innerText =
+          (itemdiscount + discount + retenVal)
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " SAR ";
+        document.getElementById("disc_ttl").style.direction = "ltr";
+      }
+      try {
+        getttlDisc();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

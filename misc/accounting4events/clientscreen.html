@@ -1,0 +1,92 @@
+<script>
+  $(document).ready(function () {
+    // required fields
+    setTimeout(() => {
+      var inputIds = [
+        "ClientFirstName",
+        "ClientLastName",
+        "ClientPhone1",
+        "ClientPhone2",
+        "ClientEmail",
+        "ClientAddress1",
+        "ClientCity",
+      ];
+      $.each(inputIds, function (index, id) {
+        // Add required attribute to the input
+        $("#" + id).attr("required", true);
+
+        // Append an asterisk to the corresponding label
+        $('label[for="' + id + '"]').append(' <span class="required">*</span>');
+      });
+    }, 250);
+    // is Unique
+    setTimeout(() => {
+      $("#submitBtn").hide();
+      let prebtn = `
+    <button id="presubmitBtn" class="btn s2020 btn-icn btn-success font-weight-medium ml-2">
+        <i class="mdi mdi-content-save-outline fs-20"></i><span>حفظ</span></button>`;
+      $("#submitBtn").after(prebtn);
+      $("#presubmitBtn").on("click", async function (e) {
+        e.preventDefault();
+        let emailVal = $("#ClientEmail").val();
+        let mobileVal = $("#ClientPhone2").val();
+        console.log(emailVal);
+        console.log(mobileVal);
+        if (emailVal && mobileVal) {
+          let isValid = await cleckvalues(emailVal, mobileVal);
+          console.log(isValid);
+          if (isValid) {
+            $("#submitBtn").trigger("click");
+          }
+
+        } else {
+          alert("يجب إدخال البريد الإلكتروني والهاتف المحمول");
+        }
+      });
+      async function cleckvalues(emailVal, mobileVal) {
+        // /v2/api/entity/client/list/1?filter[email]=
+        let flag = true;
+        try {
+          const response = await fetch(
+            `/v2/api/entity/client/list/1?filter[email]=${emailVal}`,
+            {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const data = await response.json();
+          console.log("Response:", data);
+          if (data.data.length > 0) {
+            flag = false;
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+
+        try {
+          const response = await fetch(
+            `/v2/api/entity/client/list/1?filter[phone2][like]=${mobileVal}`,
+            {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const data = await response.json();
+          console.log("Response:", data);
+          if (data.data.length > 0) {
+            flag = false;
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+        return flag;
+      }
+    }, 250);
+  });
+</script>

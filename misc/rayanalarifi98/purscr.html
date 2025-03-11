@@ -1,0 +1,51 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      setTimeout(() => {
+        $(
+          "#insert-here > div > div.ui-card-content.ui-card-content-box--spacing-bottom-0 > div > div > div > div.l-input-box > div"
+        ).hide();
+        $("#data-le_custom_data_purchase_order--paymenttype ").show();
+        $("#data-le_custom_data_purchase_order--paymenttype ").attr(
+          "disabled",
+          true
+        );
+        if ($("#PaymentIsPaid").is(":checked")) {
+        $("#data-le_custom_data_purchase_order--paymenttype option")
+          .val("نقدى")
+          .text("نقدى")
+          .change();
+        $("#data-le_custom_data_purchase_order--paymenttype ").change();
+      } else {
+        $("#data-le_custom_data_purchase_order--paymenttype option")
+          .val("آجل")
+          .text("آجل")
+          .change();
+        $("#data-le_custom_data_purchase_order--paymenttype ").change();
+      }
+      }, 700);
+
+      $("#PaymentIsPaid").on("change", function () {
+        if ($(this).is(":checked")) {
+          $("#data-le_custom_data_purchase_order--paymenttype option")
+            .val("نقدى")
+            .text("نقدى")
+            .change();
+          $("#data-le_custom_data_purchase_order--paymenttype ").change();
+
+          //   $("#data-le_custom_data_purchase_order--paymenttype").val("نقدي").change()
+          console.log("Checkbox is now checked.");
+        } else {
+          $("#data-le_custom_data_purchase_order--paymenttype option")
+            .val("آجل")
+            .text("آجل")
+            .change();
+          $("#data-le_custom_data_purchase_order--paymenttype ").change();
+
+          //   $("#data-le_custom_data_purchase_order--paymenttype").val("آجل").change()
+          console.log("Checkbox is now unchecked.");
+        }
+      });
+    }, 450);
+  });
+</script>

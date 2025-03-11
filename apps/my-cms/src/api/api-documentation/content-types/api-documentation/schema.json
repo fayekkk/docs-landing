@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "api_documentations",
+  "info": {
+    "singularName": "api-documentation",
+    "pluralName": "api-documentations",
+    "displayName": "API Documentation",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid"
+    },
+    "content": {
+      "type": "blocks"
+    },
+    "order": {
+      "type": "biginteger"
+    },
+    "Response": {
+      "type": "json"
+    },
+    "errors": {
+      "type": "json"
+    }
+  }
+}

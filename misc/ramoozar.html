@@ -1,0 +1,1840 @@
+<!-- code_Requisitions_owner_edit -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+  rel="stylesheet"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<style>
+  .loading-overlay {
+    display: none;
+    background: #b3b3b36b;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    top: 0;
+  }
+
+  .loading-overlay-image-container {
+    width: 15%;
+    color: #fff;
+    text-align: center;
+    position: fixed;
+    z-index: 1001;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px;
+    height: 80px;
+    border-radius: 5px;
+  }
+
+  .loading-overlay-title {
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #fff;
+  }
+
+  .loading-overlay-image {
+    width: 20%;
+  }
+</style>
+
+<script>
+  $(document).ready(function () {
+    $(
+      ".col-flex-sm-6.d-flex.justify-content-end"
+    ).prepend(`<div class="button select-actions btn-group in_preview" style="margin-left: 10px">
+  <a id="declineRequisition" href="#" class="btn btn-danger print-method Web silent btn btn-danger btn-addon s2020" 
+    >رفض</a
+  >
+  </div>`);
+
+    $("#main-content").append(overlay);
+    let linkedHelpMaterial = { data: null, status: false };
+
+    let reqId =
+      location.pathname.split("/")[location.pathname.split("/").length - 1];
+
+    function getInvoiceId(req_id) {
+      $(".loading-overlay").show();
+
+      return new Promise((res) => {
+        $.ajax({
+          url: `/v2/api/entity/requisition/${req_id}`,
+          type: "GET",
+          success: (req_data) => {
+            console.log(req_data);
+            $(".loading-overlay").hide();
+
+            res(req_data.order_id);
+          },
+          error: (err) => {
+            $(".loading-overlay").hide();
+
+            res(err);
+          },
+        });
+      });
+    }
+
+    function checkIfInHelpMaterials(req_id) {
+      return new Promise((res) => {
+        $.ajax({
+          url: `/v2/api/entity/le_810/list/-1?filter[linked_req_id]=${req_id}`,
+          type: "GET",
+          success: (data) => {
+            if (data.data.length != 0) {
+              res({ data: data.data[0], status: true });
+            } else {
+              res({ data: null, status: false });
+            }
+          },
+          error: (err) => {
+            console.log(err);
+            res(err);
+          },
+        });
+      });
+    }
+
+    function updateReqHelpedMaterials(id, staff_id) {
+      return new Promise((res) => {
+        let dataToSend = {
+          staff_worker: staff_id,
+          linked_req_status: "تمت الموافقة",
+        };
+
+        $.ajax({
+          url: `/v2/api/entity/le_810/${id}/fields`,
+          type: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          data: JSON.stringify(dataToSend),
+        });
+      });
+    }
+
+    async function getClientData() {
+      let invoiceId = getUrlParam("invoice");
+      if (invoiceId != null) {
+        let invData = await $.ajax({
+          url: `/v2/api/entity/invoice/${invoiceId}`,
+          type: "GET",
+          success: (invData) => {
+            console.log("Invoice here");
+          },
+          error: (e) => {
+            console.log(e);
+            res(e);
+          },
+        });
+
+        let clientInfoText = `
+          اسم العميل: ${invData.client_business_name} 
+          كود العميل: ${invData.clients.client_number} 
+          جوال العميل: ${invData.clients.phone2} 
+          عنوان العميل: ${invData.clients.address1} ${invData.clients.address2}
+          `;
+
+        $("#RequisitionNotes").val(clientInfoText);
+      }
+    }
+
+    function appendNewStaffSelectInput() {
+      let newInput = $(".col-xs-6.p-0").eq(4).clone();
+      $(newInput)
+        .find(".form-group")
+        .html(
+          `<label for="SelectStaff">اخنر موظف</label><select id="SelectStaff" style="width:100%"><option value="-1"> -- اختر موظف </option></select>`
+        );
+      $(newInput).removeClass("b-l");
+      $(".col-xs-6.p-0").eq(-1).after(newInput);
+    }
+
+    function getStaffList() {
+      return new Promise((res) => {
+        $.ajax({
+          url: `/v2/api/entity/staff/list/-1`,
+          type: "GET",
+          success: (data) => {
+            res(data);
+          },
+          error: (err) => {
+            console.log(err);
+            res(err);
+          },
+        });
+      });
+    }
+    let invoiceId;
+    getInvoiceId(reqId).then((id) => {
+      invoiceId = id;
+      console.log("id id " + invoiceId);
+      $("#declineRequisition").click(function (e) {
+        $(".loading-overlay").show();
+        e.preventDefault();
+        let reqDateTime = $("#RequisitionDate").val();
+
+        let year = $("#RequisitionDate").val().split(" ")[0].split("/")[2];
+        let month = $("#RequisitionDate").val().split(" ")[0].split("/")[1];
+        let day = $("#RequisitionDate").val().split(" ")[0].split("/")[0];
+        let time = $("#RequisitionDate").val().split(" ")[1];
+
+        let updatedDateTime = `${year}-${month}-${day} ${time}`;
+        $.ajax({
+          type: "POST",
+          contentType: "application/json",
+          url: `/v2/api/entity/requisition/${reqId}/fields`,
+          headers: { accept: "application/json" },
+          data: JSON.stringify({
+            status: 4,
+            date: updatedDateTime,
+            order_id: invoiceId,
+          }),
+        })
+          .then((res) => {
+            console.log(`Thank You`);
+            setTimeout(() => {
+              $(".loading-overlay").hide();
+
+              location.href = `/owner/requisitions/view/${reqId}`;
+            }, 800);
+          })
+          .fail((res) => {
+            $(".loading-overlay").hide();
+
+            console.log(
+              `Error Code ${res.status} has happened, Res" ${JSON.stringify(
+                res
+              )}`
+            );
+          });
+      });
+    });
+
+    getClientData();
+    appendNewStaffSelectInput();
+    $("#SelectStaff").select2({
+      width: "resolve",
+    });
+    getStaffList().then((data) => {
+      if (data.data.length != 0) {
+        data.data.map((val) => {
+          $("#SelectStaff").append(
+            `<option value="${val["id"]}">${val["name"]}</option>`
+          );
+        });
+      }
+      $("#SelectStaff").on("change", function () {
+        let lines = $("#RequisitionNotes").val().split(`\n`);
+        let newValue = $(this).find("option:selected").text();
+        // lines[-1] = newValue
+        //  newValue = lines.join('\n');
+        $("#RequisitionNotes").val(
+          $("#RequisitionNotes").val() + `\n` + newValue
+        );
+      });
+
+      checkIfInHelpMaterials(reqId).then((resp) => {
+        linkedHelpMaterial.status = resp.status;
+        linkedHelpMaterial.data = resp.data;
+        if (resp.status) {
+          setTimeout(() => {
+            $("#SelectStaff").val(resp.data.staff_worker).change();
+          }, 100);
+        }
+      });
+    });
+
+    $("#saveRequisition").on("click", function (e) {
+      e.preventDefault();
+      if (!linkedHelpMaterial.status) {
+        console.log(linkedHelpMaterial);
+        $("#InvoiceForm").trigger("submit");
+      } else {
+        let staffID = $("#SelectStaff").val();
+        updateReqHelpedMaterials(linkedHelpMaterial.data.id, staffID).then(
+          (linkedHelpMaterial) => {
+            console.log(linkedHelpMaterial);
+          }
+        );
+      }
+    });
+  });
+</script>
+<!-- code done by tarek abdo -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+  rel="stylesheet"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<style>
+  .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .popup-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .btnContainer {
+    display: flex;
+    justify-content: center;
+    gap: 300px;
+    margin-top: 20px;
+  }
+
+  .loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: auto;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .confirm-btn {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin-top: 5px;
+    /* margin-right: 8px; */
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .cancel-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .myTable {
+    width: 100%;
+    border: 1px solid black;
+    font-weight: bold;
+  }
+  .myTable th,
+  .myTable td {
+    text-align: center;
+  }
+  .totQtySpan {
+    /* position: relative;
+    left: -236px; */
+    font-size: 15px;
+    font-weight: bold;
+    width: 41px;
+    /* display: inline-block; */
+    background: #f3f3f3;
+    margin-top: 5px;
+    cursor: default;
+    margin-right: 400px;
+  }
+  .totQtySpan2 {
+    font-weight: bold;
+    /* position: relative;
+    right: -125px; */
+  }
+  .yellow td {
+    background-color: yellow;
+  }
+  /* this is chatGTP Style */
+  .popup {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .popup-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 800px;
+  }
+
+  .popup-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .popup-body {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .popup-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .popup-table th,
+  .popup-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .popup-table th {
+    background-color: #f2f2f2;
+  }
+
+  .popup-footer {
+    text-align: right;
+    margin-top: 10px;
+  }
+
+  .close-btn {
+    background-color: #4caf50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+  }
+  .camera-button {
+    height: 25px;
+  }
+  .camera-button i {
+    width: 26px;
+    display: inline-block;
+    height: 15px;
+  }
+  .quantity-container {
+    display: flex;
+    margin-top: 8px;
+    justify-content: space-between;
+  }
+  @media (max-width: 767px) {
+    .popup-content {
+      margin: 5% auto;
+      width: 90%;
+    }
+    .quantity-container {
+      display: flex;
+      gap: 0px;
+      margin-top: 10px;
+    }
+    .btnContainer {
+      gap: 60px;
+    }
+    .totQtySpan {
+      margin-right: 0;
+    }
+    canvas.drawing,
+    canvas.drawingBuffer {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+  canvas.drawing,
+  canvas.drawingBuffer {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  #scannerContainer {
+    width: 100%;
+    max-width: 500px;
+    height: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #scannerContainer video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .pages-head {
+    right: 0 !important;
+  }
+  .invoice-actions {
+    display: block !important;
+  }
+  .quantity-container {
+    gap: 0;
+  }
+
+  .col-flex-sm-6:nth-child(2) div:nth-child(1).disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    background-color: #e6e6e6;
+    cursor: not-allowed;
+  }
+  .myTable th:nth-last-child(2),
+  .myTable td:nth-last-child(2),
+  .myTable th:last-child,
+  .myTable td:last-child {
+    display: none;
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+<script>
+  $(document).ready(function () {
+    console.log("tarek work");
+    // setTimeout(() => {
+    //   if (
+    //     document.querySelector(".col-flex-sm-6:nth-child(2) div:nth-child(1)")
+    //       .innerText === "تأكيد"
+    //   ) {
+    //     document
+    //       .querySelector(".col-flex-sm-6:nth-child(2) div:nth-child(1)")
+    //       .classList.add("disabled");
+    //   } else {
+    //     document
+    //       .querySelector(".col-flex-sm-6:nth-child(2) div:nth-child(2)")
+    //       .classList.add("disabled");
+    //   }
+    // }, 500);
+    //////////////////done by tarek abdo ///////////////////////////////////////
+    // let code = "";
+    // document.addEventListener("keydown", function (event) {
+    //   console.log(event, "event");
+    //   console.log(event.keyCode, "eventKeyCode");
+
+    //   if (
+    //     event.keyCode === 55 ||
+    //     event.keyCode === 53 ||
+    //     event.keyCode === 52
+    //   ) {
+    //     console.log("Current code:", code);
+
+    //     // Prevent default behavior of the key
+    //     event.preventDefault();
+
+    //     // Get all rows in the table
+    //     let allmyTableRows = document.querySelectorAll(".myTable tr");
+
+    //     for (let i = 1; i < allmyTableRows.length; i++) {
+    //       // Compare 'code' with the content of the 4th cell in each row
+    //       if (
+    //         code ===
+    //         allmyTableRows[i].querySelector("td:nth-child(4)").innerText
+    //       ) {
+    //         console.log("Match found!");
+    //         allmyTableRows[i].classList.add("yellow");
+    //       }
+    //     }
+
+    //     // Reset 'code' after processing
+    //     code = "";
+    //   } else {
+    //     // Accumulate the typed key into 'code'
+    //     code += event.key;
+    //     console.log(code, "code of the item");
+    //   }
+    // });
+    // Instantiate the barcode scanner events handler
+    // var scanner = new BarcodeScanerEvents();
+
+    let code = ""; // To accumulate the scanned code
+    let typingTimeout;
+
+    document.addEventListener("keydown", function (event) {
+      // Accumulate the typed key into 'code'
+      if (event.key.length === 1) {
+        code += event.key;
+        console.log("Current code:", code);
+      }
+
+      // Clear the previous timeout
+      clearTimeout(typingTimeout);
+
+      // Set a new timeout to assume scanning is done after 300ms
+      typingTimeout = setTimeout(function () {
+        console.log("Scanning complete. Final code:", code);
+
+        // Compare the scanned code to rows in the table
+        let allmyTableRows = document.querySelectorAll(".myTable tr");
+
+        for (let i = 1; i < allmyTableRows.length; i++) {
+          let barId = allmyTableRows[i]
+            .querySelector("td:nth-child(4)")
+            .innerText.trim();
+
+          // Check if the scanned code matches the barId
+          if (code === barId) {
+            console.log("Match found for:", code);
+            allmyTableRows[i].classList.add("yellow"); // Highlight the matching row
+          }
+        }
+
+        // Reset the 'code' after processing
+        code = "";
+      }, 300); // Timeout duration: 300ms
+    });
+    ///////////////////////////////////////////////
+
+    let requestionID =
+      location.pathname.split("/")[location.pathname.split("/").length - 1];
+
+    var globalId = -1;
+    var flag;
+
+    // function requestionData(requestionID) {
+    //   return new Promise((res) => {
+    //     $.ajax({
+    //       url: `/api2/requisitions/${requestionID}`,
+    //       type: "GET",
+    //       success: (data) => {
+    //         console.log(data);
+    //         console.log(data.data.Requisition.RequisitionItem);
+    //         let invId = data.data.Requisition.order_id;
+    //         console.log(invId, "invnvnvvnID");
+
+    //         $.get(
+    //           `/v2/api/entity/le_187/list/2?filter[invoice_no_187]=draft-${invId}`
+    //         ).then((nmozgData) => {
+    //           console.log(nmozgData);
+    //           if (nmozgData.data.length > 0) {
+    //             let le_187ID = nmozgData.data[0].id;
+
+    //             flag = 1;
+    //             console.log("this invoice coming from nmozg");
+    //             $.get(`/v2/api/entity/le_187/${le_187ID}/4`).then(
+    //               (nmozgData) => {
+    //                 console.log(nmozgData);
+    //                 globalId = nmozgData.id;
+    //                 console.log(nmozgData.le_187_le_187_rooms_data);
+    //                 let myRooms = nmozgData.le_187_le_187_rooms_data;
+    //                 res(myRooms);
+    //               }
+    //             );
+    //           } else {
+    //             flag = 2;
+    //             console.log(data.data.Requisition.RequisitionItem);
+    //             console.log("this invoice is nottt coming from nmozg");
+    //             let productData = data.data.Requisition.RequisitionItem;
+    //             console.log(productData);
+    //             for (let i = 0; i < productData.length; i++) {
+    //               let productId = productData[i].product_id;
+    //               console.log(productId);
+    //               $.get(`/v2/api/entity/product/${productId}/3`).then(
+    //                 (prodData) => {
+    //                   console.log(prodData);
+    //                   console.log(prodData.product_bundles);
+    //                   if (prodData.product_bundles.length > 0) {
+    //                     // this item is mogm3 and coming from regular invocie
+    //                     // the problem is product_bundles because if the item is not mogm3 so this will fail
+    //                     let manyItem = prodData.product_bundles;
+    //                     for (
+    //                       let j = 0;
+    //                       j < prodData.product_bundles.length;
+    //                       j++
+    //                     ) {
+    //                       console.log(prodData.product_bundles[j]);
+    //                       res(manyItem);
+    //                       let innerItemsDescription =
+    //                         prodData.product_bundles[j].bundle_product_item
+    //                           .description;
+    //                       let innerItemsBarcode =
+    //                         prodData.product_bundles[j].bundle_product_item
+    //                           .barcode;
+    //                       let innerItemsunitPrice =
+    //                         prodData.product_bundles[j].bundle_product_item
+    //                           .unit_price;
+    //                       console.log(
+    //                         innerItemsDescription,
+    //                         innerItemsBarcode,
+    //                         innerItemsunitPrice
+    //                       );
+    //                     }
+    //                   }
+    //                 }
+    //               );
+    //             }
+    //           }
+    //         });
+    //       },
+    //       error: (err) => {
+    //         console.log(err);
+    //         res(err);
+    //       },
+    //     });
+    //   });
+    // }
+    // function requestionData(requestionID) {
+    //   return new Promise((res) => {
+    //     $.ajax({
+    //       url: `/api2/requisitions/${requestionID}`,
+    //       type: "GET",
+    //       success: (data) => {
+    //         console.log(data);
+    //         console.log(data.data.Requisition.RequisitionItem);
+    //         let invId = data.data.Requisition.order_id;
+    //         console.log(invId, "invnvnvvnID");
+
+    //         $.get(
+    //           `/v2/api/entity/le_187/list/2?filter[invoice_no_187]=draft-${invId}`
+    //         )
+    //           .then((nmozgData) => {
+    //             console.log(nmozgData);
+    //             if (nmozgData.data.length > 0) {
+    //               let le_187ID = nmozgData.data[0].id;
+
+    //               flag = 1;
+    //               console.log("this invoice coming from nmozg");
+    //               $.get(`/v2/api/entity/le_187/${le_187ID}/4`).then(
+    //                 (nmozgData) => {
+    //                   console.log(nmozgData);
+    //                   globalId = nmozgData.id;
+    //                   console.log(nmozgData.le_187_le_187_rooms_data);
+    //                   let myRooms = nmozgData.le_187_le_187_rooms_data;
+    //                   res(myRooms);
+    //                 }
+    //               );
+    //             } else {
+    //               flag = 2;
+    //               console.log("this invoice is not coming from nmozg");
+    //               let productData = data.data.Requisition.RequisitionItem;
+
+    //               for (let i = 0; i < productData.length; i++) {
+    //                 let productId = productData[i].product_id;
+    //                 console.log(productId);
+
+    //                 $.get(`/v2/api/entity/product/${productId}/3`)
+    //                   .then((prodData) => {
+    //                     console.log(prodData);
+    //                     console.log(prodData.product_bundles);
+
+    //                     if (prodData.product_bundles.length > 0) {
+    //                       let manyItem = prodData.product_bundles;
+    //                       for (let j = 0; j < manyItem.length; j++) {
+    //                         console.log(manyItem[j]);
+    //                         res(manyItem);
+
+    //                         let innerItemsDescription =
+    //                           manyItem[j].bundle_product_item.description;
+    //                         let innerItemsBarcode =
+    //                           manyItem[j].bundle_product_item.barcode;
+    //                         let innerItemsunitPrice =
+    //                           manyItem[j].bundle_product_item.unit_price;
+
+    //                         console.log(
+    //                           innerItemsDescription,
+    //                           innerItemsBarcode,
+    //                           innerItemsunitPrice
+    //                         );
+    //                       }
+    //                     } else {
+    //                       // If prodData.product_bundles.length === 0, continue processing the original data
+    //                       console.log(
+    //                         "No product bundles, processing original requisition data"
+    //                       );
+    //                       res(productData);
+    //                       // Here you can add any additional logic needed to handle the RequisitionItem data
+    //                       // For example:
+    //                       for (let k = 0; k < productData.length; k++) {
+    //                         let singleProductInfo = productData[k];
+    //                         console.log(
+    //                           singleProductInfo,
+    //                           "this is singleProductInfo"
+    //                         );
+    //                         res(singleProductInfo);
+    //                       }
+    //                     }
+    //                   })
+    //                   .fail((error) => {
+    //                     console.error(
+    //                       `Failed to fetch product data for product ID ${productId}:`,
+    //                       error
+    //                     );
+    //                   });
+    //               }
+    //             }
+    //           })
+    //           .fail((error) => {
+    //             console.error("Failed to fetch nmozg data:", error);
+    //           });
+    //       },
+    //       error: (err) => {
+    //         console.log(err);
+    //         res(err);
+    //       },
+    //     });
+    //   });
+    // }
+    function requestionData(requestionID) {
+      return new Promise((res) => {
+        $.ajax({
+          url: `/api2/requisitions/${requestionID}`,
+          type: "GET",
+          success: (data) => {
+            console.log(data);
+            let invId = data.data.Requisition.order_id;
+            let productData = data.data.Requisition.RequisitionItem;
+
+            $.get(
+              `/v2/api/entity/le_187/list/2?filter[invoice_no_187]=draft-${invId}`
+            )
+              .then((nmozgData) => {
+                if (nmozgData.data.length > 0) {
+                  let le_187ID = nmozgData.data[0].id;
+                  flag = 1;
+
+                  $.get(`/v2/api/entity/le_187/${le_187ID}/4`).then(
+                    (nmozgData) => {
+                      let myRooms = nmozgData.le_187_le_187_rooms_data;
+                      res(myRooms);
+                    }
+                  );
+                } else {
+                  flag = 2;
+                  let allItems = []; // Array to accumulate all items
+
+                  let requests = productData.map((item) => {
+                    return $.get(`/v2/api/entity/product/${item.product_id}/3`)
+                      .then((prodData) => {
+                        if (prodData.product_bundles.length > 0) {
+                          let manyItem = prodData.product_bundles.map(
+                            (bundle) => {
+                              return {
+                                ...bundle,
+                                quantity: item.quantity, // Attach the quantity from the original productData
+                              };
+                            }
+                          );
+                          allItems.push(...manyItem); // Add all items to the array
+                        } else {
+                          // Add the original item if no bundles, with quantity
+                          allItems.push({
+                            ...item,
+                            quantity: item.quantity, // Attach the quantity
+                          });
+                        }
+                      })
+                      .fail((error) => {
+                        console.error(
+                          `Failed to fetch product data for product ID ${item.product_id}:`,
+                          error
+                        );
+                      });
+                  });
+
+                  // Wait for all requests to complete before resolving the promise
+                  Promise.all(requests).then(() => {
+                    res(allItems); // Resolve with the accumulated data
+                  });
+                }
+              })
+              .fail((error) => {
+                console.error("Failed to fetch nmozg data:", error);
+              });
+          },
+          error: (err) => {
+            console.log(err);
+            res(err);
+          },
+        });
+      });
+    }
+
+    function createTable(myRooms) {
+      // Create the table element
+      const table = document.createElement("table");
+      const btnContainer = document.createElement("div");
+      btnContainer.classList.add("btnContainer");
+      const confirmBtn = document.createElement("button");
+      confirmBtn.classList.add("confirm-btn");
+      const cancelBtn = document.createElement("button");
+      cancelBtn.classList.add("cancel-btn");
+      confirmBtn.textContent = "تأكيد";
+      cancelBtn.textContent = "إلغاء";
+      const cameraBtn = document.createElement("button");
+      cameraBtn.innerHTML = '<i class="camera-icon">&#128248;</i>';
+      cameraBtn.setAttribute("id", "camera-button");
+      const containerOfTheQutanity = document.createElement("div");
+      containerOfTheQutanity.classList.add("quantity-container");
+      const totQtySpan = document.createElement("span");
+      totQtySpan.style.height = "fit-content";
+      const totQtySpan2 = document.createElement("span");
+      const btnSpan = document.createElement("span");
+      totQtySpan.classList.add("totQtySpan");
+      totQtySpan2.classList.add("totQtySpan2");
+      const scannerContainer = document.createElement("div");
+      scannerContainer.setAttribute("id", "scannerContainer");
+      const scannerVideo = document.createElement("video");
+      scannerVideo.id = "scanner-video";
+      scannerVideo.autoplay = true;
+
+      // Append the video element to the container
+      scannerContainer.appendChild(scannerVideo);
+      const resultVal = document.createElement("input");
+      resultVal.setAttribute("type", "text");
+      resultVal.setAttribute("id", "result_value");
+      resultVal.style.display = "none";
+      containerOfTheQutanity.appendChild(totQtySpan2);
+      containerOfTheQutanity.appendChild(totQtySpan);
+      containerOfTheQutanity.appendChild(scannerContainer);
+      containerOfTheQutanity.appendChild(resultVal);
+
+      btnSpan.appendChild(cameraBtn);
+      containerOfTheQutanity.appendChild(btnSpan);
+
+      btnContainer.appendChild(confirmBtn);
+      btnContainer.appendChild(cancelBtn);
+
+      table.classList.add("myTable");
+      table.border = "1";
+
+      // Create the table header row
+      const headerRow = document.createElement("tr");
+      for (let i = 0; i < 6; i++) {
+        const th = document.createElement("th");
+        switch (i) {
+          case 0:
+            th.textContent = "اسم المنتج";
+            break;
+          case 1:
+            th.textContent = "السعر";
+            break;
+          case 2:
+            th.textContent = "الكمية";
+            break;
+          case 3:
+            th.textContent = "الباركود";
+            break;
+          case 4:
+            th.textContent = "الرقم التعريفي";
+            break;
+          case 5:
+            th.textContent = "bundle_product_id";
+            break;
+          default:
+            break;
+        }
+        headerRow.appendChild(th);
+      }
+      table.appendChild(headerRow);
+
+      // Create table rows based on the myRooms array
+      console.log(myRooms);
+
+      myRooms.forEach((room, index) => {
+        console.log(myRooms);
+        const row = document.createElement("tr");
+        row.classList.add("myRow");
+        const allRows = document.querySelectorAll(".myRow");
+        console.log(allRows);
+
+        // Create the first td element with the copper_item_name value
+        const copperNameTd = document.createElement("td");
+        copperNameTd.textContent =
+          flag == 1
+            ? room.le_187_rooms_data_select_copper_c.copper_item_name
+            : room?.bundle_product_item
+            ? room.bundle_product_item.description
+            : room.description || room.item;
+        row.appendChild(copperNameTd);
+
+        // Create the second td element with the copper_price_c value
+        const copperPriceTd = document.createElement("td");
+        copperPriceTd.textContent =
+          flag == 1
+            ? room.copper_price_c
+            : room?.bundle_product_item
+            ? room.bundle_product_item.unit_price
+            : room.unit_price;
+        row.appendChild(copperPriceTd);
+
+        // Create the third td element with the meter_qty_c value
+        const meterQtyTd = document.createElement("td");
+        meterQtyTd.textContent = flag == 1 ? room.meter_qty_c : room.quantity;
+        row.appendChild(meterQtyTd);
+
+        // Create the fourth td element with the copper_barcode value
+        const copperBarcodeTd = document.createElement("td");
+        copperBarcodeTd.textContent =
+          flag == 1
+            ? room.copper_barcode
+            : room?.bundle_product_item
+            ? room.bundle_product_item.barcode
+            : room.Product.barcode;
+        row.appendChild(copperBarcodeTd);
+
+        // Create the fifth td element with the copper_id value
+        const copperIdTd = document.createElement("td");
+        copperIdTd.textContent = flag == 1 ? room.id : "";
+        row.appendChild(copperIdTd);
+
+        // Create the sixth td element with the copper_barcode value
+        const copperbundle_product_id = document.createElement("td");
+        copperbundle_product_id.textContent =
+          flag == 1
+            ? ""
+            : room?.bundle_product_item
+            ? room.bundle_product_id
+            : "";
+        row.appendChild(copperbundle_product_id);
+
+        table.appendChild(row);
+      });
+
+      // let finalTotalQty = 0;
+      // setTimeout(() => {
+      //   const allRows = document.querySelectorAll(".myRow");
+      //   for (let i = 0; i < allRows.length; i++) {
+      //     let targetCell = allRows[i].querySelector("td:nth-child(3)");
+      //     const meterQty = parseFloat(targetCell.innerText);
+      //     if (!isNaN(meterQty)) {
+      //       finalTotalQty += meterQty;
+      //     }
+      //     console.log(meterQty);
+      //     console.log(finalTotalQty);
+      //     totQtySpan.textContent = finalTotalQty;
+      //     totQtySpan2.textContent = "إجمالي الكميات";
+      //   }
+      // }, 500);
+
+      // Append the table to a specific element in your HTML
+      //   document.querySelector(".popup-content").append(table);
+      document
+        .querySelector(".popup-content")
+        .insertBefore(
+          table,
+          document.querySelector(".popup-content").firstChild
+        );
+      // document.querySelector(".popup-content").appendChild(totQtySpan);
+      // document.querySelector(".popup-content").appendChild(totQtySpan2);
+      document
+        .querySelector(".popup-content")
+        .appendChild(containerOfTheQutanity);
+
+      document.querySelector(".popup-content").appendChild(btnContainer);
+      // Remove the loader
+      $(".loader").remove();
+      //
+
+      let videoStream;
+      document.querySelector("#result_value").style.display = "none";
+      document
+        .getElementById("camera-button")
+        .addEventListener("click", function () {
+          if (videoStream) {
+            stopVideoStream();
+          } else {
+            startVideoStream();
+          }
+        });
+
+      async function startVideoStream() {
+        document.querySelector("#scannerContainer").style.display = "flex";
+        // document.querySelector("#result_value").style.display = "flex";
+        try {
+          videoStream = await navigator.mediaDevices.getUserMedia({
+            // video: true,
+            video: {
+              width: { ideal: 1200 }, // Set the desired width
+              height: { ideal: 850 }, // Set the desired height
+            },
+          });
+          const scannerVideo = document.getElementById("scanner-video");
+          scannerVideo.srcObject = videoStream;
+
+          // Set up barcode detection using Quagga
+          Quagga.init(
+            {
+              inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                target: scannerVideo,
+                constraints: {
+                  width: {
+                    min: 840,
+                  },
+                  height: {
+                    min: 680,
+                  },
+                  aspectRatio: {
+                    min: 1,
+                    max: 100,
+                  },
+                  facingMode: "environment",
+                },
+              },
+              locator: {
+                patchSize: "small",
+                halfSample: false,
+              },
+              numOfWorkers: 4,
+              decoder: {
+                readers: ["ean_8_reader", "code_128_reader"],
+                debug: {
+                  showCanvas: true,
+                  showPatches: true,
+                  showFoundPatches: true,
+                  showSkeleton: true,
+                  showLabels: true,
+                  showPatchLabels: true,
+                  showRemainingPatchLabels: true,
+                  boxFromPatches: {
+                    showTransformed: true,
+                    showTransformedBox: true,
+                    showBB: true,
+                  },
+                },
+              },
+              locate: false,
+            },
+            function (err) {
+              if (err) {
+                console.error("Error initializing Quagga:", err);
+                return;
+              }
+              Quagga.start();
+              Quagga.onDetected(async function (result) {
+                console.log(
+                  "Barcode detected and processed : [" +
+                    result.codeResult.code +
+                    "]",
+                  result
+                );
+                console.log(
+                  "Barcode detected and processed : [" +
+                    result.codeResult.format +
+                    "]"
+                );
+                document.getElementById("result_value").value =
+                  result.codeResult.code;
+                let allmyTableRows = document.querySelectorAll(".myTable tr");
+                document.querySelector("#scannerContainer").style.display =
+                  "flex";
+                // document.querySelector("#result_value").style.display = "flex";
+
+                for (let i = 1; i < allmyTableRows.length; i++) {
+                  if (
+                    result.codeResult.code ==
+                    allmyTableRows[i].querySelector("td:nth-child(4)").innerText
+                  ) {
+                    allmyTableRows[i].classList.add("yellow");
+                    // console.log(allmyTableRows[i]);
+                    stopVideoStream(); // Stop the video stream
+                    Quagga.stop(); // Stop the Quagga barcode detection
+                    document.querySelector("#scannerContainer").style.display =
+                      "none";
+
+                    //   // let roomUpdateData = {
+                    //   //     req_id: requestionID,
+                    //   // };
+                    // }
+
+                    // let dataToUpdate = {
+                    //   req_id: requestionID,
+                    // };
+
+                    // $.ajax({
+                    //   url: `/api2/requisitions/${requestionID}`,
+                    //   type: "PUT",
+                    //   contentType: "application/json",
+                    //   data: JSON.stringify(dataToUpdate),
+                    //   success: (response) => {
+                    //     console.log("Success:", response);
+                    //   },
+                    //   error: (error) => {
+                    //     console.error("Error:", error);
+                    //   },
+                    // });
+
+                    // result.codeResult.code = "";
+                    break; // Exit the loop since we found the match
+                  }
+                  // if (
+                  //   result.codeResult.code ==
+                  //   allmyTableRows[i].querySelector("td:nth-child(4)").innerText
+                  // ) {
+                  //   allmyTableRows[i].classList.add("yellow");
+                  //   result.codeResult.code = "";
+                  //   matchFound = true;
+                  //   break; // Exit the loop since we found the match
+                  // }
+                }
+                // if (matchFound) {
+                //   stopVideoStream(); // Stop the video stream
+                //   Quagga.stop(); // Stop the Quagga barcode detection
+                //   document.querySelector("#scannerContainer").style.display =
+                //     "none";
+                //   document.querySelector("#result_value").style.display =
+                //     "none";
+                // } else {
+                //   document.querySelector("#scannerContainer").style.display =
+                //     "flex";
+                //   document.querySelector("#result_value").style.display =
+                //     "flex";
+                // }
+              });
+            }
+          );
+        } catch (error) {
+          console.error("Error accessing camera:", error);
+        }
+      }
+
+      function stopVideoStream() {
+        if (videoStream) {
+          videoStream.getTracks().forEach((track) => track.stop());
+          videoStream = null;
+          const scannerVideo = document.getElementById("scanner-video");
+          scannerVideo.srcObject = null;
+          // Quagga.stop();
+        }
+      }
+    }
+
+    let confirmBtn = document.querySelector(".top-actions a");
+    if (confirmBtn) {
+      confirmBtn.setAttribute("disabled", false);
+    }
+
+    // Find the existing div with the class of 'row'
+    // var existingRowDiv = document.querySelector(".invoice-items");
+
+    // // Create a new div element
+    // var newDiv = document.createElement("div");
+
+    // // Set the innerText of the new div
+    // newDiv.innerText = "ggggg";
+
+    // // Insert the new div before the existing 'row' div
+    // existingRowDiv.parentNode.insertBefore(newDiv, existingRowDiv);
+
+    var button = $(
+      '<button class="btn btn-default btn-sm my-button">مراجعة الأصناف</button>'
+    );
+
+    // Insert the button before the .items-listing table
+    $("#listing_table").before(button);
+
+    let myBtn = $(".my-button");
+    // Call the showPopup function when the button is clicked
+    let dataFetched = false; // Flag to track if data has been fetched
+    let fetchedData = null; // Variable to store fetched data
+
+    const thisReqData = [];
+
+    function fetchDataAndShowPopup(requestionID) {
+      if (!dataFetched) {
+        console.log("not fetched");
+        showPopup();
+        // why dataToUse? to determine whether we use the rooms from nmozg l t2ses or this item is momg3 xD
+        requestionData(requestionID).then(async function (dataToUse) {
+          console.log(flag === 1 ? "Using myRooms" : "Using manyItem");
+
+          const response = await fetch(`/api2/requisitions/${requestionID}`);
+          const res = await response.json();
+          console.log(res.data.Requisition.status);
+
+          if (flag === 1) {
+            if (res.data.Requisition.status == 3) {
+              console.log("confirmed requisition");
+              for (let room of dataToUse) {
+                console.log(room.req_id, "roomRequisitionID");
+                console.log(requestionID, "requestionID");
+                if (room.req_id === requestionID) {
+                  thisReqData.push(room);
+                }
+              }
+            } else if (res.data.Requisition.status == 1) {
+              console.log("this req is under construction");
+              for (let room of dataToUse) {
+                if (room.req_id === requestionID || room.req_id === null) {
+                  thisReqData.push(room);
+                }
+              }
+            }
+          } else if (flag === 2) {
+            console.log("Processing manyItem data");
+            for (let item of dataToUse) {
+              //   console.log(item.bundle_product_item.description);
+              //   console.log(item.bundle_product_item.barcode);
+              //   console.log(item.bundle_product_item.unit_price);
+              thisReqData.push(item);
+            }
+          }
+
+          console.log(thisReqData, "thisReqData"); // Log the filtered data
+          fetchedData = thisReqData; // Store filtered data
+          console.log(fetchedData, "this is fetched Dataaaaa");
+          createTable(fetchedData); // Create table with filtered data
+          dataFetched = true; // Set the flag to true
+        });
+      } else {
+        showPopup();
+      }
+    }
+
+    function handleReqId() {
+      let allYellowTr = document.querySelectorAll(".myTable tr.yellow");
+      console.log(allYellowTr);
+      console.log(flag);
+      if (flag == 1) {
+        for (let i = 0; i < allYellowTr.length; i++) {
+          console.log("loop started");
+          var idofEachRoom =
+            allYellowTr[i].querySelector("td:nth-child(5)").innerText;
+          console.log(idofEachRoom, "id of each room ya trok");
+          try {
+            for (let room of thisReqData) {
+              const id = room.id;
+              if (room.id === idofEachRoom || room.id === id) {
+                console.log("equal");
+                // here to make the put request
+                let dataToUpdate = {
+                  req_id: requestionID,
+                };
+                console.log(globalId);
+                if (globalId != -1) {
+                  $.ajax({
+                    url: `/v2/api/entity/le_187_rooms_data/${idofEachRoom}/fields`,
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(dataToUpdate),
+                    success: (response) => {
+                      console.log("Success:", response);
+                    },
+                    error: (error) => {
+                      console.error("Error:", error);
+                    },
+                  });
+                }
+                console.log(room);
+
+                // room.req_id = requestionID;
+                // console.log(room);
+                break;
+              }
+            }
+          } catch (error) {
+            console.error("Error fetching myRooms data:", error);
+          }
+        }
+      }
+    }
+
+    $(document).on("click", ".confirm-btn", function () {
+      console.log("Confirm button clicked!");
+      quantityCheck();
+      handleReqId();
+      // let requestionID =
+      //   location.pathname.split("/")[location.pathname.split("/").length - 1];
+      // let allmyTableRows = document.querySelectorAll(".myTable tr");
+
+      ////
+      // this not working till the end of the function and this is not important
+      let allItemsNamesandQuantity = [];
+
+      let allCheckedItemsRows = document.querySelectorAll(".yellow");
+
+      for (let i = 0; i < allCheckedItemsRows.length; i++) {
+        let nameWithHash =
+          allCheckedItemsRows[i].querySelector("td:nth-child(1)").innerText;
+        let nameWithoutHash = nameWithHash.replace("#", "").trim();
+        allItemsNamesandQuantity.push({
+          name: nameWithoutHash,
+          qty: parseFloat(
+            allCheckedItemsRows[i].querySelector("td:nth-child(3)").innerText
+          ),
+        });
+      }
+
+      // Aggregate quantities by item name
+      let aggregatedItems = {};
+
+      allItemsNamesandQuantity.forEach((item) => {
+        if (!aggregatedItems[item.name]) {
+          aggregatedItems[item.name] = 0;
+        }
+        aggregatedItems[item.name] += item.qty;
+      });
+
+      // Convert the aggregated object back to an array
+      let uniqueItems = Object.keys(aggregatedItems).map((name) => {
+        return {
+          name: name,
+          qty: aggregatedItems[name],
+        };
+      });
+
+      console.log(uniqueItems, "uniqueItems");
+      let requestionID =
+        location.pathname.split("/")[location.pathname.split("/").length - 1];
+      $.ajax({
+        url: `/api2/requisitions/${requestionID}`,
+        type: "GET",
+        success: (data) => {
+          console.log(data, "this is my requesition data");
+          const allData = data.data.Requisition.RequisitionItem;
+          console.log(allData, "allData");
+          allData.forEach((requisitionItem) => {
+            uniqueItems.forEach((item) => {
+              if (item.name.trim() === requisitionItem.item.trim()) {
+                console.log("same");
+              }
+            });
+          });
+        },
+      });
+
+      closePopup();
+    });
+
+    function closePopup() {
+      $(".popup").css("display", "none");
+    }
+
+    // Example usage
+    $(document).on("click", ".my-button", function (e) {
+      e.preventDefault();
+      fetchDataAndShowPopup(requestionID);
+    });
+
+    function quantityCheck() {
+      console.log(thisReqData, "plssssss");
+
+      // Get the quantity from the input fields
+      const inputElements = document.querySelectorAll(
+        ".itemRow td:nth-child(4) input"
+      );
+      let allInputValues = 0;
+
+      // Sum all input values
+      for (let i = 0; i < inputElements.length; i++) {
+        allInputValues += parseFloat(inputElements[i].value);
+      }
+      console.log("All input values (initial, as numbers):", allInputValues);
+
+      // Add input event listener to update concatenated values
+      for (let i = 0; i < inputElements.length; i++) {
+        inputElements[i].addEventListener("input", function () {
+          allInputValues = 0;
+          for (let j = 0; j < inputElements.length; j++) {
+            allInputValues += parseFloat(inputElements[j].value);
+          }
+          console.log(
+            "All input values (updated, as numbers):",
+            allInputValues
+          );
+        });
+      }
+
+      let uniqueItems = {};
+      let allYellowValues = 0;
+      let hasEmptyLastTdText = false;
+
+      // Loop over all tr elements with the class 'yellow'
+      let allYellowTr = document.querySelectorAll(".myTable tr.yellow");
+
+      for (let i = 0; i < allYellowTr.length; i++) {
+        let lastTdText = allYellowTr[i]
+          .querySelector("td:last-child")
+          .innerText.trim();
+        let itemQuantity = parseFloat(
+          allYellowTr[i].querySelector("td:nth-child(3)").innerText
+        );
+
+        if (lastTdText === "") {
+          hasEmptyLastTdText = true;
+          allYellowValues += itemQuantity; // Sum all quantities if lastTdText is empty
+        } else {
+          // If the lastTdText is not already in uniqueItems, add it
+          if (!uniqueItems[lastTdText]) {
+            uniqueItems[lastTdText] = itemQuantity;
+          }
+        }
+      }
+
+      // If all rows had non-empty lastTdText, sum the unique quantities
+      if (!hasEmptyLastTdText) {
+        allYellowValues = Object.values(uniqueItems).reduce(
+          (acc, val) => acc + val,
+          0
+        );
+      }
+
+      console.log("All yellow row values (processed):", allYellowValues);
+
+      // Compare the total input values with the sum of the yellow row values
+      if (allInputValues === allYellowValues) {
+        console.log("They are equal");
+        if (
+          document.querySelector(".col-flex-sm-6:nth-child(2) div:nth-child(1)")
+            .innerText === "تأكيد"
+        ) {
+          document
+            .querySelector(".col-flex-sm-6:nth-child(2) div:nth-child(1)")
+            .classList.remove("disabled");
+        } else {
+          document
+            .querySelector(".col-flex-sm-6:nth-child(2) div:nth-child(2)")
+            .classList.remove("disabled");
+        }
+      }
+    }
+  });
+  //////////////////////barcode Mobile Scan
+  var _scannerIsRunning = false;
+
+  function startScanner() {
+    Quagga.init(
+      {
+        inputStream: {
+          name: "Live",
+          type: "LiveStream",
+          target: document.querySelector("#scanner-container"),
+          constraints: {
+            width: {
+              min: 640,
+            },
+            height: {
+              min: 480,
+            },
+            aspectRatio: {
+              min: 1,
+              max: 100,
+            },
+            facingMode: "environment",
+          },
+        },
+        locator: {
+          patchSize: "small",
+          halfSample: false,
+        },
+        numOfWorkers: 4,
+        decoder: {
+          readers: ["ean_8_reader", "code_128_reader"],
+          debug: {
+            showCanvas: true,
+            showPatches: true,
+            showFoundPatches: true,
+            showSkeleton: true,
+            showLabels: true,
+            showPatchLabels: true,
+            showRemainingPatchLabels: true,
+            boxFromPatches: {
+              showTransformed: true,
+              showTransformedBox: true,
+              showBB: true,
+            },
+          },
+        },
+        locate: false,
+      },
+      function (err) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+
+        console.log("Initialization finished. Ready to start");
+        Quagga.start();
+
+        // Set flag to is running
+        _scannerIsRunning = true;
+      }
+    );
+
+    Quagga.onDetected(function (result) {
+      console.log(
+        "Barcode detected and processed : [" + result.codeResult.code + "]",
+        result
+      );
+      console.log(
+        "Barcode detected and processed : [" + result.codeResult.format + "]"
+      );
+      document.getElementById("result_value").value = result.codeResult.code;
+    });
+  }
+
+  //
+  //tt
+
+  //   function quantityCheck() {
+  //     // there wil be edit if he need the item of that name so i will need to take the item name in the listing table and get the quantity after the change then make a loop on the popup table and get all the tr that contains that item then concate all the quantities then comapre between that qty and the qty of the item on the listing table
+
+  //     // get the quantity of the table
+  //     const inputElements = document.querySelectorAll(
+  //       ".itemRow td:nth-child(4) input"
+  //     );
+  //     let allInputValues = 0;
+
+  //     // Concatenate initial values and convert to numbers
+  //     for (let i = 0; i < inputElements.length; i++) {
+  //       allInputValues += parseFloat(inputElements[i].value);
+  //     }
+  //     console.log("All input values (initial, as numbers):", allInputValues);
+
+  //     // Add input event listener to update concatenated values
+  //     for (let i = 0; i < inputElements.length; i++) {
+  //       inputElements[i].addEventListener("input", function () {
+  //         allInputValues = 0;
+  //         for (let j = 0; j < inputElements.length; j++) {
+  //           allInputValues += parseFloat(inputElements[j].value);
+  //         }
+  //         console.log("All input values (updated, as numbers):", allInputValues);
+  //       });
+  //     }
+
+  //     let allYellowTr = document.querySelectorAll(".myTable tr.yellow");
+  //     let allYellowValues = 0;
+
+  //     // Sum the values in the yellow rows
+  //     for (let i = 0; i < allYellowTr.length; i++) {
+  //       allYellowValues += parseFloat(
+  //         allYellowTr[i].querySelector("td:nth-child(3)").innerText
+  //       );
+  //     }
+  //     console.log("All yellow row values:", allYellowValues);
+
+  //     // Compare the total input values with the sum of the yellow row values
+  //     if (allInputValues === allYellowValues) {
+  //       console.log("they are equal");
+  //       if (
+  //         document.querySelector(".col-flex-sm-6:nth-child(2) div:nth-child(1)")
+  //           .innerText === "تأكيد"
+  //       ) {
+  //         document
+  //           .querySelector(".col-flex-sm-6:nth-child(2) div:nth-child(1)")
+  //           .classList.remove("disabled");
+  //       } else {
+  //         document
+  //           .querySelector(".col-flex-sm-6:nth-child(2) div:nth-child(2)")
+  //           .classList.remove("disabled");
+  //       }
+  //     }
+  //   }
+
+  let dataFetched = false; // Flag to track if data has been fetched
+  let fetchedData = null; // Variable to store fetched data
+  let popupCreated = false; // Flag to track if the popup has been created
+
+  function showPopup() {
+    let popup = $(".popup");
+
+    if (popup.length === 0) {
+      // Create a new popup if it doesn't exist
+      popup = $(
+        '<div class="popup">\
+              <div class="popup-content">\
+                <div class="loader"></div>\
+              </div>\
+            </div>'
+      );
+      $("body").append(popup);
+
+      var windowHeight = $(window).height();
+      var popupHeight = popup.outerHeight();
+      var topPosition = (windowHeight - popupHeight) / 2;
+      popup.css("top", topPosition + "px");
+
+      popupCreated = true; // Set the flag to true
+    } else {
+      // Show the existing popup
+      popup.css("display", "flex");
+    }
+
+    // Set focus on the popup
+    popup.focus();
+
+    $(document).on("keydown", function (e) {
+      if (e.key === "Escape") {
+        closePopup();
+      }
+    });
+
+    $(document).on("click", ".cancel-btn", function () {
+      closePopup();
+    });
+  }
+  function closePopup() {
+    $(".popup").css("display", "none");
+  }
+</script>
+
+<!-- This Code made By Ahmed Fayek -->
+<!-- code_Requisitions_owner_edit -->
+<!-- <script>
+  $(document).ready(function () {
+    function getCurrentDateTimeFormatted() {
+      const now = new Date();
+
+      // Get date components
+      const day = String(now.getDate()).padStart(2, "0");
+      const month = String(now.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+      const year = now.getFullYear();
+
+      // Get time components
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+
+      // Format date and time
+      const formattedDate = `${day}/${month}/${year}`;
+      const formattedTime = `${hours}:${minutes}`;
+
+      return {
+        date: formattedDate,
+        time: formattedTime,
+      };
+    }
+
+    // Usage
+    const dateTime = getCurrentDateTimeFormatted();
+    console.log("Date:", dateTime.date); // e.g., "25/08/2023"
+    console.log("Time:", dateTime.time); // e.g., "14:30"
+    // Append the button after #RequisitionStoreId
+    $("#RequisitionStoreId").after(
+      '<button id="sendRequestBtn" class="btn" style="margin: 10px 40%;">تحديث المستودع</button>'
+    );
+    var newReqId = parseInt(window.location.href.split("/")[6]);
+    async function updatestoreinInvoice(ReqId, newstore, oldstore) {
+      try {
+        const response = await $.ajax({
+          url: `/v2/api/entity/requisition/${ReqId}/3`,
+          type: "GET",
+        });
+
+        console.log(response, "requisition data For Invoice Items");
+        console.log(
+          response.requisition_invoice.invoice_item,
+          "requisition data For Invoice Items"
+        );
+
+        let invoiceItems = response.requisition_invoice.invoice_item;
+        let ReqItems = response.items;
+
+        if (invoiceItems.length > 0) {
+          const updatePromises = invoiceItems.map(async (item) => {
+            let InvItemID = item.id;
+            let InvProductItemID = item.product_id;
+
+            let ishere = false;
+            ReqItems.map((reqItem) => {
+              if (reqItem.product_id == InvProductItemID) {
+                ishere = true;
+              }
+            });
+
+            if (item.store_id == oldstore && ishere) {
+              return await $.ajax({
+                url: `/v2/api/entity/invoice_item/${InvItemID}/fields`,
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                data: JSON.stringify({ store_id: newstore }),
+              });
+            }
+          });
+
+          const results = await Promise.all(updatePromises);
+          results.forEach((result) => {
+            console.log("Request successful:", result);
+          });
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
+        alert("حدث خطأ ");
+      }
+    }
+    async function sendEntity(reqID, oldstore, newstore, staff) {
+      let Thebody = JSON.stringify({
+        req_id: reqID,
+        old_store_1: oldstore,
+        new_repo_1: newstore,
+        staff1: staff,
+        date_edit: `${dateTime.date} - ${dateTime.time}`,
+      });
+      console.log(Thebody);
+
+      await $.ajax({
+        url: `/v2/api/entity/le_store_changing`,
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        data: Thebody,
+        success: function (response) {
+          console.log("Request successful:", response);
+
+          $.ajax({
+            url: `/v2/api/entity/requisition/${newReqId}/fields`,
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            data: JSON.stringify({ store_id: newstore }),
+            success: function (response) {
+              console.log("Request successful:", response);
+
+              updatestoreinInvoice(newReqId, newstore, OLdrequisitionStoreId);
+              alert("تم تحديث المستودع بنجاح");
+              $("#RequisitionStoreId").val(OLdrequisitionStoreId);
+              window.location.reload();
+            },
+            error: function (xhr, status, error) {
+              console.error("Request failed:", error);
+              alert("حدث خطأ ");
+            },
+          });
+        },
+        error: function (xhr, status, error) {
+          console.error("Request failed:", error);
+        },
+      });
+    }
+    var OLdrequisitionStoreId = $("#RequisitionStoreId").val();
+    $("#sendRequestBtn").on("click", function (e) {
+      e.preventDefault();
+      var requisitionStoreId = $("#RequisitionStoreId").val();
+      console.log(requisitionStoreId);
+
+      sendEntity(
+        newReqId,
+        OLdrequisitionStoreId,
+        requisitionStoreId,
+        USER.staff_id
+      );
+    });
+  });
+</script> -->

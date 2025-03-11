@@ -1,0 +1,269 @@
+<style>
+  body {
+    font: 12px Arial, Helvetica, sans-serif;
+  }
+
+  .info-table th {
+    background-color: #e5e5e5;
+    height: 10%;
+  }
+  * {
+    direction: ltr !important;
+  }
+  .info-table {
+    width: 100%;
+    /* height: 230px; */
+    min-height: 230px;
+    margin: 0px !important;
+    padding: 0px !important;
+  }
+
+  .client-info {
+    height: 100%;
+  }
+
+  .info-table > tbody > tr > td:nth-child(2) {
+    border: none !important;
+    width: 10px;
+  }
+
+  .info-table tr {
+    width: 100%;
+  }
+
+  .info-table table {
+    width: 100%;
+    height: 170px;
+  }
+
+  .invoice-info th,
+  .client-info th {
+    border: 1px solid black;
+    text-align: center !important;
+  }
+  .invoice-info th,
+  .invoice-info td {
+    padding: 4px 2px;
+  }
+  .invoice-info td,
+  .client-info td {
+    border: 1px solid black;
+    text-align: center;
+  }
+
+  .client-info,
+  .invoice-info {
+    border-collapse: collapse;
+    height: 170px;
+    font-size: 13px !important;
+  }
+
+  .client-info td {
+    padding: 5px;
+    vertical-align: top;
+    text-align: left;
+  }
+
+  .invoice-info tr:first-child th:first-child {
+    font-weight: 800;
+  }
+
+  .bus-info {
+    width: 100%;
+  }
+
+  .bus-info tr {
+    width: 100%;
+    /* height: 15px; */
+  }
+
+  .bus-info tr:nth-child(1) td:first-child {
+    vertical-align: bottom;
+  }
+
+  .bus-info tr:nth-child(3) td:nth-child(2),
+  .bus-info tr:nth-child(4) td:nth-child(2) {
+    float: right;
+  }
+  .header {
+    margin-top: -30px;
+  }
+  .header * {
+    font-size: 14px !important;
+    font-weight: 100 !important;
+  }
+  .client_infoTd p {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+</style>
+<div class="header">
+  <div width="100%" style="padding-top: 20px"></div>
+  <table width="100%">
+    <tr>
+      <td width="25%" align="center" valign="top">
+        <img
+          src="https://youssefhagag.daftara.com/files/cb300ef4/logos/66aa10aa41658_blobid1722421411717.png"
+          alt=""
+          title="smart.png"
+          width="204"
+          height="70"
+        />
+      </td>
+      <td width="50%"></td>
+      <td
+        width="25%"
+        style="
+          font-size: 25px !important;
+          font-weight: 800 !important;
+          vertical-align: bottom;
+          text-align: right;
+          padding: 5px 0 12px 0;
+        "
+      >
+        {%invoice_title%}
+      </td>
+    </tr>
+  </table>
+  <hr />
+
+  <table class="bus-info">
+    <tr>
+      <td rowspan="100%">
+        <div id="business_info" class="editable-area" style="text-align: left !important;">{%business_info%}</div>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="text-align: right !important">Tel: : +964 7830087989</td>
+    </tr>
+    <tr>
+      <td style="text-align: right !important">Tel: {%site_mobile%}</td>
+    </tr>
+  </table>
+
+  <table class="info-table" style="width: 98%; margin: 0 1% !important">
+    <tr>
+      <td style="width: 38%">
+        <table class="client-info" style="height: 160px !important">
+          <tr>
+            <th>Customer</th>
+          </tr>
+          <tr>
+            <td rowspan="4" class="client_infoTd">{%client_info%}</td>
+          </tr>
+          <tr></tr>
+          <tr></tr>
+          <tr></tr>
+        </table>
+      </td>
+      <td rowspan="4"></td>
+      <td>
+        <table class="invoice-info" style="height: 160px !important">
+          <tr>
+            <th>Doc. No.</th>
+            <th>Date</th>
+            <th>Approx. Delivery</th>
+            <th>Page</th>
+          </tr>
+          <tr>
+            <td>{%invoice_no%}</td>
+            <td id="invoice_date">{%invoice_date%}</td>
+            <td id="approxdel">{%Approx Delivery%}</td>
+            <td><span id="page"></span> of <span id="totPages"></span></td>
+          </tr>
+          <tr>
+            <th>Valid For</th>
+            <th>Payment</th>
+            <th colspan="2">SL Representative</th>
+          </tr>
+          <tr>
+            <td>{%Valid For%}</td>
+            <td>{%Payment%}</td>
+            <td colspan="2">{%sales_person%}</td>
+          </tr>
+          <tr>
+            <th>Shipping Terms</th>
+            <td colspan="3">{%Shipping Terms%}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <script>
+    function updatePageNumbers() {
+      var vars = {};
+      var query = window.location.search.substring(1);
+      var pairs = query.split("&");
+      console.log(query);
+      console.log(pairs);
+      for (var i = 0; i < pairs.length; i++) {
+        var pair = pairs[i].split("=");
+        vars[pair[0]] = decodeURIComponent(pair[1]);
+      }
+
+      var pageElements = document.getElementById("page");
+      var totalPageElements = document.getElementById("totPages");
+
+      if (pageElements) {
+        pageElements.textContent = vars.page || 1;
+      }
+
+      if (totalPageElements) {
+        totalPageElements.textContent = vars.topage || 1;
+      }
+    }
+
+    try {
+      updatePageNumbers();
+    } catch (e) {
+      console.log(e);
+    }
+    function addnewDate() {
+      var invDate = document.getElementById("invoice_date").innerText;
+      var dateParts = invDate.split("/");
+      var day = parseInt(dateParts[0]);
+      var month = parseFloat(dateParts[1]);
+      var year = parseInt(dateParts[2]);
+
+      var newDay = day;
+      var newMonth = month + 1;
+      var newYear = year;
+
+      var newDate = newDay + "/" + newMonth + "/" + newYear;
+
+      if (document.getElementById("approxdel").innerText.trim() === "") {
+        document.getElementById("approxdel").innerText = newDate;
+      }
+    }
+    try {
+      addnewDate();
+    } catch (error) {
+      console.log(error);
+    }
+    function updateheights() {
+      var invheight = parseInt(
+        document.querySelector(".invoice-info").offsetHeight
+      );
+      var clientheight = parseInt(
+        document.querySelector(".client-info").offsetHeight
+      );
+      if (invheight > clientheight) {
+        var attr = "height:" + invheight + "px;";
+        document.querySelector(".client-info").setAttribute("style", attr);
+      } else {
+        var attr = "height:" + clientheight + "px;";
+        document.querySelector(".invoice-info").setAttribute("style", attr);
+      }
+    }
+
+    try {
+      // updateheights();
+    } catch (error) {
+      console.log(error);
+    }
+  </script>
+</div>

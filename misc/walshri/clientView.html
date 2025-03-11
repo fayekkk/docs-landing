@@ -1,0 +1,58 @@
+<script>
+  $(document).ready(function () {
+    if (window.location.href.indexOf("/client/workflows/view") != -1) {
+      console.log("Loading");
+
+      let approvebtn = `<a href="#" class="btn btn-default btn-sm btn-5 " style="background-color:#75f90c" id="aprovecontract"> إعتماد العقد</a>`;
+      $(".invoice-actions").html($(".invoice-actions").html() + approvebtn);
+      let workflowId = parseInt(window.location.href.split("/")[6]);
+      var apprved = false;
+      fetch(`/v2/api/entity/le_workflow-type-entity-1/${workflowId}`, {
+        method: "GET",
+        headers: {
+          apikey: "e747799759d725a57847e411c4a536dd74626d05",
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }).then((res) => {
+        return res.json().then((data) => {
+          console.log(data);
+          console.log(data.follow_up_status_id == 18);
+          console.log(data.follow_up_status_id != null);
+
+          if (
+            data.follow_up_status_id != 18 &&
+            data.follow_up_status_id != null
+          ) {
+            apprved = true;
+            $("#aprovecontract").text("تم الإعتماد");
+            $("#aprovecontract").attr("disabled", true);
+          }
+        });
+      });
+      $("#aprovecontract").on("click", function (e) {
+        e.preventDefault();
+        if (!apprved) {
+          fetch(
+            `/v2/api/entity/le_workflow-type-entity-1/${workflowId}/fields`,
+            {
+              method: "POST",
+              headers: {
+                apikey: "e747799759d725a57847e411c4a536dd74626d05",
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ follow_up_status_id: 9 }),
+            }
+          ).then((res) => {
+            return res.json().then((data) => {
+              console.log(data);
+              $("#aprovecontract").text("تم الإعتماد");
+              $("#aprovecontract").attr("disabled", true);
+            });
+          });
+        }
+      });
+    }
+  });
+</script>

@@ -1,0 +1,107 @@
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      async function getRowsData() {
+        var rows = $("#report-table tbody tr");
+        var rowsData = [];
+        let flag = false;
+        var rowData;
+
+         rows.each(async function () {
+          let clientAccount;
+
+          if ($(this).hasClass("sub-head")) {
+            rowData = "";
+            flag = true;
+            clientAccount = $(this).text().trim().split(" ")[
+              $(this).text().trim().split(" ").length - 1
+            ];
+            console.log({ clientAccount: clientAccount });
+            var newRequest = [];
+            const fetchPromise = fetch(
+              `/v2/api/entity/journal_account/list/1?filter[code]=${clientAccount}`,
+              {
+                method: "GET",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+              .then((response) => {
+                // Check if the response is okay
+                if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+              })
+              .then((data) => {
+                console.log("Response:", data);
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+            newRequest.push(fetchPromise);
+            await Promise.all(newRequest);
+            rowData += `<tr class="New">${$(this).html()} </tr>`;
+          } else if (!$(this).hasClass("subtotal") && flag == true) {
+            rowData += `<tr class="New">${$(this).html()} </tr>`;
+          }
+          if ($(this).hasClass("subtotal") && flag == true) {
+            flag = false;
+            rowData += `<tr class="New">${$(this).html()} </tr>`;
+            rowsData.push(rowData);
+          }
+        });
+        console.log(rowsData);
+        let le_prints_le_prints_clients = [];
+        for (let i = 0; i < rowsData.length; i++) {
+          le_prints_le_prints_clients.push({
+            formatted_text: rowsData[i],
+          });
+        }
+        console.log({
+          le_prints_le_prints_clients: le_prints_le_prints_clients,
+        });
+
+        const newReq = {
+          le_prints_le_prints_clients: le_prints_le_prints_clients,
+        };
+        console.log(newReq);
+        console.log(JSON.stringify(newReq));
+        // fetch("/v2/api/entity/le_prints", {
+        //   method: "POST",
+        //   headers: {
+        //     Accept: "application/json",
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify(newReq),
+        // })
+        //   .then((response) => response.json())
+        //   .then((data) => {
+        //     console.log("Response:", data);
+        //   })
+        //   .catch((error) => {
+        //     console.error("Error:", error);
+        //   });
+      }
+      if (
+        window.location.href.indexOf("owner/reports/journal_transactions") != -1
+      ) {
+        console.log("hereee");
+        $(".Print ").before(
+          ' <button id="printBtn" class="text-main s2020 btn-s2020 btn-secondary-s2020">طباعة مخصصة</button>'
+        );
+        $("#printBtn").on("click", async function (e) {
+          e.preventDefault();
+          await getRowsData();
+        });
+      }
+    }, 500);
+  });
+</script>
+<style>
+  #printBtn {
+    margin-left: 5px;
+  }
+</style>

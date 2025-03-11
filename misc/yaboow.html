@@ -1,0 +1,17 @@
+<script>
+  function setQrPlace() {
+    var totalTable = document.querySelector("#items-list>table:nth-child(2)");
+    var emptyTds = totalTable.querySelectorAll("tr td:first-child");
+    var rowCount = totalTable.rows.length;
+    var qrCode = document.getElementById("qr_code");
+    emptyTds[0].setAttribute("rowspan", rowCount);
+    emptyTds[0].innerHTML = qrCode.innerHTML;
+    for (var i = 1; i < rowCount; i++) {
+      emptyTds[i].classList.add("hidden");
+    }
+  }
+
+  try {
+    setQrPlace();
+  } catch (e) {}
+</script>

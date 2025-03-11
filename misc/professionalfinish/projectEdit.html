@@ -1,0 +1,200 @@
+<script>
+  $(document).ready(function () {
+    function addFilterToDropdown(selector, filter) {
+      const dropdowns = $(selector);
+      dropdowns.each(function () {
+        const dropdown = $(this);
+        console.log(dropdown);
+        if (dropdown.length) {
+          try {
+            const dropdownData = JSON.parse(
+              dropdown.attr("data-izam1-forms1-dynamic-drop-down")
+            );
+
+            if (dropdownData && dropdownData.queryParams) {
+              dropdownData.queryParams = {
+                ...dropdownData.queryParams,
+                ...filter,
+              };
+
+              dropdown.attr(
+                "data-izam1-forms1-dynamic-drop-down",
+                JSON.stringify(dropdownData)
+              );
+            } else {
+              console.error(
+                "Dropdown data or queryParams is not valid for:",
+                dropdown
+              );
+            }
+          } catch (error) {
+            console.error("Error parsing dropdown data for:", dropdown, error);
+          }
+        } else {
+          console.error("Dropdown does not exist:", dropdown);
+        }
+      });
+    }
+
+    addFilterToDropdown("[id$='--item_vendorr']", {
+      "filter[supplier_custom_data.type]": "مقاول_باطن",
+    });
+    $(
+      "#le_workflow-type-entity-1 > div.form-row > div.col-lg-12 > div.row > div.col-lg-12.col-md-12.col-xs-12 > div > div > div > div.card-body.p-0 > div > div > div > div > div > div.btn-group.add-row.dropdown > button"
+    ).on("click", function (e) {
+      console.log("here");
+      setTimeout(() => {
+        addFilterToDropdown("[id$='--item_vendorr']", {
+          "filter[supplier_custom_data.type]": "مقاول_باطن",
+        });
+      }, 50);
+    });
+    // Required client
+    // $('button[type="submit"]').eq(0).attr("disabled", true);
+    // $("#client_id").on("change", function () {
+    //   if ($(this).val() == "") {
+    //     $('button[type="submit"]').eq(1).attr("disabled", true);
+    //   } else {
+    //     $('button[type="submit"]').eq(1).attr("disabled", false);
+    //   }
+    // });
+
+    function addDisabled() {
+      $("[id$='--process_percent']").attr("disabled", true);
+      $("[id$='--ta3lya_percent']").attr("disabled", true);
+      $("[id$='--vendor_process_percent']").attr("disabled", true);
+      $("[id$='--ta3lya_vendor_process_percent']").attr("disabled", true);
+    }
+    addDisabled();
+
+    function addItemChanges() {
+      $("[id$='--project_item_name']").on("change", async function () {
+        console.log($(this).val());
+        let ItemId = $(this).val();
+
+        try {
+          const response = await fetch(
+            `/v2/api/entity/le_projectsItems/${ItemId}/1`,
+            {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const data = await response.json();
+          console.log("Response:", data);
+          // Item Number
+          $(this)
+            .closest("tr")
+            .find("[id$='--item_number_in_contract']")
+            .val(data.item_no);
+          // Unit
+          $(this).closest("tr").find("[id$='--unit']").val(data.unit);
+          // Price
+          $(this)
+            .closest("tr")
+            .find("[id$='--ttl_price']")
+            .val(data.lowest_price);
+          $(this)
+            .closest("tr")
+            .find("[id$='--item_description']")
+            .val(data.item_desc);
+
+          $(this)
+            .closest("tr")
+            .find("[id$='--ttl_price']")
+            .attr("lowestPrice", data.lowest_price);
+
+          // return data;
+        } catch (error) {
+          console.error("Error:", error);
+          // return null;
+        }
+      });
+
+      $(".applyBtn ").on("click", function (e) {
+        function formatDate(dateString) {
+          const [year, month, day] = dateString.split("-");
+
+          return `${day}/${month}/${year}`;
+        }
+        let projectstartDate = $("#start_date").val();
+        let projectdeliveryDate = $("#delivery_date").val();
+        let notdelivery = true;
+        if (projectdeliveryDate == "") {
+          notdelivery = false;
+        }
+        e.preventDefault();
+        $("[id$='--startingdate']").each(function () {
+          setTimeout(() => {
+            let startDate = $(this).val();
+            if (startDate < projectstartDate) {
+              console.log(formatDate(`${projectstartDate}`));
+              $(this)
+                .prev("input")
+                .val(formatDate(`${projectstartDate}`))
+                .change();
+            }
+          }, 400);
+        });
+        $("[id$='--finishingdate']").each(function () {
+          setTimeout(() => {
+            let startDate = $(this).val();
+            if (notdelivery) {
+              if (startDate > projectdeliveryDate) {
+                console.log(formatDate(`${projectdeliveryDate}`));
+                $(this)
+                  .prev("input")
+                  .val(formatDate(`${projectdeliveryDate}`))
+                  .change();
+              }
+            }
+          }, 400);
+        });
+      });
+    }
+    $("[id$='--ttl_price']").on("change", async function () {
+      let lowest_price = parseFloat($(this).attr("lowestPrice"));
+      if (parseFloat($(this).val()) < lowest_price) {
+        $(this).val(lowest_price);
+      }
+    });
+    addItemChanges();
+
+    $(
+      "#le_workflow-type-entity-1 > div.form-row > div.col-lg-12 > div.row > div.col-lg-12.col-md-12.col-xs-12 > div > div > div > div.card-body.p-0 > div > div > div > div > div > div.btn-group.add-row.dropdown > button"
+    ).on("click", function (e) {
+      setTimeout(() => {
+        // addFilterToDropdown("[id$='--item_vendorr']", {
+        //   "filter[supplier_custom_data.type]": "مقاول باطن",
+        // });
+        addDisabled();
+        addItemChanges();
+
+        $("[id$='--ttl_price']").on("change", async function () {
+          let lowest_price = parseFloat($(this).attr("lowestPrice"));
+          if (parseFloat($(this).val()) < lowest_price) {
+            $(this).val(lowest_price);
+          }
+        });
+      }, 200);
+    });
+    // change title
+    $(
+      "#le_workflow-type-entity-1 > div.form-row > div:nth-child(1) > div > label"
+    ).html(
+      $(
+        "#le_workflow-type-entity-1 > div.form-row > div:nth-child(1) > div > label"
+      )
+        .html()
+        .replace("مسمى", "إسم المشروع")
+    );
+
+    $(
+      "#le_workflow-type-entity-1 > div.form-row > div:nth-child(6) > div > label"
+    ).text("المهندسين المعينين");
+  });
+</script>

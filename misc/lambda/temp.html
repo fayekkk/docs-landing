@@ -1,0 +1,332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      color: #55595b !important;
+    }
+    body {
+      background: transparent;
+      font: 12px Arial, Helvetica, sans-serif;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: transparent !important;
+      color: #000;
+    }
+
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 80px;
+      background-color: transparent !important;
+    }
+    .invoice-inner * {
+      background-color: transparent;
+    }
+
+    #invoice_title {
+      font-size: 20px !important;
+      font-weight: bold;
+      text-align: center;
+      padding: 10px 0;
+      border-bottom: 1px solid black;
+    }
+    #aftertitle {
+      padding-top: 3px;
+      border-bottom: 1px solid black;
+      margin-bottom: 30px;
+    }
+
+    #invData {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 15px;
+    }
+    #invData td {
+      padding: 7px 0;
+      /* border-bottom: 1px solid black; */
+    }
+    #invData td:nth-child(2) {
+      width: 5%;
+    }
+    #invData td:nth-child(1),
+    #invData td:nth-child(3) {
+      border-bottom: 1px solid black;
+      width: 47.5%;
+    }
+    #listing_table td,
+    #listing_table th {
+      border-right: none !important;
+      border-left: none !important;
+      border-top: none !important;
+      border-bottom: 1px solid black !important;
+    }
+    #listing_table th {
+      text-align: left !important;
+    }
+    #listing_table td {
+      text-align: center !important;
+    }
+
+    #listing_table td:nth-child(3) {
+      text-align: left !important;
+    }
+    #listing_table td:nth-child(1) {
+      width: 7%;
+    }
+    #listing_table td:nth-child(2) {
+      width: 25%;
+    }
+    #listing_table td:nth-child(3) {
+      width: 45%;
+    }
+    #listing_table td:nth-child(4) {
+      width: 5%;
+    }
+    #listing_table td:nth-child(5) {
+      width: 8%;
+    }
+    #listing_table td:nth-child(6) {
+      width: 5%;
+    }
+    #listing_table td:nth-child(7) {
+      width: 10%;
+    }
+    #terms {
+      width: 70%;
+      margin-left: 15%;
+      margin-right: 15%;
+      font-size: 12px;
+      font-weight: bold;
+      background-color: #cfcdc9;
+      margin-top: 50px;
+      margin-bottom: 15px;
+      border-spacing: 2px;
+      color: #55595b;
+      border: 2px double #55595b;
+    }
+    #terms td:nth-child(1) {
+      text-align: center;
+      border-right: 1px solid #55595b;
+      padding: 4px;
+    }
+    #terms td:nth-child(2) {
+      text-align: left;
+      padding: 4px;
+    }
+    .listing-table:nth-child(2) {
+      display: none;
+    }
+    #new_totals {
+      width: 30%;
+      margin-left: 70%;
+      text-align: center;
+      border-top: 1px solid #55595b;
+      border-left: 1px solid #55595b;
+      border-spacing: 0;
+      page-break-inside: avoid;
+    }
+    #new_totals td {
+      width: 50%;
+      padding: 4px;
+      border-bottom: 1px solid #55595b;
+      border-right: 1px solid #55595b;
+    }
+    .thanks {
+      margin: 20px 0;
+      text-align: center;
+    }
+    .bg {
+      background-image: url("https://lambda.daftra.com/files/46ecbe56/logos/672b304193558_blobid1730883648503.png");
+      z-index: -90000;
+      position: absolute;
+      left: 0px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      width: 100%;
+      height: 21.8cm;
+    }
+    .addresses br {
+      display: none;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+
+      <div class="bg" style="top: 0cm"></div>
+      <div class="invoice-inner">
+        <div id="invoice_title">{%invoice_title%}</div>
+        <div id="aftertitle"></div>
+
+        <table id="invData">
+          <tbody>
+            <tr>
+              <td><span id="title2"></span> {%invoice_no%}</td>
+              <td></td>
+              <td>DATE {%invoice_date%}</td>
+            </tr>
+            <tr>
+              <td>ATTEND : {%client_business_name%}</td>
+              <td></td>
+              <td>PROJECT {%PROJECT%}</td>
+            </tr>
+            <tr>
+              <td>VAT No : {%client_bn1%}</td>
+              <!-- <td colspan="2"></td> -->
+              <td></td>
+              <td class="addresses">Address : {%client_full_address%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="items-list">{%items_list%}</div>
+        <table id="terms">
+          <tbody>
+            <tr>
+              <td>TERMS</td>
+              <td>{%invoice_notes%}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div>
+          <table id="new_totals">
+            <tbody>
+              <tr>
+                <td>TOTAL</td>
+                <td class="removeCurr">{%invoice_total%}</td>
+              </tr>
+              <tr>
+                <td>VAT 15%</td>
+                <td class="removeCurr">{%tax-total%}</td>
+              </tr>
+              <tr>
+                <td>NET(SR)</td>
+                <td class="removeCurr">{%invoice_total%}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="thanks">
+          شاكرين ثقتكم بنا <br />
+          THANK YOU FOR YOUR TRUST
+        </div>
+      </div>
+      <div style="display: none">
+        <div id="discount">{%discount%}</div>
+        <div id="item-discount">{%item-discount-total%}</div>
+      </div>
+      {%html_sticky_footer%}
+    </div>
+    <script>
+      function swapAll() {
+        var allrows = document.querySelectorAll("#listing_table tr");
+        for (var i = 0; i < allrows.length; i++) {
+          var ser = allrows[i].cells[0].innerText;
+          var ITEM = allrows[i].cells[1].innerText;
+          var DESCRIPTION = allrows[i].cells[2].innerText;
+          var UNIT = allrows[i].cells[3].innerText;
+          var PRICE = allrows[i].cells[4].innerText;
+          var QTY = allrows[i].cells[5].innerText;
+          var TOTAL = allrows[i].cells[6].innerText;
+
+          allrows[i].cells[0].innerText = ser;
+          allrows[i].cells[1].innerText = ITEM;
+          allrows[i].cells[2].innerText = DESCRIPTION;
+          allrows[i].cells[3].innerText = QTY;
+          allrows[i].cells[4].innerText = PRICE;
+          allrows[i].cells[5].innerText = UNIT;
+          allrows[i].cells[6].innerText = TOTAL;
+        }
+      }
+      try {
+        swapAll();
+      } catch (error) {
+        console.log(error);
+      }
+      function addunit() {
+        var allrows = document.querySelectorAll("#listing_table tr");
+        for (var i = 1; i < allrows.length; i++) {
+          // 3 5
+          console.log(allrows[i].cells[3].innerText.trim().split(" ").length);
+
+          if (allrows[i].cells[3].innerText.trim().split(" ").length > 1) {
+            allrows[i].cells[5].innerText = allrows[i].cells[3].innerText
+              .trim()
+              .split(" ")[1];
+            allrows[i].cells[3].innerText = allrows[i].cells[3].innerText
+              .trim()
+              .split(" ")[0];
+          }
+        }
+      }
+      try {
+        addunit();
+      } catch (error) {
+        console.log(error);
+      }
+
+      function removeCurr() {
+        var AllremoveCurr = document.querySelectorAll(".removeCurr");
+        for (var i = 0; i < AllremoveCurr.length; i++) {
+          AllremoveCurr[i].innerText = parseFloat(
+            AllremoveCurr[i].innerText.replace(/,/g, "")
+          )
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+      try {
+        removeCurr();
+      } catch (error) {
+        console.log(error);
+      }
+      function repeatBg() {
+        var invoiceHeight =
+          document.querySelector(".invoice-inner").offsetHeight;
+        console.log(invoiceHeight);
+        var pageHeight = document.querySelector(".bg").offsetHeight;
+        console.log(pageHeight);
+        var numPages = Math.ceil(invoiceHeight / pageHeight);
+        console.log(numPages);
+        var bg = document.querySelector(".bg");
+        var topDis = parseFloat(bg.style.top.replace("cm", ""));
+        for (var i = 1; i < numPages; i++) {
+          var newBg = document.createElement("div");
+          newBg.setAttribute("class", "bg");
+          topDis += 21.88;
+          newBg.style.top = topDis + "cm";
+          bg.parentNode.insertBefore(newBg, bg.nextSibling);
+        }
+      }
+      try {
+        repeatBg();
+      } catch (error) {
+        console.log(error);
+      }
+      function HundleTitle() {
+        document.querySelector("#title2").innerText = "Inv";
+        // document.querySelector("#invoice_title").innerText;
+        if (
+          document.querySelector("#invoice_title").innerHTML ==
+          "فاتورة ضريبية <br> TAX INVOICE"
+        ) {
+          document.querySelector("#title2").innerText = "INV#";
+        } else {
+          document.querySelector("#title2").innerText = "QT#";
+        }
+      }
+      try {
+        HundleTitle();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

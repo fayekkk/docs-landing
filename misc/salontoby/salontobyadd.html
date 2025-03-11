@@ -1,0 +1,186 @@
+<style>
+  .late_th,
+  .late_td {
+    display: table-cell !important;
+  }
+</style>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"></script>
+<script>
+  $(document).ready(() => {
+    if (USER.branch_id != 1) {
+      setTimeout(() => {
+        const searchableSelector = async () => {
+          let branshId = USER.branch_id;
+
+          let selector = $("<select></select>")
+            .css("width", "100%")
+            .addClass("staffselect");
+
+          $("<option></option>")
+            .text("إختر العاملة")
+            .css("text-align", "center")
+            .appendTo(selector);
+
+          let url = `/v2/api/entity/staff/list/-1`;
+
+          if (branshId != 3) {
+            url += `?filter[branch_id]=${branshId}&per_page=400`;
+          } else {
+            url += `?per_page=400`;
+          }
+          await $.get(url).then((options) => {
+            options.data.forEach((optionText) => {
+              if (optionText.role_id != 1 && optionText.role_id != 6) {
+                $("<option></option>")
+                  .text(optionText.name)
+                  .css("text-align", "center")
+                  .appendTo(selector);
+              }
+            });
+          });
+
+          setTimeout(() => {
+            $("#listing_table tr").each(function () {
+              const row = $(this);
+              if (!row.find(".late_td select").length) {
+                let clonedSelector = selector.clone();
+                clonedSelector.on("change", () => {
+                  if (clonedSelector.val() == "إختر العاملة") {
+                    row.find("td:nth-child(3) textarea").val("");
+                  } else {
+                    row
+                      .find("td:nth-child(3) textarea")
+                      .val(clonedSelector.val());
+                  }
+                });
+                if (row.find("td:nth-child(3) textarea").val() != "") {
+                  clonedSelector.val(
+                    row.find("td:nth-child(3) textarea").val()
+                  );
+                }
+                console.log(clonedSelector);
+                row.find(".late_td").empty().append(clonedSelector);
+                setTimeout(() => {
+                  row.find(".late_td select").select2();
+                }, 100);
+              } else {
+              }
+            });
+          }, 250);
+        };
+
+        async function createCol(
+          prevTh,
+          prevTd,
+          colTitle,
+          classTh,
+          classTd,
+          colInput
+        ) {
+          var rowsNum = $("#listing_table tr").length;
+          setTimeout(() => {
+            if (
+              rowsNum == 2 ||
+              $("#listing_table tr:first-child th").length == 14
+            ) {
+              $(prevTh).after(
+                $("th.col-3")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-3", classTh)
+                  .replace("", colTitle)
+              );
+
+              $(prevTd).after(
+                $("td.col-3")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-3", classTd)
+                  .replace("item_col_3", colInput)
+              );
+            } else if ($("#listing_table tr:last-child .late_td").length == 0) {
+              $("#listing_table tr:last-child " + prevTd).after(
+                $("#listing_table tr:last-child td.col-3")
+                  .clone()
+                  .wrap("<p>")
+                  .parent()
+                  .html()
+                  .replace("col-3", classTd)
+                  .replace("item_col_3", colInput)
+              );
+            }
+          }, 250);
+
+          $("." + colInput).attr("placeholder", "");
+          $("." + colInput).attr("name", "");
+          $("#InvoiceLayout").triggerHandler("change", ["def"]);
+
+          searchableSelector();
+
+          $(".late_th").text("إختار العاملة");
+        }
+
+        createCol(
+          "th.col-3",
+          "td.col-3",
+          "إختيار العاملة ",
+          "late_th",
+          "late_td",
+          "late_input"
+        );
+        $(document).on("change", ".item_name", function () {
+          setTimeout(() => {
+            var $closestTr = $(this).closest("tr");
+            var staffSelectValue = $closestTr.find(".staffselect").val();
+            if (staffSelectValue != "إختر العاملة") {
+              $closestTr
+                .find(".staffselect")
+                .val(staffSelectValue)
+                .trigger("change");
+              $closestTr.find(".col-2 textarea").val(staffSelectValue);
+            }
+          }, 250);
+        });
+
+        $("#AddItem").on("click", () => {
+          createCol(
+            "th.col-3",
+            "td.col-3",
+            "إختيار العاملة ",
+            "late_th",
+            "late_td",
+            "late_input"
+          );
+        });
+        setInterval(() => {
+          var saveDiv = document.querySelectorAll(
+            ".actions-btns .btn-group"
+          )[2];
+          var savedraftDiv = document.querySelectorAll(
+            ".actions-btns .btn-group"
+          )[1];
+          var allSelectors = document.querySelectorAll(".staffselect");
+          for (let i = 0; i < allSelectors.length; i++) {
+            if (allSelectors[i].value.trim() == "إختر العاملة") {
+              saveDiv.style.display = "none";
+              savedraftDiv.style.display = "none";
+              break;
+            }
+            if (i == allSelectors.length - 1) {
+              saveDiv.style.display = "inline-block";
+              savedraftDiv.style.display = "inline-block";
+            }
+          }
+        }, 200);
+      }, 500);
+    }
+  });
+</script>

@@ -1,0 +1,21 @@
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      var firstInvoiceAction =
+        document.querySelectorAll(".invoice-actions a")[0];
+
+      var newElement = document.createElement("a");
+      let invId = parseInt(window.location.href.split("/")[6]);
+      newElement.href = `/owner/posts/post/2/${invId}`;
+      newElement.classList.add(
+        "btn",
+        "btn-default",
+        "btn-sm",
+        "quick-action-btn"
+      );
+      newElement.innerHTML =
+        '<span class="fa fa-book" aria-hidden="true"></span>  إضافة ملاحظة/مرفق ';
+      firstInvoiceAction.insertAdjacentElement("afterend", newElement);
+    }, 500);
+  });
+</script>

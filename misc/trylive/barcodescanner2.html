@@ -1,0 +1,696 @@
+<!-- <div class="product-code">010880000099278510pte20g06911200728210009</div>
+<div class="product-code">010880000097140710pga24b15311240123210002</div>
+<div class="product-code">010880004062350210pga23f30011230613210021</div>
+<div class="product-code">
+  010880012177387410pth22b2381122020921001017300208
+</div>
+<div class="product-code">010880000093856110pti22b23611220218210057</div>
+<div class="product-code">010880004060011410pti21l31311211213210017</div>
+<div class="product-code">010880000097216910pte22c12211220502210015</div>
+<div class="product-code">010880000097766910etz23d08311230427210023</div>
+<div class="product-code">010880004061704410pta21k58311211117210001</div>
+<div class="product-code">010880004062292510pgg23f00411230620210006</div>
+<div class="product-code">010880000097203910cte22c02711220315210025</div>
+<div class="product-code">010880004068498510pte23d17911230404210033</div>
+<div class="product-code">010880000097226810pte22a46911220219210006</div>
+<div class="product-code">010880000090380410put24a01811231223210040</div>
+<div class="product-code">010880000090379810put22e01111220519210004</div>
+<div class="product-code">010880000096122410pui22f03511220614210149</div>
+<div class="product-code">010880000093558410cuu22d00811220415210017</div>
+<div class="product-code">010880000095621310tcr22k16411221110210004</div>
+<div class="product-code">010880000094386210pul24a02211231223210002</div>
+<div class="product-code">010880000094378710tcr22e51411220524210008</div>
+<div class="product-code">010880000094377010tcr22c47711220406210002</div>
+<div class="product-code">010880000096907710cte22b02111220209210159</div>
+<div class="product-code">010880000091049910ptl24a07511231223210001</div>
+<div class="product-code">010880000093736610tcr23i53911230926210004</div>
+<div class="product-code">010880991707391410ttr23i07011230926210008</div>
+<div class="product-code">010880000095718010tcd23j71211231010210010</div>
+<div class="product-code">010880991707388410ttr23i06911230926210014</div>
+<div class="product-code">010880000093057210tcr22b35811220222210006</div>
+<div class="product-code">010880000093137110tcr23h37211230809210003</div>
+<div class="product-code">010880000093138810tcr23h37311230809210007</div>
+<div class="product-code">010880000093661110tcr23i53811230926210008</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+<script>
+  const productCodes = [
+    "pte20g069",
+    "pga24b153",
+    "pga23f300",
+    "pth22b238",
+    "pti22b236",
+    "pti21l313",
+    "pte22c122",
+    "etz23d083",
+    "pta21k583",
+    "pgg23f004",
+    "cte22c027",
+    "pte23d179",
+    "pte22a469",
+    "put24a018",
+    "put22e011",
+    "pui22f035",
+    "cuu22d008",
+    "tcr22k164",
+    "pul24a022",
+    "tcr22e514",
+    "tcr22c477",
+    "cte22b021",
+    "ptl24a075",
+    "tcr23i539",
+    "ttr23i070",
+    "tcd23j712",
+    "ttr23i069",
+    "tcr22b358",
+    "tcr23h372",
+    "tcr23h373",
+    "tcr23i538",
+  ];
+
+  // Example: Log the array to the console
+  console.log(productCodes);
+  $.fn.extractLotAndExpiry = function () {
+    return this.each(function () {
+      var str = $(this).text().trim();
+      //   console.log(str);
+
+      var lotNumber;
+      var expiryDate;
+      const lastSixDigitsRegex = /(\d{6})$/;
+      const lastSixMatches = str.match(lastSixDigitsRegex);
+      const isDataable = str.substr(-8).substr(0, 2) == "17";
+      const isDataable2 = str.length > 41;
+
+      if (lastSixMatches && isDataable && isDataable2) {
+        // console.log("Last 6 digits:", lastSixMatches[1]);
+        expiryDate = lastSixMatches[1];
+      } else {
+        expiryDate = "";
+      }
+
+      const elevenCharRegex = /([a-zA-Z][\w]{8})(\d+)/;
+      const elevenCharMatches = str.match(elevenCharRegex);
+
+      if (elevenCharMatches) {
+        // console.log(
+        //   "11 characters starting with a letter:",
+        //   elevenCharMatches[1]
+        // );
+        // console.log("Additional digits:", elevenCharMatches[2]);
+        lotNumber = elevenCharMatches[1];
+      }
+      if (expiryDate != "") {
+        var year = "20" + expiryDate.substr(0, 2);
+        var month = expiryDate.substr(2, 2);
+        var day = expiryDate.substr(4, 2);
+        var formattedExpiry = year + "/" + month + "/" + day;
+      } else {
+        var formattedExpiry = "";
+      }
+
+      var result = {
+        lotNumber: lotNumber,
+        expiryDate: formattedExpiry,
+      };
+
+      $(this).data("extractedInfo", result);
+    });
+  };
+
+  $(".product-code").extractLotAndExpiry();
+  let i = 0;
+  $(".product-code").each(function () {
+    var info = $(this).data("extractedInfo");
+    console.log(productCodes[i] == info.lotNumber);
+    i++;
+    if (info) {
+      console.log("LOT:", info.lotNumber, "Expiry:", info.expiryDate);
+    }
+  });
+</script> -->
+<!-- ********************************************************************************************************************* -->
+<div class="product-code">
+  010880020932591910ftn24b4841124013121025417320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121026317320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121020817320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121026217320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121023517320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121024517320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121024717320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121021717320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121024417320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121025617320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121022717320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121022617320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121022017320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121025317320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121023617320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221055817320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221053917320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221052917320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221051317320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221056617320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221052117320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221058417320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221016117320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221022517320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221019717320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221056917320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221021017320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221022717320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221049517320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221049417320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121041217320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221020217320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221059417320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221022217320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221020917320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221024617320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121029617320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121037617320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221023917320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221022917320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121042117320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121032217320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121042317320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121032417320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121037817320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221058217320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221042917320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221039317320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221048817320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221053317320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221054117320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221053217320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221056817320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221051517320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221055117320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221054917320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221055617320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221055317320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221057217320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221054417320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221038417320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221055417320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221032317320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221041417320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221047617320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221026217320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221055517320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221049117320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221056317320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221054517320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221040517320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221035117320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221033217320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221035017320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221050117320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121032517320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121036117320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121043317320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121031717320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121030817320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121028917320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121039717320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121040617320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121042417320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121029917320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121038817320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121037917320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121041517320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121029017320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121043417320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221040917320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221046817320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221047717320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221051017320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24aa231124012221050917320121
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121036617320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121056517320130
+</div>
+<div class="product-code">
+  010880020932591910ftn24b4841124013121057317320130
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+<script>
+  const codes = [
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24b484",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24aa23",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+    "ftn24b484",
+  ];
+
+  const dates = [
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/30",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/21",
+    "2032/01/30",
+    "2032/01/30",
+    "2032/01/30",
+  ];
+
+  $.fn.extractLotAndExpiry = function () {
+    return this.each(function () {
+      var str = $(this).text().trim();
+
+      var lotNumber;
+      var expiryDate;
+      const lastSixDigitsRegex = /(\d{6})$/;
+      const lastSixMatches = str.match(lastSixDigitsRegex);
+      const isDataable = str.substr(-8).substr(0, 2) == "17";
+      const isDataable2 = str.length > 41;
+
+      if (lastSixMatches && isDataable && isDataable2) {
+        expiryDate = lastSixMatches[1];
+      } else {
+        expiryDate = "";
+      }
+// 010880020932591910ftn24b4841124013121026217320130
+
+
+      const elevenCharRegex = /([a-zA-Z][\w]{8})(\d+)/;
+      const elevenCharMatches = str.match(elevenCharRegex);
+
+      if (elevenCharMatches) {
+        lotNumber = elevenCharMatches[1];
+      }
+      if (expiryDate != "") {
+        var year = "20" + expiryDate.substr(0, 2);
+        var month = expiryDate.substr(2, 2);
+        var day = expiryDate.substr(4, 2);
+        var formattedExpiry = year + "/" + month + "/" + day;
+      } else {
+        var formattedExpiry = "";
+      }
+
+      var result = {
+        lotNumber: lotNumber,
+        expiryDate: formattedExpiry,
+      };
+
+      $(this).data("extractedInfo", result);
+    });
+  };
+
+  $(".product-code").extractLotAndExpiry();
+  let i = 0;
+  $(".product-code").each(function () {
+    var info = $(this).data("extractedInfo");
+    console.log($(".product-code").eq(i).text());
+    console.log(i);
+
+    console.log(codes[i]);
+    console.log(codes[i] == info.lotNumber);
+    console.log(dates[i]);
+    console.log(dates[i] == info.expiryDate);
+
+    i++;
+    if (info) {
+      console.log("LOT:", info.lotNumber, "Expiry:", info.expiryDate);
+    }
+  });
+</script>

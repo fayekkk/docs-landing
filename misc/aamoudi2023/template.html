@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Template</title>
+  </head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    body {
+      direction: ltr;
+      background: #ffffff;
+      font: 12px "Tahoma", Arial, Helvetica, sans-serif;
+      text-align: left;
+    }
+    .invoice-wrap {
+      width: 660px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+    }
+    .invoice-inner {
+      margin: 0 30px;
+      padding: 20px 0;
+    }
+    #header {
+      width: 100%;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+    #header tr:nth-child(1) td:nth-child(1) {
+      width: 33%;
+    }
+    #header tr:nth-child(1) td:nth-child(2) {
+      width: 33%;
+    }
+    #header tr:nth-child(1) td:nth-child(3) {
+      width: 33%;
+    }
+    #site_business_name {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .qr-code {
+      text-align: center;
+    }
+    #listing_table {
+      direction: rtl;
+    }
+    #listing_table td,
+    #listing_table th {
+      border-left: none !important;
+      border-top: none !important;
+      border-right: none !important;
+      border-bottom: 1px solid #e5e5e5;
+      text-align: center;
+      vertical-align: top;
+      font-weight: 100 !important;
+    }
+    #listing_table td:nth-child(3),
+    #listing_table th:nth-child(3) {
+      display: none;
+    }
+    .adresss br {
+      display: none;
+    }
+    #clientTable {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 15px;
+    }
+    #clientTable td:nth-child(1) {
+      width: 30%;
+    }
+    #clientTable td:nth-child(2) {
+      width: 30%;
+    }
+    #clientTable td:nth-child(3) {
+      width: 40%;
+    }
+    .listing-table:nth-child(2) {
+      direction: rtl;
+    }
+    .listing-table:nth-child(2) td {
+      border-left: none !important;
+      border-top: none !important;
+      border-right: none !important;
+      border-bottom: none !important;
+    }
+    .listing-table:nth-child(2) td:nth-child(2) {
+      color: #7d7bff;
+    }
+  </style>
+  <body>
+    <div class="invoice-wrap">
+      {%html_sticky_header%}
+
+      <div class="invoice-inner">
+        <table id="header">
+          <tr>
+            <td id="site_logo">
+              <img
+                style="vertical-align: top; margin-bottom: 10px"
+                id="logo"
+                class="editable-area"
+                src="{%logo%}"
+                width="{%logo-width%}"
+                height="{%logo-height%}"
+              />
+            </td>
+            <td rowspan="100%" class="qr-code">{%sa_qr_code_image%}</td>
+            <td>
+              <div style="font-weight: bold; font-size: 18px">
+                <span style="font-size: 20px" id="invoice_title">
+                  {%invoice_title%}</span
+                >
+                <br />
+                <span id="qot_title"></span>
+                #{%invoice_no%}
+              </div>
+              <div style="font-size: 15px">
+                <span id="qot_title1"></span> Date
+                <br />
+                {%invoice_date%}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td id="site_business_name">{%site_business_name%}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              الرقم الضريبي: 311601101400003
+              <br />
+              {%address1%} {%city%}، {%state%} {%postal_code%} {%phone1%}
+            </td>
+          </tr>
+        </table>
+        <table id="clientTable">
+          <tr>
+            <td>
+              Balance Due
+              <br />
+              <span style="font-weight: bold; font-size: 15px"
+                >{%invoice_total%}</span
+              >
+              <br />
+              <br />
+              Due Date {%due_date%}
+            </td>
+            <td>
+              Total Amount
+              <br />
+              {%invoice_subtotal%}
+              <br />
+              <br />
+              Paid
+              <br />
+              {%paid%}
+            </td>
+            <td>
+              Bill To:
+              <br />
+              {%client_business_name%}
+              <br />
+              {%client_first_name%} {%client_last_name%}
+              <br />
+              <span class="adresss"> {%client_full_address%}</span>
+              <br />
+              الرقم الضريبي {%client_bn1%}
+            </td>
+          </tr>
+        </table>
+        <div id="items-list">{%items_list%}</div>
+        <div class="notes-block">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div
+                  style="font-style: italic"
+                  class="editable-area"
+                  id="footer"
+                >
+                  {%footer%}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <br />
+      </div>
+      {%html_sticky_footer%}
+    </div>
+
+    <script>
+      function hundleInvTitle() {
+        var invTitle11 = document.getElementById("qot_title");
+        var invTitle12 = document.getElementById("qot_title1");
+        if (document.getElementById("invoice_title").innerText == "Quotation") {
+          invTitle11.innerText = "Estimate";
+          invTitle12.innerText = "Estimate";
+        } else {
+          invTitle11.innerText = "Invoice";
+          invTitle12.innerText = "Invoice";
+          document.querySelector(
+            ".listing-table:nth-child(2) tr:last-child"
+          ).style.display = "none";
+          document.querySelector(
+            ".listing-table:nth-child(2) tr:nth-last-child(2)"
+          ).style.display = "none";
+        }
+      }
+      try {
+        hundleInvTitle();
+      } catch (error) {
+        console.log(error);
+      }
+      function addenglishdescription() {
+        var allRows = document.querySelectorAll("#listing_table tbody tr");
+        for (var i = 0; i < allRows.length; i++) {
+          allRows[i].cells[1].innerHTML =
+            allRows[i].cells[1].innerHTML +
+            " <br>" +
+            allRows[i].cells[2].innerHTML;
+        }
+      }
+      try {
+        addenglishdescription();
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>
