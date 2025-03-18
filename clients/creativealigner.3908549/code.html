@@ -97,11 +97,18 @@
         let le_prints_le_prints_clients = [];
         for (let i = 0; i < rowsData.length; i++) {
           le_prints_le_prints_clients.push({
-            formatted_text: rowsData[i].htmlcontent.replace(/   /g, ""),
+            formatted_text: rowsData[i].htmlcontent
+              .replace(/   /g, "")
+              .replace(/font-size: 15px;/g, "")
+              .replace(/format-me/g, "")
+              .replace(/data-currency-code=\"SAR\"/g, "")
+              .replace(/style=\"color: #247dbd\"/g, "")
+              .replace(/style=\"font-size: 9pt;\"/g, ""),
             codes: JSON.stringify(rowsData[i].client),
             clientdata: rowsData[i].client.id,
           });
         }
+        //
         console.log({
           le_prints_le_prints_clients: le_prints_le_prints_clients,
         });

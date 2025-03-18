@@ -1,15 +1,535 @@
-يانات المؤسسة بالعربي 
-مؤسسة نايف علوان علي السهيمي التجارية 
-الرقم الضريبي : 302177650100003
-جدة - شارع فلسطين- مركز سعودي تك
+<style>
+  [class$="--hotels_name"] {
+    display: none;
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    setTimeout(() => {
+      $("#client_id").attr("required", true);
+      $(".form-row div:nth-child(5) div label")
+        .eq(0)
+        .append(`<span class="required">*</span>`);
+      function main() {
+        $("#le_workflow-type-entity-1_custom_data-total_cost").attr(
+          "readonly",
+          true
+        );
+        $("#le_workflow-type-entity-1_custom_data-profit").attr(
+          "readonly",
+          true
+        );
+        $(document).on(
+          "change",
+          `#le_workflow-type-entity-1_custom_data-hotels_cost ,
+             #le_workflow-type-entity-1_custom_data-car_cost,
+             #le_workflow-type-entity-1_custom_data-insurance_cost_,
+             #le_workflow-type-entity-1_custom_data-other_cost`,
+          function () {
+            let hotels_cost = $(
+              "#le_workflow-type-entity-1_custom_data-hotels_cost"
+            ).val()
+              ? $("#le_workflow-type-entity-1_custom_data-hotels_cost").val()
+              : 0;
 
-بالانجليزي
-NAIF ALWAN ALI ALSOHAIMI COMMERCIAL EST
+            let car_cost = $(
+              "#le_workflow-type-entity-1_custom_data-car_cost"
+            ).val()
+              ? $("#le_workflow-type-entity-1_custom_data-car_cost").val()
+              : 0;
+            let insurance_cost = $(
+              "#le_workflow-type-entity-1_custom_data-insurance_cost_"
+            ).val()
+              ? $(
+                  "#le_workflow-type-entity-1_custom_data-insurance_cost_"
+                ).val()
+              : 0;
+            let other_cost = $(
+              "#le_workflow-type-entity-1_custom_data-other_cost"
+            ).val()
+              ? $("#le_workflow-type-entity-1_custom_data-other_cost").val()
+              : 0;
+            let total_cost =
+              parseFloat(car_cost) +
+              parseFloat(insurance_cost) +
+              parseFloat(hotels_cost) +
+              parseFloat(other_cost);
+            $("#le_workflow-type-entity-1_custom_data-total_cost")
+              .val(total_cost)
+              .trigger("change");
+            $("#le_workflow-type-entity-1_custom_data-sales_price").trigger(
+              "change"
+            );
+          }
+        );
+        $("#le_workflow-type-entity-1_custom_data-sales_price").on(
+          "change",
+          function () {
+            let ttlcost = $(
+              "#le_workflow-type-entity-1_custom_data-total_cost"
+            ).val()
+              ? $("#le_workflow-type-entity-1_custom_data-total_cost").val()
+              : 0;
+            let currval = $(this).val() ? $(this).val() : 0;
+            $("#le_workflow-type-entity-1_custom_data-profit")
+              .val(currval - ttlcost)
+              .trigger("change");
+          }
+        );
 
-JEDDAH - PALSTINE ST . SAUDI TEC CENTERا
+        //   **************************************************************
+        async function getHotelsWithServices() {
+          try {
+            // Fetch all hotels first
+            const hotelsResponse = await fetch(
+              "/v2/api/entity/le_services/list/1?per_page=200"
+            );
+            const hotelsData = await hotelsResponse.json();
+            const hotels = hotelsData.data;
 
-بيانات اخرى : 
+            // Process hotels in batches of 20
+            const batchSize = 20;
+            const hotelsWithServices = [];
 
- رقم الهاتف: 0126516020
-رقم الجوال : 0545402477
-الايميل : blackmax.bx@gmail.com
+            for (let i = 0; i < hotels.length; i += batchSize) {
+              const batch = hotels.slice(i, i + batchSize);
+
+              // Create an array of promises for the current batch
+              const batchPromises = batch.map((hotel) => {
+                return fetch(`/v2/api/entity/le_services/${hotel.id}/1`)
+                  .then((response) => response.json())
+                  .then((servicesData) => {
+                    return {
+                      hotel_name: hotel.hotel_name,
+                      hotel_id: hotel.id,
+                      services:
+                        servicesData.le_services_le_services_hotel_services,
+                    };
+                  });
+              });
+
+              // Wait for all promises in the current batch to resolve
+              const batchResults = await Promise.all(batchPromises);
+              hotelsWithServices.push(...batchResults);
+            }
+
+            console.log(hotelsWithServices);
+            return hotelsWithServices;
+          } catch (error) {
+            console.error("Error fetching hotels or services:", error);
+          }
+        }
+        getHotelsWithServices();
+        function calculateNights() {
+          $("[id$='--check_in_date']").each(async function () {
+            let checkInDate = new Date($(this).val());
+            let checkoutDateValue = $(this)
+              .closest("tr")
+              .find("[id$='--check_out_date']")
+              .val();
+            let checkoutDate;
+            if (checkoutDateValue != "") {
+              checkoutDate = new Date(checkoutDateValue);
+            } else {
+              checkoutDate = 0;
+            }
+            let numberOfNights = 0;
+            console.log({ checkInDate: checkInDate });
+            console.log({ checkoutDate: checkoutDate });
+
+            if (checkInDate && checkoutDate != 0) {
+              let timeDifference = checkoutDate - checkInDate;
+              numberOfNights = timeDifference / (1000 * 60 * 60 * 24);
+              numberOfNights = Math.floor(numberOfNights);
+            } else if (checkInDate) {
+              numberOfNights = 1;
+            } else {
+              console.log("Please enter valid check-in and check-out dates.");
+            }
+            console.log({ numberOfNights: numberOfNights });
+            if (numberOfNights > 0) {
+              $(this)
+                .closest("tr")
+                .find("[id$='--nights']")
+                .val(numberOfNights)
+                .trigger("change");
+            }
+          });
+        }
+        function addSelectorsAfterInputs() {
+          $("[id$='--hotel_service2']").each(async function () {
+            const inputId = $(this).attr("id");
+            const selectId = inputId + "_select";
+            console.log({ selectId: selectId });
+
+            if ($("#" + selectId).length === 0) {
+              const $input = $(this);
+
+              const hotelsData = await getHotelsWithServices();
+              let HotelId = $(this).closest("tr").find("[id$='--hotel']").val();
+
+              const select = document.createElement("select");
+              select.id = selectId;
+              select.className = "hotel-select";
+
+              const defaultOption = document.createElement("option");
+              defaultOption.textContent = "Please Select";
+              defaultOption.value = -1;
+              // defaultOption.disabled = true;
+              defaultOption.selected = true;
+              select.appendChild(defaultOption);
+              if (HotelId != "") {
+                function getHotelById(hotels, hotelId) {
+                  console.log({ hotelsL: hotels });
+                  console.log({ hotelId: hotelId });
+
+                  return hotels.filter((hotel) => hotel.hotel_id === hotelId);
+                }
+                const fulldata = getHotelById(hotelsData, HotelId);
+                console.log({ fulldata: fulldata });
+                if (fulldata.length > 0) {
+                  const data = fulldata[0].services;
+                  data.forEach((item, index) => {
+                    const option = document.createElement("option");
+                    option.textContent = item.service_name;
+                    option.hotelId = fulldata[0].hotel_id;
+                    option.attr("noOfRooms", item.no_of_nights);
+                    option.attr("roomCost", item.service_cost);
+                    select.appendChild(option);
+                  });
+                }
+              }
+              $input.after(select);
+              const $select = $("#" + selectId);
+              $("[id$='--hotel']").on("change", function () {
+                const $currselect = $(this).closest("tr").find(".hotel-select");
+                console.log($currselect);
+
+                let HotelId = $(this)
+                  .closest("tr")
+                  .find("[id$='--hotel']")
+                  .val();
+
+                if (HotelId !== "") {
+                  $currselect.empty();
+
+                  const defaultOption = $("<option></option>")
+                    .text("Please Select")
+                    .val(-1)
+                    .prop("selected", true);
+
+                  $currselect.append(defaultOption);
+                  function getHotelById(hotels, hotelId) {
+                    return hotels.filter((hotel) => hotel.hotel_id == hotelId);
+                  }
+                  const fulldata = getHotelById(hotelsData, HotelId);
+                  console.log({ fulldata: fulldata });
+                  console.log({ HotelId: HotelId });
+                  console.log({ hotelsData: hotelsData });
+
+                  const data = fulldata[0].services;
+                  data.forEach((item) => {
+                    const option = document.createElement("option");
+                    option.textContent = item.service_name;
+                    option.value = item.id;
+                    option.setAttribute("data-hotel-id", fulldata[0].hotel_id);
+                    option.setAttribute("data-room-id", item.id);
+                    option.setAttribute("data-no-of-rooms", item.no_of_nights);
+                    option.setAttribute("data-room-cost", item.service_cost);
+                    option.setAttribute("service_name", item.service_name);
+                    $currselect.append(option);
+                  });
+                }
+              });
+
+              $select.css({
+                width: $input.css("width"),
+                height: $input.css("height"),
+                padding: $input.css("padding"),
+                margin: $input.css("margin"),
+                border: $input.css("border"),
+                borderRadius: $input.css("border-radius"),
+                backgroundColor: $input.css("background-color"),
+                color: $input.css("color"),
+                fontSize: $input.css("font-size"),
+                fontFamily: $input.css("font-family"),
+              });
+
+              $input.hide();
+              $(document).on("change", ".hotel-select", function () {
+                let currVal = $(this).val();
+
+                if (currVal != -1) {
+                  const selectedOption = $(this).find("option:selected");
+                  console.log({ currVal: selectedOption.textContent });
+
+                  $(this)
+                    .closest("tr")
+                    .find("[id$='--room_cost_per_night']")
+                    .val(parseFloat(selectedOption.attr("data-room-cost")))
+                    .trigger("change");
+                  $(this)
+                    .closest("tr")
+                    .find("[id$='--hotel_service2']")
+                    .val(selectedOption.attr("service_name"));
+                }
+              });
+
+              $(document).on("click", ".applyBtn", function () {
+                calculateNights();
+              });
+              $(document).on(
+                "change",
+                "[id$='--room_cost_per_night'],[id$='--nights'],[id$='--number_of_room']",
+                function () {
+                  let roomCostPerNight =
+                    $(this)
+                      .closest("tr")
+                      .find("[id$='--room_cost_per_night']")
+                      .val() || 0;
+                  let nights =
+                    $(this).closest("tr").find("[id$='--nights']").val() || 0;
+                  let numberOfRoom =
+                    $(this)
+                      .closest("tr")
+                      .find("[id$='--number_of_room']")
+                      .val() || 0;
+
+                  roomCostPerNight = Number(roomCostPerNight);
+                  nights = Number(nights);
+                  numberOfRoom = Number(numberOfRoom);
+
+                  let totalCost = roomCostPerNight * nights * numberOfRoom;
+                  $(this)
+                    .closest("tr")
+                    .find("[id$='--hotels_cost']")
+                    .val(totalCost)
+                    .trigger("change");
+                  let ttlhotelsCost = 0;
+                  $("[id$='--hotels_cost']").each(function () {
+                    ttlhotelsCost += parseFloat($(this).val());
+                  });
+                  $("#le_workflow-type-entity-1_custom_data-hotels_cost")
+                    .val(ttlhotelsCost)
+                    .trigger("change");
+                  // let roomCostPerNight = parseFloat($("[id$='--room_cost_per_night']").val());
+                  // let nights = parseInt($("[id$='--nights']").val());
+                  // let numberOfRoom = parseInt($("[id$='--number_of_room']").val());
+                }
+              );
+
+              $(document).on("change", "[id$='--tour_cost']", function () {
+                let ttlcost = 0;
+                $("[id$='--tour_cost']").each(function () {
+                  ttlcost += parseFloat(
+                    $(this).val() != "" ? $(this).val() : 0
+                  );
+                });
+                $("#le_workflow-type-entity-1_custom_data-car_cost")
+                  .val(ttlcost)
+                  .trigger("change");
+              });
+            }
+            $(".hotel-select").select2({
+              selectOnClose: true,
+            });
+          });
+        }
+        addSelectorsAfterInputs();
+      }
+      main();
+      $(
+        "#le_workflow-type-entity-1 > div.form-row > div.col-lg-12 > div.row > div:nth-child(31) > div > div > div > div.card-body.p-0 > div > div > div > div > div > div.btn-group.add-row.dropdown > button"
+      ).on("click", function () {
+        setTimeout(() => {
+          main();
+        }, 150);
+      });
+    }, 250);
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("le_workflow-type-entity-1");
+
+    if (form) {
+      form.onsubmit = function (e) {
+        e.preventDefault();
+        handleSubmit(e);
+      };
+    } else {
+      console.error(
+        "Form element with ID 'le_workflow-type-entity-1' not found."
+      );
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      console.log("Form submitted");
+      const formDataObj = collectFormData(event.target);
+      console.log(formDataObj);
+    }
+
+    function collectFormData(formElement) {
+      const formData = new FormData(formElement);
+      const formDataObj = {};
+
+      formData.forEach((value, key) => {
+        const keys = key.match(/[^\[\]]+/g);
+        let tempObj = formDataObj;
+
+        keys.forEach((k, i) => {
+          if (i === keys.length - 1) {
+            tempObj[k] = value;
+          } else {
+            if (!tempObj[k]) {
+              tempObj[k] = {};
+            }
+            tempObj = tempObj[k];
+          }
+        });
+      });
+      submitData(formDataObj);
+      return formDataObj;
+    }
+    async function updateData() {
+      try {
+        const updatePromises = $(".hotel-select").map(async function () {
+          const selectedOption = $(this).find("option:selected");
+
+          const idToUpdate = selectedOption.attr("data-room-id");
+          const oldNoofnights = selectedOption.attr("data-no-of-rooms");
+          const currNoofnights =
+            $(this).closest("tr").find("[id$='--nights']").val() || 0;
+
+          if (idToUpdate) {
+            const response = await fetch(
+              `/v2/api/entity/le_services_hotel_services/${idToUpdate}/fields`,
+              {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  no_of_nights: (oldNoofnights || 0) - currNoofnights,
+                }),
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error(
+                "Network response was not ok " + response.statusText
+              );
+            }
+
+            const res = await response.json();
+            console.log("Success:", res);
+          }
+        });
+        await Promise.all(updatePromises);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+
+    async function updatettlNightsData() {
+      try {
+        const updatePromises = $("[id$='--hotel']").map(async function () {
+          console.log($(this).val());
+          console.log("///////");
+          let idToUpdate = $(this).val();
+          if (idToUpdate) {
+            const response = await fetch(
+              `/v2/api/entity/le_services/${idToUpdate}`,
+              {
+                method: "get",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error(
+                "Network response was not ok " + response.statusText
+              );
+            }
+            const res = await response.json();
+            console.log("Success:", res);
+            let oldNights = res.no_of_nights || 0;
+            console.log({ oldNights: oldNights });
+            // if (oldNights == "") {
+            //   oldNights = 0;
+            // }
+            let currNights = $(this)
+              .closest("tr")
+              .find("[id$='--nights']")
+              .val();
+            console.log({ currNights: currNights });
+            if (currNights == "" || currNights == 0) {
+              currNights = 0;
+            }
+            const newNights = parseInt(oldNights) - parseInt(currNights);
+            console.log({ newNights: newNights });
+            const response2 = await fetch(
+              `/v2/api/entity/le_services/${idToUpdate}/fields`,
+              {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  no_of_nights: String(newNights),
+                }),
+              }
+            );
+
+            if (!response2.ok) {
+              throw new Error(
+                "Network response was not ok " + response2.statusText
+              );
+            }
+            const res2 = await response2.json();
+            console.log("Success:", res2);
+          }
+        });
+        await Promise.all(updatePromises);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+
+    function submitData(clientData) {
+      fetch(`/v2/api/entity/le_workflow-type-entity-1`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(clientData),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              "Network response was not ok " + response.statusText
+            );
+          }
+          return response.json();
+        })
+        .then((res) => {
+          console.log("Success:", res);
+          //   alert("تم إضافة الحجز بنجاح");
+          updateData();
+          updatettlNightsData();
+          window.location.href = `/owner/work_orders/workflow_view/${res.id}`;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  });
+</script>

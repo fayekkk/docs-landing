@@ -165,6 +165,15 @@
     .listing-table:nth-child(2) {
       display: none;
     }
+    #listing_table th:nth-child(3) {
+      width: 125px;
+    }
+    #listing_table th:nth-child(7) {
+      width: 35px;
+    }
+    #listing_table th:nth-child(12) {
+      width: 35px;
+    }
     #new_totals {
       width: 100%;
       border-collapse: collapse;
@@ -348,7 +357,7 @@
         <div id="spelling">{%invoice_total_spelled%}</div>
 
         <div id="sign">
-          مؤسسة مدائن الجوف للمقاولت
+          مؤسسة مدائن الجوف للمقاولات
 
           <br />
           <br />
@@ -453,9 +462,9 @@
           var taxval = allRows[i].cells[11].innerHTML;
           var ttl = allRows[i].cells[12].innerHTML;
           allRows[i].cells[0].innerHTML = ser;
-          allRows[i].cells[1].innerHTML = orderNo;
+          allRows[i].cells[1].innerHTML = itemNo;
           allRows[i].cells[2].innerHTML = orderDisc;
-          allRows[i].cells[3].innerHTML = itemNo;
+          allRows[i].cells[3].innerHTML = orderNo;
           allRows[i].cells[4].innerHTML = date;
           allRows[i].cells[5].innerHTML = qty;
           allRows[i].cells[6].innerHTML = price;
@@ -490,18 +499,19 @@
           ".listing-table:nth-child(2) tr"
         );
         for (var i = 0; i < allttls.length; i++) {
+          var discount = 0;
           if (allttls[i].cells[1].innerText.indexOf("خصم ضمان أعمال") != -1) {
-            var discount = parseFloat(
+            discount = parseFloat(
               allttls[i].cells[2].innerText.replace(/,/g, "")
             );
-            document.getElementById("retention").innerText = discount;
-            // taxtotal
-            document.getElementById("invoice_subtotalbeftax").innerText =
-              subttl +
-              parseFloat(
-                document.getElementById("taxtotal").innerText.replace(/,/g, "")
-              );
           }
+          document.getElementById("retention").innerText = discount;
+          // taxtotal
+          document.getElementById("invoice_subtotalbeftax").innerText =
+            subttl +
+            parseFloat(
+              document.getElementById("taxtotal").innerText.replace(/,/g, "")
+            );
         }
       }
       try {
