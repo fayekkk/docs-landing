@@ -1,0 +1,439 @@
+<style>
+  .itemSelect {
+    width: 32%;
+  }
+  .itemLabel {
+    display: inline-block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    width: 100%;
+    direction: ltr;
+  }
+</style>
+
+<script>
+  $(document).ready(() => {
+    setTimeout(() => {
+      const searchableSelector = () => {
+        const label = document.createElement("label");
+        const label2 = document.createElement("label");
+        label.textContent = "(من) إختر الخدمة";
+        label.classList.add("itemLabel");
+        label2.textContent = "(إلى)إختر الخدمة";
+        label2.classList.add("itemLabel");
+
+        const selector = $("<select class='itemSelect'>").get(0);
+        // selector.classList.add("itemSelect");
+        const defaultOption = document.createElement("option");
+        defaultOption.textContent = "إختر الخدمة";
+        defaultOption.style.textAlign = "center";
+        selector.appendChild(defaultOption);
+        const workOrderId = new URLSearchParams(window.location.search).get(
+          "filter[work_order_id]"
+        );
+        $.get(`/v2/api/entity/le_workflow-type-entity-2/${workOrderId}/4`).then(
+          (response) => {
+            const options =
+              response["le_workflow-type-entity-2_custom_data"][
+                "le_custom_data_le_workflow-type-entity-2_le_custom_data_le_workflow-type-entity-2_project_items"
+              ];
+
+            options.forEach((optionText) => {
+              const option = document.createElement("option");
+              option.textContent = optionText.item_name;
+              option.dataset.purch_estimated_cost =
+                optionText.purch_estimated_cost;
+              option.dataset.expenses_estimated_cost =
+                optionText.expenses_estimated_cost;
+              option.dataset.rec_id = optionText.id;
+              option.dataset.purch_actual_cost = optionText.purch_actual_cost;
+              option.dataset.expenses_actual_cost =
+                optionText.expenses_actual_cost;
+              option.dataset.incomes_cost = optionText.incomes_cost;
+              option.style.textAlign = "center";
+              selector.appendChild(option);
+            });
+
+            // Append the label and selector to the specified div
+            const targetDiv = $(
+              "#form-panel > div > div:nth-child(2) > div:nth-child(4)"
+            );
+            const newDiv = $("<div>");
+            newDiv.append(label);
+            newDiv.append(selector);
+            newDiv.append(label2);
+            newDiv.append($(selector).clone()[0]);
+            targetDiv.after(newDiv);
+            $(document).on(
+              "change",
+              ".itemSelect , #ExpenseAmount",
+              function (e) {
+                let expenseVal = $(".itemSelect").val();
+                let expenseAmount =
+                  ($("#ExpenseAmount").val() || 0) -
+                  ($("#ExpenseTax1Amount").val() || 0);
+                if (expenseVal != "إختر الخدمة") {
+                  const selectedOption =
+                    $(".itemSelect").find("option:selected");
+                  const itemvalues = selectedOption[0].dataset;
+                  let estimatedAmount = itemvalues.expenses_estimated_cost;
+                  console.log(expenseAmount);
+                  console.log(estimatedAmount);
+                  if (parseFloat(expenseAmount) > parseFloat(estimatedAmount)) {
+                    if (window.location.href.indexOf("expense") != -1) {
+                      alert("المبلغ المدخل أكبر من المبلغ المتوقع للمصروفات");
+                    }
+                  }
+                }
+              }
+            );
+          }
+        );
+      };
+
+      async function updateProjectItem(workOrderId, invoiceNo, subval) {
+        // Check which items are selected
+        const firstItemSelected =
+          $(".itemSelect").eq(0).val() !== "إختر الخدمة";
+        const secondItemSelected =
+          $(".itemSelect").eq(1).val() !== "إختر الخدمة";
+
+        // If neither item is selected, abort operation
+        if (!firstItemSelected && !secondItemSelected) {
+          console.log("No items selected, aborting operation");
+          return;
+        }
+
+        // Determine if we're working with incomes or expenses
+        const isIncomes = window.location.href.indexOf("incomes") !== -1;
+
+        // Calculate the current value (amount minus tax)
+        let currVal =
+          parseFloat(
+            ($("#ExpenseAmount").val() || 0) -
+              ($("#ExpenseTax1Amount").val() || 0)
+          ) || 0;
+
+        // Get invoice ID from URL
+        const invId = window.location.pathname.split("/")[4];
+
+        try {
+          // Case 1: First item not selected, only add to second item
+          if (!firstItemSelected && secondItemSelected) {
+            console.log("First item not selected, only adding to second item");
+
+            const selectedOption2 = $(".itemSelect")
+              .eq(1)
+              .find("option:selected");
+            const itemvalues2 = selectedOption2[0].dataset;
+
+            // Calculate values for the second item
+            let prevVal2 = isIncomes
+              ? parseFloat(itemvalues2.incomes_cost) || 0
+              : parseFloat(itemvalues2.expenses_actual_cost) || 0;
+
+            console.log({ prevVal2: prevVal2 });
+
+            // Calculate new value by adding to second item
+            let newVal2 = prevVal2 + currVal;
+
+            // Prepare the body for the API request
+            let body2 = isIncomes
+              ? { incomes_cost: newVal2 }
+              : { expenses_actual_cost: newVal2 };
+
+            console.log({ body2: body2 });
+
+            // Update the second item
+            const response2 = await fetch(
+              `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${itemvalues2.rec_id}/fields`,
+              {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body2),
+              }
+            );
+
+            if (!response2.ok) {
+              const errorRes2 = await response2.json();
+              throw new Error(
+                `Error ${response2.status}: ${
+                  errorRes2.message || "An error occurred."
+                }`
+              );
+            }
+
+            const res2 = await response2.json();
+            console.log({ res2: res2 });
+
+            // Post history for the second item with positive value
+            await postHistory(
+              invId,
+              itemvalues2.rec_id,
+              selectedOption2[0].textContent,
+              subval
+            );
+
+            // Post history for the missing first item with negative value
+            await postHistory(invId, "--", "--", `- ${subval}`);
+          }
+          // Case 2: Both items selected - normal transfer operation
+          else if (firstItemSelected && secondItemSelected) {
+            const selectedOption = $(".itemSelect")
+              .eq(0)
+              .find("option:selected");
+            const selectedOption2 = $(".itemSelect")
+              .eq(1)
+              .find("option:selected");
+
+            const itemvalues = selectedOption[0].dataset;
+            const itemvalues2 = selectedOption2[0].dataset;
+
+            // Calculate values for both items
+            let prevVal = isIncomes
+              ? parseFloat(itemvalues.incomes_cost) || 0
+              : parseFloat(itemvalues.expenses_actual_cost) || 0;
+
+            let prevVal2 = isIncomes
+              ? parseFloat(itemvalues2.incomes_cost) || 0
+              : parseFloat(itemvalues2.expenses_actual_cost) || 0;
+
+            console.log({ prevVal: prevVal, prevVal2: prevVal2 });
+
+            // Calculate new values
+            let newVal = prevVal - currVal;
+            let newVal2 = prevVal2 + currVal;
+
+            // Prepare the bodies for API requests
+            let body = isIncomes
+              ? { incomes_cost: newVal }
+              : { expenses_actual_cost: newVal };
+
+            let body2 = isIncomes
+              ? { incomes_cost: newVal2 }
+              : { expenses_actual_cost: newVal2 };
+
+            console.log({ body: body, body2: body2 });
+
+            // Update the first item
+            const response = await fetch(
+              `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${itemvalues.rec_id}/fields`,
+              {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body),
+              }
+            );
+
+            if (!response.ok) {
+              const errorRes = await response.json();
+              throw new Error(
+                `Error ${response.status}: ${
+                  errorRes.message || "An error occurred."
+                }`
+              );
+            }
+
+            // Post history for the first item
+            await postHistory(
+              invId,
+              itemvalues.rec_id,
+              selectedOption[0].textContent,
+              `- ${subval}`
+            );
+
+            // Update the second item
+            const response2 = await fetch(
+              `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${itemvalues2.rec_id}/fields`,
+              {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body2),
+              }
+            );
+
+            if (!response2.ok) {
+              const errorRes2 = await response2.json();
+              throw new Error(
+                `Error ${response2.status}: ${
+                  errorRes2.message || "An error occurred."
+                }`
+              );
+            }
+
+            // Post history for the second item
+            await postHistory(
+              invId,
+              itemvalues2.rec_id,
+              selectedOption2[0].textContent,
+              subval
+            );
+          }
+          // Case 3: Only first item selected
+          else if (firstItemSelected && !secondItemSelected) {
+            console.log(
+              "Second item not selected, only deducting from first item"
+            );
+
+            const selectedOption = $(".itemSelect")
+              .eq(0)
+              .find("option:selected");
+            const itemvalues = selectedOption[0].dataset;
+
+            // Calculate values for the first item
+            let prevVal = isIncomes
+              ? parseFloat(itemvalues.incomes_cost) || 0
+              : parseFloat(itemvalues.expenses_actual_cost) || 0;
+
+            console.log({ prevVal: prevVal });
+
+            // Calculate new value
+            let newVal = prevVal - currVal;
+
+            // Prepare the body for API request
+            let body = isIncomes
+              ? { incomes_cost: newVal }
+              : { expenses_actual_cost: newVal };
+
+            console.log({ body: body });
+
+            // Update the first item
+            const response = await fetch(
+              `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${itemvalues.rec_id}/fields`,
+              {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body),
+              }
+            );
+
+            if (!response.ok) {
+              const errorRes = await response.json();
+              throw new Error(
+                `Error ${response.status}: ${
+                  errorRes.message || "An error occurred."
+                }`
+              );
+            }
+
+            // Post history for the first item
+            await postHistory(
+              invId,
+              itemvalues.rec_id,
+              selectedOption[0].textContent,
+              `- ${subval}`
+            );
+
+            // Post history for the missing second item with positive value
+            await postHistory(invId, "--", "--", subval);
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+      async function postHistory(invoiceNo, itemId, itemName, ttlval) {
+        let postBody = {
+          operations_type: "مصروف",
+          ref_type: "expense",
+          op_date: new Date().toISOString().slice(0, 19).replace("T", " "),
+          operation_no: invoiceNo,
+          item_id: itemId,
+          project_item: itemName,
+          single_line_field: ttlval,
+          reference_id: workOrderId,
+        };
+        if (window.location.href.indexOf("incomes") != -1) {
+          postBody = {
+            operations_type: "سند قبض ",
+            ref_type: "income",
+            op_date: new Date().toISOString().slice(0, 19).replace("T", " "),
+            operation_no: invoiceNo,
+            item_id: itemId,
+            project_item: itemName,
+            single_line_field: ttlval,
+            reference_id: workOrderId,
+          };
+        }
+        console.log({ postBody: postBody });
+        try {
+          const response = await fetch(`/v2/api/entity/le_OperationsLog`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(postBody),
+          });
+          if (!response.ok) {
+            const errorRes = await response.json();
+            throw new Error(
+              `Error ${response.status}: ${
+                errorRes.message || "An error occurred."
+              }`
+            );
+          }
+          await response.json();
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+
+      const url = window.location.href;
+      const urlObj = new URL(url);
+      const workOrderId = new URLSearchParams(window.location.search).get(
+        "filter[work_order_id]"
+      );
+      async function updateProjectData2(invNo) {
+        const url = window.location.href;
+        const urlObj = new URL(url);
+        const workOrderId = urlObj.searchParams.get("work_order_id");
+        const invoiceNo = invNo;
+        let subval =
+          parseFloat(
+            ($("#ExpenseAmount").val() || 0) -
+              ($("#ExpenseTax1Amount").val() || 0)
+          ) || 0;
+        await updateProjectItem(workOrderId, invoiceNo, subval);
+      }
+      if (workOrderId) {
+        console.log("start project");
+
+        searchableSelector();
+        $(".submit-btn-group")
+          .eq(0)
+          .before(
+            '<button id="myButton" style="background-color: #13b272; color: white; padding: 10px 20px; border: none;margin-left:8px;margin-right:8px; cursor: pointer;"> تحديث التكاليف  </button>'
+          );
+        $("#myButton").on("click", async function (e) {
+          e.preventDefault();
+          const invId = window.location.pathname.split("/")[6];
+          await updateProjectData2(invId);
+          alert("تم الإنتهاء من تحديث التكاليف");
+        });
+      } else {
+        let expenseId = window.location.href.split("/")[6];
+        $.get(`/v2/api/entity/expense/${expenseId}/1`).then((response) => {
+          console.log({ response: response });
+          if (response.work_order_id) {
+            const currurl = window.location.href;
+            const editUrl = `${currurl}?filter[work_order_id]=${response.work_order_id}`;
+            console.log("Redirecting to Edit URL:", editUrl);
+            window.location.href = editUrl;
+          }
+        });
+      }
+    }, 1000);
+  });
+</script>

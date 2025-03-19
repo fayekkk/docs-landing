@@ -1,0 +1,126 @@
+<script>
+  async function updateProjectData2(invNo) {
+    const workOrderId = new URLSearchParams(window.location.search).get(
+      "filter[work_order_id]"
+    );
+    const invoiceNo = invNo;
+    console.log({ workOrderId: workOrderId, invoiceNo: invoiceNo });
+
+    // Create a map to track net changes for each item
+    const itemChanges = {};
+
+    // Process all rows
+    const rows = $(".late2_td .itemSelect").closest("tr").toArray();
+
+    // First pass: capture all item info and calculate net changes
+    for (const row of rows) {
+      const targetSelect = $(row).find(".late2_td .itemSelect");
+      const sourceSelect = $(row).find(".late_td .itemSelect");
+
+      const targetId = $(targetSelect).val();
+
+      // Skip if no valid target item is selected
+      if (targetId === "إختر الخدمة") continue;
+
+      // Get item data
+      const targetOption = $(targetSelect).find("option:selected");
+      const sourceOption = $(sourceSelect).find("option:selected");
+
+      const targetData = targetOption[0].dataset;
+      const sourceData = sourceOption[0].dataset;
+
+      // Calculate transaction amount
+      const price = parseFloat($(row).find(".unit-price input").val()) || 0;
+      const qty = parseFloat($(row).find(".Quantity input").val()) || 0;
+      const amount = price * qty;
+
+      // Initialize items in our tracking map if needed
+      if (!itemChanges[targetData.rec_id]) {
+        itemChanges[targetData.rec_id] = {
+          id: targetData.rec_id,
+          name: targetOption[0].textContent,
+          originalCost: parseFloat(targetData.purch_actual_cost) || 0,
+          netChange: 0,
+          transactions: [],
+        };
+      }
+
+      if (!itemChanges[sourceData.rec_id]) {
+        itemChanges[sourceData.rec_id] = {
+          id: sourceData.rec_id,
+          name: sourceOption[0].textContent,
+          originalCost: parseFloat(sourceData.purch_actual_cost) || 0,
+          netChange: 0,
+          transactions: [],
+        };
+      }
+
+      // Record this transaction
+      itemChanges[targetData.rec_id].transactions.push({
+        amount: amount,
+        isPositive: true,
+      });
+
+      itemChanges[sourceData.rec_id].transactions.push({
+        amount: amount,
+        isPositive: false,
+      });
+
+      // Update net changes
+      itemChanges[targetData.rec_id].netChange += amount;
+      itemChanges[sourceData.rec_id].netChange -= amount;
+    }
+
+    // Process all updates
+    for (const itemId in itemChanges) {
+      const item = itemChanges[itemId];
+
+      // Only update if there's a non-zero change
+      if (item.netChange !== 0) {
+        const newCost = item.originalCost + item.netChange;
+
+        try {
+          // Update the item's cost in the backend
+          const response = await fetch(
+            `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${item.id}/fields`,
+            {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ purch_actual_cost: newCost }),
+            }
+          );
+
+          if (!response.ok) {
+            const errorRes = await response.json();
+            throw new Error(
+              `Error ${response.status}: ${
+                errorRes.message || "An error occurred."
+              }`
+            );
+          }
+
+          // Process all transactions for this item
+          for (const transaction of item.transactions) {
+            // Call postHistory with fixed amounts: -200 for negative transactions, +250 for positive ones
+            const historyAmount = transaction.isPositive
+              ? transaction.amount
+              : " - " + transaction.isPositive;
+
+            await postHistory(
+              invoiceNo,
+              item.id,
+              item.name,
+              historyAmount,
+              workOrderId
+            );
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+    }
+  }
+</script>

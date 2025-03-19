@@ -1,0 +1,114 @@
+<script>
+  setTimeout(() => {
+    // Function to process all products with 6 fields and store them
+    async function processProducts(allProducts) {
+      // Create a new array with the 6 fields we want
+      const processedProducts = allProducts.map((product) => ({
+        name: product.Product.name || "",
+        code: product.Product || "",
+        barcode: product.Product.barcode || "",
+        field1: product.Product.ProductsCustomData[0].field_16 || "",
+        field2: product.Product.ProductsCustomData[0].field_21 || "",
+        field3: product.Product.ProductsCustomData[0].field_24 || "",
+      }));
+
+      console.log("Processed products:", processedProducts);
+
+      // Optionally store the processed products
+      //   localStorage.setItem(
+      //     "productsCatalog",
+      //     JSON.stringify(processedProducts)
+      //   );
+
+      return processedProducts;
+    }
+
+    // Function to fetch products in batches
+    async function fetchProductsInBatches(totalPages) {
+      let allProducts = [];
+      const batchSize = 20; // Number of simultaneous requests
+
+      console.log(
+        `Fetching ${totalPages} pages of products in batches of ${batchSize}`
+      );
+
+      for (let i = 1; i <= totalPages; i += batchSize) {
+        console.log(`Fetching batch starting at page ${i}`);
+        const requests = [];
+
+        // Create batch of requests
+        for (let j = 0; j < batchSize && i + j <= totalPages; j++) {
+          const pageNum = i + j;
+          requests.push(
+            fetch(`/api2/products?page=${pageNum}&load_custom_data=1`, {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+              },
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error ${response.status}`);
+                }
+                return response.json();
+              })
+              .then((data) => {
+                if (data && data.data) {
+                  return data.data; // Return just the products array
+                }
+                return [];
+              })
+          );
+        }
+
+        // Wait for all requests in the batch to complete
+        const batchResults = await Promise.all(requests);
+
+        // Flatten and add to our collection
+        const batchProducts = batchResults.flat();
+        allProducts = allProducts.concat(batchProducts);
+
+        console.log(`Fetched ${allProducts.length} products so far`);
+      }
+
+      return allProducts;
+    }
+
+    // Initial request to get total number of pages
+    fetch(`/api2/products?load_custom_data=1`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then(async (data) => {
+        const totalPages = parseInt(data.pagination.page_count);
+        console.log(`Total pages to fetch: ${totalPages}`);
+
+        try {
+          // Fetch all products
+          const allProducts = await fetchProductsInBatches(totalPages);
+          console.log(
+            `Successfully fetched all ${allProducts.length} products`
+          );
+
+          // Process products to extract the 6 fields we want
+          const processedProducts = await processProducts(allProducts);
+
+          // You can do something with processedProducts here
+
+          console.log({ processedProducts: processedProducts });
+
+          // Example: Display a success message
+        } catch (error) {
+          console.error("Error during product fetching:", error);
+          alert("Error fetching products. See console for details.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error getting total pages:", error);
+        alert("Failed to determine total number of product pages.");
+      });
+  }, 500);
+</script>

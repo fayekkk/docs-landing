@@ -1,0 +1,73 @@
+<script>
+  $(document).ready(function () {
+    // Create two new input fields
+    var arabicNameInput = $("<input>", {
+      type: "text",
+      id: "ArabicName",
+      class: "form-control",
+      placeholder: "Arabic Name",
+    });
+
+    var englishNameInput = $("<input>", {
+      type: "text",
+      id: "EnglishName",
+      class: "form-control",
+      placeholder: "English Name",
+    });
+
+    // Create container divs with labels
+    var arabicContainer = $("<div>", { class: "form-group" })
+      .append($("<label>").text("Arabic Name"))
+      .append(arabicNameInput);
+
+    var englishContainer = $("<div>", { class: "form-group" })
+      .append($("<label>").text("English Name"))
+      .append(englishNameInput);
+
+    // Insert the new fields after #ProductName
+    $("#ProductName").after(englishContainer);
+    $("#ProductName").after(arabicContainer);
+
+    // Set initial values if fields already have data
+    var initialArabic = $("#CustomModelField12").val();
+    var initialEnglish = $("#CustomModelField11").val();
+
+    if (initialArabic) {
+      $("#ArabicName").val(initialArabic);
+    }
+
+    if (initialEnglish) {
+      $("#EnglishName").val(initialEnglish);
+    }
+
+    // Update merged product name when either field changes
+    function updateMergedName() {
+      var arabicName = $("#ArabicName").val().trim();
+      var englishName = $("#EnglishName").val().trim();
+
+      // Update the hidden fields
+      $("#CustomModelField12").val(arabicName);
+      $("#CustomModelField11").val(englishName);
+
+      // Create merged name
+      var mergedName = "";
+
+      if (arabicName && englishName) {
+        mergedName = arabicName + " / " + englishName;
+      } else if (arabicName) {
+        mergedName = arabicName;
+      } else if (englishName) {
+        mergedName = englishName;
+      }
+
+      // Update the main product name
+      $("#ProductName").val(mergedName);
+    }
+
+    // Listen for changes on both input fields
+    $("#ArabicName, #EnglishName").on("input", updateMergedName);
+
+    // Initial merge
+    updateMergedName();
+  });
+</script>

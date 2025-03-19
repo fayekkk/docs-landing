@@ -1,0 +1,304 @@
+<!-- code_Invoices_owner_add -->
+<style>
+  .col-1 {
+    position: relative !important;
+  }
+
+  .desc {
+    display: block !important;
+  }
+
+  .p-list {
+    border: 0;
+    box-shadow: 0 0 7px 3px rgba(0, 0, 0, 0.1);
+    width: 380px;
+  }
+  @media (max-width: 768px) {
+    .p-list {
+      width: 100% !important;
+    }
+  }
+
+  .p-list input {
+    border: medium none;
+    display: block;
+    font-size: 15px;
+    padding: 5px 15px;
+    width: 100%;
+  }
+
+  .s-list {
+    background: none repeat scroll 0 0 #fff;
+    z-index: 20000000000;
+    position: absolute;
+    list-style: none;
+  }
+
+  .p-list .p-list-ul {
+    overflow: auto;
+    max-height: 200px;
+  }
+
+  .p-list .p-list-ul li {
+    padding: 0 10px;
+    color: #3a3e63;
+  }
+
+  .s-list li {
+    border: none;
+    border-bottom: 1px solid #eee;
+    display: block;
+    float: none;
+    height: auto;
+    position: relative;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .p-left {
+    float: right !important;
+  }
+
+  .m-r-x {
+    margin-left: 5px;
+  }
+
+  .p-list li a h4 {
+    padding: 0;
+    margin: 0 0 0;
+    font-size: 14px;
+    max-width: 65%;
+  }
+
+  .p-list li a span {
+    left: 15px;
+    right: auto;
+  }
+
+  .p-list li a span {
+    padding: 0;
+    margin: 0 0 0;
+    color: #888;
+    font-size: 12px;
+    float: right;
+    padding-top: 12px;
+    position: absolute;
+    top: 23px;
+  }
+  .p-list .p-list-ul li a span.product-stock {
+    top: 40px !important;
+  }
+
+  .p-list .p-list-ul li a {
+    padding: 5px 10px 15px 10px !important;
+    top: 5px;
+  }
+
+  .p-list li a span.v-click-span {
+    left: 15px;
+    right: auto;
+  }
+
+  .p-list li a span.v-click-span {
+    padding: 0;
+    margin: 0 0 0;
+    color: #888;
+    font-size: 14px;
+    float: right;
+    position: absolute;
+    top: 10px;
+  }
+
+  .v-click {
+    border: none;
+    background: transparent;
+    /* color: black; */
+    margin-top: 8px;
+    color: grey;
+  }
+
+  .p-list .p-list-ul li.active,
+  .p-list .p-list-ul li:hover {
+    background-color: #00b0ef;
+  }
+
+  .p-list .p-list-ul li.active *,
+  .p-list .p-list-ul li:hover * {
+    color: #fff;
+  }
+
+  .p-list li a .v-click:hover {
+    color: #000099 !important;
+    transform: scale(1.5);
+  }
+
+  .col-1 textarea,
+  #itemsDescription #search_pro {
+    direction: ltr;
+    text-align: right;
+  }
+  /* .tare2 {
+      display: none !important;
+    } */
+
+  #InvoiceProducts {
+    display: none !important;
+  }
+
+  .invoice-items .table tr td {
+    overflow: inherit !important;
+  }
+</style>
+<script>
+  let md = `<div class="modal fade" id="myModalGeneral" tabindex="-1" role="dialog" aria-labelledby="myModalGeneralLabel">
+                          <div id="myModalGeneralSize" class="modal-dialog modal-lg" role="document">
+                              <div class="modal-content">
+                                  <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                                  <div id="myModalGeneralheader" class="modal-header">
+      
+                                      <h4 class="modal-title" id="myModalGeneralLabel">الضرائب</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                      <iframe id="myModalGeneral_iframe" width="100%" height="100%" src="" frameborder="0" allowfullscreen=""></iframe>
+                                  </div>
+      
+                              </div>
+                          </div>
+                      </div>`;
+
+  let descr = `<div class="p-list s-list hidden" id="itemsDescription" style="">
+                      <div class="p-2 bg-white d-flex justify-content-center align-items-center g-1 ">
+      
+                    <input type="text" class="form-control" id="search_pro" value="" placeholder="البحث عن المنتجات ( بالوصف )">
+      
+                    </div>
+                      <ul class="p-list-ul">
+                  </ul>
+      
+                  <a  href="#" class="add-p-link item-settings btn-block-s2020 btn-secondary-s2020 font-weight-bold fs-14 px-3 py-2 s2020 text-dark-blue"><i class="s2020 far fa-plus-circle text-success mr-2"></i>إضافة منتج جديد</a>
+      
+              </div>`;
+
+  var clickedProduct;
+  var new_click = false;
+
+  async function performSearch(term) {
+    let res = await fetch(
+      `/v2/api/entity/le_productsclone_productslist/list/1?filter[or][name][like]=${term}&filter[or][code][like]=${term}&filter[or][barcode][like]=${term}&filter[or][field3][like]=${term}&filter[or][field2][like]=${term}&filter[or][field1][like]=${term}&filter[reference_id]=4&sort[name]=asc`
+    );
+    let response = await res.json();
+    console.log({ response: response });
+
+    return response;
+  }
+
+  function displayData(data) {
+    $(".p-list-ul li").remove();
+    data.map((item) => {
+      console.log({ item });
+
+      $(".p-list-ul").append(`<li>
+                  <a id="product-${item.id}" href="#9" class="product-link" data-sku=${item.barcode}>
+                    <h4>${item.name}</h4>
+                    <span class="v-click-span"
+                      ><button
+                        title="تفاصيل البند"
+                        href="#"
+                        class="v-click fa fa-info-circle"
+                      ></button
+                    ></span>
+                    <p>${item.code}</p>
+                    <span class="clearfix"></span
+                  ></a>
+                </li>`);
+    });
+  }
+
+  let s = 813.383;
+  let flag = 0;
+  $(document).ready(function () {
+    $("body,html").append(descr);
+  });
+
+  ///////////
+  $(document).on("input", ".col-1 textarea", async function () {
+    // Check if descr element already exists in this row
+    if ($(this).closest("tr").find("#itemsDescription").length === 0) {
+      $(this).closest("tr").find(".col-1").append(descr);
+      $(this).closest("tr").find(".col-1 #itemsDescription").addClass("desc");
+    }
+    $("#search_pro").val($(this).closest("tr").find(".col-1 textarea").val());
+    let debounceTimer;
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(async () => {
+      if ($(this).closest("tr").find(".col-1 textarea").val().trim() !== "") {
+        let result = await performSearch($("#search_pro").val());
+        displayData(result.data);
+      }
+    }, 300);
+  });
+
+  $(document).on("click", ".col-1 .desc .p-list-ul li a", function (e) {
+    e.preventDefault();
+    console.log("link clicked");
+    console.log({
+      inBARCODE: $(this).closest(".p-list-ul li").find("a").attr("data-sku"),
+    });
+
+    $(this).closest("tr").find(".select-item textarea").val("");
+    onReceiveBarCode(
+      $(this).closest(".p-list-ul li").find("a").attr("data-sku")
+    );
+  });
+
+  $(document).on(
+    "click",
+    ".col-1 .desc .p-list-ul li a .v-click-span",
+    function (e) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      pid_id = $(this).parents(".product-link").attr("id") + "";
+      clickedProduct = pid_id.split("-")[1];
+      $("#myModalGeneralSize").addClass("modal-dialog modal-md");
+      $("#myModalGeneral_iframe").attr("style", "border: 0; height: 445px");
+      $("#myModalGeneralheader").hide();
+      $("#myModalGeneral_iframe").attr("src", "about:blank");
+      $("#myModalGeneral").modal("show");
+      $("#myModalGeneral_iframe").attr(
+        "src",
+        "/owner/products/view/" + clickedProduct + "?info_screen=1&is_ajax=1"
+      );
+    }
+  );
+
+  $(document).on("click", ".add-p-link", function (e) {
+    $("#myModalGeneralSize").addClass("modal-dialog modal-md");
+    $("#myModalGeneral_iframe").attr("style", "border: 0; height: 445px");
+    $("#myModalGeneralheader").hide();
+    $("#myModalGeneral_iframe").attr("src", "about:blank");
+    $("#myModalGeneral").modal("show");
+    $("#myModalGeneral_iframe").attr("src", "/owner/products/add?box=1");
+  });
+  $(document).on("click", function (e) {
+    console.log(e.target.id);
+    if (e.target.id != "search-icon") {
+      console.log("done");
+      $(".col-1 #itemsDescription")
+        .closest("tr")
+        .find(".col-1 #itemsDescription")
+        .remove();
+    }
+  });
+
+  $(document).ready(() => {
+    $(document).on("click", ".col-1", function () {
+      console.log("clicked");
+
+      setTimeout(() => {
+        $(this).closest("tr").find(".col-1 textarea").removeAttr("readonly");
+      }, "100");
+    });
+  });
+</script>

@@ -1,0 +1,260 @@
+<script>
+  setTimeout(() => {
+    // Function to process all products with 6 fields and store them
+    async function processProducts(allProducts) {
+      // Generate barcodes for products that don't have them
+      let barcodeCounter = 3689100000000; // Starting barcode number
+      const productsToUpdate = []; // Array for products needing barcode updates
+
+      // Create a new array with the 6 fields we want
+      const processedProducts = allProducts.map((product) => {
+        const productId = product.Product.id;
+        const existingBarcode = product.Product.barcode;
+        let barcode = existingBarcode;
+
+        // Check if product has no barcode and assign one
+        if (!existingBarcode || existingBarcode.trim() === "") {
+          barcode = (barcodeCounter++).toString();
+
+          // Add to the list of products to update
+          productsToUpdate.push({
+            id: productId,
+            barcode: barcode,
+          });
+        }
+
+        return {
+          prodId: productId,
+          name: product.Product.name || "",
+          code: product.Product.product_code || "",
+          barcode: barcode || "",
+          field1: product.Product.ProductsCustomData[0].field_16 || "",
+          field2: product.Product.ProductsCustomData[0].field_21 || "",
+          field3: product.Product.ProductsCustomData[0].field_24 || "",
+        };
+      });
+
+      console.log("Processed products:", processedProducts);
+      console.log(
+        `Found ${productsToUpdate.length} products needing barcode updates`
+      );
+
+      return {
+        processedProducts,
+        productsToUpdate,
+      };
+    }
+
+    // Function to update barcodes for products that don't have them
+    async function updateProductBarcodes(productsToUpdate) {
+      if (productsToUpdate.length === 0) {
+        console.log("No products need barcode updates");
+        return [];
+      }
+
+      console.log(`Updating barcodes for ${productsToUpdate.length} products`);
+
+      // Update products in batches
+      const batchSize = 20;
+      const updateResults = [];
+
+      for (let i = 0; i < productsToUpdate.length; i += batchSize) {
+        const batch = productsToUpdate.slice(i, i + batchSize);
+        console.log(
+          `Processing update batch ${
+            Math.floor(i / batchSize) + 1
+          } of ${Math.ceil(productsToUpdate.length / batchSize)}`
+        );
+
+        const requests = batch.map((product) =>
+          fetch(`/v2/api/entity/product/${product.id}/fields`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ barcode: product.barcode }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log(
+                `Updated barcode for product ${product.id} to ${product.barcode}`
+              );
+              updateResults.push({
+                productId: product.id,
+                barcode: product.barcode,
+                status: "success",
+                response: data,
+              });
+              return data;
+            })
+            .catch((error) => {
+              console.error(`Error updating product ${product.id}:`, error);
+              updateResults.push({
+                productId: product.id,
+                barcode: product.barcode,
+                status: "error",
+                error: error.message,
+              });
+            })
+        );
+
+        // Wait for all requests in the batch to complete
+        await Promise.all(requests);
+
+        // Add a small delay between batches
+        if (i + batchSize < productsToUpdate.length) {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+      }
+
+      console.log("Barcode update results:", updateResults);
+      return updateResults;
+    }
+
+    // Function to fetch products in batches
+    async function fetchProductsInBatches(totalPages) {
+      let allProducts = [];
+      const batchSize = 20; // Number of simultaneous requests
+
+      console.log(
+        `Fetching ${totalPages} pages of products in batches of ${batchSize}`
+      );
+
+      for (let i = 1; i <= totalPages; i += batchSize) {
+        console.log(`Fetching batch starting at page ${i}`);
+        const requests = [];
+
+        // Create batch of requests
+        for (let j = 0; j < batchSize && i + j <= totalPages; j++) {
+          const pageNum = i + j;
+          requests.push(
+            fetch(`/api2/products?page=${pageNum}&load_custom_data=1`, {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+              },
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error ${response.status}`);
+                }
+                return response.json();
+              })
+              .then((data) => {
+                if (data && data.data) {
+                  return data.data; // Return just the products array
+                }
+                return [];
+              })
+          );
+        }
+
+        // Wait for all requests in the batch to complete
+        const batchResults = await Promise.all(requests);
+
+        // Flatten and add to our collection
+        const batchProducts = batchResults.flat();
+        allProducts = allProducts.concat(batchProducts);
+
+        console.log(`Fetched ${allProducts.length} products so far`);
+      }
+
+      return allProducts;
+    }
+
+    // Initial request to get total number of pages
+    fetch(`/api2/products?load_custom_data=1`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then(async (data) => {
+        const totalPages = parseInt(data.pagination.page_count);
+        console.log(`Total pages to fetch: ${totalPages}`);
+
+        try {
+          // Fetch all products
+          const allProducts = await fetchProductsInBatches(totalPages);
+          console.log(
+            `Successfully fetched all ${allProducts.length} products`
+          );
+
+          // Process products to extract the 6 fields we want and add barcodes where missing
+          const { processedProducts, productsToUpdate } = await processProducts(
+            allProducts
+          );
+
+          // Display summary before updates
+          console.log(
+            `Final product catalog has ${processedProducts.length} items`
+          );
+          console.log({ processedProducts: processedProducts });
+          console.log({ productsToUpdate: productsToUpdate });
+
+          await fetch(`/v2/api/entity/le_productsclone`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              le_productsclone_le_productsclone_productslist: processedProducts,
+            }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log(`postes Succccc`);
+            });
+
+          // Ask user if they want to proceed with updates
+          if (productsToUpdate.length > 0) {
+            const shouldUpdate = confirm(
+              `Found ${productsToUpdate.length} products without barcodes. Do you want to update them now?`
+            );
+
+            if (shouldUpdate) {
+              // Update the barcodes using the API
+              const updateResults = await updateProductBarcodes(
+                productsToUpdate
+              );
+
+              // Count successes and failures
+              const successCount = updateResults.filter(
+                (r) => r.status === "success"
+              ).length;
+              const errorCount = updateResults.filter(
+                (r) => r.status === "error"
+              ).length;
+
+              alert(
+                `Barcode update complete.\nSuccessful: ${successCount}\nFailed: ${errorCount}`
+              );
+            } else {
+            }
+          } else {
+            alert("No products need barcode updates.");
+          }
+        } catch (error) {
+          console.error("Error during product processing:", error);
+          alert("Error processing products. See console for details.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error getting total pages:", error);
+        alert("Failed to determine total number of product pages.");
+      });
+  }, 500);
+</script>
