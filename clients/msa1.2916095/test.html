@@ -1,70 +1,96 @@
 <script>
-  document.getElementById("PurchaseOrderForm").onsubmit = async function (e) {
-    e.preventDefault();
-    console.log("yesss");
+  // Build new invoice body from purchase order data
+  function buildPurchaseInvoiceBody(purchaseOrder) {
+    // Create base invoice object preserving all keys
+    const invoiceBody = {
+      reference_id: 1,
+      supplier_id: purchaseOrder.supplier_id,
+      is_offline: purchaseOrder.is_offline,
+      supplier_business_name: purchaseOrder.supplier_business_name,
+      supplier_first_name: purchaseOrder.supplier_first_name,
+      supplier_last_name: purchaseOrder.supplier_last_name,
+      supplier_email: purchaseOrder.supplier_email,
+      supplier_address1: purchaseOrder.supplier_address1,
+      supplier_address2: purchaseOrder.supplier_address2,
+      supplier_postal_code: purchaseOrder.supplier_postal_code,
+      supplier_city: purchaseOrder.supplier_city,
+      supplier_state: purchaseOrder.supplier_state,
+      supplier_country_code: purchaseOrder.supplier_country_code,
+      date: new Date().toISOString().split("T")[0],
+      draft: purchaseOrder.draft,
+      discount: purchaseOrder.discount,
+      due_after: purchaseOrder.due_after,
+      issue_date: purchaseOrder.issue_date,
+      label_due_date: purchaseOrder.label_due_date,
+      summary_subtotal: purchaseOrder.summary_subtotal,
+      summary_discount: purchaseOrder.summary_discount,
+      summary_total: purchaseOrder.summary_total,
+      currency_code: purchaseOrder.currency_code,
+      summary_paid: purchaseOrder.summary_paid,
+      summary_unpaid: purchaseOrder.summary_unpaid,
+      html_notes: `Cloned from Purchase Order #${purchaseOrder.no}`,
+      invoice_layout_id: purchaseOrder.invoice_layout_id,
+      subscription_notify: purchaseOrder.subscription_notify,
+      supplier_secondary_address2: purchaseOrder.supplier_secondary_address2,
+      is_received: purchaseOrder.is_received,
+      received_date:
+        new Date().toISOString().split("T")[0] +
+        " " +
+        new Date().toTimeString().split(" ")[0].substring(0, 8),
+      follow_up_status: purchaseOrder.follow_up_status,
+      discount_amount: purchaseOrder.discount_amount,
+      shipping_amount: purchaseOrder.shipping_amount,
+      payment_status: purchaseOrder.payment_status,
+      store_id: purchaseOrder.store_id,
+      work_order_id: purchaseOrder.work_order_id,
+      summary_refund: purchaseOrder.summary_refund,
+      item_columns: purchaseOrder.item_columns,
+      extra_details: purchaseOrder.extra_details,
+      requisition_delivery_status: purchaseOrder.requisition_delivery_status,
+      branch_id: purchaseOrder.branch_id,
+      tags: purchaseOrder.tags,
+      source_id: purchaseOrder.id, // Set the source to current purchase order
+      source_type: "purchase_order",
+      item_discount_amount: purchaseOrder.item_discount_amount,
+      approved_by: purchaseOrder.approved_by,
+      subscription_id: purchaseOrder.subscription_id,
+      shipping_tax_id: purchaseOrder.shipping_tax_id,
 
-    const formData = new FormData(e.target);
-    const formDataObj = {};
-    let isValid = true;
-    let errorMessage = "";
-    formData.forEach((value, key) => {
-      const keys = key.match(/[^\[\]]+/g);
-      let tempObj = formDataObj;
-      const inputElement = e.target.querySelector(`[name="${key}"]`);
-      if (inputElement && inputElement.hasAttribute("required") && !value) {
-        isValid = false;
-        errorMessage += `${inputElement.placeholder || key} is required.\n`;
-      }
-      keys.forEach((k, i) => {
-        if (i === keys.length - 1) {
-          tempObj[k] = value;
-        } else {
-          if (!tempObj[k]) {
-            tempObj[k] = {};
-          }
-          tempObj = tempObj[k];
-        }
-      });
-    });
-    if (!isValid) {
-      alert(errorMessage);
-      return;
-    }
-    console.log({ formDataObj: formDataObj });
-    let url = `/api2/purchase_invoices/add_debit_note`;
-    if (window.location.href.indexOf("expenses") != -1) {
-      url = `/api2/expenses`;
-    }
-    await fetch(`${url}`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formDataObj.data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.json().then((errorRes) => {
-            console.error("Error:", errorRes);
-            alert(
-              `Error ${response.status}: ${
-                errorRes.message || "An error occurred."
-              }`
-            );
-          });
-        }
-        return response.json().then(async (res) => {
-          console.log("Success:", res);
-          //   await updateProjectData2(res.id);
-          //   if (window.location.href.indexOf("expense") != -1) {
-          //     window.location.href = `/owner/expenses/view/${res.id}`;
-          //   }
-        });
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-        alert("An unexpected error occurred. Please try again.");
-      });
-  };
+      // Map purchase order items to invoice items
+      products: purchaseOrder.purchase_order_items.map((item) => ({
+        product_id: item.product_id,
+        quantity: item.quantity,
+        unit_price: item.unit_price,
+        description: item.description,
+        discount_type: item.discount_type,
+        discount: item.discount,
+        tax1: item.tax1,
+        tax2: item.tax2,
+        unit_name: item.unit_name,
+        unit_small_name: item.unit_small_name,
+        unit_factor: item.unit_factor,
+        unit_factor_id: item.unit_factor_id,
+        tracking_data: item.tracking_data,
+        store_id: item.store_id,
+      })),
+
+      // Include any taxes from the purchase order
+      taxes: purchaseOrder.purchase_order_taxes || [],
+
+      // Include custom fields
+      custom_fields: purchaseOrder.purchase_order_custom_fields.map(
+        (field) => ({
+          label: field.label,
+          value: field.value,
+          placeholder: field.placeholder,
+          display_order: field.display_order,
+        })
+      ),
+    };
+
+    return invoiceBody;
+  }
+
+  // Example usage with the provided object
+  const invoiceBody = buildPurchaseInvoiceBody(obj);
 </script>

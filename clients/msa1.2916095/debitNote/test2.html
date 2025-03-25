@@ -1,0 +1,135 @@
+<script>
+  function createPostBodyFromGetResponse(apiData) {
+    // Get today's date in YYYY-MM-DD format
+    const today = new Date();
+    const formattedDate = `${today.getFullYear()}-${(today.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
+
+
+    // Build the complete post body that mirrors the GET structure
+    const postBody = {
+      supplier_id: apiData.supplier_id,
+      staff_id: apiData.staff_id || 0,
+      supplier_business_name: apiData.supplier_business_name,
+      date: formattedDate,
+      requisition_delivery_status: apiData.requisition_delivery_status,
+      summary_total: apiData.summary_total,
+      currency_code: apiData.currency_code,
+      payment_status: apiData.payment_status || 0,
+      follow_up_status: apiData.follow_up_status,
+      tags: apiData.tags || [],
+      type: apiData.type,
+      is_offline: apiData.is_offline,
+      supplier_first_name: apiData.supplier_first_name,
+      supplier_last_name: apiData.supplier_last_name,
+      supplier_email: apiData.supplier_email,
+      supplier_address1: apiData.supplier_address1,
+      supplier_address2: apiData.supplier_address2,
+      supplier_postal_code: apiData.supplier_postal_code,
+      supplier_city: apiData.supplier_city,
+      supplier_state: apiData.supplier_state,
+      supplier_country_code: apiData.supplier_country_code,
+      draft: apiData.draft,
+      discount: apiData.discount,
+      due_after: apiData.due_after,
+      issue_date: apiData.issue_date,
+      label_due_date: apiData.label_due_date,
+      summary_subtotal: apiData.summary_subtotal,
+      summary_discount: apiData.summary_discount,
+      summary_paid: apiData.summary_paid,
+      summary_unpaid: apiData.summary_unpaid,
+      html_notes: `نسخة من أمر الشراء ${apiData.no}`,
+      invoice_layout_id: apiData.invoice_layout_id,
+      subscription_notify: apiData.subscription_notify,
+      supplier_secondary_address2: apiData.supplier_secondary_address2,
+      is_received: apiData.is_received,
+      received_date:
+        formattedDate + " " + new Date().toTimeString().slice(0, 8),
+      discount_amount: apiData.discount_amount,
+      shipping_amount: apiData.shipping_amount,
+      store_id: apiData.store_id,
+      work_order_id: apiData.work_order_id,
+      summary_refund: apiData.summary_refund,
+      item_columns: apiData.item_columns,
+      extra_details: apiData.extra_details,
+      branch_id: apiData.branch_id,
+      source_id: apiData.id,
+      source_type: "purchase_order",
+      item_discount_amount: apiData.item_discount_amount,
+      approved_by: apiData.approved_by,
+      subscription_id: apiData.subscription_id,
+      shipping_tax_id: apiData.shipping_tax_id,
+
+      // Add purchase order items
+      purchase_order_items: [],
+
+      // Add other required objects
+      supplier: {
+        id: apiData.supplier_id,
+        supplier_from_data: "1",
+      },
+
+      // Add custom fields
+      purchase_order_custom_fields: [],
+    };
+
+    // Add items (from either purchase_order_items or purchase_debit_notes_items)
+    const itemsSource =
+      apiData.purchase_order_items && apiData.purchase_order_items.length > 0
+        ? apiData.purchase_order_items
+        : apiData.purchase_debit_notes_items || [];
+
+    if (itemsSource.length > 0) {
+      itemsSource.forEach((item) => {
+        postBody.purchase_order_items.push({
+          purchase_order_id: "", // Will be assigned by the server
+          item: item.item,
+          description: item.description || "",
+          unit_price: item.unit_price,
+          quantity: item.quantity,
+          tax1: item.tax1,
+          tax2: item.tax2,
+          summary_tax1: item.summary_tax1,
+          summary_tax2: item.summary_tax2,
+          subtotal: item.subtotal,
+          product_id: item.product_id,
+          display_order: item.display_order,
+          col_3: item.col_3 || "",
+          col_4: item.col_4 || "",
+          col_5: item.col_5 || "",
+          status: item.status,
+          unit_name: item.unit_name,
+          unit_small_name: item.unit_small_name,
+          unit_factor: item.unit_factor,
+          unit_factor_id: item.unit_factor_id,
+          tracking_data: item.tracking_data,
+          discount_type: item.discount_type,
+          discount: item.discount,
+          calculated_discount: item.calculated_discount,
+          store_id: item.store_id,
+        });
+      });
+    }
+
+    // Add custom fields
+    if (
+      apiData.purchase_order_custom_fields &&
+      apiData.purchase_order_custom_fields.length > 0
+    ) {
+      apiData.purchase_order_custom_fields.forEach((field) => {
+        postBody.purchase_order_custom_fields.push({
+          purchase_order_id: "", // Will be assigned by the server
+          display_order: field.display_order,
+          label: field.label,
+          value: field.value,
+          placeholder: field.placeholder,
+        });
+      });
+    }
+
+    return postBody;
+  }
+
+
+</script>

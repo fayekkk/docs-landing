@@ -1,5 +1,17 @@
 <html>
   <head>
+    <style>
+      #banks {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
+      #banks td {
+        border: 1px solid black;
+        padding: 3px;
+        text-align: right;
+      }
+    </style>
     <script>
       function subst() {
         // Decoding the invoice page url to detect page number
@@ -27,10 +39,22 @@
     </script>
   </head>
   <body style="border: 0; margin: 0" onload="subst()">
+    <table id="banks">
+      <tr>
+        <td>البنك : مصرف الراجحى</td>
+        <td>رقم الحساب : 525000010006080321343</td>
+        <td>IBAN : SA3380000525608010321343</td>
+      </tr>
+      <tr>
+        <td>البنك : البنك الأهلي السعودي</td>
+        <td>رقم الحساب : 01400008957505</td>
+        <td>IBAN : SA7310000001400008957505</td>
+      </tr>
+    </table>
     <table style="width: 100%">
       <tr>
         <td colspan="2">
-          <div
+          <!-- <div
             style="
               border-top: 2px solid rgb(255, 41, 41);
               text-align: right;
@@ -39,14 +63,14 @@
             "
           >
             استلمت البضاعة كاملة و سليمة
-          </div>
+          </div> -->
         </td>
       </tr>
       <tr>
         <td style="text-align: center; direction: ltr; width: 70%">
           <span class="page"></span> of <span class="topage"></span>
         </td>
-        <td>اسم المستحدم : {%staff_member_name%}</td>
+        <!-- <td>اسم المستحدم : {%staff_member_name%}</td> -->
       </tr>
     </table>
   </body>

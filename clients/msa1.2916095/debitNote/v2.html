@@ -1,0 +1,201 @@
+<script>
+  // Clone Purchase Order to Invoice
+
+  $(document).ready(function () {
+    if (
+      window.location.href.indexOf("/purchase_invoices/view_debit_note") != -1
+    ) {
+      // Get purchase order ID from URL
+      const purchaseOrderId = window.location.pathname.split("/")[4];
+
+      // Add clone button to UI with the specified style
+      $(".invoice-actions a").first().before(`
+          <a href="#" id="cloneToInvoice" class="btn btn-default btn-sm btn-5">
+            <i class="fa fa-copy"></i> نسخ إلى فاتورة
+          </a>
+        `);
+      function convertPurchaseOrderToPostBody(purchaseOrderData) {
+        const today = new Date();
+        const formattedDate = `${today
+          .getDate()
+          .toString()
+          .padStart(2, "0")}/${(today.getMonth() + 1)
+          .toString()
+          .padStart(2, "0")}/${today.getFullYear()}`;
+
+        // Create the new purchase order body
+        const postBody = {
+          item_columns: purchaseOrderData.item_columns || null,
+          invoice_layout_id: purchaseOrderData.invoice_layout_id,
+          type: "14",
+          is_offline: purchaseOrderData.is_offline || null,
+          id: "", // Empty for new order
+          supplier_id: purchaseOrderData.supplier_id || null,
+          currency_code: purchaseOrderData.currency_code || null,
+          language_id: purchaseOrderData.invoice_layout?.language_id || null,
+          supplier_supplier_number:
+            purchaseOrderData.supplier?.supplier_number || "000001",
+          supplier_business_name:
+            purchaseOrderData.supplier_business_name || "مورد",
+          supplier_first_name: purchaseOrderData.supplier_first_name || null,
+          supplier_last_name: purchaseOrderData.supplier_last_name || null,
+
+          supplier_address1: purchaseOrderData.supplier_address1 || null,
+          supplier_address2: purchaseOrderData.supplier_address2 || null,
+          supplier_city: purchaseOrderData.supplier_city || null,
+          supplier_state: purchaseOrderData.supplier_state || null,
+          supplier_postal_code: purchaseOrderData.supplier_postal_code || null,
+          supplier_phone1: purchaseOrderData.supplier?.phone1 || null,
+          supplier_phone2: purchaseOrderData.supplier?.phone2 || null,
+          supplier_country_code:
+            purchaseOrderData.supplier_country_code || "EG",
+          supplier_bn1: purchaseOrderData.supplier?.bn1 || null,
+          supplier_bn1_label:
+            purchaseOrderData.supplier?.bn1_label || "سجل تجاري",
+          supplier_bn2: purchaseOrderData.supplier?.bn2 || null,
+          supplier_bn2_label:
+            purchaseOrderData.supplier?.bn2_label || "بطاقة ضريبية",
+          supplier_default_currency_code:
+            purchaseOrderData.supplier?.default_currency_code || "EGP",
+          date: formattedDate,
+          work_order_id: purchaseOrderData.work_order_id || null,
+          store_id: purchaseOrderData.store_id || "2",
+          show_item_stores: "0",
+          shipping_tax_id: purchaseOrderData.shipping_tax_id || null,
+          shipping_amount: purchaseOrderData.shipping_amount || null,
+          discount: purchaseOrderData.discount || null,
+          discount_amount: purchaseOrderData.discount_amount || null,
+          adjustment_label: "",
+          adjustment_value: "",
+          html_notes: purchaseOrderData.html_notes || null,
+          draft: "1", 
+          summary_total: {
+            currency: purchaseOrderData.currency_code || "EGP", 
+          },
+          Supplier: {
+            id: purchaseOrderData.supplier_id || "1",
+            supplier_from_data: "1",
+          },
+          PurchaseOrderCustomField: {},
+          purchase_order_items: {},
+          purchaseDocuments_s3: "",
+          "template-PurchaseOrderDocument": {
+            "%unid%": {
+              id: "",
+              document_id: "%id%",
+            },
+          },
+          JournalAccountAdjustmentRoute: {
+            entity_type: "purchases_adjustment",
+            entity_id: "",
+            auto_account_type: "fixed",
+            account_type: "1",
+            account_id: "",
+          },
+          le_custom_data_purchase_order: {
+            testes: "",
+            id: "",
+            reference_id: "",
+          },
+        };
+
+        // Add custom fields
+        if (
+          purchaseOrderData.purchase_order_custom_fields &&
+          purchaseOrderData.purchase_order_custom_fields.length > 0
+        ) {
+          purchaseOrderData.purchase_order_custom_fields.forEach(
+            (field, index) => {
+              postBody.PurchaseOrderCustomField[index] = {
+                label: field.label || null,
+                value: field.value || null,
+              };
+            }
+          );
+        }
+
+        // Add order items
+        if (
+          purchaseOrderData.purchase_order_items &&
+          purchaseOrderData.purchase_order_items.length > 0
+        ) {
+          purchaseOrderData.purchase_order_items.forEach((item, index) => {
+            postBody.purchase_order_items[index] = {
+              item: item.item || "0",
+              product_id: item.product_id ,
+              description: item.description || "",
+              col_3: item.col_3 || "",
+              col_4: item.col_4 || "",
+              col_5: item.col_5 || "",
+              unit_price: item.unit_price || 0,
+              quantity: item.quantity || 1,
+              discount: item.discount || 0,
+              discount_type: item.discount_type || 1,
+              tax1: item.tax1,
+              tax2: item.tax2,
+            };
+          });
+        }
+
+        return postBody;
+      }
+      // Handle clone button click
+      $("#cloneToInvoice").on("click", async function (e) {
+        e.preventDefault();
+        const $btn = $(this);
+        const originalHtml = $btn.html();
+        $btn
+          .prop("disabled", true)
+          .html('<i class="fa fa-spinner fa-spin"></i> جاري المعالجة...');
+
+        try {
+          // Fetch purchase order data
+          const orderResponse = await fetch(
+            `/v2/api/entity/purchase_order/${purchaseOrderId}/1`
+          );
+          if (!orderResponse.ok)
+            throw new Error(
+              `خطأ ${orderResponse.status}: ${orderResponse.statusText}`
+            );
+          const purchaseOrder = await orderResponse.json();
+          console.log({ purchaseOrder: purchaseOrder });
+
+          // Transform to invoice format
+          const invoiceBody = convertPurchaseOrderToPostBody(purchaseOrder);
+          console.log({ invoiceBody: invoiceBody });
+
+          //   Create new invoice
+          const invoiceResponse = await fetch(
+            "/v2/api/entity/purchase_debit_note",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+              body: JSON.stringify(invoiceBody),
+            }
+          );
+
+          if (!invoiceResponse.ok) {
+            const errorText = await invoiceResponse.text();
+            console.log({ errorText: errorText });
+
+            throw new Error(`خطأ في إنشاء إشعر المدين: ${errorText}`);
+          }
+          const newInvoice = await invoiceResponse.json();
+          window.open(
+            `/owner/purchase_invoices/edit_debit_note/${newInvoice.id}`,
+            "_blank"
+          );
+        } catch (error) {
+          console.log(error);
+
+          alert(error.message);
+        } finally {
+          $btn.prop("disabled", false).html(originalHtml);
+        }
+      });
+    }
+  });
+</script>

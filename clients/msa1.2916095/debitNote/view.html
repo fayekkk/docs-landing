@@ -1,0 +1,164 @@
+<script>
+  // Clone Purchase Order to Invoice
+
+  $(document).ready(function () {
+    if (
+      window.location.href.indexOf("/purchase_invoices/view_debit_note") != -1
+    ) {
+      // Get purchase order ID from URL
+      const purchaseOrderId = window.location.pathname.split("/")[4];
+
+      // Add clone button to UI with the specified style
+      $(".invoice-actions a").first().before(`
+      <a href="#" id="cloneToInvoice" class="btn btn-default btn-sm btn-5">
+        <i class="fa fa-copy"></i> نسخ إلى فاتورة
+      </a>
+    `);
+
+      // Handle clone button click
+      $("#cloneToInvoice").on("click", async function (e) {
+        e.preventDefault();
+        const $btn = $(this);
+        const originalHtml = $btn.html();
+        $btn
+          .prop("disabled", true)
+          .html('<i class="fa fa-spinner fa-spin"></i> جاري المعالجة...');
+
+        try {
+          // Fetch purchase order data
+          const orderResponse = await fetch(
+            `/v2/api/entity/purchase_order/${purchaseOrderId}/1`
+          );
+          if (!orderResponse.ok)
+            throw new Error(
+              `خطأ ${orderResponse.status}: ${orderResponse.statusText}`
+            );
+          const purchaseOrder = await orderResponse.json();
+          console.log({ purchaseOrder: purchaseOrder });
+
+          // Transform to invoice format
+          const invoiceBody = {
+            type: 14,
+            supplier_id: purchaseOrder.supplier_id,
+            is_offline: purchaseOrder.is_offline,
+            supplier_business_name: purchaseOrder.supplier_business_name,
+            supplier_first_name: purchaseOrder.supplier_first_name,
+            supplier_last_name: purchaseOrder.supplier_last_name,
+            supplier_email: purchaseOrder.supplier_email,
+            supplier_address1: purchaseOrder.supplier_address1,
+            supplier_address2: purchaseOrder.supplier_address2,
+            supplier_postal_code: purchaseOrder.supplier_postal_code,
+            supplier_city: purchaseOrder.supplier_city,
+            supplier_state: purchaseOrder.supplier_state,
+            supplier_country_code: purchaseOrder.supplier_country_code,
+            date: new Date().toISOString().split("T")[0],
+            draft: purchaseOrder.draft,
+            discount: purchaseOrder.discount,
+            due_after: purchaseOrder.due_after,
+            issue_date: purchaseOrder.issue_date,
+            label_due_date: purchaseOrder.label_due_date,
+            summary_subtotal: purchaseOrder.summary_subtotal,
+            summary_discount: purchaseOrder.summary_discount,
+            summary_total: purchaseOrder.summary_total,
+            currency_code: purchaseOrder.currency_code,
+            summary_paid: purchaseOrder.summary_paid,
+            summary_unpaid: purchaseOrder.summary_unpaid,
+            html_notes: ``,
+            invoice_layout_id: purchaseOrder.invoice_layout_id,
+            subscription_notify: purchaseOrder.subscription_notify,
+            supplier_secondary_address2:
+              purchaseOrder.supplier_secondary_address2,
+            is_received: purchaseOrder.is_received,
+            received_date:
+              new Date().toISOString().split("T")[0] +
+              " " +
+              new Date().toTimeString().split(" ")[0].substring(0, 8),
+            follow_up_status: purchaseOrder.follow_up_status,
+            discount_amount: purchaseOrder.discount_amount,
+            shipping_amount: purchaseOrder.shipping_amount,
+            payment_status: purchaseOrder.payment_status,
+            store_id: purchaseOrder.store_id,
+            work_order_id: purchaseOrder.work_order_id,
+            summary_refund: purchaseOrder.summary_refund,
+            item_columns: purchaseOrder.item_columns,
+            extra_details: purchaseOrder.extra_details,
+            requisition_delivery_status:
+              purchaseOrder.requisition_delivery_status,
+            branch_id: purchaseOrder.branch_id,
+            tags: purchaseOrder.tags,
+            source_id: purchaseOrder.id,
+            source_type: "purchase_order",
+            item_discount_amount: purchaseOrder.item_discount_amount,
+            approved_by: purchaseOrder.approved_by,
+            subscription_id: purchaseOrder.subscription_id,
+            shipping_tax_id: purchaseOrder.shipping_tax_id,
+            purchase_order_items: purchaseOrder.purchase_order_items,
+            // Map purchase order items to invoice items
+            products: purchaseOrder.purchase_order_items.map((item) => ({
+              calculated_discount: item.calculated_discount,
+              col_3: item.col_3,
+              col_4: item.col_4,
+              col_5: item.col_5,
+              created:
+                new Date().toISOString().split("T")[0] +
+                " " +
+                new Date().toTimeString().split(" ")[0].substring(0, 8),
+              description: item.description,
+              discount: item.discount,
+              discount_type: item.discount_type,
+              display_order: item.display_order,
+              item: item.item,
+              product_id: item.product_id,
+              quantity: item.quantity,
+              status: item.status,
+              store_id: item.store_id,
+              subtotal: item.subtotal,
+              summary_tax1: item.summary_tax1,
+              summary_tax2: item.summary_tax2,
+              tax1: item.tax1,
+              tax2: item.tax2,
+              tracking_data: item.tracking_data,
+              unit_factor: item.unit_factor,
+              unit_factor_id: item.unit_factor_id,
+              unit_name: item.unit_name,
+              unit_price: item.unit_price,
+              unit_small_name: item.unit_small_name,
+            })),
+            taxes: purchaseOrder.purchase_order_taxes || [],
+            custom_fields: purchaseOrder.custom_fields,
+            purchase_order_custom_fields:
+              purchaseOrder.purchase_order_custom_fields,
+          };
+          console.log({ invoiceBody: invoiceBody });
+
+          //   Create new invoice
+          const invoiceResponse = await fetch(
+            "/v2/api/entity/purchase_debit_note",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+              body: JSON.stringify(invoiceBody),
+            }
+          );
+
+          if (!invoiceResponse.ok) {
+            const errorText = await invoiceResponse.text();
+            throw new Error(`خطأ في إنشاء إشعر المدين: ${errorText}`);
+          }
+          const newInvoice = await invoiceResponse.json();
+          window.open(
+            `/owner/purchase_invoices/edit_debit_note/${newInvoice.id}`,
+            "_blank"
+          );
+        } catch (error) {
+          alert(error.message);
+        } finally {
+          $btn.prop("disabled", false).html(originalHtml);
+        }
+      });
+    }
+  });
+</script>

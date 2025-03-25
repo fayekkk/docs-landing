@@ -330,6 +330,12 @@
   #currencySelect {
     width: 93%;
   }
+  .report-table-dashed * {
+    font-weight: bold !important;
+  }
+  .report-table-dashed {
+    width: 96% !important;
+  }
 </style>
 <script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
 //
@@ -339,23 +345,55 @@
   $(document).ready(function () {
     setTimeout(() => {
       if (
-        window.location.href.indexOf(
-          "/owner/reports/journal_transactions?report_type=cat"
-        ) != -1
+        window.location.href.indexOf("/owner/reports/journal_transactions") !=
+          -1 &&
+        window.location.href.indexOf("report_type=cat") != -1 &&
+        $(".actions-selections-head")
+          .text()
+          .indexOf("تقرير ميزان مراجعة مجاميع وأرصدة") != -1
       ) {
-        $(".report-table-dashed--head:first-child th:nth-child(5)").hide();
-        $(
-          ".report-table-dashed--head:not(:first-child) th:nth-child(7)"
-        ).hide();
-        $(
-          ".report-table-dashed--head:not(:first-child) th:nth-child(8)"
-        ).hide();
+        if ($("#level").val()) {
+          $(".report-table-dashed--head:first-child th:nth-child(5)").hide();
+          $(".report-table-dashed--head:first-child th:nth-child(2)").hide();
+          $(
+            ".report-table-dashed--head:not(:first-child) th:nth-child(5)"
+          ).hide();
+          $(
+            ".report-table-dashed--head:not(:first-child) th:nth-child(6)"
+          ).hide();
 
-        $(".report-table-dashed tbody td:nth-child(7)").hide();
-        $(".report-table-dashed tbody td:nth-child(8)").hide();
-        $(".report-table-dashed tbody th:nth-child(7)").hide();
-        $(".report-table-dashed tbody th:nth-child(8)").hide();
+          $(".report-table-dashed tbody td:nth-child(2)").hide();
+          $(".report-table-dashed tbody td:nth-child(7)").hide();
+          $(".report-table-dashed tbody td:nth-child(8)").hide();
+          $(".report-table-dashed tbody th:nth-child(6)").hide();
+          $(".report-table-dashed tbody th:nth-child(7)").hide();
+          $(".report-table-dashed").css({
+            "margin-left": "20px",
+            "margin-right": "20px",
+            "font-weight": "bold",
+            width: "96% !important",
+          });
+          $(".grand-total-cell").removeAttr("colspan");
+        } else {
+          $(".report-table-dashed--head:first-child th:nth-child(5)").hide();
+          $(
+            ".report-table-dashed--head:not(:first-child) th:nth-child(7)"
+          ).hide();
+          $(
+            ".report-table-dashed--head:not(:first-child) th:nth-child(8)"
+          ).hide();
 
+          $(".report-table-dashed tbody td:nth-child(7)").hide();
+          $(".report-table-dashed tbody td:nth-child(8)").hide();
+          $(".report-table-dashed tbody th:nth-child(6)").hide();
+          $(".report-table-dashed tbody th:nth-child(7)").hide();
+          $(".report-table-dashed").css({
+            "margin-left": "20px",
+            "margin-right": "20px",
+            "font-weight": "bold",
+            width: "96% !important",
+          });
+        }
         // $(".grand-total th:nth-child(7)").hide();
         $("#printBtn").hide();
         // $(".grand-total th:nth-child(8)").hide();

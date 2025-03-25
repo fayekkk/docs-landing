@@ -1,260 +1,500 @@
+<!-- code_Invoices_owner_add -->
+<style>
+  .col-1 {
+    position: relative !important;
+  }
+
+  .desc {
+    display: block !important;
+  }
+
+  .p-list {
+    border: 0;
+    box-shadow: 0 0 7px 3px rgba(0, 0, 0, 0.1);
+    width: 380px;
+  }
+  @media (max-width: 768px) {
+    .p-list {
+      width: 100% !important;
+    }
+  }
+
+  .p-list input {
+    border: medium none;
+    display: block;
+    font-size: 15px;
+    padding: 5px 15px;
+    width: 100%;
+  }
+
+  .s-list {
+    background: none repeat scroll 0 0 #fff;
+    z-index: 20000000000;
+    position: absolute;
+    list-style: none;
+  }
+
+  .p-list .p-list-ul {
+    overflow: auto;
+    max-height: 200px;
+  }
+
+  .p-list .p-list-ul li {
+    padding: 0 10px;
+    color: #3a3e63;
+  }
+
+  .s-list li {
+    border: none;
+    border-bottom: 1px solid #eee;
+    display: block;
+    float: none;
+    height: auto;
+    position: relative;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .p-left {
+    float: right !important;
+  }
+
+  .m-r-x {
+    margin-left: 5px;
+  }
+
+  .p-list li a h4 {
+    padding: 0;
+    margin: 0 0 0;
+    font-size: 14px;
+    max-width: 65%;
+  }
+
+  .p-list li a span {
+    left: 15px;
+    right: auto;
+  }
+
+  .p-list li a span {
+    padding: 0;
+    margin: 0 0 0;
+    color: #888;
+    font-size: 12px;
+    float: right;
+    padding-top: 12px;
+    position: absolute;
+    top: 23px;
+  }
+  .p-list .p-list-ul li a span.product-stock {
+    top: 40px !important;
+  }
+
+  .p-list .p-list-ul li a {
+    padding: 5px 10px 15px 10px !important;
+    top: 5px;
+  }
+
+  .p-list li a span.v-click-span {
+    left: 15px;
+    right: auto;
+  }
+
+  .p-list li a span.v-click-span {
+    padding: 0;
+    margin: 0 0 0;
+    color: #888;
+    font-size: 14px;
+    float: right;
+    position: absolute;
+    top: 10px;
+  }
+
+  .v-click {
+    border: none;
+    background: transparent;
+    /* color: black; */
+    margin-top: 8px;
+    color: grey;
+  }
+
+  .p-list .p-list-ul li.active,
+  .p-list .p-list-ul li:hover {
+    background-color: #00b0ef;
+  }
+
+  .p-list .p-list-ul li.active *,
+  .p-list .p-list-ul li:hover * {
+    color: #fff;
+  }
+
+  .p-list li a .v-click:hover {
+    color: #000099 !important;
+    transform: scale(1.5);
+  }
+
+  .col-1 textarea,
+  #itemsDescription #search_pro {
+    direction: ltr;
+    text-align: right;
+  }
+  /* .tare2 {
+      display: none !important;
+    } */
+
+  #InvoiceProducts {
+    display: none !important;
+  }
+
+  .invoice-items .table tr td {
+    overflow: inherit !important;
+  }
+</style>
 <script>
-  setTimeout(() => {
-    // Function to process all products with 6 fields and store them
-    async function processProducts(allProducts) {
-      // Generate barcodes for products that don't have them
-      let barcodeCounter = 3689100000000; // Starting barcode number
-      const productsToUpdate = []; // Array for products needing barcode updates
+  // Templates
+  const modalTemplate = `
+    <div class="modal fade" id="myModalGeneral" tabindex="-1" role="dialog" aria-labelledby="myModalGeneralLabel">
+      <div id="myModalGeneralSize" class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
+          </button>
+          <div id="myModalGeneralheader" class="modal-header">
+            <h4 class="modal-title" id="myModalGeneralLabel">الضرائب</h4>
+          </div>
+          <div class="modal-body">
+            <iframe id="myModalGeneral_iframe" width="100%" height="100%" src="" frameborder="0" allowfullscreen=""></iframe>
+          </div>
+        </div>
+      </div>
+    </div>`;
 
-      // Create a new array with the 6 fields we want
-      const processedProducts = allProducts.map((product) => {
-        const productId = product.Product.id;
-        const existingBarcode = product.Product.barcode;
-        let barcode = existingBarcode;
+  const productSearchTemplate = `
+    <div class="p-list s-list" id="itemsDescription" style="position: relative; z-index: 1000;">
+      <div class="p-2 bg-white d-flex justify-content-center align-items-center g-1">
+        <input type="text" class="form-control" id="search_pro" value="" placeholder="البحث عن المنتجات ( بالوصف )">
+      </div>
+      <ul class="p-list-ul"></ul>
+      <a href="#" id="addProductButton" class="add-p-link item-settings btn-block-s2020 btn-secondary-s2020 font-weight-bold fs-14 px-3 py-2 s2020 text-dark-blue">
+        <i class="s2020 far fa-plus-circle text-success mr-2"></i>إضافة منتج جديد
+      </a>
+    </div>`;
 
-        // Check if product has no barcode and assign one
-        if (!existingBarcode || existingBarcode.trim() === "") {
-          barcode = (barcodeCounter++).toString();
+  // State variables
+  var clickedProduct = null;
+  var debounceTimer = null;
+  var searchActive = false;
+  var activeTextarea = null;
+  var preventClose = false;
 
-          // Add to the list of products to update
-          productsToUpdate.push({
-            id: productId,
-            barcode: barcode,
-          });
-        }
-
-        return {
-          prodId: productId,
-          name: product.Product.name || "",
-          code: product.Product.product_code || "",
-          barcode: barcode || "",
-          field1: product.Product.ProductsCustomData[0].field_16 || "",
-          field2: product.Product.ProductsCustomData[0].field_21 || "",
-          field3: product.Product.ProductsCustomData[0].field_24 || "",
-        };
-      });
-
-      console.log("Processed products:", processedProducts);
-      console.log(
-        `Found ${productsToUpdate.length} products needing barcode updates`
+  // Fetch product data based on search term
+  async function searchProducts(term) {
+    try {
+      const encodedTerm = encodeURIComponent(term);
+      const response = await fetch(
+        `/v2/api/entity/le_productsclone_productslist/list/1?filter[or][name][like]=${encodedTerm}&filter[or][code][like]=${encodedTerm}&filter[or][barcode][like]=${encodedTerm}&filter[or][field3][like]=${encodedTerm}&filter[or][field2][like]=${encodedTerm}&filter[or][field1][like]=${encodedTerm}&filter[reference_id]=4&sort[name]=asc`
       );
 
-      return {
-        processedProducts,
-        productsToUpdate,
-      };
-    }
-
-    // Function to update barcodes for products that don't have them
-    async function updateProductBarcodes(productsToUpdate) {
-      if (productsToUpdate.length === 0) {
-        console.log("No products need barcode updates");
-        return [];
+      if (!response.ok) {
+        throw new Error(`Search failed: ${response.status}`);
       }
 
-      console.log(`Updating barcodes for ${productsToUpdate.length} products`);
+      return await response.json();
+    } catch (error) {
+      console.error("Error searching products:", error);
+      return { data: [] };
+    }
+  }
 
-      // Update products in batches
-      const batchSize = 20;
-      const updateResults = [];
+  // Render product search results
+  function renderProductList(products) {
+    const productList = $(".p-list-ul");
+    productList.empty();
 
-      for (let i = 0; i < productsToUpdate.length; i += batchSize) {
-        const batch = productsToUpdate.slice(i, i + batchSize);
-        console.log(
-          `Processing update batch ${
-            Math.floor(i / batchSize) + 1
-          } of ${Math.ceil(productsToUpdate.length / batchSize)}`
-        );
+    if (!products || !products.length) {
+      productList.append('<li class="no-results">لا توجد نتائج</li>');
+      return;
+    }
 
-        const requests = batch.map((product) =>
-          fetch(`/v2/api/entity/product/${product.id}/fields`, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ barcode: product.barcode }),
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error(`HTTP error ${response.status}`);
-              }
-              return response.json();
-            })
-            .then((data) => {
-              console.log(
-                `Updated barcode for product ${product.id} to ${product.barcode}`
-              );
-              updateResults.push({
-                productId: product.id,
-                barcode: product.barcode,
-                status: "success",
-                response: data,
-              });
-              return data;
-            })
-            .catch((error) => {
-              console.error(`Error updating product ${product.id}:`, error);
-              updateResults.push({
-                productId: product.id,
-                barcode: product.barcode,
-                status: "error",
-                error: error.message,
-              });
-            })
-        );
+    products.forEach((product) => {
+      productList.append(`
+        <li>
+          <a id="product-${
+            product.id
+          }" href="#9" class="product-link" data-sku="${product.barcode || ""}">
+            <h4 class="product-name">${product.name || ""}</h4>
+            <span class="v-click-span">
+              <button title="تفاصيل البند" href="#" class="v-click fa fa-info-circle"></button>
+            </span>
+            <p class="product-code">${product.code || ""}</p>
+            <span class="clearfix"></span>
+          </a>
+        </li>
+      `);
+    });
+  }
 
-        // Wait for all requests in the batch to complete
-        await Promise.all(requests);
+  // Handle product selection
+  function selectProduct(element) {
+    // Find the parent product-link if we clicked on a child element
+    const productLink = $(element).hasClass("product-link")
+      ? $(element)
+      : $(element).closest(".product-link");
 
-        // Add a small delay between batches
-        if (i + batchSize < productsToUpdate.length) {
-          await new Promise((resolve) => setTimeout(resolve, 500));
+    if (!productLink.length) {
+      console.warn("Could not find product link element");
+      return;
+    }
+
+    const barcode = productLink.attr("data-sku");
+    if (!barcode) {
+      console.warn("No barcode found on product link");
+      return;
+    }
+
+    console.log("Product selected with barcode:", barcode);
+
+    // Find related elements
+    const $row = $(activeTextarea).closest("tr");
+    $row.find(".select-item textarea").val("");
+
+    // Call external function if defined
+    if (typeof onReceiveBarCode === "function") {
+      onReceiveBarCode(barcode);
+    } else {
+      console.warn("onReceiveBarCode function not defined");
+    }
+
+    // Close search results only after selection is processed
+    setTimeout(() => {
+      $("#itemsDescription").remove();
+      searchActive = false;
+    }, 100);
+  }
+
+  // Show product details modal
+  function showProductDetails(productId) {
+    $("#myModalGeneralSize").addClass("modal-dialog modal-md");
+    $("#myModalGeneral_iframe").attr({
+      style: "border: 0; height: 445px",
+      src: `/owner/products/view/${productId}?info_screen=1&is_ajax=1`,
+    });
+    $("#myModalGeneralheader").hide();
+    $("#myModalGeneral").modal("show");
+  }
+
+  // Show add product modal
+  function showAddProductModal() {
+    console.log("Showing add product modal");
+    $("#myModalGeneralSize").addClass("modal-dialog modal-md");
+    $("#myModalGeneral_iframe").attr({
+      style: "border: 0; height: 445px",
+      src: "/owner/products/add?box=1",
+    });
+    $("#myModalGeneralheader").hide();
+    $("#myModalGeneral").modal("show");
+  }
+
+  // Create or update search box
+  function setupSearchBox(textarea) {
+    const $row = $(textarea).closest("tr");
+    const $col = $row.find(".col-1");
+    activeTextarea = textarea;
+
+    // Remove any existing search boxes to prevent duplicates
+    $("#itemsDescription").remove();
+
+    // Add the search box
+    $col.append(productSearchTemplate);
+
+    // Set the search value from textarea
+    const searchText = $(textarea).val().trim();
+    $("#search_pro").val(searchText);
+
+    // Make the search box visible
+    const $searchBox = $("#itemsDescription");
+    $searchBox.addClass("desc").show();
+
+    // Set search as active
+    searchActive = true;
+
+    // Perform initial search if text exists
+    if (searchText) {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(async () => {
+        const result = await searchProducts(searchText);
+        renderProductList(result.data || []);
+      }, 300);
+    }
+
+    // Set focus on search box with a slight delay to prevent issues
+    setTimeout(() => {
+      $("#search_pro").focus();
+    }, 100);
+  }
+
+  // Initialize the app
+  $(document).ready(function () {
+    // Append modal to body if it doesn't exist
+    if ($("#myModalGeneral").length === 0) {
+      $("body").append(modalTemplate);
+    }
+
+    // Handle focus/click on textarea
+    $(document).on("focus click", ".col-1 textarea", function (e) {
+      e.stopPropagation();
+      setupSearchBox(this);
+
+      // Make textarea editable
+      $(this).removeAttr("readonly");
+    });
+
+    // Handle input in textarea
+    $(document).on("input", ".col-1 textarea", function (e) {
+      e.stopPropagation();
+      const searchText = $(this).val().trim();
+
+      // Update the search box if it exists
+      if ($("#search_pro").length) {
+        $("#search_pro").val(searchText);
+      } else {
+        // Create search box if it doesn't exist
+        setupSearchBox(this);
+      }
+
+      // Perform search
+      clearTimeout(debounceTimer);
+      if (searchText) {
+        debounceTimer = setTimeout(async () => {
+          preventClose = true; // Prevent search from closing during update
+          const result = await searchProducts(searchText);
+          renderProductList(result.data || []);
+          setTimeout(() => {
+            preventClose = false;
+          }, 500);
+        }, 300);
+      }
+    });
+
+    // Handle input in search box
+    $(document).on("input", "#search_pro", function (e) {
+      e.stopPropagation();
+      const searchText = $(this).val().trim();
+
+      // Update the textarea
+      $(activeTextarea).val(searchText);
+
+      // Perform search
+      clearTimeout(debounceTimer);
+      if (searchText) {
+        debounceTimer = setTimeout(async () => {
+          preventClose = true; // Prevent search from closing during update
+          const result = await searchProducts(searchText);
+          renderProductList(result.data || []);
+          setTimeout(() => {
+            preventClose = false;
+          }, 500);
+        }, 300);
+      }
+    });
+
+    // FIXED: Handle clicks on product link and all its child elements
+    $(document).on("click", ".product-link", function (e) {
+      if (
+        !$(e.target).hasClass("v-click") &&
+        !$(e.target).closest(".v-click-span").length
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        selectProduct(this);
+      }
+    });
+
+    // Handle clicks on product name and code
+    $(document).on("click", ".product-name, .product-code", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      selectProduct(this);
+    });
+
+    // Handle specific clicks on spans and paragraphs in product links
+    $(document).on(
+      "click",
+      ".product-link span:not(.v-click-span), .product-link p",
+      function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        selectProduct(this);
+      }
+    );
+
+    // Handle product details button click
+    $(document).on("click", ".v-click, .v-click-span", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const productLink = $(this).closest(".product-link");
+      if (productLink.length) {
+        const productId = productLink.attr("id").split("-")[1];
+        if (productId) {
+          clickedProduct = productId;
+          showProductDetails(productId);
         }
       }
+    });
 
-      console.log("Barcode update results:", updateResults);
-      return updateResults;
-    }
+    // Handle add product button
+    $(document).on("click", "#addProductButton, .add-p-link", function (e) {
+      console.log("Add product link clicked!");
+      e.preventDefault();
+      e.stopPropagation();
+      showAddProductModal();
+      return false;
+    });
 
-    // Function to fetch products in batches
-    async function fetchProductsInBatches(totalPages) {
-      let allProducts = [];
-      const batchSize = 20; // Number of simultaneous requests
-
-      console.log(
-        `Fetching ${totalPages} pages of products in batches of ${batchSize}`
-      );
-
-      for (let i = 1; i <= totalPages; i += batchSize) {
-        console.log(`Fetching batch starting at page ${i}`);
-        const requests = [];
-
-        // Create batch of requests
-        for (let j = 0; j < batchSize && i + j <= totalPages; j++) {
-          const pageNum = i + j;
-          requests.push(
-            fetch(`/api2/products?page=${pageNum}&load_custom_data=1`, {
-              method: "GET",
-              headers: {
-                Accept: "application/json",
-              },
-            })
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error(`HTTP error ${response.status}`);
-                }
-                return response.json();
-              })
-              .then((data) => {
-                if (data && data.data) {
-                  return data.data; // Return just the products array
-                }
-                return [];
-              })
-          );
+    // Stop event propagation for clicks inside the search box
+    $(document).on(
+      "mousedown mouseup click",
+      "#itemsDescription, #search_pro",
+      function (e) {
+        if (
+          !$(e.target).hasClass("product-link") &&
+          !$(e.target).closest(".product-link").length
+        ) {
+          e.stopPropagation();
         }
-
-        // Wait for all requests in the batch to complete
-        const batchResults = await Promise.all(requests);
-
-        // Flatten and add to our collection
-        const batchProducts = batchResults.flat();
-        allProducts = allProducts.concat(batchProducts);
-
-        console.log(`Fetched ${allProducts.length} products so far`);
       }
+    );
 
-      return allProducts;
-    }
-
-    // Initial request to get total number of pages
-    fetch(`/api2/products?load_custom_data=1`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then(async (data) => {
-        const totalPages = parseInt(data.pagination.page_count);
-        console.log(`Total pages to fetch: ${totalPages}`);
-
-        try {
-          // Fetch all products
-          const allProducts = await fetchProductsInBatches(totalPages);
-          console.log(
-            `Successfully fetched all ${allProducts.length} products`
-          );
-
-          // Process products to extract the 6 fields we want and add barcodes where missing
-          const { processedProducts, productsToUpdate } = await processProducts(
-            allProducts
-          );
-
-          // Display summary before updates
-          console.log(
-            `Final product catalog has ${processedProducts.length} items`
-          );
-          console.log({ processedProducts: processedProducts });
-          console.log({ productsToUpdate: productsToUpdate });
-
-          await fetch(`/v2/api/entity/le_productsclone`, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              le_productsclone_le_productsclone_productslist: processedProducts,
-            }),
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error(`HTTP error ${response.status}`);
-              }
-              return response.json();
-            })
-            .then((data) => {
-              console.log(`postes Succccc`);
-            });
-
-          // Ask user if they want to proceed with updates
-          if (productsToUpdate.length > 0) {
-            const shouldUpdate = confirm(
-              `Found ${productsToUpdate.length} products without barcodes. Do you want to update them now?`
-            );
-
-            if (shouldUpdate) {
-              // Update the barcodes using the API
-              const updateResults = await updateProductBarcodes(
-                productsToUpdate
-              );
-
-              // Count successes and failures
-              const successCount = updateResults.filter(
-                (r) => r.status === "success"
-              ).length;
-              const errorCount = updateResults.filter(
-                (r) => r.status === "error"
-              ).length;
-
-              alert(
-                `Barcode update complete.\nSuccessful: ${successCount}\nFailed: ${errorCount}`
-              );
-            } else {
-            }
-          } else {
-            alert("No products need barcode updates.");
+    // Close search results when clicking outside
+    $(document).on("click", function (e) {
+      if (
+        searchActive &&
+        !preventClose &&
+        !$(e.target).closest("#itemsDescription").length &&
+        !$(e.target).closest(".col-1 textarea").length &&
+        e.target.id !== "search-icon"
+      ) {
+        // Add a slight delay to ensure it wasn't an interaction with the search
+        setTimeout(() => {
+          if (!preventClose) {
+            $("#itemsDescription").remove();
+            searchActive = false;
           }
-        } catch (error) {
-          console.error("Error during product processing:", error);
-          alert("Error processing products. See console for details.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error getting total pages:", error);
-        alert("Failed to determine total number of product pages.");
-      });
-  }, 500);
+        }, 200);
+      }
+    });
+
+    // Prevent search from closing when interacting with it
+    $(document).on("mouseenter", "#itemsDescription", function () {
+      preventClose = true;
+    });
+
+    $(document).on("mouseleave", "#itemsDescription", function () {
+      setTimeout(() => {
+        preventClose = false;
+      }, 500);
+    });
+  });
 </script>

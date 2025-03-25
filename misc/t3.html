@@ -1,12 +1,417 @@
 <script>
-  $(document).ready(function () {
-    setTimeout(() => {
-      $("#le_workflow-type-entity-1_custom_data-id")
-        .parent()
-        .css("direction", "ltr");
-      $("#le_workflow-type-entity-1_custom_data-id")
-        .parent()
-        .css("text-align", "left");
-    }, 250);
-  });
+
+  function convertToPostmanCollection() {
+    // Create basic Postman collection structure
+    const postmanCollection = {
+      info: {
+        name: "Daftra APIs",
+        description: "APIs For Daftra Project",
+        schema:
+          "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      },
+      item: [],
+      variable: [
+        {
+          key: "baseUrl",
+          value: "https://example.daftra.com/api2",
+          type: "string",
+        },
+        {
+          key: "apiKey",
+          value: "YOUR_API_KEY_HERE",
+          type: "string",
+        },
+      ],
+    };
+
+    // Extract and organize endpoints
+    // From our file analysis, we see these main categories:
+    const categories = [
+      "Invoices",
+      "Estimates",
+      "Credit Notes",
+      "Refund Receipts",
+      "Clients",
+      "Suppliers",
+      "Work Orders",
+      "Client Appointments",
+      "Invoice Appointments",
+      "Estimate Appointments",
+      "Work Order Appointments",
+      "Notes",
+      "Time Tracking",
+      "Invoice Payments",
+      "Client Payments",
+      "Products",
+      "Journals",
+      "Journal Accounts",
+      "Journal Cats",
+      "Expenses",
+      "Incomes",
+      "Taxes",
+      "Purchase Invoices",
+      "Purchase Refunds",
+      "Stock Transactions",
+      "Stores",
+      "Treasuries",
+    ];
+
+    // Create folders for each category
+    categories.forEach((categoryName) => {
+      const categoryKey = categoryName.replace(/\s+/g, "");
+      const pathName = categoryKey
+        .toLowerCase()
+        .replace(/([a-z])([A-Z])/g, "$1_$2");
+
+      // Create folder
+      const folder = {
+        name: categoryName,
+        item: [],
+      };
+
+      // Add common CRUD operations for this endpoint
+      // GET all
+      folder.item.push({
+        name: `Get All ${categoryName}`,
+        request: {
+          method: "GET",
+          header: [
+            {
+              key: "APIKEY",
+              value: "{{apiKey}}",
+              type: "text",
+            },
+            {
+              key: "Accept",
+              value: "application/json",
+              type: "text",
+            },
+          ],
+          url: {
+            raw: `{{baseUrl}}/${pathName}`,
+            host: ["{{baseUrl}}"],
+            path: [pathName],
+          },
+        },
+      });
+
+      // GET single
+      folder.item.push({
+        name: `Get Single ${categoryName.replace(/s$/, "")}`,
+        request: {
+          method: "GET",
+          header: [
+            {
+              key: "APIKEY",
+              value: "{{apiKey}}",
+              type: "text",
+            },
+            {
+              key: "Accept",
+              value: "application/json",
+              type: "text",
+            },
+          ],
+          url: {
+            raw: `{{baseUrl}}/${pathName}/:id`,
+            host: ["{{baseUrl}}"],
+            path: [pathName, ":id"],
+            variable: [
+              {
+                key: "id",
+                value: "1",
+                description: "ID of the item to get",
+              },
+            ],
+          },
+        },
+      });
+
+      // POST (create)
+      folder.item.push({
+        name: `Create ${categoryName.replace(/s$/, "")}`,
+        request: {
+          method: "POST",
+          header: [
+            {
+              key: "APIKEY",
+              value: "{{apiKey}}",
+              type: "text",
+            },
+            {
+              key: "Content-Type",
+              value: "application/json",
+              type: "text",
+            },
+            {
+              key: "Accept",
+              value: "application/json",
+              type: "text",
+            },
+          ],
+          url: {
+            raw: `{{baseUrl}}/${pathName}`,
+            host: ["{{baseUrl}}"],
+            path: [pathName],
+          },
+          body: {
+            mode: "raw",
+            raw: JSON.stringify(
+              {
+                [`${categoryKey.replace(/s$/, "")}`]: {
+                  // Example fields based on typical patterns
+                  // These would be populated with accurate fields in a real conversion
+                  name: "Sample name",
+                  description: "Sample description",
+                },
+              },
+              null,
+              2
+            ),
+            options: {
+              raw: {
+                language: "json",
+              },
+            },
+          },
+        },
+      });
+
+      // PUT (update)
+      folder.item.push({
+        name: `Update ${categoryName.replace(/s$/, "")}`,
+        request: {
+          method: "PUT",
+          header: [
+            {
+              key: "APIKEY",
+              value: "{{apiKey}}",
+              type: "text",
+            },
+            {
+              key: "Content-Type",
+              value: "application/json",
+              type: "text",
+            },
+            {
+              key: "Accept",
+              value: "application/json",
+              type: "text",
+            },
+          ],
+          url: {
+            raw: `{{baseUrl}}/${pathName}/:id`,
+            host: ["{{baseUrl}}"],
+            path: [pathName, ":id"],
+            variable: [
+              {
+                key: "id",
+                value: "1",
+                description: "ID of the item to update",
+              },
+            ],
+          },
+          body: {
+            mode: "raw",
+            raw: JSON.stringify(
+              {
+                [`${categoryKey.replace(/s$/, "")}`]: {
+                  // Example fields for update
+                  name: "Updated name",
+                  description: "Updated description",
+                },
+              },
+              null,
+              2
+            ),
+            options: {
+              raw: {
+                language: "json",
+              },
+            },
+          },
+        },
+      });
+
+      // DELETE
+      folder.item.push({
+        name: `Delete ${categoryName.replace(/s$/, "")}`,
+        request: {
+          method: "DELETE",
+          header: [
+            {
+              key: "APIKEY",
+              value: "{{apiKey}}",
+              type: "text",
+            },
+            {
+              key: "Accept",
+              value: "application/json",
+              type: "text",
+            },
+          ],
+          url: {
+            raw: `{{baseUrl}}/${pathName}/:id`,
+            host: ["{{baseUrl}}"],
+            path: [pathName, ":id"],
+            variable: [
+              {
+                key: "id",
+                value: "1",
+                description: "ID of the item to delete",
+              },
+            ],
+          },
+        },
+      });
+
+      // Add folder to collection
+      postmanCollection.item.push(folder);
+    });
+
+    // Add special endpoints
+    // General Listing
+    const generalListingFolder = {
+      name: "General Listing",
+      item: [
+        {
+          name: "Get General Listing",
+          request: {
+            method: "GET",
+            header: [
+              {
+                key: "APIKEY",
+                value: "{{apiKey}}",
+                type: "text",
+              },
+              {
+                key: "Accept",
+                value: "application/json",
+                type: "text",
+              },
+            ],
+            url: {
+              raw: "{{baseUrl}}/listing/:model",
+              host: ["{{baseUrl}}"],
+              path: ["listing", ":model"],
+              variable: [
+                {
+                  key: "model",
+                  value: "InvoiceLayout",
+                  description: "Model to list",
+                },
+              ],
+            },
+            description:
+              "Get list data as key,value pairs the key is the item_id and value is its title",
+          },
+        },
+      ],
+    };
+    postmanCollection.item.push(generalListingFolder);
+
+    // Site Info
+    const siteInfoFolder = {
+      name: "Site",
+      item: [
+        {
+          name: "Get Site Info",
+          request: {
+            method: "GET",
+            header: [
+              {
+                key: "APIKEY",
+                value: "{{apiKey}}",
+                type: "text",
+              },
+              {
+                key: "Accept",
+                value: "application/json",
+                type: "text",
+              },
+            ],
+            url: {
+              raw: "{{baseUrl}}/site_info",
+              host: ["{{baseUrl}}"],
+              path: ["site_info"],
+            },
+            description: "Get current site info",
+          },
+        },
+      ],
+    };
+    postmanCollection.item.push(siteInfoFolder);
+
+    // Follow Up Statuses and Actions
+    const followUpFolder = {
+      name: "Follow Up",
+      item: [
+        {
+          name: "Get Follow Up Statuses",
+          request: {
+            method: "GET",
+            header: [
+              {
+                key: "APIKEY",
+                value: "{{apiKey}}",
+                type: "text",
+              },
+              {
+                key: "Accept",
+                value: "application/json",
+                type: "text",
+              },
+            ],
+            url: {
+              raw: "{{baseUrl}}/follow_up_statuses/:type",
+              host: ["{{baseUrl}}"],
+              path: ["follow_up_statuses", ":type"],
+              variable: [
+                {
+                  key: "type",
+                  value: "client",
+                  description: "Type of status (client, invoice, etc.)",
+                },
+              ],
+            },
+          },
+        },
+        {
+          name: "Get Follow Up Actions",
+          request: {
+            method: "GET",
+            header: [
+              {
+                key: "APIKEY",
+                value: "{{apiKey}}",
+                type: "text",
+              },
+              {
+                key: "Accept",
+                value: "application/json",
+                type: "text",
+              },
+            ],
+            url: {
+              raw: "{{baseUrl}}/follow_up_actions/:type",
+              host: ["{{baseUrl}}"],
+              path: ["follow_up_actions", ":type"],
+              variable: [
+                {
+                  key: "type",
+                  value: "client",
+                  description: "Type of action (client, invoice, etc.)",
+                },
+              ],
+            },
+          },
+        },
+      ],
+    };
+    postmanCollection.item.push(followUpFolder);
+
+    return postmanCollection;
+  }
+
+
 </script>

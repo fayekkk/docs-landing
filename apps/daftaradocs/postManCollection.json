@@ -1,0 +1,3975 @@
+{
+    "info": {
+      "name": "Daftra API Collection - Part 1",
+      "description": "API Collection for Daftra Business Management System (Invoices, Estimates, Credit Notes, Refund Receipts, Purchase Orders)",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Invoices",
+        "item": [
+          {
+            "name": "GET All Invoices",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoices.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoices.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Invoice",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoices/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoices", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Invoice",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoices.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoices.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Invoice\": {\n    \"client_id\": 15,\n    \"store_id\": 1,\n    \"currency_code\": \"USD\",\n    \"date\": \"2023-03-23\",\n    \"draft\": 0,\n    \"InvoiceItem\": [\n      {\n        \"product_id\": 1,\n        \"quantity\": 1,\n        \"unit_price\": 100\n      }\n    ]\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Invoice",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoices/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoices", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Invoice\": {\n    \"date\": \"2023-03-24\",\n    \"notes\": \"Updated invoice\",\n    \"discount\": 5\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Invoice",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoices/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoices", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Estimates",
+        "item": [
+          {
+            "name": "GET All Estimates",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/estimates.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "estimates.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Estimate",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/estimates/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "estimates", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Estimate",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/estimates.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "estimates.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Estimate\": {\n    \"client_id\": 15,\n    \"store_id\": 1,\n    \"currency_code\": \"USD\",\n    \"date\": \"2023-03-23\",\n    \"draft\": 0,\n    \"InvoiceItem\": [\n      {\n        \"product_id\": 1,\n        \"quantity\": 1,\n        \"unit_price\": 100\n      }\n    ]\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Estimate",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/estimates/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "estimates", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Estimate\": {\n    \"date\": \"2023-03-24\",\n    \"notes\": \"Updated estimate\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Estimate",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/estimates/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "estimates", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Credit Notes",
+        "item": [
+          {
+            "name": "GET All Credit Notes",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/credit_notes.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "credit_notes.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Credit Note",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/credit_notes/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "credit_notes", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Credit Note",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/credit_notes.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "credit_notes.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"CreditNote\": {\n    \"client_id\": 15,\n    \"store_id\": 1,\n    \"currency_code\": \"USD\",\n    \"date\": \"2023-03-23\",\n    \"draft\": 0,\n    \"InvoiceItem\": [\n      {\n        \"product_id\": 1,\n        \"quantity\": 1,\n        \"unit_price\": 100\n      }\n    ]\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Credit Note",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/credit_notes/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "credit_notes", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"CreditNote\": {\n    \"date\": \"2023-03-24\",\n    \"notes\": \"Updated credit note\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Credit Note",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/credit_notes/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "credit_notes", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Refund Receipts",
+        "item": [
+          {
+            "name": "GET All Refund Receipts",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/refund_receipts.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "refund_receipts.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Refund Receipt",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/refund_receipts/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "refund_receipts", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Refund Receipt",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/refund_receipts.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "refund_receipts.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"RefundReceipt\": {\n    \"client_id\": 15,\n    \"store_id\": 1,\n    \"subscription_id\": 26,\n    \"currency_code\": \"USD\",\n    \"date\": \"2023-03-23\",\n    \"draft\": 0,\n    \"InvoiceItem\": [\n      {\n        \"product_id\": 1,\n        \"quantity\": 1,\n        \"unit_price\": 100\n      }\n    ]\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Refund Receipt",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/refund_receipts/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "refund_receipts", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"RefundReceipt\": {\n    \"date\": \"2023-03-24\",\n    \"notes\": \"Updated refund receipt\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Refund Receipt",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/refund_receipts/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "refund_receipts", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Purchase Orders",
+        "item": [
+          {
+            "name": "GET All Purchase Orders",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/purchase_invoices.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "purchase_invoices.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Purchase Order",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/purchase_invoices/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "purchase_invoices", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Purchase Order",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/purchase_invoices.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "purchase_invoices.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"PurchaseOrder\": {\n    \"supplier_id\": 1,\n    \"staff_id\": 0,\n    \"currency_code\": \"USD\",\n    \"date\": \"2023-03-23\",\n    \"draft\": 0,\n    \"PurchaseOrderItem\": [\n      {\n        \"product_id\": 1,\n        \"quantity\": 10,\n        \"unit_price\": 50,\n        \"discount\": 0,\n        \"discount_type\": 1\n      }\n    ]\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Purchase Order",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/purchase_invoices/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "purchase_invoices", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"PurchaseOrder\": {\n    \"date\": \"2023-03-24\",\n    \"is_received\": 1,\n    \"received_date\": \"2023-03-24 12:00:00\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Purchase Order",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/purchase_invoices/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "purchase_invoices", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Purchase Refunds",
+        "item": [
+          {
+            "name": "GET All Purchase Refunds",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/purchase_refunds.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "purchase_refunds.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Purchase Refund",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/purchase_refunds/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "purchase_refunds", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Purchase Refund",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/purchase_refunds.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "purchase_refunds.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"PurchaseRefund\": {\n    \"supplier_id\": 1,\n    \"staff_id\": 0,\n    \"currency_code\": \"USD\",\n    \"date\": \"2023-03-23\",\n    \"draft\": 0,\n    \"PurchaseOrderItem\": [\n      {\n        \"product_id\": 1,\n        \"quantity\": 5,\n        \"unit_price\": 50\n      }\n    ]\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Purchase Refund",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/purchase_refunds/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "purchase_refunds", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"PurchaseRefund\": {\n    \"date\": \"2023-03-24\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Purchase Refund",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/purchase_refunds/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "purchase_refunds", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Clients",
+        "item": [
+          {
+            "name": "GET All Clients",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/clients.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "clients.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Client",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/clients/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "clients", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Client",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/clients.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "clients.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Client\": {\n    \"type\": 2,\n    \"business_name\": \"ACME Corp\",\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"password\": \"securepassword\",\n    \"phone1\": \"555-1234\",\n    \"country_code\": \"US\",\n    \"address1\": \"123 Main St\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postal_code\": \"10001\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Client",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/clients/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "clients", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Client\": {\n    \"business_name\": \"ACME Corporation\",\n    \"phone1\": \"555-5678\",\n    \"email\": \"updated.email@example.com\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Client",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/clients/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "clients", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Suppliers",
+        "item": [
+          {
+            "name": "GET All Suppliers",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/suppliers.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "suppliers.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Supplier",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/suppliers/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "suppliers", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Supplier",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/suppliers.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "suppliers.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Supplier\": {\n    \"supplier_number\": \"SUP001\",\n    \"business_name\": \"Supply Co\",\n    \"first_name\": \"Jane\",\n    \"last_name\": \"Smith\",\n    \"email\": \"jane.smith@example.com\",\n    \"password\": \"securepassword\",\n    \"phone1\": \"555-9876\",\n    \"country_code\": \"US\",\n    \"address1\": \"456 Market St\",\n    \"city\": \"San Francisco\",\n    \"state\": \"CA\",\n    \"postal_code\": \"94103\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Supplier",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/suppliers/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "suppliers", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Supplier\": {\n    \"business_name\": \"Supply Company Ltd\",\n    \"phone1\": \"555-9999\",\n    \"email\": \"updated.supplier@example.com\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Supplier",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/suppliers/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "suppliers", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Staff",
+        "item": [
+          {
+            "name": "GET All Staff",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/staff.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "staff.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Staff",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/staff/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "staff", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Staff",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/staff.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "staff.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Staff\": {\n    \"name\": \"Michael Johnson\",\n    \"role_id\": 1,\n    \"email_address\": \"michael.johnson@example.com\",\n    \"password\": \"securepassword\",\n    \"mobile\": \"555-7890\",\n    \"country_code\": \"US\",\n    \"hourly_rate\": 45.00,\n    \"hourly_rate_currency_code\": \"USD\",\n    \"default_store_id\": 1,\n    \"default_treasury_id\": 1,\n    \"language_code\": \"en\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Staff",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/staff/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "staff", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Staff\": {\n    \"mobile\": \"555-2468\",\n    \"hourly_rate\": 50.00,\n    \"notes\": \"Senior technician with 10+ years of experience\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Staff",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/staff/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "staff", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Client Attendance",
+        "item": [
+          {
+            "name": "Add New Client Attendance",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/client-attendance-log/store",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "client-attendance-log", "store"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"ClientAttendance\": {\n    \"time\": \"2023-03-23 09:00:00\"\n  }\n}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Client Appointments",
+        "item": [
+          {
+            "name": "GET All Client Appointments",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/client_appointments.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "client_appointments.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Client Appointment",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/client_appointments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "client_appointments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Client Appointment",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/client_appointments.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "client_appointments.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"ClientAppointment\": {\n    \"item_id\": 15,\n    \"date\": \"2023-03-23 14:00:00\",\n    \"end_date\": \"2023-03-23 15:00:00\",\n    \"body\": \"Initial consultation\",\n    \"action_id\": 1,\n    \"status\": 0,\n    \"partner_type\": 1,\n    \"partner_id\": 15,\n    \"staff_id\": 1,\n    \"share_with_partner\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Client Appointment",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/client_appointments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "client_appointments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"ClientAppointment\": {\n    \"date\": \"2023-03-24 14:00:00\",\n    \"end_date\": \"2023-03-24 15:30:00\",\n    \"body\": \"Rescheduled consultation with extended time\",\n    \"status\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Client Appointment",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/client_appointments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "client_appointments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Invoice Appointments",
+        "item": [
+          {
+            "name": "GET All Invoice Appointments",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoice_appointments.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoice_appointments.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Invoice Appointment",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoice_appointments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoice_appointments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Invoice Appointment",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoice_appointments.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoice_appointments.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"InvoiceAppointment\": {\n    \"item_id\": 123,\n    \"date\": \"2023-03-23 14:00:00\",\n    \"end_date\": \"2023-03-23 15:00:00\",\n    \"body\": \"Invoice review meeting\",\n    \"action_id\": 1,\n    \"status\": 0,\n    \"partner_type\": 1,\n    \"partner_id\": 15,\n    \"staff_id\": 1,\n    \"share_with_partner\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Invoice Appointment",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoice_appointments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoice_appointments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"InvoiceAppointment\": {\n    \"date\": \"2023-03-24 14:00:00\",\n    \"body\": \"Rescheduled invoice review\",\n    \"status\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Invoice Appointment",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoice_appointments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoice_appointments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+
+      {
+        "name": "Estimate Appointments",
+        "item": [
+          {
+            "name": "GET All Estimate Appointments",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/estimate_appointments.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "estimate_appointments.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Estimate Appointment",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/estimate_appointments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "estimate_appointments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Estimate Appointment",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/estimate_appointments.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "estimate_appointments.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"EstimateAppointment\": {\n    \"item_id\": 123,\n    \"date\": \"2023-03-23 14:00:00\",\n    \"end_date\": \"2023-03-23 15:00:00\",\n    \"body\": \"Estimate review meeting\",\n    \"action_id\": 1,\n    \"status\": 0,\n    \"partner_type\": 1,\n    \"partner_id\": 15,\n    \"staff_id\": 1,\n    \"share_with_partner\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Estimate Appointment",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/estimate_appointments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "estimate_appointments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"EstimateAppointment\": {\n    \"date\": \"2023-03-24 14:00:00\",\n    \"body\": \"Rescheduled estimate review\",\n    \"status\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Estimate Appointment",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/estimate_appointments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "estimate_appointments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Work Order Appointments",
+        "item": [
+          {
+            "name": "GET All Work Order Appointments",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/work_order_appointments.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "work_order_appointments.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Work Order Appointment",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/work_order_appointments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "work_order_appointments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Work Order Appointment",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/work_order_appointments.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "work_order_appointments.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"WorkOrderAppointment\": {\n    \"item_id\": 123,\n    \"date\": \"2023-03-23 14:00:00\",\n    \"end_date\": \"2023-03-23 15:00:00\",\n    \"body\": \"Work order inspection visit\",\n    \"action_id\": 1,\n    \"status\": 0,\n    \"partner_type\": 1,\n    \"partner_id\": 15,\n    \"staff_id\": 1,\n    \"share_with_partner\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Work Order Appointment",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/work_order_appointments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "work_order_appointments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"WorkOrderAppointment\": {\n    \"date\": \"2023-03-24 14:00:00\",\n    \"body\": \"Rescheduled work order inspection\",\n    \"status\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Work Order Appointment",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/work_order_appointments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "work_order_appointments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Notes",
+        "item": [
+          {
+            "name": "GET All Notes",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/notes.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "notes.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Note",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/notes/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "notes", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Note",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/notes/client/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "notes", "client", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Note\": {\n    \"item_type\": 1,\n    \"item_id\": 15,\n    \"date\": \"2023-03-23 12:00:00\",\n    \"staff_id\": 1,\n    \"body\": \"Client meeting notes. Discussed new project requirements and timeline.\",\n    \"action_id\": 1,\n    \"status_id\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Note",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/notes/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "notes", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Note\": {\n    \"body\": \"Updated client meeting notes with follow-up items. Client requested additional features to be included in the proposal.\",\n    \"status_id\": 2\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Note",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/notes/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "notes", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Products",
+        "item": [
+          {
+            "name": "GET All Products",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/products.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "products.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Product",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/products/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "products", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Product",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/products.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "products.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Product\": {\n    \"name\": \"Premium Widget\",\n    \"description\": \"High-quality premium widget for industrial applications\",\n    \"unit_price\": 199.99,\n    \"tax1\": 1,\n    \"tax2\": 0,\n    \"supplier_id\": 1,\n    \"brand\": \"WidgetCo\",\n    \"tags\": \"premium, industrial, widget\",\n    \"buy_price\": 149.99,\n    \"product_code\": \"WID-001\",\n    \"track_stock\": 1,\n    \"stock_balance\": 100,\n    \"low_stock_thershold\": 20,\n    \"barcode\": \"1234567890123\",\n    \"type\": 1,\n    \"availabe_online\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Product",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/products/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "products", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Product\": {\n    \"name\": \"Premium Widget Pro\",\n    \"unit_price\": 249.99,\n    \"description\": \"Updated high-quality premium widget for professional industrial applications\",\n    \"low_stock_thershold\": 25\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Product",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/products/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "products", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Time Tracking",
+        "item": [
+          {
+            "name": "GET All Time Tracking",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/time_tracking.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "time_tracking.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Time Tracking",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/time_tracking/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "time_tracking", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Time Tracking",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/time_tracking.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "time_tracking.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"TimeTracking\": {\n    \"staff_id\": 1,\n    \"project_id\": 5,\n    \"activity_id\": 3,\n    \"date\": \"2023-03-23\",\n    \"time\": \"2:30\",\n    \"notes\": \"Development work on feature X\",\n    \"work_order_id\": 45\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Time Tracking",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/time_tracking/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "time_tracking", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"TimeTracking\": {\n    \"time\": \"3:15\",\n    \"notes\": \"Extended development work on feature X with additional unit tests\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Time Tracking",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/time_tracking/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "time_tracking", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Work Orders",
+        "item": [
+          {
+            "name": "GET All Work Orders",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/work_orders.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "work_orders.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Work Order",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/work_orders/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "work_orders", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Work Order",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/work_orders.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "work_orders.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"WorkOrder\": {\n    \"client_id\": 15,\n    \"title\": \"New Service Installation\",\n    \"start_date\": \"2023-03-23\",\n    \"description\": \"Install new equipment at client site\",\n    \"delivery_date\": \"2023-03-30\",\n    \"budget\": 1500.00,\n    \"budget_currency\": \"USD\",\n    \"status\": 1,\n    \"staff_id\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Work Order",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/work_orders/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "work_orders", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"WorkOrder\": {\n    \"title\": \"Updated Service Installation\",\n    \"status\": 2,\n    \"delivery_date\": \"2023-04-05\",\n    \"budget\": 1750.00\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Work Order",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/work_orders/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "work_orders", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+
+      {
+        "name": "Product Categories",
+        "item": [
+          {
+            "name": "GET All Product Categories",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/product_categories.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "product_categories.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Product Category",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/product_categories/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "product_categories", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Taxes",
+        "item": [
+          {
+            "name": "GET All Taxes",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/taxes.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "taxes.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Tax",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/taxes/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "taxes", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Tax",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/taxes.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "taxes.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Tax\": {\n    \"name\": \"State Sales Tax\",\n    \"value\": 5.5,\n    \"description\": \"State sales tax for retail goods and services\",\n    \"included\": 0\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Tax",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/taxes/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "taxes", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Tax\": {\n    \"name\": \"State Sales Tax (Updated)\",\n    \"value\": 6.0,\n    \"description\": \"Updated state sales tax rate for retail goods and services\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Tax",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/taxes/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "taxes", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Invoice Payments",
+        "item": [
+          {
+            "name": "GET All Invoice Payments",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoice_payments.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoice_payments.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Invoice Payment",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoice_payments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoice_payments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Invoice Payment",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoice_payments.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoice_payments.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"InvoicePayment\": {\n    \"invoice_id\": 123,\n    \"payment_method\": \"Credit Card\",\n    \"amount\": 250.00,\n    \"transaction_id\": \"TXN123456\",\n    \"treasury_id\": 1,\n    \"date\": \"2023-03-23 14:30:00\",\n    \"email\": \"client@example.com\",\n    \"status\": 1,\n    \"notes\": \"Payment received for Invoice #123\",\n    \"receipt_notes\": \"Thank you for your payment\",\n    \"staff_id\": 1,\n    \"currency_code\": \"USD\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Invoice Payment",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoice_payments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoice_payments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"InvoicePayment\": {\n    \"notes\": \"Updated payment notes\",\n    \"receipt_notes\": \"Thank you for your business. We appreciate it.\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Invoice Payment",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/invoice_payments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "invoice_payments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Client Payments",
+        "item": [
+          {
+            "name": "GET All Client Payments",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/client_payments.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "client_payments.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Client Payment",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/client_payments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "client_payments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Client Payment",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/client_payments.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "client_payments.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"ClientPayment\": {\n    \"client_id\": 15,\n    \"status\": 1,\n    \"payment_method\": \"Bank Transfer\",\n    \"amount\": 500.00,\n    \"currency_code\": \"USD\",\n    \"transaction_id\": \"TXN123456\",\n    \"treasury_id\": 1,\n    \"date\": \"2023-03-23 14:30:00\",\n    \"staff_id\": 1,\n    \"notes\": \"Prepayment for upcoming services\",\n    \"receipt_notes\": \"Thank you for your payment\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Client Payment",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/client_payments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "client_payments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"ClientPayment\": {\n    \"notes\": \"Updated prepayment for upcoming services and consulting\",\n    \"receipt_notes\": \"Thank you for your continued business. We appreciate your trust.\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Client Payment",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/client_payments/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "client_payments", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Expenses",
+        "item": [
+          {
+            "name": "GET All Expenses",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/expenses.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "expenses.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Expense",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/expenses/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "expenses", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Expense",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/expenses.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "expenses.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Expense\": {\n    \"amount\": 350.25,\n    \"currency_code\": \"USD\",\n    \"vendor\": \"Office Supplies Inc\",\n    \"category\": \"Office Supplies\",\n    \"date\": \"2023-03-23\",\n    \"note\": \"Purchase of printer cartridges and paper\",\n    \"tax1_id\": 1,\n    \"tax1_included\": 0,\n    \"is_income\": 0\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Expense",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/expenses/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "expenses", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Expense\": {\n    \"amount\": 375.50,\n    \"note\": \"Purchase of printer cartridges, paper, and staples\",\n    \"vendor\": \"Office Supplies Inc - Main Branch\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Expense",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/expenses/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "expenses", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Incomes",
+        "item": [
+          {
+            "name": "GET All Incomes",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/incomes.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "incomes.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Income",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/incomes/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "incomes", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Income",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/incomes.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "incomes.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Income\": {\n    \"amount\": 1250.00,\n    \"currency_code\": \"USD\",\n    \"vendor\": \"Conference Organizers LLC\",\n    \"category\": \"Speaking Engagement\",\n    \"date\": \"2023-03-23\",\n    \"note\": \"Payment for keynote at industry conference\",\n    \"client_id\": 15,\n    \"tax1_id\": 1,\n    \"tax1_included\": 0,\n    \"is_income\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Income",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/incomes/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "incomes", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Income\": {\n    \"amount\": 1350.00,\n    \"note\": \"Payment for keynote and workshop at industry conference\",\n    \"vendor\": \"Conference Organizers International LLC\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Income",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/incomes/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "incomes", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Stores",
+        "item": [
+          {
+            "name": "GET All Stores",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/stores.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "stores.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Store",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/stores/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "stores", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Store",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/stores.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "stores.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Store\": {\n    \"name\": \"Downtown Warehouse\",\n    \"shipping_address\": \"123 Commerce St, Downtown, NY 10001\",\n    \"primary\": 0,\n    \"active\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Store",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/stores/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "stores", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Store\": {\n    \"name\": \"Downtown Main Warehouse\",\n    \"shipping_address\": \"123 Commerce St, Suite 100, Downtown, NY 10001\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Store",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/stores/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "stores", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Treasuries",
+        "item": [
+          {
+            "name": "GET All Treasuries",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/treasuries.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "treasuries.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Treasury",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/treasuries/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "treasuries", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Treasury",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/treasuries.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "treasuries.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Treasury\": {\n    \"name\": \"Main Cash Register\",\n    \"type\": 3,\n    \"active\": 1,\n    \"is_primary\": 0,\n    \"description\": \"Main cash treasury for retail operations\",\n    \"staff_id\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Treasury",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/treasuries/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "treasuries", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Treasury\": {\n    \"name\": \"Main Cash Register - Front Office\",\n    \"description\": \"Main cash treasury for front office retail operations\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Treasury",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/treasuries/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "treasuries", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Stock Transactions",
+        "item": [
+          {
+            "name": "GET All Stock Transactions",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/stock_transactions.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "stock_transactions.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Stock Transaction",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/stock_transactions/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "stock_transactions", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Stock Transaction",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/stock_transactions.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "stock_transactions.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"StockTransaction\": {\n    \"product_id\": 1,\n    \"store_id\": 1,\n    \"transaction_type\": 1,\n    \"date\": \"2023-03-23 14:30:00\",\n    \"quantity\": 50,\n    \"currency_code\": \"USD\",\n    \"price\": 10.00,\n    \"price_without_tax\": 10.00,\n    \"added_by\": 1,\n    \"notes\": \"Stock replenishment\",\n    \"fetch_from_raw\": 0\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Stock Transaction",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/stock_transactions/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "stock_transactions", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"StockTransaction\": {\n    \"quantity\": 55,\n    \"notes\": \"Updated stock replenishment\",\n    \"price\": 9.75\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Stock Transaction",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/stock_transactions/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "stock_transactions", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Journals",
+        "item": [
+          {
+            "name": "GET All Journals",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journals.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journals.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Journal",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journals/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journals", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Journal",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journals.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journals.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Journal\": {\n    \"entity_type\": \"expense\",\n    \"entity_id\": \"123\",\n    \"total_debit\": 500.00,\n    \"total_credit\": 500.00,\n    \"currency_code\": \"USD\",\n    \"description\": \"Office supplies expense\",\n    \"staff_id\": 1,\n    \"JournalTransaction\": [\n      {\n        \"journal_id\": 0,\n        \"debit\": 500.00,\n        \"credit\": 0.00,\n        \"currency_code\": \"USD\",\n        \"description\": \"Office supplies expense\",\n        \"journal_account_id\": \"1001\"\n      },\n      {\n        \"journal_id\": 0,\n        \"debit\": 0.00,\n        \"credit\": 500.00,\n        \"currency_code\": \"USD\",\n        \"description\": \"Cash payment for office supplies\",\n        \"journal_account_id\": \"1002\"\n      }\n    ]\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Journal",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journals/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journals", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"Journal\": {\n    \"description\": \"Updated office supplies expense\",\n    \"alter_description\": \"Quarterly purchase of office supplies\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Journal",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journals/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journals", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Journal Accounts",
+        "item": [
+          {
+            "name": "GET All Journal Accounts",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journal_accounts.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journal_accounts.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Journal Account",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journal_accounts/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journal_accounts", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Journal Account",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journal_accounts.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journal_accounts.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"JournalAccount\": {\n    \"journal_cat_id\": \"5001\",\n    \"code\": \"5005\",\n    \"type\": \"0\",\n    \"name\": \"Office Supplies Expense\",\n    \"staff_id\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Journal Account",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journal_accounts/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journal_accounts", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"JournalAccount\": {\n    \"name\": \"Office & Administrative Supplies Expense\",\n    \"code\": \"5005-01\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Journal Account",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journal_accounts/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journal_accounts", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Journal Categories",
+        "item": [
+          {
+            "name": "GET All Journal Categories",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journal_cats.json?limit=20&page=1",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journal_cats.json"],
+                "query": [
+                  {"key": "limit", "value": "20"},
+                  {"key": "page", "value": "1"}
+                ]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Single Journal Category",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journal_cats/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journal_cats", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Add New Journal Category",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journal_cats.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journal_cats.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"JournalCat\": {\n    \"code\": \"5000\",\n    \"name\": \"Operating Expenses\",\n    \"type\": \"0\",\n    \"staff_id\": 1\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Edit Journal Category",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journal_cats/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journal_cats", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"JournalCat\": {\n    \"name\": \"General Operating Expenses\",\n    \"code\": \"5000-G\"\n  }\n}"
+              }
+            }
+          },
+          {
+            "name": "Delete Journal Category",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/journal_cats/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "journal_cats", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Follow Up Statuses",
+        "item": [
+          {
+            "name": "GET Single Follow Up Status",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/follow_up_statuses/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "follow_up_statuses", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Follow Up Statuses by Type",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/follow_up_statuses/{{type}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "follow_up_statuses", "{{type}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ],
+              "description": "Get follow up statuses by entity type. Replace {{type}} with one of: client, invoice, estimate, purchase_order, staff, supplier, product, work_order"
+            }
+          },
+          {
+            "name": "Delete Follow Up Status",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/follow_up_statuses/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "follow_up_statuses", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Follow Up Actions",
+        "item": [
+          {
+            "name": "GET Single Follow Up Action",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/follow_up_actions/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "follow_up_actions", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          {
+            "name": "GET Follow Up Actions by Type",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/follow_up_actions/{{type}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "follow_up_actions", "{{type}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ],
+              "description": "Get follow up actions by entity type. Replace {{type}} with one of: client, invoice, estimate, purchase_order, staff, supplier, product, work_order"
+            }
+          },
+          {
+            "name": "Delete Follow Up Action",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/follow_up_actions/{{id}}.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "follow_up_actions", "{{id}}.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "General Listing",
+        "item": [
+          {
+            "name": "GET Invoice Layouts",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/listing/InvoiceLayout.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "listing", "InvoiceLayout.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ],
+              "description": "Get list of invoice layout options"
+            }
+          },
+          {
+            "name": "GET Price Groups",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/listing/GroupPrice.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "listing", "GroupPrice.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ],
+              "description": "Get list of price group options"
+            }
+          },
+          {
+            "name": "GET Time Zones",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/listing/Timezone.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "listing", "Timezone.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ],
+              "description": "Get list of timezone options"
+            }
+          },
+          {
+            "name": "GET Date Formats",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/listing/dateFormats.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "listing", "dateFormats.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ],
+              "description": "Get list of date format options"
+            }
+          },
+          {
+            "name": "GET Language Codes",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/listing/Language.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "listing", "Language.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ],
+              "description": "Get list of language code options"
+            }
+          },
+          {
+            "name": "GET Staff Roles",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/listing/Role.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "listing", "Role.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ],
+              "description": "Get list of staff role options"
+            }
+          },
+          {
+            "name": "GET Projects",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/listing/Project.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "listing", "Project.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ],
+              "description": "Get list of project options"
+            }
+          },
+          {
+            "name": "GET Activities",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/listing/TimeActivity.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "listing", "TimeActivity.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ],
+              "description": "Get list of time activity options"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Site Info",
+        "item": [
+          {
+            "name": "GET Site Info",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/site_info.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "site_info.json"]
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}",
+                  "type": "text"
+                }
+              ],
+              "description": "Get information about the current site"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Authentication",
+        "item": [
+          {
+            "name": "OAuth2 Bearer Token",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/oauth/token",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "oauth", "token"]
+              },
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"client_id\": \"{{client_id}}\",\n  \"client_secret\": \"{{client_secret}}\",\n  \"grant_type\": \"password\",\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
+              },
+              "description": "Get an OAuth2 Bearer token for authenticating API requests. Use this token in the Authorization header for all API requests."
+            }
+          },
+          {
+            "name": "API Key Info",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api2/api_key_info.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api2", "api_key_info.json"]
+              },
+              "header": [
+                {
+                  "key": "APIKEY",
+                  "value": "{{apikey}}",
+                  "type": "text"
+                }
+              ],
+              "description": "Get information about the current API key. This is an alternative to using OAuth2 Bearer tokens."
+            }
+          }
+        ]
+      },
+      {
+        "name": "Documentation",
+        "item": [
+          {
+            "name": "Get Postman Collection",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api_docs/postman_collection.json",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api_docs", "postman_collection.json"]
+              },
+              "description": "Download the official Postman collection directly from the Daftra system. This can be used to compare with this custom collection."
+            }
+          },
+          {
+            "name": "Get OpenAPI Spec",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "https://{{subdomain}}/api_docs/spec.php",
+                "protocol": "https",
+                "host": ["{{subdomain}}"],
+                "path": ["api_docs", "spec.php"]
+              },
+              "description": "Download the OpenAPI specification (Swagger) file that describes the API."
+            }
+          }
+        ]
+      }
+    ],
+    "event": [
+      {
+        "listen": "prerequest",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "// This script can be used to automatically refresh tokens if needed",
+            "// It's not implemented yet but could be added later",
+            "// Example:",
+            "/*",
+            "if (pm.environment.get('token_expires_at') && new Date().getTime() > pm.environment.get('token_expires_at')) {",
+            "    console.log('Token is expired. Getting new token...');",
+            "    // Send request to get new token",
+            "    // Update environment variables",
+            "}",
+            "*/"
+          ]
+        }
+      },
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "// This script can be used to automatically store tokens received from authentication",
+            "// It's not implemented yet but could be added later",
+            "// Example:",
+            "/*",
+            "if (pm.request.url.toString().includes('/oauth/token')) {",
+            "    var jsonData = pm.response.json();",
+            "    if (jsonData.access_token) {",
+            "        pm.environment.set('token', jsonData.access_token);",
+            "        var expiryDate = new Date();",
+            "        expiryDate.setSeconds(expiryDate.getSeconds() + jsonData.expires_in);",
+            "        pm.environment.set('token_expires_at', expiryDate.getTime());",
+            "    }",
+            "}",
+            "*/"
+          ]
+        }
+      }
+    ],
+    "variable": [
+      {
+        "key": "subdomain",
+        "value": "yourdomain.daftra.com"
+      },
+      {
+        "key": "token",
+        "value": "YOUR_BEARER_TOKEN"
+      },
+      {
+        "key": "client_id",
+        "value": "YOUR_CLIENT_ID"
+      },
+      {
+        "key": "client_secret",
+        "value": "YOUR_CLIENT_SECRET"
+      },
+      {
+        "key": "username",
+        "value": "your.email@example.com"
+      },
+      {
+        "key": "password",
+        "value": "YOUR_PASSWORD"
+      },
+      {
+        "key": "apikey",
+        "value": "YOUR_API_KEY"
+      }
+    ]
+  }

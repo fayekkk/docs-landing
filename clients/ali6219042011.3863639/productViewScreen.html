@@ -1,102 +1,132 @@
 <script>
-  function processProductById(productId, updateData) {
-    // Step 1: Get the product by ID
-    $.ajax({
-      url: "/api2/products/" + productId + "?load_custom_data=1",
-      type: "GET",
-      success: function (product) {
-        console.log("Product retrieved:", product);
+  document.addEventListener("DOMContentLoaded", () => {
+    const productId = window.location.pathname.split("/")[4];
+    if (productId) processProductById(productId);
+  });
 
-        // Step 2: Filter products by criteria
-        const filterParams = {
-          prodId: product.id,
-        };
+  // Main process function
+  async function processProductById(productId) {
+    try {
+      console.log("Processing product:", productId);
 
-        $.ajax({
-          url: `/v2/api/entity/le_productsclone_productslist/list/1?filter[code]=${product.product_code}`,
-          type: "GET",
-          success: function (filteredProducts) {
-            console.log("Filtered products:", filteredProducts);
-
-            // Check if products were found
-            if (filteredProducts && filteredProducts.data.length > 0) {
-              // Found matching products, proceed with update
-              const matchedProduct = filteredProducts.data[0];
-
-              // Step 3: Update the product
-              $.ajax({
-                url: `/v2/api/entity/product/${matchedProduct.id}/fields`,
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({
-                  name: product.Product.name || "",
-                  code: product.Product.product_code || "",
-                  barcode: barcode || "",
-                  field1: product.Product.ProductsCustomData[0].field_16 || "",
-                  field2: product.Product.ProductsCustomData[0].field_21 || "",
-                  field3: product.Product.ProductsCustomData[0].field_24 || "",
-                }),
-                success: function (updateResponse) {
-                  console.log("Product updated successfully:", updateResponse);
-                  showNotification("success", "Product updated successfully");
-                },
-                error: function (xhr, status, error) {
-                  console.error("Error updating product:", error);
-                  showNotification(
-                    "error",
-                    "Failed to update product: " + error
-                  );
-                },
-              });
-            } else {
-              // No products found
-              console.log("No matching products found");
-              showNotification("warning", "No matching products found");
-            }
-          },
-          error: function (xhr, status, error) {
-            console.error("Error filtering products:", error);
-            showNotification("error", "Failed to filter products: " + error);
-          },
-          complete: function () {},
-        });
-      },
-      error: function (xhr, status, error) {
-        console.error("Error getting product:", error);
-        showNotification("error", "Failed to retrieve product: " + error);
-      },
-    });
-
-    // Helper function to show notifications
-    function showNotification(type, message) {
-      // Remove any existing notifications
-      $(".notification").remove();
-
-      // Create notification element
-      const notification = $(
-        `<div class="notification notification-${type}">${message}</div>`
+      // Get product and handle barcode
+      const product = await fetchWithLogging(
+        `/api2/products/${productId}?load_custom_data=1`
       );
-      $("body").append(notification);
+      const newBarcode = `${productId}696365482`;
+      let currentBarcode = product.data.Product.barcode;
 
-      // Auto-hide after 5 seconds
-      setTimeout(function () {
-        notification.fadeOut(300, function () {
-          $(this).remove();
+      // Update barcode if missing
+      if (!currentBarcode) {
+        try {
+          await postWithLogging(`/v2/api/entity/product/${productId}/fields`, {
+            barcode: newBarcode,
+          });
+          currentBarcode = newBarcode;
+        } catch (error) {
+          console.warn(
+            "Barcode update failed, continuing process:",
+            error.message
+          );
+        }
+      }
+
+      // Check if product exists in clone system
+      console.log({ product: product });
+
+      const productCode = product.data.Product.product_code || "";
+      console.log({ productCode: productCode });
+
+      const cloneProducts = await fetchWithLogging(
+        `/v2/api/entity/le_productsclone_productslist/list/1?filter[code]=${productCode}`
+      );
+
+      // Prepare payload
+      const payload = createProductPayload(product.data, currentBarcode);
+
+      // Update or create product in clone system
+      if (cloneProducts.data.length > 0) {
+        await postWithLogging(
+          `/v2/api/entity/le_productsclone_productslist/${cloneProducts.data[0].id}/fields`,
+          payload
+        );
+      } else {
+        await postWithLogging(`/v2/api/entity/le_productsclone_productslist`, {
+          ...payload,
+          reference_id: 4,
         });
-      }, 5000);
+      }
+
+      console.log("Product processing completed successfully");
+    } catch (error) {
+      console.error("Process failed:", error.message);
+      console.error("Error details:", error);
     }
   }
 
-  // Example usage:
-  $("#updateProductButton").on("click", function () {
-    const productId = window.location.pathname.split("/")[4];
-    const updateData = {
-      name: $("#productNameInput").val(),
-      price: $("#productPriceInput").val(),
-      stock: $("#productStockInput").val(),
-      // Add any other fields to update
-    };
+  // Helper function to create product payload
+  function createProductPayload(productData, barcode) {
+    console.log({ productData: productData });
 
-    processProductById(productId, updateData);
-  });
+    const product = productData.Product;
+    let customFields = { field_16: "", field_21: "", field_24: "" };
+
+    customFields.field_16 = product.CustomModel.field_16;
+    customFields.field_21 = product.CustomModel.field_21;
+    customFields.field_24 = product.CustomModel.field_24;
+    console.log({ customFields: customFields });
+
+    return {
+      name: product.name || "",
+      code: product.product_code || "",
+      barcode: barcode || "",
+      field1: customFields.field_16 || "",
+      field2: customFields.field_21 || "",
+      field3: customFields.field_24 || "",
+    };
+  }
+
+  // Reusable fetch with logging
+  async function fetchWithLogging(url) {
+    console.log(`GET: ${url}`);
+
+    try {
+      const response = await fetch(url);
+      console.log(`Response: ${response.status}`);
+
+      if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error(`Fetch failed: ${url}`, error);
+      throw error;
+    }
+  }
+
+  // Reusable post with logging
+  async function postWithLogging(url, payload) {
+    console.log(`POST: ${url}`, payload);
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      console.log(`Response: ${response.status}`);
+
+      if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error(`Post failed: ${url}`, error);
+      throw error;
+    }
+  }
 </script>
