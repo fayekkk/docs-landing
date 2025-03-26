@@ -21,176 +21,240 @@
 
 <script>
   $(document).ready(function () {
-    // Function to update a project item
+    // ===== HELPER FUNCTIONS =====
+    const log = (type, msg, data) =>
+      console[type](`[${type.toUpperCase()}] ${msg}`, data || "");
+
+    // Cache mechanism
+    const cache = {
+      workOrderId: null,
+      services: null,
+      getWorkOrderId: () => cache.workOrderId,
+      setWorkOrderId: (id) => {
+        cache.workOrderId = id;
+        return id;
+      },
+      getServices: () => cache.services,
+      setServices: (services) => {
+        cache.services = services;
+        return services;
+      },
+    };
+
+    // Safe data helpers
+    const safe = {
+      id: (id) => (id && id !== "undefined" ? id : null),
+      number: (val) => (!isNaN(parseFloat(val)) ? parseFloat(val) : 0),
+      string: (str) => str || "--",
+      attr: (val) => (val === undefined ? "" : val),
+    };
+
+    // API helpers
+    const api = {
+      async fetch(url, options = {}) {
+        try {
+          const defaultOptions = {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          };
+          const response = await fetch(url, { ...defaultOptions, ...options });
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(
+              `API Error ${response.status}: ${
+                errorData.message || "Unknown error"
+              }`
+            );
+          }
+          return await response.json();
+        } catch (error) {
+          log("error", `API call failed: ${url}`, error);
+          throw error;
+        }
+      },
+
+      async updateItem(itemId, field, value) {
+        // Validate inputs
+        const safeId = safe.id(itemId);
+        if (!safeId) throw new Error(`Invalid item ID: ${itemId}`);
+
+        const safeValue = safe.number(value);
+        log("info", `Updating item ${safeId}.${field} = ${safeValue}`);
+
+        return api.fetch(
+          `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${safeId}/fields`,
+          {
+            method: "POST",
+            body: JSON.stringify({ [field]: safeValue }),
+          }
+        );
+      },
+
+      postLog: (logData) =>
+        api.fetch("/v2/api/entity/le_OperationsLog", {
+          method: "POST",
+          body: JSON.stringify({
+            ...logData,
+            item_id: safe.string(logData.item_id),
+            project_item: safe.string(logData.project_item),
+          }),
+        }),
+
+      getRequisition: (id) => api.fetch(`/v2/api/entity/requisition/${id}/1`),
+
+      async getServices(workOrderId) {
+        if (cache.getServices()) return cache.getServices();
+
+        try {
+          const response = await $.ajax({
+            url: `/v2/api/entity/le_workflow-type-entity-2/${workOrderId}/4`,
+            method: "GET",
+            dataType: "json",
+          });
+
+          // Safely extract and validate services
+          try {
+            const services =
+              response["le_workflow-type-entity-2_custom_data"][
+                "le_custom_data_le_workflow-type-entity-2_le_custom_data_le_workflow-type-entity-2_project_items"
+              ];
+
+            if (!Array.isArray(services))
+              throw new Error("Invalid services data");
+
+            // Filter valid services with required fields
+            const validServices = services.filter(
+              (s) => s && s.id && s.item_name
+            );
+            log("info", `Found ${validServices.length} valid services`);
+
+            return cache.setServices(validServices);
+          } catch (e) {
+            log("error", "Could not extract services from response", e);
+            throw new Error("Invalid services data structure");
+          }
+        } catch (error) {
+          log("error", "Failed to fetch services", error);
+          throw error;
+        }
+      },
+    };
+
+    // ===== CORE OPERATIONS =====
+    // Post operation history with data validation
+    async function postHistory(
+      invoiceNo,
+      itemId,
+      itemName,
+      totalValue,
+      workOrderId,
+      isAdd = false
+    ) {
+      try {
+        const postBody = {
+          operations_type: isAdd ? "إذن إضافة " : "إذن صرف ",
+          ref_type: isAdd ? "requisitionsAdd" : "requisitionsSpend",
+          op_date: new Date().toISOString().slice(0, 19).replace("T", " "),
+          operation_no: invoiceNo,
+          item_id: safe.string(itemId),
+          project_item: safe.string(itemName),
+          single_line_field: totalValue,
+          reference_id: workOrderId,
+        };
+
+        await api.postLog(postBody);
+      } catch (error) {
+        log("error", "Failed to post history", error);
+      }
+    }
+
+    // Update project item with validation
     async function updateProjectItem(
       workOrderId,
       invoiceNo,
       itemValues,
       subValue,
       records,
-      itemName
+      itemName,
+      isAdd = false
     ) {
-      let previousCost = parseFloat(itemValues.requisitions_spend) || 0;
-      let totalValue = previousCost + subValue;
-
-      const existingRecord = records.find(
-        (record) => record.recId === itemValues.rec_id
-      );
-      if (existingRecord) {
-        totalValue = existingRecord.requisitions_spend;
-      }
-
       try {
-        const response = await fetch(
-          `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${itemValues.rec_id}/fields`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ requisitions_spend: totalValue }),
-          }
-        );
-
-        if (!response.ok) {
-          const errorRes = await response.json();
-          throw new Error(
-            `Error ${response.status}: ${
-              errorRes.message || "An error occurred."
-            }`
-          );
+        // Validate item ID
+        const itemId = safe.id(itemValues.rec_id);
+        if (!itemId) {
+          log("error", `Invalid item ID for ${itemName}`, itemValues);
+          throw new Error(`Missing ID for ${itemName}`);
         }
 
+        const field = isAdd ? "requisitions_add" : "requisitions_spend";
+        const previousCost = safe.number(itemValues[field]);
+        const safeSubValue = safe.number(subValue);
+        let totalValue = previousCost + safeSubValue;
+
+        // Check for existing record
+        const existingRecord = records.find(
+          (record) => record.recId === itemId
+        );
+        if (existingRecord) totalValue = existingRecord[field];
+
+        // Update item in database
+        await api.updateItem(itemId, field, totalValue);
         await postHistory(
           invoiceNo,
-          itemValues.rec_id,
+          itemId,
           itemName,
-          subValue,
-          workOrderId
+          safeSubValue,
+          workOrderId,
+          isAdd
         );
       } catch (error) {
-        alert(error.message);
-      }
-    }
-    // Function to update a project item
-    async function updateProjectItem2(
-      workOrderId,
-      invoiceNo,
-      itemValues,
-      subValue,
-      records,
-      itemName
-    ) {
-      let previousCost = parseFloat(itemValues.requisitions_add) || 0;
-      let totalValue = previousCost + subValue;
-
-      const existingRecord = records.find(
-        (record) => record.recId === itemValues.rec_id
-      );
-      if (existingRecord) {
-        totalValue = existingRecord.requisitions_add;
-      }
-
-      try {
-        const response = await fetch(
-          `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${itemValues.rec_id}/fields`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ requisitions_add: totalValue }),
-          }
-        );
-
-        if (!response.ok) {
-          const errorRes = await response.json();
-          throw new Error(
-            `Error ${response.status}: ${
-              errorRes.message || "An error occurred."
-            }`
-          );
-        }
-
-        await postHistory2(
-          invoiceNo,
-          itemValues.rec_id,
-          itemName,
-          subValue,
-          workOrderId
-        );
-      } catch (error) {
-        alert(error.message);
+        log("error", `Failed to update item ${itemName}`, error);
+        // alert(error.message);
       }
     }
 
-    // Handle service transfers for edit mode
+    // Service transfer with validation
     async function updateServiceTransfer(workOrderId, invoiceNo) {
-      // Check which items are selected
-      const fromItemSelected = $(".itemSelect").eq(0).val() !== "إختر الخدمة";
-      const toItemSelected = $(".itemSelect").eq(1).val() !== "إختر الخدمة";
-
-      // If neither item is selected, abort operation
-      if (!fromItemSelected && !toItemSelected) {
-        console.log("No items selected, aborting operation");
-        return;
-      }
-
-      // Calculate the total value from the items
-      let totalValue = 0;
-      $(".itemRow").each(function () {
-        const price = parseFloat($(this).find(".unit-price input").val()) || 0;
-        const qty = parseFloat($(this).find(".Quantity input").val()) || 0;
-        totalValue += price * qty;
-      });
-
       try {
-        // Case 1: From item not selected, only add to To item
+        const fromSelect = $(".itemSelect").eq(0);
+        const toSelect = $(".itemSelect").eq(1);
+
+        const fromItemSelected = fromSelect.val() !== "إختر الخدمة";
+        const toItemSelected = toSelect.val() !== "إختر الخدمة";
+
+        if (!fromItemSelected && !toItemSelected) return;
+
+        // Calculate total value
+        let totalValue = 0;
+        $(".itemRow").each(function () {
+          const price = safe.number($(this).find(".unit-price input").val());
+          const qty = safe.number($(this).find(".Quantity input").val());
+          totalValue += price * qty;
+        });
+
+        // Case 1: To item only
         if (!fromItemSelected && toItemSelected) {
-          console.log("From item not selected, only adding to To item");
-
-          const toOption = $(".itemSelect").eq(1).find("option:selected");
+          const toOption = toSelect.find("option:selected");
           const toItemValues = toOption[0].dataset;
+          const toItemId = safe.id(toItemValues.rec_id);
 
-          // Calculate values for the To item
-          let previousToValue =
-            parseFloat(toItemValues.requisitions_spend) || 0;
-          let newToValue = previousToValue + totalValue;
-
-          // Update the To item
-          const toResponse = await fetch(
-            `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${toItemValues.rec_id}/fields`,
-            {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ requisitions_spend: newToValue }),
-            }
-          );
-
-          if (!toResponse.ok) {
-            const errorRes = await toResponse.json();
-            throw new Error(
-              `Error ${toResponse.status}: ${
-                errorRes.message || "An error occurred."
-              }`
-            );
+          if (!toItemId) {
+            throw new Error("Missing ID for target service");
           }
 
-          // Post history for the To item with positive value
+          const previousToValue = safe.number(toItemValues.requisitions_spend);
+          const newToValue = previousToValue + totalValue;
+
+          await api.updateItem(toItemId, "requisitions_spend", newToValue);
           await postHistory(
             invoiceNo,
-            toItemValues.rec_id,
-            toOption[0].textContent,
+            toItemId,
+            toOption.text(),
             totalValue,
             workOrderId
           );
-
-          // Post history for the missing From item with negative value
           await postHistory(
             invoiceNo,
             "--",
@@ -199,840 +263,467 @@
             workOrderId
           );
         }
-        // Case 2: Both items selected - normal transfer operation
+        // Case 2: Both items
         else if (fromItemSelected && toItemSelected) {
-          const fromOption = $(".itemSelect").eq(0).find("option:selected");
-          const toOption = $(".itemSelect").eq(1).find("option:selected");
+          const fromOption = fromSelect.find("option:selected");
+          const toOption = toSelect.find("option:selected");
 
           const fromItemValues = fromOption[0].dataset;
           const toItemValues = toOption[0].dataset;
 
-          // Calculate values for both items
-          let previousFromValue =
-            parseFloat(fromItemValues.requisitions_spend) || 0;
-          let previousToValue =
-            parseFloat(toItemValues.requisitions_spend) || 0;
+          const fromItemId = safe.id(fromItemValues.rec_id);
+          const toItemId = safe.id(toItemValues.rec_id);
 
-          console.log({ previousFromValue, previousToValue });
-
-          // Calculate new values
-          let newFromValue = previousFromValue - totalValue;
-          let newToValue = previousToValue + totalValue;
-
-          // Update the From item
-          const fromResponse = await fetch(
-            `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${fromItemValues.rec_id}/fields`,
-            {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ requisitions_spend: newFromValue }),
-            }
-          );
-
-          if (!fromResponse.ok) {
-            const errorRes = await fromResponse.json();
-            throw new Error(
-              `Error ${fromResponse.status}: ${
-                errorRes.message || "An error occurred."
-              }`
-            );
+          if (!fromItemId || !toItemId) {
+            throw new Error("Missing ID for one or both services");
           }
 
-          // Post history for the From item
+          const previousFromValue = safe.number(
+            fromItemValues.requisitions_spend
+          );
+          const previousToValue = safe.number(toItemValues.requisitions_spend);
+
+          const newFromValue = previousFromValue - totalValue;
+          const newToValue = previousToValue + totalValue;
+
+          // Update source item
+          await api.updateItem(fromItemId, "requisitions_spend", newFromValue);
           await postHistory(
             invoiceNo,
-            fromItemValues.rec_id,
-            fromOption[0].textContent,
+            fromItemId,
+            fromOption.text(),
             `- ${totalValue}`,
             workOrderId
           );
 
-          // Update the To item
-          const toResponse = await fetch(
-            `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${toItemValues.rec_id}/fields`,
-            {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ requisitions_spend: newToValue }),
-            }
-          );
-
-          if (!toResponse.ok) {
-            const errorRes = await toResponse.json();
-            throw new Error(
-              `Error ${toResponse.status}: ${
-                errorRes.message || "An error occurred."
-              }`
-            );
-          }
-
-          // Post history for the To item
+          // Update target item
+          await api.updateItem(toItemId, "requisitions_spend", newToValue);
           await postHistory(
             invoiceNo,
-            toItemValues.rec_id,
-            toOption[0].textContent,
+            toItemId,
+            toOption.text(),
             totalValue,
             workOrderId
           );
         }
-        // Case 3: Only From item selected
+        // Case 3: From item only
         else if (fromItemSelected && !toItemSelected) {
-          console.log("To item not selected, only deducting from From item");
-
-          const fromOption = $(".itemSelect").eq(0).find("option:selected");
+          const fromOption = fromSelect.find("option:selected");
           const fromItemValues = fromOption[0].dataset;
+          const fromItemId = safe.id(fromItemValues.rec_id);
 
-          // Calculate values for the From item
-          let previousFromValue =
-            parseFloat(fromItemValues.requisitions_spend) || 0;
-          let newFromValue = previousFromValue - totalValue;
-
-          // Update the From item
-          const fromResponse = await fetch(
-            `/v2/api/entity/le_custom_data_le_workflow-type-entity-2_project_items/${fromItemValues.rec_id}/fields`,
-            {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ requisitions_spend: newFromValue }),
-            }
-          );
-
-          if (!fromResponse.ok) {
-            const errorRes = await fromResponse.json();
-            throw new Error(
-              `Error ${fromResponse.status}: ${
-                errorRes.message || "An error occurred."
-              }`
-            );
+          if (!fromItemId) {
+            throw new Error("Missing ID for source service");
           }
 
-          // Post history for the From item
+          const previousFromValue = safe.number(
+            fromItemValues.requisitions_spend
+          );
+          const newFromValue = previousFromValue - totalValue;
+
+          await api.updateItem(fromItemId, "requisitions_spend", newFromValue);
           await postHistory(
             invoiceNo,
-            fromItemValues.rec_id,
-            fromOption[0].textContent,
+            fromItemId,
+            fromOption.text(),
             `- ${totalValue}`,
             workOrderId
           );
-
-          // Post history for the missing To item with positive value
           await postHistory(invoiceNo, "--", "--", totalValue, workOrderId);
         }
       } catch (error) {
-        alert(error.message);
+        log("error", "Transfer operation failed", error);
+        // alert(`Transfer failed: ${error.message}`);
       }
     }
 
-    // Function to log the history of operations
-    async function postHistory(
-      invoiceNo,
-      itemId,
-      itemName,
-      totalValue,
-      workOrderId
-    ) {
-      const postBody = {
-        operations_type: "إذن صرف ",
-        ref_type: "requisitionsSpend",
-        op_date: new Date().toISOString().slice(0, 19).replace("T", " "),
-        operation_no: invoiceNo,
-        item_id: itemId,
-        project_item: itemName,
-        single_line_field: totalValue,
-        reference_id: workOrderId,
-      };
-
-      try {
-        const response = await fetch(`/v2/api/entity/le_OperationsLog`, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(postBody),
-        });
-
-        if (!response.ok) {
-          const errorRes = await response.json();
-          throw new Error(
-            `Error ${response.status}: ${
-              errorRes.message || "An error occurred."
-            }`
-          );
-        }
-      } catch (error) {
-        alert(error.message);
-      }
-    }
-    // Function to log the history of operations
-    async function postHistory2(
-      invoiceNo,
-      itemId,
-      itemName,
-      totalValue,
-      workOrderId
-    ) {
-      const postBody = {
-        operations_type: "إذن إضافة ",
-        ref_type: "requisitionsAdd",
-        op_date: new Date().toISOString().slice(0, 19).replace("T", " "),
-        operation_no: invoiceNo,
-        item_id: itemId,
-        project_item: itemName,
-        single_line_field: totalValue,
-        reference_id: workOrderId,
-      };
-
-      try {
-        const response = await fetch(`/v2/api/entity/le_OperationsLog`, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(postBody),
-        });
-
-        if (!response.ok) {
-          const errorRes = await response.json();
-          throw new Error(
-            `Error ${response.status}: ${
-              errorRes.message || "An error occurred."
-            }`
-          );
-        }
-      } catch (error) {
-        alert(error.message);
-      }
-    }
-
-    // Function to update project data
+    // Update project data with validation
     async function updateProjectData(invoiceNo) {
-      const url = new URL(window.location.href);
-      const workOrderId = url.searchParams.get("work_order_id");
-      let records = [];
-      const itemSelects = $(".itemSelect").toArray();
+      try {
+        const workOrderId = await getWorkOrderId();
+        if (!workOrderId) throw new Error("Missing work order ID");
 
-      // For add screens, handle each item select
-      if (window.location.href.includes("/requisitions/add")) {
-        for (const itemSelect of itemSelects) {
-          const recId = $(itemSelect).val();
+        let records = [];
 
-          if (
-            recId !== "إختر الخدمة" &&
-            window.location.href.includes("/requisitions/add/2")
-          ) {
+        // For add screens
+        if (window.location.href.includes("/requisitions/add")) {
+          const itemSelects = $(".itemSelect").toArray();
+
+          for (const itemSelect of itemSelects) {
+            const recId = $(itemSelect).val();
+            if (recId === "إختر الخدمة") continue;
+
             const selectedOption = $(itemSelect).find("option:selected");
             const itemValues = selectedOption[0].dataset;
-            const price =
-              parseFloat(
-                $(itemSelect).closest("tr").find(".unit-price input").val()
-              ) || 0;
-            const qty =
-              parseFloat(
-                $(itemSelect).closest("tr").find(".Quantity input").val()
-              ) || 0;
+
+            // Validate item ID
+            if (!safe.id(itemValues.rec_id)) {
+              log("warn", `Skipping item with invalid ID`, itemValues);
+              continue;
+            }
+
+            const row = $(itemSelect).closest("tr");
+            const price = safe.number(row.find(".unit-price input").val());
+            const qty = safe.number(row.find(".Quantity input").val());
             const subValue = price * qty;
 
+            if (subValue <= 0) continue;
+
+            // Determine operation type
+            const isAddOperation = window.location.href.includes(
+              "/requisitions/add/1"
+            );
+            const field = isAddOperation
+              ? "requisitions_add"
+              : "requisitions_spend";
+
+            // Update tracking records
             const existingRecordIndex = records.findIndex(
               (record) => record.recId === itemValues.rec_id
             );
             if (existingRecordIndex !== -1) {
-              records[existingRecordIndex].requisitions_spend += subValue;
+              records[existingRecordIndex][field] += subValue;
             } else {
               records.push({
                 recId: itemValues.rec_id,
-                requisitions_spend:
-                  (parseFloat(itemValues.requisitions_spend) || 0) + subValue,
+                [field]: safe.number(itemValues[field]) + subValue,
               });
             }
 
+            // Update the item
             await updateProjectItem(
               workOrderId,
               invoiceNo,
               itemValues,
               subValue,
               records,
-              selectedOption[0].textContent
-            );
-          } else if (
-            recId !== "إختر الخدمة" &&
-            window.location.href.includes("/requisitions/add/1")
-          ) {
-            const selectedOption = $(itemSelect).find("option:selected");
-            const itemValues = selectedOption[0].dataset;
-            const price =
-              parseFloat(
-                $(itemSelect).closest("tr").find(".unit-price input").val()
-              ) || 0;
-            const qty =
-              parseFloat(
-                $(itemSelect).closest("tr").find(".Quantity input").val()
-              ) || 0;
-            const subValue = price * qty;
-
-            const existingRecordIndex = records.findIndex(
-              (record) => record.recId === itemValues.rec_id
-            );
-            if (existingRecordIndex !== -1) {
-              records[existingRecordIndex].requisitions_add += subValue;
-            } else {
-              records.push({
-                recId: itemValues.rec_id,
-                requisitions_add:
-                  (parseFloat(itemValues.requisitions_add) || 0) + subValue,
-              });
-            }
-
-            await updateProjectItem2(
-              workOrderId,
-              invoiceNo,
-              itemValues,
-              subValue,
-              records,
-              selectedOption[0].textContent
+              selectedOption.text(),
+              isAddOperation
             );
           }
         }
-      }
-      // For edit screen, handle the service transfer
-      else if (window.location.href.includes("/requisitions/edit")) {
-        await updateServiceTransfer(workOrderId, invoiceNo);
+        // For edit screen
+        else if (window.location.href.includes("/requisitions/edit")) {
+          await updateServiceTransfer(workOrderId, invoiceNo);
+        }
+
+        log("info", `Project data updated for invoice ${invoiceNo}`);
+      } catch (error) {
+        log("error", "Failed to update project data", error);
+        // alert(`Error: ${error.message}`);
       }
     }
 
-    // Function to get workOrderId, either from URL params or API
+    // Get work order ID with caching
     async function getWorkOrderId() {
-      // First try to get from URL params
-      const url = new URL(window.location.href);
-      let workOrderId = url.searchParams.get("work_order_id");
-
-      // If found in URL, return it
-      if (workOrderId) {
-        console.log("Work order ID found in URL:", workOrderId);
-        return workOrderId;
-      }
-
-      // If still not found, try to get from API
-      console.log("Work order ID not found in URL, fetching from API...");
-
       try {
-        // Get requisition ID from URL path
-        let requisitionId;
+        if (cache.getWorkOrderId()) return cache.getWorkOrderId();
 
+        // Try from URL params
+        const url = new URL(window.location.href);
+        let workOrderId = url.searchParams.get("work_order_id");
+
+        if (workOrderId) {
+          return cache.setWorkOrderId(workOrderId);
+        }
+
+        // Try from API for edit screen
         if (window.location.href.includes("/requisitions/edit/")) {
-          requisitionId = window.location.pathname.split("/edit/")[1];
-        } else if (window.location.href.includes("/requisitions/add/")) {
-          return null; // For add screen, we need the work_order_id in the URL
-        } else {
-          return null; // Unknown page type
+          const requisitionId = window.location.pathname.split("/edit/")[1];
+          if (!requisitionId) return null;
+
+          try {
+            const data = await api.getRequisition(requisitionId);
+            workOrderId = data?.work_order_id;
+
+            if (!workOrderId) return null;
+
+            // Reload with the ID as parameter
+            const currentUrl = window.location.href;
+            const newUrl = currentUrl.includes("?")
+              ? `${currentUrl}&work_order_id=${workOrderId}`
+              : `${currentUrl}?work_order_id=${workOrderId}`;
+
+            window.location.href = newUrl;
+            return cache.setWorkOrderId(workOrderId);
+          } catch (error) {
+            return null;
+          }
         }
 
-        // Fetch the requisition data from API
-        const response = await fetch(
-          `/v2/api/entity/requisition/${requisitionId}/1`
-        );
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch requisition data: ${response.status}`
-          );
-        }
-
-        const data = await response.json();
-        workOrderId = data.work_order_id;
-
-        if (!workOrderId) {
-          console.error("Work order ID not found in API response:", data);
-          return null;
-        }
-
-        console.log(
-          `Work order ID fetched from API for requisition ${requisitionId}:`,
-          workOrderId
-        );
-
-        // Reload page with the work_order_id as a parameter (not using filter)
-        const currentUrl = window.location.href;
-        const newUrl = currentUrl.includes("?")
-          ? `${currentUrl}&work_order_id=${workOrderId}`
-          : `${currentUrl}?work_order_id=${workOrderId}`;
-
-        console.log("Reloading with new URL:", newUrl);
-        window.location.href = newUrl;
-
-        // This won't be reached due to page reload, but we return it anyway
-        return workOrderId;
+        return null;
       } catch (error) {
-        console.error("Error fetching work order ID:", error);
+        log("error", "Error fetching work order ID", error);
         return null;
       }
     }
-    // Initialize the form and item prices based on the current URL
-    if (window.location.href.includes("/requisitions/add")) {
-      $(".item-unit-price").attr("readonly", false);
 
-      // Function to create a searchable selector for services
-      const createServiceSelector = async () => {
-        const selector = $("<select>", {
-          class: "itemSelect",
-          style: "width: 100%;",
-        });
-        selector.append(
-          $("<option>", { text: "إختر الخدمة", style: "text-align: center;" })
-        );
+    // Create select element with data validation
+    function createServiceSelect(
+      services,
+      className,
+      defaultText = "إختر الخدمة"
+    ) {
+      const select = $("<select>", { class: className, style: "width: 100%;" });
 
-        const workOrderId = await getWorkOrderId();
-        $.get(`/v2/api/entity/le_workflow-type-entity-2/${workOrderId}/4`).then(
-          (response) => {
-            console.log({ response: response });
+      select.append(
+        $("<option>", {
+          text: defaultText,
+          style: "text-align: center;",
+        })
+      );
 
-            const options =
-              response["le_workflow-type-entity-2_custom_data"][
-                "le_custom_data_le_workflow-type-entity-2_le_custom_data_le_workflow-type-entity-2_project_items"
-              ];
-            options.forEach((optionText) => {
-              const option = document.createElement("option");
-              option.textContent = optionText.item_name;
-              option.dataset["purch_estimated_cost"] =
-                optionText.purch_estimated_cost;
-              option.dataset["expenses_estimated_cost"] =
-                optionText.expenses_estimated_cost;
-              option.dataset["rec_id"] = optionText.id;
-              option.dataset["requisitions_spend"] =
-                optionText.requisitions_spend;
-              option.dataset["expenses_actual_cost"] =
-                optionText.expenses_actual_cost;
-              option.dataset["requisitions_add"] = optionText.requisitions_add;
-              option.dataset["requisitions_spend"] =
-                optionText.requisitions_spend;
-              option.style.textAlign = "center";
-              selector.append(option);
-            });
+      if (!services || !Array.isArray(services) || services.length === 0) {
+        return select;
+      }
 
-            // Append selector to item rows
-            $("#listing_table .itemRow").each(function () {
-              if (!$(this).find(".itemSelect").length) {
-                $(this).find(".late_td").empty().append(selector.clone());
-              }
-            });
+      services.forEach((service) => {
+        if (!service || !service.id) return;
+
+        // Create option with all attributes
+        const option = document.createElement("option");
+        option.textContent = service.item_name || "Unnamed Service";
+        option.style.textAlign = "center";
+        option.value = service.id;
+
+        // Set all properties as both data-* attributes and direct attributes
+        const serviceProps = {
+          rec_id: service.id,
+          purch_estimated_cost: safe.number(service.purch_estimated_cost),
+          expenses_estimated_cost: safe.number(service.expenses_estimated_cost),
+          requisitions_spend: safe.number(service.requisitions_spend),
+          expenses_actual_cost: safe.number(service.expenses_actual_cost),
+          requisitions_add: safe.number(service.requisitions_add),
+        };
+
+        // Set data attributes
+        for (const [key, value] of Object.entries(serviceProps)) {
+          option.dataset[key] = value;
+        }
+
+        // Set direct attributes
+        for (const [key, value] of Object.entries(service)) {
+          if (value !== undefined && value !== null) {
+            // Set as direct attribute with data- prefix
+            option.setAttribute(`data-${key}`, safe.attr(value));
           }
-        );
-      };
+        }
 
-      // Create service selector on load
-      createServiceSelector();
+        // Also set the required attributes directly
+        option.setAttribute("data-rec_id", service.id);
+        option.setAttribute("data-id", service.id);
 
-      // Event listener for changes in item pricing and quantity
-      $(document).on(
-        "change",
-        ".item-unit-price, .item-qty, .itemSelect",
-        function () {
-          const closestTr = $(this).closest("tr");
-          const selectedValue = closestTr.find(".itemSelect").val();
-          let totalSubCost = 0;
+        select.append(option);
+      });
 
-          $(".itemRow").each(function () {
+      return select;
+    }
+
+    // Create table selectors
+    async function createTableSelectors() {
+      try {
+        const workOrderId = await getWorkOrderId();
+        if (!workOrderId) return;
+
+        // Fetch services
+        let services = [];
+        try {
+          services = await api.getServices(workOrderId);
+        } catch (error) {
+          log("error", "Failed to load services, using empty list", error);
+        }
+
+        // Create header columns and selectors based on page type
+        if (window.location.href.includes("/requisitions/edit")) {
+          // Add headers if needed
+          if ($("#listing_table th.from_service_th").length === 0) {
+            $("#label_unit_price").before(
+              `<th class="from_service_th">الخدمة من</th>`
+            );
+          }
+          if ($("#listing_table th.to_service_th").length === 0) {
+            $("#listing_table th.from_service_th").after(
+              `<th class="to_service_th">الخدمة إلى</th>`
+            );
+          }
+
+          // Add selectors to each row
+          $("#listing_table tbody tr.itemRow").each(function () {
             const row = $(this);
-            if (row.find(".itemSelect").val() === selectedValue) {
-              const price = parseFloat(row.find(".item-unit-price").val()) || 0;
-              const qty = parseFloat(row.find(".item-qty").val()) || 0;
+
+            // From service cell and selector
+            if (row.find("td.from_service_td").length === 0) {
+              row
+                .find(".unit-price")
+                .before(`<td class="from_service_td"></td>`);
+            }
+            if (
+              row.find("td.from_service_td .fromServiceSelect").length === 0
+            ) {
+              row
+                .find("td.from_service_td")
+                .empty()
+                .append(
+                  createServiceSelect(services, "fromServiceSelect itemSelect")
+                );
+            }
+
+            // To service cell and selector
+            if (row.find("td.to_service_td").length === 0) {
+              row
+                .find("td.from_service_td")
+                .after(`<td class="to_service_td"></td>`);
+            }
+            if (row.find("td.to_service_td .toServiceSelect").length === 0) {
+              row
+                .find("td.to_service_td")
+                .empty()
+                .append(
+                  createServiceSelect(services, "toServiceSelect itemSelect")
+                );
+            }
+          });
+
+          // Update colspan
+          $(".items-totals").find("td").eq(0).attr("colspan", "7");
+        } else {
+          // Add header if needed
+          if ($("#listing_table th.late_th").length === 0) {
+            $("#label_unit_price").before(
+              `<th class="late_th">إختار الخدمة</th>`
+            );
+          }
+
+          // Add selector to each row
+          $("#listing_table tbody tr.itemRow").each(function () {
+            const row = $(this);
+
+            if (row.find("td.late_td").length === 0) {
+              row.find(".unit-price").before(`<td class="late_td"></td>`);
+            }
+            if (row.find("td.late_td .itemSelect").length === 0) {
+              row
+                .find("td.late_td")
+                .empty()
+                .append(createServiceSelect(services, "itemSelect"));
+            }
+          });
+
+          // Update colspan
+          $(".items-totals").find("td").eq(0).attr("colspan", "6");
+        }
+      } catch (error) {
+        log("error", "Failed to create table selectors", error);
+      }
+    }
+
+    // ===== INITIALIZATION =====
+    $(".item-unit-price").attr("readonly", false);
+
+    // Add Screen
+    if (window.location.href.includes("/requisitions/add")) {
+      // Create selectors
+      createTableSelectors();
+
+      // Add update costs button
+      if ($("#updateCostsBtn").length === 0) {
+        $(".submit-btn-group")
+          .eq(0)
+          .before(
+            '<button id="updateCostsBtn" style="background-color: #13b272; color: white; padding: 10px 20px; border: none; margin-left:8px; margin-right:8px; cursor: pointer;">تحديث التكاليف</button>'
+          );
+      }
+
+      // Button click handler
+      $(document)
+        .off("click", "#updateCostsBtn")
+        .on("click", "#updateCostsBtn", async function (e) {
+          e.preventDefault();
+          try {
+            const requisitionId = window.location.pathname.split("/add/")[1];
+            await updateProjectData(requisitionId);
+            alert("تم الإنتهاء من تحديث التكاليف");
+          } catch (error) {
+            // alert(`Error: ${error.message}`);
+          }
+        });
+
+      // Add item button handler
+      $(document)
+        .off("click", "#AddItem")
+        .on("click", "#AddItem", function () {
+          setTimeout(() => createTableSelectors(), 250);
+        });
+
+      // Field change handler
+      $(document)
+        .off("change", ".item-unit-price, .item-qty, .itemSelect")
+        .on("change", ".item-unit-price, .item-qty, .itemSelect", function () {
+          const row = $(this).closest("tr");
+          const selectedOption = row.find(".itemSelect option:selected");
+          if (selectedOption.val() === "إختر الخدمة") return;
+
+          // Calculate total cost for this item across all rows
+          let totalSubCost = 0;
+          $(".itemRow").each(function () {
+            if ($(this).find(".itemSelect").val() === selectedOption.val()) {
+              const price = safe.number($(this).find(".item-unit-price").val());
+              const qty = safe.number($(this).find(".item-qty").val());
               totalSubCost += price * qty;
             }
           });
 
-          const actualSpendCost =
-            parseFloat(
-              closestTr
-                .find(".itemSelect option:selected")
-                .data("requisitions_spend")
-            ) || 0;
-          const actualAddCost =
-            parseFloat(
-              closestTr
-                .find(".itemSelect option:selected")
-                .data("requisitions_add")
-            ) || 0;
-
-          let totalActualCost = window.location.href.includes(
+          // Get current value and calculate new total
+          const isSpendOp = window.location.href.includes(
             "/requisitions/add/2"
-          )
-            ? actualSpendCost + totalSubCost
-            : window.location.href.includes("/requisitions/add/1")
-            ? actualAddCost + totalSubCost
-            : 0;
-
-          console.log(`Total Actual Cost for: ${totalActualCost}`);
-        }
-      );
-
-      // Function to create a new column for service selection
-      function createCol(prevTh, prevTd, colTitle, classTh, classTd, colInput) {
-        if ($(`#listing_table th.${classTh}`).length === 0) {
-          $(prevTh).before(`<th class='${classTh}'>${colTitle}</th>`);
-        }
-
-        // Append new TD with input area to each row
-        $(`#listing_table tr`).each(function () {
-          if (!$(this).find(`td.${classTd}`).length) {
-            $(this)
-              .find(prevTd)
-              .before(
-                `<td class='${classTd}'><textarea class='${colInput} editable-input'></textarea></td>`
-              );
-          }
+          );
+          const fieldValue = safe.number(
+            selectedOption.data(
+              isSpendOp ? "requisitions_spend" : "requisitions_add"
+            )
+          );
+          log(
+            "info",
+            `Total for ${selectedOption.text()}: ${fieldValue + totalSubCost}`
+          );
         });
-        createServiceSelector(); // Refresh selector after creating columns
-      }
-
-      // Get work order ID using our new function and create the necessary columns
-      const workOrderId = getWorkOrderId();
-      if (workOrderId) {
-        createCol(
-          "#label_unit_price",
-          ".unit-price",
-          "إختار الخدمة",
-          "late_th",
-          "late_td",
-          "late_input"
-        );
-        $(".items-totals").find("td").eq(0).attr("colspan", "6");
-      }
-
-      // Add new item and create service selection column
-      $(document).on("click", "#AddItem", function () {
-        if (workOrderId) {
-          setTimeout(() => {
-            $(".item-unit-price").attr("readonly", false);
-            createCol(
-              "#label_unit_price",
-              ".unit-price",
-              "إختار الخدمة",
-              "late_th",
-              "late_td",
-              "late_input"
-            );
-          }, 250);
-        }
-      });
-
-      // Add update costs button
-      $(".submit-btn-group")
-        .eq(0)
-        .before(
-          '<button id="updateCostsBtn" style="background-color: #13b272; color: white; padding: 10px 20px; border: none; margin-left:8px; margin-right:8px; cursor: pointer;">تحديث التكاليف</button>'
-        );
-
-      // Set up event handler for the update button
-      $("#updateCostsBtn").on("click", async function (e) {
-        e.preventDefault();
-        const workOrderId = await getWorkOrderId();
-        const requisitionId = window.location.pathname.split("/add/")[1];
-        await updateProjectData(requisitionId);
-        alert("تم الإنتهاء من تحديث التكاليف");
-      });
-    } else if (window.location.href.includes("/requisitions/edit")) {
-      // Setup for edit screen
+    }
+    // Edit Screen
+    else if (window.location.href.includes("/requisitions/edit")) {
       setTimeout(() => {
-        // Create service selectors for transfer functionality
-        // Function to create table headers and cells with service selectors
-        async function createTableSelectors() {
-          try {
-            console.log("[INFO] Creating table selectors for #listing_table");
+        // Create selectors
+        createTableSelectors();
 
-            // Get work order ID
-            const workOrderId = await getWorkOrderId();
-            if (!workOrderId) {
-              console.error(
-                "[ERROR] Cannot create selectors - missing work order ID"
-              );
-              return;
-            }
-
-            // First, create the header columns if they don't exist
-            const tableHeaders = $("#listing_table thead tr");
-            if (tableHeaders.length) {
-              // For Add screen - create one service column
-              if (window.location.href.includes("/requisitions/add")) {
-                if ($("#listing_table th.late_th").length === 0) {
-                  $("#label_unit_price").before(
-                    `<th class="late_th">إختار الخدمة</th>`
-                  );
-                  console.log("[INFO] Added service header column to table");
-                }
-              }
-              // For Edit screen - create two service columns (From and To)
-              else if (window.location.href.includes("/requisitions/edit")) {
-                if ($("#listing_table th.from_service_th").length === 0) {
-                  $("#label_unit_price").before(
-                    `<th class="from_service_th">الخدمة من</th>`
-                  );
-                  console.log(
-                    "[INFO] Added 'From Service' header column to table"
-                  );
-                }
-
-                if ($("#listing_table th.to_service_th").length === 0) {
-                  $("#listing_table th.from_service_th").after(
-                    `<th class="to_service_th">الخدمة إلى</th>`
-                  );
-                  console.log(
-                    "[INFO] Added 'To Service' header column to table"
-                  );
-                }
-              }
-            } else {
-              console.warn("[WARN] Table header row not found");
-            }
-
-            // Fetch service data from API
-            console.log(
-              `[INFO] Fetching services for work order ID: ${workOrderId}`
+        // Add update costs button
+        if ($("#updateCostsBtn").length === 0) {
+          $("#saveRequisition")
+            .eq(0)
+            .before(
+              '<button id="updateCostsBtn" style="background-color: #13b272; color: white; padding:7px 20px; border: none; margin-left:8px; margin-right:8px; cursor: pointer;">تحديث التكاليف</button>'
             );
-            try {
-              const response = await $.ajax({
-                url: `/v2/api/entity/le_workflow-type-entity-2/${workOrderId}/4`,
-                method: "GET",
-                dataType: "json",
-              });
 
-              console.log("[INFO] Services API response received", response);
-
-              const services =
-                response["le_workflow-type-entity-2_custom_data"][
-                  "le_custom_data_le_workflow-type-entity-2_le_custom_data_le_workflow-type-entity-2_project_items"
-                ];
-
-              if (!services || !Array.isArray(services)) {
-                console.error("[ERROR] Invalid services data format", response);
-                return;
+          // Button handler
+          $("#updateCostsBtn")
+            .off("click")
+            .on("click", async function (e) {
+              e.preventDefault();
+              try {
+                const requisitionId =
+                  window.location.pathname.split("/edit/")[1];
+                await updateProjectData(requisitionId);
+                alert("تم الإنتهاء من تحديث التكاليف");
+              } catch (error) {
+                // alert(`Error: ${error.message}`);
               }
-
-              console.log(`[INFO] Found ${services.length} services`);
-
-              // Process each row in the table
-              $("#listing_table tbody tr.itemRow").each(function (index) {
-                const row = $(this);
-
-                // For Add screen - create one service selector per row
-                if (window.location.href.includes("/requisitions/add")) {
-                  // Check if the cell exists, create it if not
-                  if (row.find("td.late_td").length === 0) {
-                    row.find(".unit-price").before(`<td class="late_td"></td>`);
-                  }
-
-                  // Create the select element if it doesn't exist
-                  if (row.find("td.late_td .itemSelect").length === 0) {
-                    const select = $("<select>", {
-                      class: "itemSelect",
-                      style: "width: 100%;",
-                    });
-
-                    // Add default option
-                    select.append(
-                      $("<option>", {
-                        text: "إختر الخدمة",
-                        style: "text-align: center;",
-                      })
-                    );
-
-                    // Add service options
-                    services.forEach((service) => {
-                      const option = $("<option>", {
-                        text: service.item_name,
-                        style: "text-align: center;",
-                        value: service.id,
-                      });
-
-                      // Set data attributes
-                      option.data(
-                        "purch_estimated_cost",
-                        service.purch_estimated_cost
-                      );
-                      option.data(
-                        "expenses_estimated_cost",
-                        service.expenses_estimated_cost
-                      );
-                      option.data("rec_id", service.id);
-                      option.data(
-                        "requisitions_spend",
-                        service.requisitions_spend
-                      );
-                      option.data(
-                        "expenses_actual_cost",
-                        service.expenses_actual_cost
-                      );
-                      option.data("requisitions_add", service.requisitions_add);
-
-                      select.append(option);
-                    });
-
-                    // Append select to the cell
-                    row.find("td.late_td").empty().append(select);
-                    console.log(
-                      `[INFO] Added service selector to row ${index + 1}`
-                    );
-                  }
-                }
-                // For Edit screen - create From and To service selectors
-                else if (window.location.href.includes("/requisitions/edit")) {
-                  // Create From Service cell and select
-                  if (row.find("td.from_service_td").length === 0) {
-                    row
-                      .find(".unit-price")
-                      .before(`<td class="from_service_td"></td>`);
-                  }
-
-                  if (
-                    row.find("td.from_service_td .fromServiceSelect").length ===
-                    0
-                  ) {
-                    const fromSelect = $("<select>", {
-                      class: "fromServiceSelect itemSelect",
-                      style: "width: 100%;",
-                    });
-
-                    // Add default option
-                    fromSelect.append(
-                      $("<option>", {
-                        text: "إختر الخدمة",
-                        style: "text-align: center;",
-                      })
-                    );
-
-                    // Add service options
-                    services.forEach((service) => {
-                      const option = $("<option>", {
-                        text: service.item_name,
-                        style: "text-align: center;",
-                        value: service.id,
-                      });
-
-                      // Set data attributes
-                      option.data(
-                        "purch_estimated_cost",
-                        service.purch_estimated_cost
-                      );
-                      option.data(
-                        "expenses_estimated_cost",
-                        service.expenses_estimated_cost
-                      );
-                      option.data("rec_id", service.id);
-                      option.data(
-                        "requisitions_spend",
-                        service.requisitions_spend
-                      );
-                      option.data(
-                        "expenses_actual_cost",
-                        service.expenses_actual_cost
-                      );
-                      option.data("requisitions_add", service.requisitions_add);
-
-                      fromSelect.append(option);
-                    });
-
-                    // Append select to the cell
-                    row.find("td.from_service_td").empty().append(fromSelect);
-                    console.log(
-                      `[INFO] Added From service selector to row ${index + 1}`
-                    );
-                  }
-
-                  // Create To Service cell and select
-                  if (row.find("td.to_service_td").length === 0) {
-                    row
-                      .find("td.from_service_td")
-                      .after(`<td class="to_service_td"></td>`);
-                  }
-
-                  if (
-                    row.find("td.to_service_td .toServiceSelect").length === 0
-                  ) {
-                    const toSelect = $("<select>", {
-                      class: "toServiceSelect itemSelect",
-                      style: "width: 100%;",
-                    });
-
-                    // Add default option
-                    toSelect.append(
-                      $("<option>", {
-                        text: "إختر الخدمة",
-                        style: "text-align: center;",
-                      })
-                    );
-
-                    // Add service options
-                    services.forEach((service) => {
-                      const option = $("<option>", {
-                        text: service.item_name,
-                        style: "text-align: center;",
-                        value: service.id,
-                      });
-
-                      // Set data attributes
-                      option.data(
-                        "purch_estimated_cost",
-                        service.purch_estimated_cost
-                      );
-                      option.data(
-                        "expenses_estimated_cost",
-                        service.expenses_estimated_cost
-                      );
-                      option.data("rec_id", service.id);
-                      option.data(
-                        "requisitions_spend",
-                        service.requisitions_spend
-                      );
-                      option.data(
-                        "expenses_actual_cost",
-                        service.expenses_actual_cost
-                      );
-                      option.data("requisitions_add", service.requisitions_add);
-
-                      toSelect.append(option);
-                    });
-
-                    // Append select to the cell
-                    row.find("td.to_service_td").empty().append(toSelect);
-                    console.log(
-                      `[INFO] Added To service selector to row ${index + 1}`
-                    );
-                  }
-                }
-              });
-
-              // Update colspan for totals row
-              if (window.location.href.includes("/requisitions/add")) {
-                $(".items-totals").find("td").eq(0).attr("colspan", "6");
-              } else if (window.location.href.includes("/requisitions/edit")) {
-                $(".items-totals").find("td").eq(0).attr("colspan", "7"); // One more column for edit screen
-              }
-
-              console.log("[SUCCESS] Table selectors created successfully");
-            } catch (apiError) {
-              console.error("[ERROR] Failed to fetch services data", apiError);
-            }
-          } catch (error) {
-            console.error("[ERROR] Error creating table selectors", error);
-          }
+            });
         }
 
-        // Handle adding new items
-        $(document).on("click", "#AddItem", function () {
-          setTimeout(() => {
-            createTableSelectors();
-          }, 250); 
-        });
-
-        createTableSelectors();
+        // Add new item handler
+        $(document)
+          .off("click", "#AddItem")
+          .on("click", "#AddItem", function () {
+            setTimeout(() => createTableSelectors(), 250);
+          });
       }, 1000);
     }
   });
