@@ -1,0 +1,46 @@
+/* src/styles/theme.css */
+:root {
+    /* Light theme (default) */
+    --background: #ffffff;
+    --background-secondary: #f9fafb;
+    --text: #1f2937;
+    --text-secondary: #4b5563;
+    --primary: #3b82f6;
+    --primary-light: #60a5fa;
+    --primary-dark: #2563eb;
+    --secondary: #10b981;
+    --accent: #8b5cf6;
+    --muted: #e5e7eb;
+    --border: #e5e7eb;
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --card-bg: #ffffff;
+    --card-border: #e5e7eb;
+    --navbar-bg: rgba(255, 255, 255, 0.8);
+    --navbar-text: #1f2937;
+    --navbar-blur: blur(10px);
+    --footer-bg: #1f2937;
+    --footer-text: #f9fafb;
+  }
+  
+  .dark-theme {
+    /* Dark theme */
+    --background: #111827;
+    --background-secondary: #1f2937;
+    --text: #f9fafb;
+    --text-secondary: #d1d5db;
+    --primary: #3b82f6;
+    --primary-light: #60a5fa;
+    --primary-dark: #2563eb;
+    --secondary: #10b981;
+    --accent: #8b5cf6;
+    --muted: #374151;
+    --border: #374151;
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+    --card-bg: #1f2937;
+    --card-border: #374151;
+    --navbar-bg: rgba(31, 41, 55, 0.8);
+    --navbar-text: #f9fafb;
+    --navbar-blur: blur(10px);
+    --footer-bg: #111827;
+    --footer-text: #f9fafb;
+  }
